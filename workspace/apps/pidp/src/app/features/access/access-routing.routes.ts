@@ -85,4 +85,11 @@ export const routes: Routes = [
         './pages/provincial-attachment-system/provincial-attachment-system-routing.routes'
       ).then((m) => m.routes),
   },
+  {
+    path: AccessRoutes.EXTERNAL_ACCOUNTS,
+    loadChildren: (): Promise<Routes> =>
+      import('./pages/external-accounts/external-accounts.routes').then(
+        (m) => m.routes,
+      ),
+  },
 ];

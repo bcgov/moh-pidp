@@ -11,6 +11,7 @@ import { IAccessSection } from './access-section.model';
 import { AccountLinkingPortalSection } from './access/account-linking-portal-section.class';
 import { BcProviderPortalSection } from './access/bc-provider-portal-section.class';
 import { DriverFitnessPortalSection } from './access/driver-fitness-portal-section.class';
+import { ExternalAccountsPortalSection } from './access/external-accounts-portal-section.class';
 import { HcimAccountTransferPortalSection } from './access/hcim-account-transfer-portal-section.class';
 import { ImmsBCEformsPortalSection } from './access/immsbc-eforms-portal-section.class';
 import { MsTeamsClinicMemberPortalSection } from './access/ms-teams-clinic-member-portal-section.class';
@@ -140,6 +141,10 @@ export class AccessStateBuilder {
       ...ArrayUtils.insertResultIf<IAccessSection>(
         this.insertSection('immsBCEforms', profileStatus),
         () => [new ImmsBCEformsPortalSection(profileStatus, this.router)],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('externalAccounts', profileStatus),
+        () => [new ExternalAccountsPortalSection(profileStatus, this.router)],
       ),
     ];
   }

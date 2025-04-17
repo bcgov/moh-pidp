@@ -41,6 +41,7 @@ export class MockProfileStatus {
         complianceTraining: { statusCode: StatusCode.AVAILABLE },
         provincialAttachmentSystem: { statusCode: StatusCode.AVAILABLE },
         immsBCEforms: { statusCode: StatusCode.AVAILABLE },
+        b2bAccounts: { statusCode: StatusCode.AVAILABLE },
       },
     };
   }
