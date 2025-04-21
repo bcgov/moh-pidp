@@ -88,8 +88,13 @@ export const routes: Routes = [
   {
     path: AccessRoutes.EXTERNAL_ACCOUNTS,
     loadChildren: (): Promise<Routes> =>
-      import('./pages/external-accounts/external-accounts.routes').then(
+      import('./pages/external-accounts/external-accounts-routing.routes').then(
         (m) => m.routes,
       ),
+  },
+  {
+    path: AccessRoutes.HALO,
+    loadChildren: (): Promise<Routes> =>
+      import('./pages/halo/halo-routing.routes').then((m) => m.routes),
   },
 ];

@@ -14,6 +14,7 @@ export class AccessRoutes {
   public static SPECIAL_AUTH_EFORMS = 'sa-eforms';
   public static PROVINCIAL_ATTACHMENT_SYSTEM = 'provincial-attachment-system';
   public static EXTERNAL_ACCOUNTS = 'external-accounts';
+  public static HALO = 'halo';
 
   /**
    * @description
