@@ -10,10 +10,18 @@ from flask import Flask
 from flask_wtf import CSRFProtect
 from os import environ
 import logging
+import socket
 
 app = Flask(__name__)
 csrf = CSRFProtect()
 csrf.init_app(app) # Compliant
+
+def get_ip_from_host(host):
+    try:
+        ip_address = socket.gethostbyname(host)
+        return ip_address
+    except socket.error as err:
+        print(f"Error: {err}")   
 
 
 def check_services(output_type):
@@ -21,7 +29,8 @@ def check_services(output_type):
 
     namespace = environ.get('namespace')
     cluster = environ.get('cluster')
-    notouch = environ.get('notouch') 
+    notouch = environ.get('notouch')
+    gslb_host = environ.get('gslb_host')
     data = {}
 
     # this is the magic to connect to the OCP cluster for running kubernetes commands
@@ -62,6 +71,10 @@ def check_services(output_type):
                 print(f"Error retrieving endpoints: {e}")
                 return 'FAIL - Error retrieving endpoint: {e}', 500
 
+        
+        who_is_active = get_ip_from_host(gslb_host)
+        if who_is_active:
+            logging.info(f'who_am_i: {cluster.upper()}; who_is_active: {who_is_active.upper()}')                 
 
         if success:
             return_color = "green"                        
