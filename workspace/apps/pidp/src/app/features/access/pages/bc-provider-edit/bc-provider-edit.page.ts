@@ -35,6 +35,7 @@ import { NavigationService } from '@pidp/presentation';
 
 import { NoContent } from '@bcgov/shared/data-access';
 import {
+  AnchorDirective,
   ConfirmDialogComponent,
   CrossFieldErrorMatcher,
   DialogOptions,
@@ -94,6 +95,7 @@ export interface BcProviderEditInitialStateModel {
     NgClass,
     FaIconComponent,
     TooltipComponent,
+    AnchorDirective,
   ],
 })
 export class BcProviderEditPage
@@ -117,6 +119,8 @@ export class BcProviderEditPage
   public progressSubscription!: Subscription;
   public mfaShowTooltip = false;
   public passwordShowTooltip = false;
+  public providerIdentitySupport: string;
+  public additionalSupportPhone: string;
 
   public breadcrumbsData: Array<{ title: string; path: string }> = [
     { title: 'Home', path: '' },
@@ -136,6 +140,9 @@ export class BcProviderEditPage
   @ViewChild('mfaDialog')
   public mfaDialogTemplate!: TemplateRef<any>;
 
+  @ViewChild('errorDialog')
+  public errorDialogTemplate!: TemplateRef<any>;
+
   public get isResetButtonEnabled(): boolean {
     return this.formState.form.valid;
   }
@@ -154,6 +161,8 @@ export class BcProviderEditPage
     super(dependenciesService);
     this.formState = new BcProviderEditFormState(fb);
     this.identityProvider$ = this.authorizedUserService.identityProvider$;
+    this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
+    this.additionalSupportPhone = this.config.phones.additionalSupport;
   }
 
   public onSuccessDialogClose(): void {
@@ -279,9 +288,8 @@ export class BcProviderEditPage
           this.showResetCompleteDialog();
         }),
         catchError(() => {
-          this.progressBarValue = 90;
-          this.progressComplete = false;
-          this.showErrorCard = true;
+          this.dialog.closeAll();
+          this.showMfaErrorDialog();
           return of(noop());
         }),
       )
@@ -342,6 +350,31 @@ export class BcProviderEditPage
       .open(this.mfaDialogTemplate, { data, disableClose: true })
       .afterClosed()
       .pipe(exhaustMap((result) => (result ? this.logout() : EMPTY)))
+      .subscribe();
+  }
+
+  private showMfaErrorDialog(): void {
+    const data: DialogOptions = {
+      title: 'An error occured',
+      bottomBorder: false,
+      titlePosition: 'center',
+      bodyTextPosition: 'center',
+      component: HtmlComponent,
+      data: {
+        content: `We apologize, your authentication credentials could not be reset. Contact our support desk at <a href="mailto:${this.providerIdentitySupport}">${this.providerIdentitySupport}</a> or by phone at <a href="tel:${this.additionalSupportPhone}">${this.additionalSupportPhone}</a>.<br /> Please mention that this is a BCProvider MFA reset request.`,
+      },
+      imageSrc: '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
+      imageType: 'banner',
+      width: '31rem',
+      height: '24rem',
+      actionText: 'Back',
+      actionTypePosition: 'center',
+      cancelHide: true,
+      progressBar: true,
+    };
+    this.dialog
+      .open(this.errorDialogTemplate, { data })
+      .afterClosed()
       .subscribe();
   }
 

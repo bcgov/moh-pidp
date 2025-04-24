@@ -9,7 +9,7 @@
     padding: var(--card-padding);
     min-height: 15rem;
     cursor: pointer;
-
+    transition: all 0.2s;
     & .card-header {
       & .card-header-icon {
         fa-icon {
