@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { FeedbackFormState } from './feedback-form.component-form-state';
 import { AbstractFormDependenciesService, AbstractFormPage } from '@app/core/classes/abstract-form-page.class';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { catchError, Observable, of, tap } from 'rxjs';
 import { SuccessDialogComponent } from "../success-dialog/success-dialog.component";
 import { MatInputModule } from '@angular/material/input';
 import { NgIf } from '@angular/common';
@@ -19,6 +19,7 @@ import { LoggerService } from '@app/core/services/logger.service';
 import { PartyService } from '@app/core/party/party.service';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { ToastService } from '@app/core/services/toast.service';
+import { LOADING_OVERLAY_DEFAULT_MESSAGE, LoadingOverlayService } from '@pidp/presentation';
 
 @Component({
   selector: 'app-feedback-form-dialog',
@@ -67,6 +68,7 @@ export class FeedbackFormDialogComponent
     dialog: MatDialog,
     public dialogRef: MatDialogRef<FeedbackFormDialogComponent>,
     private readonly feedbackFormDialogResource: FeedbackFormDialogResource,
+    private readonly loadingOverlayService: LoadingOverlayService,
     private readonly logger: LoggerService,
     private readonly partyService: PartyService,
     private readonly toastService: ToastService,
@@ -88,7 +90,7 @@ export class FeedbackFormDialogComponent
   public onFileSelected(): void {
     const inputNode: HTMLInputElement | null = document.querySelector('#file');
     this.selectedFile= inputNode?.files ? inputNode.files[0] : null;
-    if((this.selectedFile?.size ?? 0) > 5 * 1024 * 1024) {
+    if((this.selectedFile?.size ?? 0) > 2 * 1024 * 1024) {
       this.showErrorCard = true;
     } else {
       this.showErrorCard = false;
@@ -125,6 +127,8 @@ export class FeedbackFormDialogComponent
     if(this.showErrorCard){
       return;
     }
+
+    this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
     const formData = new FormData();
     if(this.selectedFile) {
       formData.append('file', this.selectedFile, this.selectedFile?.name);
@@ -132,18 +136,21 @@ export class FeedbackFormDialogComponent
     formData.append('feedback', this.formState.feedback.value);
     formData.append('partyid', this.partyService.partyId.toString());
 
-    this.feedbackFormDialogResource.postFeedback(formData).subscribe(
-      () => {
+    this.feedbackFormDialogResource.postFeedback(formData).pipe(
+      tap(() => {
+        this.loadingOverlayService.close();
         this.showSuccessDialog();
-      },
-      (err: HttpErrorResponse) => {
+      }),
+      catchError((err: HttpErrorResponse) => {
+        this.loadingOverlayService.close();
         this.logger.error(
           '[FeedbackFormDialogResource::postFeedback] error has occurred: ',
           err,
         );
         this.toastService.openErrorToast('Error occurred while sending feedback');
-      },
-    );
+        return of(null);
+      }),
+    ).subscribe();
   }
 
   public showSuccessDialog(): void {
