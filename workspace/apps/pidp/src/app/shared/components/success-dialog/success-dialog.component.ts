@@ -30,7 +30,7 @@ export class SuccessDialogComponent implements OnInit {
   public faXmark = faXmark;
   public showHeader = false;
 
-  @Input() public username!: string;
+  @Input() public username: string = '';
   @Input() public title!: string;
   @Input() public componentType!: Type<SuccessDialogComponentClass>;
 
@@ -46,8 +46,8 @@ export class SuccessDialogComponent implements OnInit {
   public ngOnInit(): void {
     this.loadDialogParagraphComponent(this.componentType);
     if (
-      this.componentType instanceof DialogBcproviderCreateComponent ||
-      this.componentType instanceof DialogBcproviderEditComponent
+      this.componentType === DialogBcproviderCreateComponent ||
+      this.componentType === DialogBcproviderEditComponent
     ) {
       this.showHeader = true;
     }
@@ -56,10 +56,18 @@ export class SuccessDialogComponent implements OnInit {
   private loadDialogParagraphComponent(
     componentType: Type<SuccessDialogComponentClass>,
   ): void {
+    if (!this.dialogParagraphHost) {
+      console.error('DialogParagraphHost is not initialized.');
+      return;
+    }
     const componentRef =
       this.dialogParagraphHost.createComponent<SuccessDialogComponentClass>(
         componentType,
       );
-    componentRef.instance.username = this.username;
+    if (this.username) {
+      componentRef.instance.username = this.username;
+    } else {
+      console.warn('Username is undefined.');
+    }
   }
 }
