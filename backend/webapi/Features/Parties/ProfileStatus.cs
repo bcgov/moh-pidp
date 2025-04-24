@@ -81,7 +81,9 @@ public partial class ProfileStatus
                     ProfileSection.Create<PrescriptionRefillEformsSection>(data),
                     ProfileSection.Create<ProviderReportingPortalSection>(data),
                     ProfileSection.Create<ProvincialAttachmentSystemSection>(data),
-                    ProfileSection.Create<SAEformsSection>(data)
+                    ProfileSection.Create<SAEformsSection>(data),
+                    ProfileSection.Create<ImmsBCSection>(data)
+
                 }
                 .ToDictionary(section => section.SectionName, section => section)
             };
@@ -100,14 +102,12 @@ public partial class ProfileStatus
         public bool HasBCProviderCredential { get; set; }
         public bool HasBCServicesCardCredential { get; set; }
         public bool LicenceDeclarationComplete { get; set; }
-
         // Computed in Finalize()
         private string? userIdentityProvider;
         public PlrStandingsDigest EndorsementPlrStanding { get; set; } = default!;
         public bool HasMSTeamsClinicEndorsement { get; set; }
         public bool HasPendingEndorsementRequest { get; set; }
         public PlrStandingsDigest PartyPlrStanding { get; set; } = default!;
-
         public bool HasEnrolment(AccessTypeCode accessTypeCode) => this.CompletedEnrolments.Contains(accessTypeCode);
         public bool HasNoLicence => this.LicenceDeclarationComplete && this.CollegeCode == null;
         public bool UserIsBCProvider => this.userIdentityProvider == IdentityProviders.BCProvider;
