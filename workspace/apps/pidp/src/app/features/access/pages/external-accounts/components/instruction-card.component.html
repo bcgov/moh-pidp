@@ -1,0 +1,43 @@
+<!-- stepper.component.html -->
+<div class="stepper-container">
+  <div
+    class="step-card"
+    [ngClass]="{
+      active: data.isActive,
+      completed: data.isCompleted && !data.isActive
+    }">
+    <div class="step-icon">
+      <mat-icon [svgIcon]="data.icon"></mat-icon>
+    </div>
+    <div class="step-content">
+      <h2 class="step-title">{{ data.title }}</h2>
+      <p class="step-description">{{ data.description }}</p>
+
+      <!-- Dropdown content -->
+      <div *ngIf="data.content.type === 'dropdown'" class="dropdown-content">
+        <div class="select-container">
+          <select class="form-control">
+            <option>{{ data.content.placeholder }}</option>
+          </select>
+          <div class="dropdown-arrow">
+            <i class="arrow-down"></i>
+          </div>
+        </div>
+        <a *ngIf="data.content.helpText" class="help-link" href="#">{{
+          data.content.helpText
+        }}</a>
+      </div>
+
+      <!-- Input content -->
+      <div *ngIf="data.content.type === 'input'" class="input-content">
+        <input
+          class="form-control"
+          type="text"
+          [placeholder]="data.content.placeholder" />
+        <button *ngIf="data.content.buttonText" class="btn-continue">
+          {{ data.content.buttonText }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

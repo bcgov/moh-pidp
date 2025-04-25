@@ -1,0 +1,25 @@
+@use 'pidp-variables' as pidp;
+
+.main {
+  display: grid;
+  grid-template-columns: calc(60% - 15px) calc(40% - 15px);
+  gap: 20px;
+  min-height: 340px;
+  margin: calc(var(--gap)) 0;
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    padding-right: calc(var(--gap) * 0.9);
+    position: relative;
+    line-height: 1.5rem;
+  }
+
+  &__card-sidebar {
+    display: flex;
+    flex-direction: column;
+    padding-right: calc(var(--gap) * 0.9);
+    position: relative;
+    line-height: 1.5rem;
+  }
+}

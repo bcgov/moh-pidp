@@ -1,1 +1,26 @@
-<p>externalAccounts works!</p>
+<div class="container">
+  <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
+  <div class="content">
+    <section class="intro">
+      <div class="contetn-header">
+        <h1>Bring your own account</h1>
+        <p>
+          Use an existing professional account from your organization to access
+          healthcare (provider) information reducing the need to switch accounts
+          or make a new account.
+        </p>
+      </div>
+    </section>
+    <section class="main">
+      <div class="main__card">
+        <div class="card-title">
+          <h2>Instructions</h2>
+          <ng-container *ngFor="let instruction of instructions">
+            <app-instruction-card [data]="instruction"></app-instruction-card>
+          </ng-container>
+        </div>
+      </div>
+      <div class="main__card-sidebar">Need assistence?</div>
+    </section>
+  </div>
+</div>
