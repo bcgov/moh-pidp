@@ -22,35 +22,27 @@
           [selectedIndex]="selectedIndex">
           <mat-step [state]="'number'" [completed]="false">
             <ng-template matStepLabel> Choose an account </ng-template>
-            <div>
-              <p class="guide-information">
-                A BCProvider is a credential used to access health applications.
-                In the future the BCProvider will be integrated with multiple
-                health authorities, EMRs and other government health services.
-              </p>
+            <div class="choose-account">
               <button
                 mat-flat-button
                 type="button"
-                color="primary"
+                color="secondary"
                 routerLink="/access/bc-provider-application"
                 aria-labelledby="complete-bcprovider"
                 [disabled]="bcProvider$ | async">
-                Create a BCProvider Credential
+                <mat-icon class="left-icon">account_box</mat-icon>
+                <span class="button-text">Create a BCProvider Credential</span>
+                <mat-icon class="right-icon">keyboard_arrow_right</mat-icon>
               </button>
-            </div>
-            <div>
-              <p class="guide-information">
-                You may bring your own account here to be reused for accessing
-                multiple health authorities, EMRs and other government health
-                services.
-              </p>
               <button
                 mat-flat-button
                 type="button"
-                color="primary"
-                routerLink="/access/bc-provider-application"
-                aria-labelledby="complete-bcprovider">
-                Bring your own account
+                color="secondary"
+                routerLink="/access/external-accounts"
+                aria-labelledby="external-accounts">
+                <mat-icon class="left-icon">build</mat-icon>
+                <span class="button-text">Bring your own account</span>
+                <mat-icon class="right-icon">keyboard_arrow_right</mat-icon>
               </button>
             </div>
             <div class="smaller-text">
@@ -67,7 +59,7 @@
           <mat-step [completed]="false">
             <ng-template matStepLabel>
               <p class="pas-step-label">
-                Invite others to the Provincial Attachment System (PAS)<br />
+                Invite others to Halo - PAS EMR<br />
                 (Optional)
               </p>
             </ng-template>
@@ -90,7 +82,7 @@
                   </mat-step>
                   <mat-step editable="false" [completed]="false">
                     <ng-template matStepLabel
-                      >Completion and PAS login available</ng-template
+                      >Completion and Halo link available</ng-template
                     >
                   </mat-step>
                 </mat-stepper>
@@ -145,7 +137,7 @@
                 aria-labelledby="navigate-to-halo"
                 [disabled]="halo$ | async"
                 (click)="navigateToPath()">
-                Login to Provincial Attachment System with your BCProvider
+                Go to Halo - PAS EMR
               </button>
             </div>
             <div class="stepper-buttons">
@@ -157,31 +149,15 @@
           </mat-step>
         </mat-stepper>
       </div>
-      <div class="pas-button-container">
-        <div class="card pas-button">
+      <div class="card">
+        <div class="main-image-text"><strong>HALO - PAS EMR</strong></div>
+        <div class="main-image-container">
           <img
             class="img-checkup"
-            ngSrc="/assets/images/checkup.png"
-            alt="checkup"
+            ngSrc="/assets/images/halo.png"
+            alt="halo there"
             priority
             fill />
-          <div class="card-container auth-card">
-            <div class="card-header auth-card-header">
-              <h3><strong>Halo - PAS EMR</strong></h3>
-            </div>
-            <div class="card-footer auth-card-footer">
-              <button
-                mat-flat-button
-                uiPageFooterAction
-                type="submit"
-                color="primary"
-                aria-labelledby="navigate-to-pas"
-                [disabled]="halo$ | async"
-                (click)="navigateToPath()">
-                Login
-              </button>
-            </div>
-          </div>
         </div>
         <ng-container *ngIf="hasCpn && (halo$ | async)">
           <div class="pas-button-text">

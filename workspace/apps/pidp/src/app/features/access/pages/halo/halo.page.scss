@@ -33,15 +33,14 @@
     gap: var(--gap);
 
     .content-header h1 {
-      color: #003366;
+      color: pidp.$bcgov-color-primary;
       font-size: 50px;
       font-weight: 700;
       word-wrap: break-word;
     }
 
     .main {
-      display: grid;
-      grid-template-columns: calc(60% - 15px) calc(40% - 15px);
+      display: flex;
       gap: 20px;
       min-height: 340px;
       margin: calc(var(--gap)) 0;
@@ -50,78 +49,60 @@
         display: flex;
         flex-direction: column;
         padding-right: calc(var(--gap) * 0.9);
-        position: relative;
         line-height: 1.5rem;
         margin-left: -1.5rem;
 
         .stepper-title {
+          // TODO: move to pidp-variables.scss
           color: #313132;
           font-size: 1.5rem;
           font-weight: 700;
           margin-bottom: calc(var(--gap) / 2);
           padding-left: 1.8rem;
         }
-      }
-      .pas-button {
-        height: 15rem;
-        background: linear-gradient(
-          270deg,
-          rgba(0, 0, 0, 0) 40%,
-          rgba(158, 204, 211, 1) 100%
-        );
-        img {
-          object-fit: cover;
-          z-index: -2;
-        }
 
-        div.auth-card {
-          padding: 2rem;
-        }
-
-        .card-container {
+        .choose-account {
           display: flex;
-          flex-direction: column;
-          height: 95%;
-          width: 100%;
-          align-items: flex-start;
+          gap: 0.5rem;
 
-          .card-header,
-          .card-footer {
-            flex: 1;
+          button {
             display: flex;
             align-items: center;
-            justify-content: center;
-          }
+            justify-content: space-between;
+            border: 1px solid pidp.$grey-20;
+            padding: 25px;
+            :nth-child(3) {
+              order: 3;
+            }
 
-          .card-header {
-            color: white;
-            display: flex;
-            padding: 0.65rem 1rem;
-            border-radius: 0.25rem;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 0.5rem;
-            background: rgba(0, 0, 0, 0.7);
-            margin-bottom: 6.5rem;
+            mat-icon.left-icon {
+              margin-right: 0.5rem;
+            }
 
-            h3 {
-              margin: 0;
+            mat-icon.right-icon {
+              margin-left: auto;
             }
           }
+        }
 
-          .card-footer {
-            align-items: flex-end;
-            button {
-              z-index: 1;
-              padding: 0.35rem 2rem;
-              &:disabled {
-                border-radius: var(--layout-borderRadius-medium, 0.25rem);
-                background: var(
-                  --surface-color-primary-button-disabled,
-                  #edebe9
-                );
-              }
-            }
+        .main-image-text {
+          display: flex;
+          color: #fff;
+          justify-content: center;
+          align-items: center;
+          font-size: larger;
+          height: 60px;
+          background-color: pidp.$bcgov-color-primary;
+        }
+
+        .main-image-container {
+          height: 430px;
+          width: auto;
+          object-fit: contain;
+          position: relative;
+
+          img {
+            height: 400px;
           }
         }
       }
@@ -132,78 +113,15 @@
   }
 }
 
-.viewport-small {
-  .main {
-    grid-template-columns: calc(50% - 15px) calc(50% - 15px) !important;
-
-    .card-header {
-      margin-bottom: 5rem !important;
-    }
-  }
-}
-
-.viewport-xsmall {
-  .content-header {
-    margin: 0px 20px 0px 20px;
-  }
-
-  .content-header h1 {
-    font-size: 40px;
-    line-height: 1.1;
-  }
-
-  .main {
-    display: flex !important;
-    flex-direction: column !important;
-
-    & .card {
-      margin-left: 0 !important;
-    }
-
-    .pas-step-label {
-      line-height: 1.1;
-    }
-
-    .pas-button {
-      div.auth-card {
-        padding: 20px 0px 0px 20px !important;
-      }
-
-      .card-container {
-        height: 50% !important;
-
-        .auth-card-footer {
-          padding: 7.5px 0px 7.5px 0px;
-        }
-
-        .card-header {
-          margin-bottom: 4.5rem !important;
-        }
-      }
-    }
-  }
-}
-
-.viewport-medium {
-  div.auth-card {
-    padding: 20px 0 10px 20px !important;
-  }
-}
-
 .smaller-text {
   font-size: smaller;
   margin: 0 10px;
 }
 
-.bcprovider-username {
-  font-size: smaller;
-}
-
 .stepper-buttons {
   margin-top: 10px;
   & button {
-    border: pidp.$bcgov-color-primary solid 2px;
-    color: pidp.$bcgov-color-primary;
+    border: 1px solid pidp.$grey-20;
   }
 
   & button:last-child {
@@ -213,11 +131,6 @@
   & button.top-button {
     margin-left: 0;
   }
-}
-
-.guide-information {
-  font-size: smaller;
-  margin-bottom: 10px;
 }
 
 .pas-step-label {
