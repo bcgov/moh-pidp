@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ExternalAccountsPage } from './external-accounts.page';
@@ -8,7 +9,7 @@ describe('ExternalAccountsPage', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ExternalAccountsPage],
+      imports: [HttpClientModule, ExternalAccountsPage],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ExternalAccountsPage);

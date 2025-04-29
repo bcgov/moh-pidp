@@ -1,4 +1,4 @@
-<div class="container">
+<div class="box container" uiPidpInjectViewportCss>
   <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
   <div class="content">
     <section class="intro">
@@ -15,12 +15,36 @@
       <div class="main__card">
         <div class="card-title">
           <h2>Instructions</h2>
-          <ng-container *ngFor="let instruction of instructions">
-            <app-instruction-card [data]="instruction"></app-instruction-card>
-          </ng-container>
+          <div class="onboarding-container">
+            <div class="cards-wrapper">
+              <ng-container *ngFor="let card of cards; let i = index">
+                <app-instruction-card
+                  [cardData]="card"
+                  [isActive]="isCardActive(i)"
+                  [isCompleted]="isCardCompleted(i)"
+                  (continueEvent)="onContinue(i, $event)">
+                </app-instruction-card>
+              </ng-container>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="main__card-sidebar">Need assistence?</div>
+      <div class="main__card-sidebar">
+        <div class="assistance-box">
+          <div class="assistance-header">Need assistance?</div>
+          <div class="assistance-content">
+            <mat-icon [svgIcon]="'need-assistance'"></mat-icon>
+            <ul>
+              <li>I'm more interested in <a href="#">BCProvider</a></li>
+              <li>
+                Have a question and need to talk to us directly?
+                <a href="#">Contact us</a>
+              </li>
+              <li>Here is OneHealthID's <a href="#">FAQ page</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </section>
   </div>
 </div>

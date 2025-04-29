@@ -1,43 +1,95 @@
-<!-- stepper.component.html -->
-<div class="stepper-container">
-  <div
-    class="step-card"
-    [ngClass]="{
-      active: data.isActive,
-      completed: data.isCompleted && !data.isActive
-    }">
-    <div class="step-icon">
-      <mat-icon [svgIcon]="data.icon"></mat-icon>
+<!-- card.component.html -->
+<div
+  class="card"
+  [ngClass]="{
+    active: isActive,
+    completed: isCompleted,
+    inactive: !isActive && !isCompleted
+  }">
+  <div class="card-content">
+    <div class="card-icon">
+      <mat-icon *ngIf="cardData.icon" [svgIcon]="cardData.icon"></mat-icon>
     </div>
-    <div class="step-content">
-      <h2 class="step-title">{{ data.title }}</h2>
-      <p class="step-description">{{ data.description }}</p>
+    <div class="card-body">
+      <h2 class="card-title">{{ cardData.title }}</h2>
+      <p class="card-description">{{ cardData.description }}</p>
 
-      <!-- Dropdown content -->
-      <div *ngIf="data.content.type === 'dropdown'" class="dropdown-content">
-        <div class="select-container">
-          <select class="form-control">
-            <option>{{ data.content.placeholder }}</option>
-          </select>
-          <div class="dropdown-arrow">
-            <i class="arrow-down"></i>
+      <ng-container [ngSwitch]="cardData.type">
+        <!-- Dropdown Selection -->
+        <div *ngSwitchCase="'dropdown'" class="form-group">
+          <mat-select
+            class="form-control"
+            [disabled]="!isActive"
+            (selectionChange)="onContinue($event.value)">
+            <mat-option value="" disabled selected>
+              {{ cardData.placeholder }}
+            </mat-option>
+            @for (option of cardData.options; track $index) {
+              <mat-option value="option.value"> {{ option.label }}</mat-option>
+            }
+          </mat-select>
+          <a
+            *ngIf="cardData.linkText"
+            class="help-link"
+            href="javascript:void(0)"
+            >{{ cardData.linkText }}</a
+          >
+        </div>
+
+        <!-- Input Field -->
+        <div *ngSwitchCase="'input'" class="form-group input-container">
+          <div class="input-container__wrapper">
+            <input
+              name="email"
+              class="form-control"
+              type="email"
+              #inputField="ngModel"
+              required
+              email
+              [placeholder]="cardData.placeholder"
+              [disabled]="!isActive"
+              [ngClass]="{
+                'is-invalid':
+                  inputField.invalid && (inputField.dirty || inputField.touched)
+              }"
+              [(ngModel)]="email" />
+
+            <button
+              class="btn"
+              [disabled]="!isActive || inputField.invalid"
+              (click)="onContinue(inputField.value)">
+              {{ cardData.buttonText }}
+            </button>
+          </div>
+
+          <div
+            *ngIf="
+              inputField.invalid && (inputField.dirty || inputField.touched)
+            "
+            class="text-danger input-container__error">
+            <div *ngIf="inputField.errors?.['required']">
+              Email is required.
+            </div>
+            <div *ngIf="inputField.errors?.['email']">
+              Please enter a valid email address.
+            </div>
           </div>
         </div>
-        <a *ngIf="data.content.helpText" class="help-link" href="#">{{
-          data.content.helpText
-        }}</a>
-      </div>
 
-      <!-- Input content -->
-      <div *ngIf="data.content.type === 'input'" class="input-content">
-        <input
-          class="form-control"
-          type="text"
-          [placeholder]="data.content.placeholder" />
-        <button *ngIf="data.content.buttonText" class="btn-continue">
-          {{ data.content.buttonText }}
-        </button>
-      </div>
+        <!-- Email Verification -->
+        <div *ngSwitchCase="'verification'" class="form-group"></div>
+
+        <!-- Final Setup -->
+        <div *ngSwitchCase="'final'" class="form-group">
+          <button
+            *ngIf="cardData.buttonText"
+            class="btn btn-continue"
+            [disabled]="!isActive"
+            (click)="onContinue()">
+            {{ cardData.buttonText }}
+          </button>
+        </div>
+      </ng-container>
     </div>
   </div>
 </div>
