@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -27,6 +27,7 @@ export class InstructionCardComponent {
   email: string = '';
 
   public onContinue(value?: any): void {
+    console.log('Continue clicked', value);
     this.continueEvent.emit(value);
   }
 }

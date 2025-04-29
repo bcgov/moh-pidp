@@ -9,23 +9,23 @@
   transition: all 0.3s ease;
 
   &.active {
-    border-left: 6px solid #fcba19;
-    border-right: 1px solid #013366;
-    border-top: 1px solid #013366;
-    border-bottom: 1px solid #013366;
+    border-left: 6px solid pidp.$bcgov-color-accent;
+    border-right: 2px solid pidp.$btn-blue-color;
+    border-top: 2px solid pidp.$btn-blue-color;
+    border-bottom: 2px solid pidp.$btn-blue-color;
     border-radius: 0.5rem;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.15);
   }
   &.completed {
-    border-left: 6px solid #fcba19;
-    border-right: 1px solid #ccc;
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
+    border-left: 6px solid pidp.$bcgov-color-accent;
+    border-right: 2px solid pidp.$grey-20;
+    border-top: 2px solid pidp.$grey-20;
+    border-bottom: 2px solid pidp.$grey-20;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
 
   &.inactive {
-    background-color: #f0f0f0;
+    background-color: pidp.$grey-20;
     opacity: 0.7;
 
     .card-icon {
@@ -87,7 +87,7 @@
   .form-control {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ced4da;
+    border: 1px solid pidp.$grey-30;
     border-radius: 4px;
     font-size: 14px;
 
@@ -105,21 +105,21 @@
     }
 
     &__error {
-      color: #dc3545;
+      color: pidp.$bcgov-color-semantic-error;
       font-size: 12px;
       margin-top: 5px;
     }
   }
 
   .is-invalid {
-    border-color: #dc3545 !important;
+    border-color: pidp.$bcgov-color-semantic-error !important;
     box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
   }
 
   .help-link {
     display: block;
     margin-top: 8px;
-    color: #013366;
+    color: pidp.$btn-blue-color;
     text-decoration: none;
     font-size: 14px;
   }
@@ -134,19 +134,27 @@
     align-items: center;
     gap: 0.625rem;
     cursor: pointer;
+
+    &:disabled {
+      background-color: pidp.$grey-30;
+      border-color: pidp.$grey-30;
+      color: pidp.$grey-40;
+      cursor: not-allowed;
+    }
   }
 
   .btn-continue {
-    background-color: #036;
+    background-color: pidp.$btn-blue-color;
     color: #fff;
     border: none;
 
     &:hover {
-      background-color: #013366;
+      background-color: pidp.$btn-blue-color;
     }
 
     &:disabled {
-      background-color: #6c757d;
+      background-color: pidp.$grey-30;
+      border-color: pidp.$grey-30;
       cursor: not-allowed;
     }
   }

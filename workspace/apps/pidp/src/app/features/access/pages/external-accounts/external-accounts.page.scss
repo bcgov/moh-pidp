@@ -35,6 +35,7 @@
 .main {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
   gap: 20px;
   min-height: 340px;
   margin: calc(var(--gap)) 0;
@@ -73,8 +74,18 @@
   }
 
   .assistance-content {
+    display: flex;
+    justify-content: center;
     padding: 20px;
     background-color: white;
+    flex-direction: column;
+    align-items: center;
+
+    &__icon-box {
+      width: 3.1875rem !important;
+      height: 3.75rem !important;
+      padding: 0rem 1rem;
+    }
 
     .question-icon {
       text-align: center;

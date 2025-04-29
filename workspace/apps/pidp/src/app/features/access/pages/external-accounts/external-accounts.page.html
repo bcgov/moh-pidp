@@ -17,14 +17,14 @@
           <h2>Instructions</h2>
           <div class="onboarding-container">
             <div class="cards-wrapper">
-              <ng-container *ngFor="let card of cards; let i = index">
-                <app-instruction-card
-                  [cardData]="card"
-                  [isActive]="isCardActive(i)"
-                  [isCompleted]="isCardCompleted(i)"
-                  (continueEvent)="onContinue(i, $event)">
-                </app-instruction-card>
-              </ng-container>
+              @for (card of cards(); track $index) {
+              <app-instruction-card
+                [cardData]="card"
+                [isActive]="isCardActive($index)"
+                [isCompleted]="isCardCompleted($index)"
+                (continueEvent)="onContinue($index, $event)">
+              </app-instruction-card>
+              }
             </div>
           </div>
         </div>
@@ -33,7 +33,9 @@
         <div class="assistance-box">
           <div class="assistance-header">Need assistance?</div>
           <div class="assistance-content">
-            <mat-icon [svgIcon]="'need-assistance'"></mat-icon>
+            <mat-icon
+              class="assistance-content__icon-box"
+              [svgIcon]="'need-assistance'"></mat-icon>
             <ul>
               <li>I'm more interested in <a href="#">BCProvider</a></li>
               <li>

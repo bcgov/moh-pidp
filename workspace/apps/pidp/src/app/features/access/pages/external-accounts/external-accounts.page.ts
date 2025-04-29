@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -74,7 +74,7 @@ export class ExternalAccountsPage {
 
   currentStep = 0;
 
-  public cards = [
+  public cards = signal([
     {
       id: 1,
       icon: 'instruction-document',
@@ -116,7 +116,7 @@ export class ExternalAccountsPage {
       type: 'final',
       buttonText: 'Continue',
     },
-  ];
+  ]);
 
   public isCardActive(index: number): boolean {
     return index === this.currentStep;
@@ -131,7 +131,7 @@ export class ExternalAccountsPage {
     console.log(`Step ${index + 1} completed with value:`, value);
 
     // Move to the next step if not the last one
-    if (index < this.cards.length - 1) {
+    if (index < this.cards().length - 1) {
       this.currentStep = index + 1;
     } else {
       // Handle completion of all steps

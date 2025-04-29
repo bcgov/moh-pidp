@@ -8,88 +8,99 @@
   }">
   <div class="card-content">
     <div class="card-icon">
-      <mat-icon *ngIf="cardData.icon" [svgIcon]="cardData.icon"></mat-icon>
+      @if (cardData.icon) {
+        <mat-icon [svgIcon]="cardData.icon"></mat-icon>
+      }
     </div>
     <div class="card-body">
       <h2 class="card-title">{{ cardData.title }}</h2>
       <p class="card-description">{{ cardData.description }}</p>
 
-      <ng-container [ngSwitch]="cardData.type">
+      @switch (cardData.type) {
         <!-- Dropdown Selection -->
-        <div *ngSwitchCase="'dropdown'" class="form-group">
-          <mat-select
-            class="form-control"
-            [disabled]="!isActive"
-            (selectionChange)="onContinue($event.value)">
-            <mat-option value="" disabled selected>
-              {{ cardData.placeholder }}
-            </mat-option>
-            @for (option of cardData.options; track $index) {
-              <mat-option value="option.value"> {{ option.label }}</mat-option>
+        @case ('dropdown') {
+          <div class="form-group">
+            <mat-select
+              class="form-control"
+              [disabled]="!isActive"
+              [placeholder]="cardData.placeholder"
+              (selectionChange)="onContinue($event.value)">
+              @for (option of cardData.options; track $index) {
+                <mat-option [value]="option.value">
+                  {{ option.label }}
+                </mat-option>
+              }
+            </mat-select>
+            @if (cardData.linkText) {
+              <a class="help-link" href="javascript:void(0)">{{
+                cardData.linkText
+              }}</a>
             }
-          </mat-select>
-          <a
-            *ngIf="cardData.linkText"
-            class="help-link"
-            href="javascript:void(0)"
-            >{{ cardData.linkText }}</a
-          >
-        </div>
+          </div>
+        }
 
         <!-- Input Field -->
-        <div *ngSwitchCase="'input'" class="form-group input-container">
-          <div class="input-container__wrapper">
-            <input
-              name="email"
-              class="form-control"
-              type="email"
-              #inputField="ngModel"
-              required
-              email
-              [placeholder]="cardData.placeholder"
-              [disabled]="!isActive"
-              [ngClass]="{
-                'is-invalid':
-                  inputField.invalid && (inputField.dirty || inputField.touched)
-              }"
-              [(ngModel)]="email" />
+        @case ('input') {
+          <div class="form-group input-container">
+            <div class="input-container__wrapper">
+              <input
+                name="email"
+                class="form-control"
+                type="email"
+                #inputField="ngModel"
+                required
+                email
+                [placeholder]="cardData.placeholder"
+                [disabled]="!isActive"
+                [ngClass]="{
+                  'is-invalid':
+                    inputField.invalid &&
+                    (inputField.dirty || inputField.touched)
+                }"
+                [(ngModel)]="email" />
 
-            <button
-              class="btn"
-              [disabled]="!isActive || inputField.invalid"
-              (click)="onContinue(inputField.value)">
-              {{ cardData.buttonText }}
-            </button>
-          </div>
+              <button
+                class="btn"
+                [disabled]="!isActive || inputField.invalid"
+                (click)="onContinue(inputField.value)">
+                {{ cardData.buttonText }}
+              </button>
+            </div>
 
-          <div
-            *ngIf="
+            @if (
               inputField.invalid && (inputField.dirty || inputField.touched)
-            "
-            class="text-danger input-container__error">
-            <div *ngIf="inputField.errors?.['required']">
-              Email is required.
-            </div>
-            <div *ngIf="inputField.errors?.['email']">
-              Please enter a valid email address.
-            </div>
-          </div>
-        </div>
+            ) {
+              <div class="text-danger input-container__error">
+                @if (inputField.errors?.['required']) {
+                  Email is required.
+                }
 
+                @if (inputField.errors?.['email']) {
+                  Please enter a valid email address.
+                }
+              </div>
+            }
+          </div>
+        }
         <!-- Email Verification -->
-        <div *ngSwitchCase="'verification'" class="form-group"></div>
+        @case ('varification') {
+          <div class="form-group"></div>
+        }
 
         <!-- Final Setup -->
-        <div *ngSwitchCase="'final'" class="form-group">
-          <button
-            *ngIf="cardData.buttonText"
-            class="btn btn-continue"
-            [disabled]="!isActive"
-            (click)="onContinue()">
-            {{ cardData.buttonText }}
-          </button>
-        </div>
-      </ng-container>
+        @case ('final') {
+          <div class="form-group">
+            @if (cardData.buttonText) {
+              <button
+                class="btn btn-continue"
+                [disabled]="!isActive"
+                (click)="onContinue()">
+                {{ cardData.buttonText }}
+              </button>
+            }
+          </div>
+        }
+      }
     </div>
   </div>
 </div>
