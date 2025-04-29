@@ -3,6 +3,8 @@ import { Component, inject, signal } from '@angular/core';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 
+import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
+
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { AccessRoutes } from '../../access.routes';
 import { InstructionCardComponent } from './components/instruction-card.component';
@@ -15,15 +17,16 @@ import { InstructionCardComponent } from './components/instruction-card.componen
     BreadcrumbComponent,
     InstructionCardComponent,
     MatIconModule,
+    InjectViewportCssClassDirective,
   ],
   templateUrl: './external-accounts.page.html',
   styleUrl: './external-accounts.page.scss',
 })
 export class ExternalAccountsPage {
-  sanitizer = inject(DomSanitizer);
-  matIconRegistry = inject(MatIconRegistry);
+  public sanitizer = inject(DomSanitizer);
+  public matIconRegistry = inject(MatIconRegistry);
 
-  constructor() {
+  public constructor() {
     this.registerSvgIcons();
   }
 
@@ -72,7 +75,7 @@ export class ExternalAccountsPage {
     );
   }
 
-  currentStep = 0;
+  public currentStep = 0;
 
   public cards = signal([
     {
@@ -110,9 +113,9 @@ export class ExternalAccountsPage {
     {
       id: 4,
       icon: 'instruction-time',
-      title: 'Final setup from OneHealthID',
+      title: 'Instructions complete',
       description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum pulvinar turpis lorem',
+        'Click the “Continue” button to start using your own account.',
       type: 'final',
       buttonText: 'Continue',
     },
