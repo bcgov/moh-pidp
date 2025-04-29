@@ -1,1 +1,52 @@
-<p>externalAccounts works!</p>
+<div class="box container" uiPidpInjectViewportCss>
+  <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
+  <div class="content">
+    <section class="intro">
+      <div class="contetn-header">
+        <h1>Bring your own account</h1>
+        <p>
+          Use an existing professional account from your organization to access
+          healthcare (provider) information reducing the need to switch accounts
+          or make a new account.
+        </p>
+      </div>
+    </section>
+    <section class="main">
+      <div class="main__card">
+        <div class="card-title">
+          <h2>Instructions</h2>
+          <div class="onboarding-container">
+            <div class="cards-wrapper">
+              @for (card of cards(); track $index) {
+              <app-instruction-card
+                [cardData]="card"
+                [isActive]="isCardActive($index)"
+                [isCompleted]="isCardCompleted($index)"
+                (continueEvent)="onContinue($index, $event)">
+              </app-instruction-card>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="main__card-sidebar">
+        <div class="assistance-box">
+          <div class="assistance-header">Need assistance?</div>
+          <div class="assistance-content">
+            <mat-icon
+              class="assistance-content__icon-box"
+              [svgIcon]="'need-assistance'"></mat-icon>
+            <ul>
+              <li>I'm more interested in <a href="#">BCProvider</a></li>
+              <li>
+                Have a question and need to talk to us directly?
+                <a href="#">Contact us</a>
+              </li>
+              <li>Here is OneHealthID's <a href="#">FAQ page</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
