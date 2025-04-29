@@ -95,10 +95,9 @@
           background-color: pidp.$bcgov-color-primary;
         }
 
-        .main-image-container {
+        .main-image {
           height: 430px;
           width: auto;
-          object-fit: contain;
           position: relative;
 
           img {
@@ -136,4 +135,20 @@
 .pas-step-label {
   margin: unset;
   line-height: 1.3;
+}
+
+.viewport-xsmall,
+.viewport-small {
+  .main {
+    .main-image-container {
+      display: none !important;
+    }
+    .card {
+      .choose-account {
+        button {
+          padding: 14px !important;
+        }
+      }
+    }
+  }
 }
