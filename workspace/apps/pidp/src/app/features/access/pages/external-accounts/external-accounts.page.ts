@@ -8,6 +8,7 @@ import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { AccessRoutes } from '../../access.routes';
 import { InstructionCardComponent } from './components/instruction-card.component';
+import { InstructionCard } from './components/instruction-card.model';
 
 @Component({
   selector: 'app-external-accounts',
@@ -61,9 +62,9 @@ export class ExternalAccountsPage {
       ),
     );
     this.matIconRegistry.addSvgIcon(
-      'instruction-time',
+      'icon-complete',
       this.sanitizer.bypassSecurityTrustResourceUrl(
-        'assets/images/icons/instruction-time.svg',
+        'assets/images/icons/icon-complete.svg',
       ),
     );
 
@@ -75,9 +76,9 @@ export class ExternalAccountsPage {
     );
   }
 
-  public currentStep = 0;
+  public currentStep = 1;
 
-  public cards = signal([
+  public cards = signal<InstructionCard[]>([
     {
       id: 1,
       icon: 'instruction-document',
@@ -106,14 +107,16 @@ export class ExternalAccountsPage {
       id: 3,
       icon: 'instruction-mail',
       title: 'Please verify your email address',
+      placeholder: '',
       description:
         'Click the verified link in the email that was just sent to you.',
       type: 'verification',
     },
     {
       id: 4,
-      icon: 'instruction-time',
+      icon: 'icon-complete',
       title: 'Instructions complete',
+      placeholder: '',
       description:
         'Click the “Continue” button to start using your own account.',
       type: 'final',
@@ -122,20 +125,28 @@ export class ExternalAccountsPage {
   ]);
 
   public isCardActive(index: number): boolean {
+    //TODO : to be removed.
+    if (index === 0 || index === 2) {
+      return false;
+    }
     return index === this.currentStep;
   }
 
   public isCardCompleted(index: number): boolean {
+    //TODO : to be removed.
+    if (index === 0 || index === 2) {
+      return false;
+    }
     return index < this.currentStep;
   }
 
-  public onContinue(index: number, value: any): void {
+  public onContinue(index: number, value: string): void {
     // Handle the continue action for each step
     console.log(`Step ${index + 1} completed with value:`, value);
 
     // Move to the next step if not the last one
     if (index < this.cards().length - 1) {
-      this.currentStep = index + 1;
+      this.currentStep = index + 2;
     } else {
       // Handle completion of all steps
       console.log('All steps completed!');
