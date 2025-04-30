@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { AccessRoutes } from '../../access.routes';
@@ -22,8 +23,9 @@ import { InstructionCardComponent } from './components/instruction-card.componen
 export class ExternalAccountsPage {
   sanitizer = inject(DomSanitizer);
   matIconRegistry = inject(MatIconRegistry);
+  public AccessRoutes = AccessRoutes;
 
-  constructor() {
+  constructor(private router: Router) {
     this.registerSvgIcons();
   }
 
@@ -136,6 +138,7 @@ export class ExternalAccountsPage {
     } else {
       // Handle completion of all steps
       console.log('All steps completed!');
+      this.router.navigate([value.routePath]);
     }
   }
 }

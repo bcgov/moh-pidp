@@ -22,6 +22,7 @@
                 [cardData]="card"
                 [isActive]="isCardActive($index)"
                 [isCompleted]="isCardCompleted($index)"
+                [routePath]="AccessRoutes.routePath(AccessRoutes.HALO)"
                 (continueEvent)="onContinue($index, $event)">
               </app-instruction-card>
               }

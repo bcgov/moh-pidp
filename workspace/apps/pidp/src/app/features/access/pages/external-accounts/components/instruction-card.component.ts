@@ -22,6 +22,7 @@ export class InstructionCardComponent {
   @Input() cardData: any;
   @Input() isActive: boolean = false;
   @Input() isCompleted: boolean = false;
+  @Input() public routePath = '';
   @Output() continueEvent = new EventEmitter<any>();
 
   email: string = '';
