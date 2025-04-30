@@ -30,6 +30,7 @@
 
     .card-icon {
       color: #a0a0a0;
+      opacity: 0.4;
     }
 
     .card-title,
@@ -51,16 +52,6 @@
     font-size: 24px;
     color: pidp.$btn-blue-color;
     margin-right: 15px;
-
-    i {
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      border: 2px solid currentColor;
-    }
   }
 
   .card-body {
@@ -86,10 +77,10 @@
 
   .form-control {
     width: 100%;
-    padding: 10px;
     border: 1px solid pidp.$grey-30;
     border-radius: 4px;
     font-size: 14px;
+    padding: 10px;
 
     &:focus {
       outline: none;
@@ -135,6 +126,10 @@
     gap: 0.625rem;
     cursor: pointer;
 
+    &:hover {
+      opacity: 0.7;
+    }
+
     &:disabled {
       background-color: pidp.$grey-30;
       border-color: pidp.$grey-30;
@@ -144,12 +139,12 @@
   }
 
   .btn-continue {
-    background-color: pidp.$btn-blue-color;
+    background-color: pidp.$bcgov-color-semantic-success;
     color: #fff;
     border: none;
 
     &:hover {
-      background-color: pidp.$btn-blue-color;
+      opacity: 0.7;
     }
 
     &:disabled {

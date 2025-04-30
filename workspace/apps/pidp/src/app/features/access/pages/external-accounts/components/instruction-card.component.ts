@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output, model } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
+
+import { InstructionCard } from './instruction-card.model';
 
 @Component({
   selector: 'app-instruction-card',
@@ -19,16 +21,22 @@ import { MatSelectModule } from '@angular/material/select';
   styleUrl: './instruction-card.component.scss',
 })
 export class InstructionCardComponent {
-  @Input() cardData: any;
-  @Input() isActive: boolean = false;
-  @Input() isCompleted: boolean = false;
+  @Input()
+  public cardData: InstructionCard = {} as InstructionCard;
   @Input() public routePath = '';
-  @Output() continueEvent = new EventEmitter<any>();
 
-  email: string = '';
+  @Input()
+  public isActive = false;
 
-  public onContinue(value?: any): void {
-    console.log('Continue clicked', value);
+  @Input()
+  public isCompleted = false;
+
+  @Output()
+  public continueEvent = new EventEmitter<string>();
+
+  public email = '';
+
+  public onContinue(value?: string): void {
     this.continueEvent.emit(value);
   }
 }

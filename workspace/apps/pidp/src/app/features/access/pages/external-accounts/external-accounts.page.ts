@@ -4,9 +4,12 @@ import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 
+import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
+
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { AccessRoutes } from '../../access.routes';
 import { InstructionCardComponent } from './components/instruction-card.component';
+import { InstructionCard } from './components/instruction-card.model';
 
 @Component({
   selector: 'app-external-accounts',
@@ -16,16 +19,16 @@ import { InstructionCardComponent } from './components/instruction-card.componen
     BreadcrumbComponent,
     InstructionCardComponent,
     MatIconModule,
+    InjectViewportCssClassDirective,
   ],
   templateUrl: './external-accounts.page.html',
   styleUrl: './external-accounts.page.scss',
 })
 export class ExternalAccountsPage {
-  sanitizer = inject(DomSanitizer);
-  matIconRegistry = inject(MatIconRegistry);
-  public AccessRoutes = AccessRoutes;
+  public sanitizer = inject(DomSanitizer);
+  public matIconRegistry = inject(MatIconRegistry);
 
-  constructor(private router: Router) {
+  public constructor() {
     this.registerSvgIcons();
   }
 
@@ -60,9 +63,9 @@ export class ExternalAccountsPage {
       ),
     );
     this.matIconRegistry.addSvgIcon(
-      'instruction-time',
+      'icon-complete',
       this.sanitizer.bypassSecurityTrustResourceUrl(
-        'assets/images/icons/instruction-time.svg',
+        'assets/images/icons/icon-complete.svg',
       ),
     );
 
@@ -74,9 +77,9 @@ export class ExternalAccountsPage {
     );
   }
 
-  currentStep = 0;
+  public currentStep = 1;
 
-  public cards = signal([
+  public cards = signal<InstructionCard[]>([
     {
       id: 1,
       icon: 'instruction-document',
@@ -105,36 +108,46 @@ export class ExternalAccountsPage {
       id: 3,
       icon: 'instruction-mail',
       title: 'Please verify your email address',
+      placeholder: '',
       description:
         'Click the verified link in the email that was just sent to you.',
       type: 'verification',
     },
     {
       id: 4,
-      icon: 'instruction-time',
-      title: 'Final setup from OneHealthID',
+      icon: 'icon-complete',
+      title: 'Instructions complete',
+      placeholder: '',
       description:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum pulvinar turpis lorem',
+        'Click the “Continue” button to start using your own account.',
       type: 'final',
       buttonText: 'Continue',
     },
   ]);
 
   public isCardActive(index: number): boolean {
+    //TODO : to be removed.
+    if (index === 0 || index === 2) {
+      return false;
+    }
     return index === this.currentStep;
   }
 
   public isCardCompleted(index: number): boolean {
+    //TODO : to be removed.
+    if (index === 0 || index === 2) {
+      return false;
+    }
     return index < this.currentStep;
   }
 
-  public onContinue(index: number, value: any): void {
+  public onContinue(index: number, value: string): void {
     // Handle the continue action for each step
     console.log(`Step ${index + 1} completed with value:`, value);
 
     // Move to the next step if not the last one
     if (index < this.cards().length - 1) {
-      this.currentStep = index + 1;
+      this.currentStep = index + 2;
     } else {
       // Handle completion of all steps
       console.log('All steps completed!');

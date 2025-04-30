@@ -23,7 +23,7 @@
             <mat-select
               class="form-control"
               [disabled]="!isActive"
-              [placeholder]="cardData.placeholder"
+              [placeholder]="cardData.placeholder || ''"
               (selectionChange)="onContinue($event.value)">
               @for (option of cardData.options; track $index) {
                 <mat-option [value]="option.value">
@@ -31,6 +31,7 @@
                 </mat-option>
               }
             </mat-select>
+
             @if (cardData.linkText) {
               <a class="help-link" href="javascript:void(0)">{{
                 cardData.linkText
@@ -51,7 +52,6 @@
                 required
                 email
                 [placeholder]="cardData.placeholder"
-                [disabled]="!isActive"
                 [ngClass]="{
                   'is-invalid':
                     inputField.invalid &&
@@ -61,7 +61,7 @@
 
               <button
                 class="btn"
-                [disabled]="!isActive || inputField.invalid"
+                [disabled]="inputField.invalid"
                 (click)="onContinue(inputField.value)">
                 {{ cardData.buttonText }}
               </button>
@@ -83,7 +83,7 @@
           </div>
         }
         <!-- Email Verification -->
-        @case ('varification') {
+        @case ('verification') {
           <div class="form-group"></div>
         }
 

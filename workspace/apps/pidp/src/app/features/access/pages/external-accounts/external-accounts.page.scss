@@ -25,109 +25,101 @@
   --form-card-width: 25rem;
 }
 
-.content-header h1 {
-  color: #003366;
-  font-size: 50px;
-  font-weight: 700;
-  word-wrap: break-word;
-}
-
-.main {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 20px;
-  min-height: 340px;
-  margin: calc(var(--gap)) 0;
-
-  &__card {
+.viewport-all {
+  & .content {
+    padding-bottom: var(--content-padding);
     display: flex;
     flex-direction: column;
-    padding-right: calc(var(--gap) * 0.9);
-    position: relative;
-    line-height: 1.5rem;
-  }
+    gap: var(--gap);
 
-  &__card-sidebar {
-    display: flex;
-    flex-direction: column;
-    padding-right: calc(var(--gap) * 0.9);
-    position: relative;
-    line-height: 1.5rem;
-    align-items: flex-end;
-    margin-top: 2rem;
-  }
-}
+    .content-header {
+      h1 {
+        color: pidp.$bcgov-color-primary;
+        font-size: 50px;
+        font-weight: 700;
+        word-wrap: break-word;
+      }
 
-.assistance-box {
-  width: 350px;
-  border: 1px solid #e0e0e0;
-  font-family: Arial, sans-serif;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-
-  .assistance-header {
-    background-color: #13365f;
-    color: white;
-    padding: 15px 20px;
-    font-size: 22px;
-    font-weight: bold;
-  }
-
-  .assistance-content {
-    display: flex;
-    justify-content: center;
-    padding: 20px;
-    background-color: white;
-    flex-direction: column;
-    align-items: center;
-
-    &__icon-box {
-      width: 3.1875rem !important;
-      height: 3.75rem !important;
-      padding: 0rem 1rem;
-    }
-
-    .question-icon {
-      text-align: center;
-      margin-bottom: 20px;
-
-      span {
-        display: inline-block;
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        background-color: #666;
-        color: white;
-        font-size: 40px;
-        line-height: 60px;
-        position: relative;
-
-        &::after {
-          content: '';
-          position: absolute;
-          bottom: -5px;
-          left: 45px;
-          width: 15px;
-          height: 15px;
-          background-color: #666;
-          transform: rotate(45deg);
-        }
+      p {
+        color: pidp.$bcgov-color-text;
       }
     }
 
-    ul {
-      list-style-type: disc;
-      padding-left: 20px;
+    .main {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 20px;
+      min-height: 340px;
+      margin: calc(var(--gap)) 0;
 
-      li {
-        margin-bottom: 15px;
+      & .card {
+        display: flex;
+        flex-direction: column;
+        padding-right: calc(var(--gap) * 0.9);
+        position: relative;
+        line-height: 1.5rem;
 
-        a {
-          color: #3273dc;
-          text-decoration: none;
+        &__card-title h2 {
+          color: pidp.$bcgov-color-text;
+          font-size: 1.5rem;
+          font-weight: 700;
+          margin-bottom: calc(var(--gap) / 2);
+        }
 
-          &::after {
-            content: ' >';
+        &__card-wrapper {
+          padding: 1rem 0;
+        }
+      }
+
+      .assistance-box {
+        max-width: 300px;
+        border: 1px solid pidp.$grey-20;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        margin-top: 3.5rem;
+
+        .assistance-header h2 {
+          background-color: pidp.$btn-blue-color;
+          color: #fff;
+          padding: 1rem;
+          font-size: 1.5rem;
+          font-weight: 700;
+          text-align: center;
+          margin: 0;
+        }
+
+        .assistance-content {
+          display: flex;
+          justify-content: center;
+          padding: 20px;
+          flex-direction: column;
+          align-items: center;
+
+          &__icon {
+            width: 3.1875rem;
+            height: 3.75rem;
+
+            display: flex;
+            flex-shrink: 0;
+            justify-content: center;
+            margin-bottom: 1rem;
+          }
+
+          ul {
+            list-style-type: disc;
+            padding-left: 20px;
+
+            li {
+              margin-bottom: 15px;
+              color: pidp.$bcgov-color-text;
+
+              a:link,
+              a:visited {
+                color: pidp.$btn-blue-color;
+                text-decoration: none;
+                display: flex;
+              }
+            }
           }
         }
       }
