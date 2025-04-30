@@ -52,7 +52,7 @@ export class HaloPage {
       title: 'Access',
       path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
     },
-    { title: 'PAS', path: '' },
+    { title: 'Halo', path: '' },
   ];
 
   public constructor(

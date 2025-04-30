@@ -33,7 +33,7 @@ export class ExternalAccountsPage {
       title: 'Access',
       path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
     },
-    { title: 'PAS', path: AccessRoutes.routePath(AccessRoutes.HALO) },
+    { title: 'Halo', path: AccessRoutes.routePath(AccessRoutes.HALO) },
     { title: 'External Accounts', path: '' },
   ];
 
