@@ -1,10 +1,20 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import {
+  Component,
+  TemplateRef,
+  ViewChild,
+  inject,
+  signal,
+} from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 
 import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
+
+import { DialogExternalAccountCreateComponent } from '@app/shared/components/success-dialog/components/external-account-create.component';
+import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
 
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { AccessRoutes } from '../../access.routes';
@@ -20,6 +30,7 @@ import { InstructionCard } from './components/instruction-card.model';
     InstructionCardComponent,
     MatIconModule,
     InjectViewportCssClassDirective,
+    SuccessDialogComponent,
   ],
   templateUrl: './external-accounts.page.html',
   styleUrl: './external-accounts.page.scss',
@@ -28,8 +39,12 @@ export class ExternalAccountsPage {
   public sanitizer = inject(DomSanitizer);
   public matIconRegistry = inject(MatIconRegistry);
   public AccessRoutes = AccessRoutes;
+  public componentType = DialogExternalAccountCreateComponent;
 
-  public constructor(private router: Router) {
+  public constructor(
+    private router: Router,
+    private dialog: MatDialog,
+  ) {
     this.registerSvgIcons();
   }
 
@@ -79,6 +94,8 @@ export class ExternalAccountsPage {
   }
 
   public currentStep = 1;
+  @ViewChild('successDialog')
+  public successDialogTemplate!: TemplateRef<Element>;
 
   public cards = signal<InstructionCard[]>([
     {
@@ -153,6 +170,12 @@ export class ExternalAccountsPage {
       // Handle completion of all steps
       console.log('All steps completed!');
       this.router.navigate([value]);
+      this.showSuccessDialog();
     }
+  }
+
+  private showSuccessDialog(): void {
+    const config: MatDialogConfig = {};
+    this.dialog.open(this.successDialogTemplate, config);
   }
 }

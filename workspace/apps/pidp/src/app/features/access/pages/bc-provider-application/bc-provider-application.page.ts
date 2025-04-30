@@ -136,7 +136,7 @@ export class BcProviderApplicationPage
   ];
 
   public fullName$!: Observable<string>;
-  public showInstructions: boolean = false;
+  public showInstructions = false;
   public activeLayout: 'upliftAccount' | 'createAccount' | '';
 
   @ViewChild('successDialog')
