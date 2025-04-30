@@ -15,8 +15,6 @@ import { faCircleCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
 import { SuccessDialogComponentClass } from './classes/success-dialog-component.class';
-import { DialogBcproviderCreateComponent } from './components/dialog-bcprovider-create.component';
-import { DialogBcproviderEditComponent } from './components/dialog-bcprovider-edit.component';
 import { FeedbackSendComponent } from './components/feedback-send.component';
 
 @Component({
@@ -31,7 +29,7 @@ export class SuccessDialogComponent implements OnInit {
   public faXmark = faXmark;
   public showHeader = false;
 
-  @Input() public username: string = '';
+  @Input() public username = '';
   @Input() public title!: string;
   @Input() public componentType!: Type<SuccessDialogComponentClass>;
 
