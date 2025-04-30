@@ -17,6 +17,7 @@ import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 import { SuccessDialogComponentClass } from './classes/success-dialog-component.class';
 import { DialogBcproviderCreateComponent } from './components/dialog-bcprovider-create.component';
 import { DialogBcproviderEditComponent } from './components/dialog-bcprovider-edit.component';
+import { FeedbackSendComponent } from './components/feedback-send.component';
 
 @Component({
   selector: 'app-success-dialog',
@@ -45,12 +46,7 @@ export class SuccessDialogComponent implements OnInit {
 
   public ngOnInit(): void {
     this.loadDialogParagraphComponent(this.componentType);
-    if (
-      this.componentType === DialogBcproviderCreateComponent ||
-      this.componentType === DialogBcproviderEditComponent
-    ) {
-      this.showHeader = true;
-    }
+    this.showHeader = this.componentType !== FeedbackSendComponent;
   }
 
   private loadDialogParagraphComponent(
