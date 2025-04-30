@@ -27,8 +27,9 @@ import { InstructionCard } from './components/instruction-card.model';
 export class ExternalAccountsPage {
   public sanitizer = inject(DomSanitizer);
   public matIconRegistry = inject(MatIconRegistry);
+  public AccessRoutes = AccessRoutes;
 
-  public constructor() {
+  public constructor(private router: Router) {
     this.registerSvgIcons();
   }
 
@@ -151,7 +152,7 @@ export class ExternalAccountsPage {
     } else {
       // Handle completion of all steps
       console.log('All steps completed!');
-      this.router.navigate([value.routePath]);
+      this.router.navigate([value]);
     }
   }
 }
