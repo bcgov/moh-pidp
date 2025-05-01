@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatStepperModule } from '@angular/material/stepper';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 
 import { BehaviorSubject, Observable } from 'rxjs';
 
@@ -18,6 +18,7 @@ import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrum
 
 import { AccessRoutes } from '../../access.routes';
 import { bcProviderTutorialLink } from '../provincial-attachment-system/provincial-attachment-system.constants';
+import { haloUrl } from './halo.constants';
 
 @Component({
   selector: 'app-halo',
@@ -40,8 +41,7 @@ export class HaloPage {
     false,
   );
   public destination$: Observable<Destination>;
-  public halo$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
-  public hasCpn: boolean | undefined;
+  public halo$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   public selectedIndex: number;
   public bcProviderTutorial: string;
   public Destination = Destination;
@@ -58,7 +58,6 @@ export class HaloPage {
   public constructor(
     private discoveryResource: DiscoveryResource,
     private partyService: PartyService,
-    private router: Router,
   ) {
     this.selectedIndex = -1;
     this.bcProviderTutorial = bcProviderTutorialLink;
@@ -68,6 +67,6 @@ export class HaloPage {
   }
 
   public navigateToPath(): void {
-    this.router.navigate(['/']);
+    window.open(haloUrl, '_blank');
   }
 }
