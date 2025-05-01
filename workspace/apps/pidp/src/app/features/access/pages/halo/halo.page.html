@@ -58,61 +58,6 @@
 
           <mat-step [completed]="false">
             <ng-template matStepLabel>
-              <p class="pas-step-label">
-                Invite others to Halo - PAS EMR<br />
-                (Optional)
-              </p>
-            </ng-template>
-            <div>
-              <div
-                *ngIf="!hasCpn && (destination$ | async) === Destination.PORTAL; else licenced">
-                <p>
-                  <i
-                    >Because you are MOA or do <strong>not</strong> have a
-                    college licence, then this step will become part of the
-                    process.</i
-                  >
-                </p>
-                <mat-stepper class="moa-message-steps">
-                  <mat-step editable="false" [completed]="false">
-                    <ng-template matStepLabel>Start endorsement</ng-template>
-                  </mat-step>
-                  <mat-step editable="false" [completed]="false">
-                    <ng-template matStepLabel>Pending Approval</ng-template>
-                  </mat-step>
-                  <mat-step editable="false" [completed]="false">
-                    <ng-template matStepLabel
-                      >Completion and Halo link available</ng-template
-                    >
-                  </mat-step>
-                </mat-stepper>
-              </div>
-              <ng-template #licenced>
-                <p class="guide-information">
-                  Do you work with others who need access to Halo? For example,
-                  assistants or other members of your Care Team, who may or may
-                  not have a professional license? <br />If you do, then you can
-                  send trusted colleagues a OneHealthID access invitation by
-                  clicking the “Endorsements” button below.
-                </p>
-              </ng-template>
-              <button
-                mat-flat-button
-                type="button"
-                color="primary"
-                routerLink="/organization-info/endorsements"
-                aria-labelledby="navigate-to-endorsements">
-                Endorsements
-              </button>
-            </div>
-            <div class="stepper-buttons">
-              <button mat-stroked-button matStepperPrevious>Back</button>
-              <button mat-stroked-button matStepperNext>Next</button>
-            </div>
-          </mat-step>
-
-          <mat-step [completed]="false">
-            <ng-template matStepLabel>
               Multi-Factor Authentication (MFA) Set-Up Guide
             </ng-template>
             <p class="guide-information">
@@ -159,16 +104,11 @@
             priority
             fill />
         </div>
-        <ng-container *ngIf="hasCpn && (halo$ | async)">
-          <div class="pas-button-text">
-            <i>You will need BCProvider credential before logging in.</i>
-          </div>
-        </ng-container>
-        <ng-container *ngIf="!hasCpn && (halo$ | async)">
+        <ng-container *ngIf="(halo$ | async)">
           <div class="pas-button-text">
             <i
-              >You will need BCProvider credential, and an endorsement before
-              logging in.</i
+              >You will need a BCProvider or your own credential before logging
+              in.</i
             >
           </div>
         </ng-container>
