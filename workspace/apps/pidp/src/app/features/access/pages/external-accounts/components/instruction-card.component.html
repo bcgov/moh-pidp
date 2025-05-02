@@ -33,9 +33,14 @@
             </mat-select>
 
             @if (cardData.linkText) {
-              <a class="help-link" href="javascript:void(0)">{{
-                cardData.linkText
-              }}</a>
+              <a
+                class="help-link"
+                href="javascript:void(0)"
+                [class.disabled]="!isActive"
+                [attr.aria-disabled]="!isActive"
+                [tabindex]="!isActive ? -1 : 0"
+                >{{ cardData.linkText }}</a
+              >
             }
           </div>
         }

@@ -11,8 +11,12 @@ import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 
-import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
+import {
+  AnchorDirective,
+  InjectViewportCssClassDirective,
+} from '@bcgov/shared/ui';
 
+import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { DialogExternalAccountCreateComponent } from '@app/shared/components/success-dialog/components/external-account-create.component';
 import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
 
@@ -31,6 +35,7 @@ import { InstructionCard } from './components/instruction-card.model';
     MatIconModule,
     InjectViewportCssClassDirective,
     SuccessDialogComponent,
+    AnchorDirective,
   ],
   templateUrl: './external-accounts.page.html',
   styleUrl: './external-accounts.page.scss',
@@ -38,8 +43,11 @@ import { InstructionCard } from './components/instruction-card.model';
 export class ExternalAccountsPage {
   public sanitizer = inject(DomSanitizer);
   public matIconRegistry = inject(MatIconRegistry);
+  public config = inject(APP_CONFIG) as AppConfig;
+
   public AccessRoutes = AccessRoutes;
   public componentType = DialogExternalAccountCreateComponent;
+  public emailSupport = this.config.emails.providerIdentitySupport;
 
   public constructor(
     private router: Router,
