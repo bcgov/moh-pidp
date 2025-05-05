@@ -266,10 +266,11 @@ export class BcProviderApplicationPage
         .split('/')
         .includes(AccessRoutes.PROVINCIAL_ATTACHMENT_SYSTEM)
     ) {
-      this.router.navigate([
-        AccessRoutes.BASE_PATH,
-        AccessRoutes.PROVINCIAL_ATTACHMENT_SYSTEM,
-      ]);
+      this.router.navigateByUrl(
+        AccessRoutes.routePath(AccessRoutes.PROVINCIAL_ATTACHMENT_SYSTEM),
+      );
+    } else if (this.previousUrl.split('/').includes(AccessRoutes.HALO)) {
+      this.router.navigateByUrl(AccessRoutes.routePath(AccessRoutes.HALO));
     } else {
       this.navigationService.navigateToRoot();
     }
