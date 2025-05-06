@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import {
   Component,
+  Inject,
   TemplateRef,
   ViewChild,
   inject,
@@ -43,17 +44,18 @@ import { InstructionCard } from './components/instruction-card.model';
 export class ExternalAccountsPage {
   public sanitizer = inject(DomSanitizer);
   public matIconRegistry = inject(MatIconRegistry);
-  public config = inject(APP_CONFIG) as AppConfig;
 
   public AccessRoutes = AccessRoutes;
   public componentType = DialogExternalAccountCreateComponent;
-  public emailSupport = this.config.emails.providerIdentitySupport;
+  public emailSupport: string;
 
   public constructor(
     private router: Router,
     private dialog: MatDialog,
+    @Inject(APP_CONFIG) private config: AppConfig,
   ) {
     this.registerSvgIcons();
+    this.emailSupport = this.config.emails.providerIdentitySupport;
   }
 
   public breadcrumbsData: Array<{ title: string; path: string }> = [

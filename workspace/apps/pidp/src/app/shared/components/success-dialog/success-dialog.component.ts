@@ -54,8 +54,13 @@ export class SuccessDialogComponent implements OnInit {
       console.error('DialogParagraphHost is not initialized.');
       return;
     }
-    this.dialogParagraphHost.createComponent<SuccessDialogComponentClass>(
-      componentType,
-    );
+    const componentRef =
+      this.dialogParagraphHost.createComponent<SuccessDialogComponentClass>(
+        componentType,
+      );
+
+    if ('username' in componentRef.instance) {
+      componentRef.instance.username = this.username;
+    }
   }
 }

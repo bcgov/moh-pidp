@@ -32,7 +32,7 @@
             <h1><strong>Set new password</strong></h1>
 
             <p class="username username-intro">Provided username:</p>
-            <p class="username username-overflow">{{ username }}</p>
+            <p class="username username-overflow">{{ username() }}</p>
             <div class="form-content">
               <div class="field">
                 <label id="bc-provider-application-new-password"
@@ -148,7 +148,7 @@
 <ng-template #successDialog>
   <app-success-dialog
     title="Password reset completed"
-    [username]="username"
+    [username]="username()"
     [componentType]="componentType">
   </app-success-dialog>
 </ng-template>
