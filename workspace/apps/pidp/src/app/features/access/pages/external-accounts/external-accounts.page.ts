@@ -12,6 +12,13 @@ import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 
+import { EMPTY, catchError, tap } from 'rxjs';
+
+import {
+  LOADING_OVERLAY_DEFAULT_MESSAGE,
+  LoadingOverlayService,
+} from '@pidp/presentation';
+
 import {
   AnchorDirective,
   InjectViewportCssClassDirective,
@@ -19,6 +26,7 @@ import {
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
+import { ToastService } from '@app/core/services/toast.service';
 import { DialogExternalAccountCreateComponent } from '@app/shared/components/success-dialog/components/external-account-create.component';
 import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
 
@@ -55,9 +63,11 @@ export class ExternalAccountsPage {
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
     private dialog: MatDialog,
-    private resource: ExternalAccountsResource,
+    private loadingOverlay: LoadingOverlayService,
     private partyService: PartyService,
+    private resource: ExternalAccountsResource,
     private router: Router,
+    private toastService: ToastService,
   ) {
     this.registerSvgIcons();
     this.emailSupport = this.config.emails.providerIdentitySupport;
@@ -179,8 +189,20 @@ export class ExternalAccountsPage {
     console.log(`Step ${index + 1} completed with value:`, value);
 
     if (index + 1 === InvitationSteps.USER_PRINCIPAL_NAME) {
+      this.loadingOverlay.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
       this.resource
         .createExternalAccount(this.partyService.partyId, value)
+        .pipe(
+          tap(() => {
+            this.loadingOverlay.close();
+            this.toastService.openSuccessToast('Account invited successfully!');
+          }),
+          catchError(() => {
+            this.loadingOverlay.close();
+            this.toastService.openErrorToast('Failed to invite account.');
+            return EMPTY;
+          }),
+        )
         .subscribe();
     }
 
