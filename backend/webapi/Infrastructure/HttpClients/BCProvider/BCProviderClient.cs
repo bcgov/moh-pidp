@@ -11,8 +11,9 @@ public partial class BCProviderClient(
 {
     private readonly GraphServiceClient client = client;
     private readonly ILogger<BCProviderClient> logger = logger;
-    private readonly string domain = config.BCProviderClient.Domain;
+    private readonly string appUrl = config.ApplicationUrl;
     private readonly string clientId = config.BCProviderClient.ClientId;
+    private readonly string domain = config.BCProviderClient.Domain;
 
     public async Task<object?> GetAttribute(string userPrincipalName, string attributeName)
     {
@@ -68,6 +69,41 @@ public partial class BCProviderClient(
         catch (Exception e)
         {
             this.logger.LogAccountCreationFailure(userPrincipal, e);
+            return null;
+        }
+    }
+
+    public async Task<string?> SendInvite(string userPrincipalName)
+    {
+        var invitation = new Invitation
+        {
+            InvitedUserEmailAddress = userPrincipalName,
+            InviteRedirectUrl = this.appUrl,
+            SendInvitationMessage = false,
+            InvitedUserType = "Guest"
+        };
+
+        try
+        {
+            var response = await this.client.Invitations.PostAsync(invitation);
+            if (response == null)
+            {
+                this.logger.LogInviteUserError(userPrincipalName, "Response was null.");
+            }
+            else if (response.InvitedUser == null)
+            {
+                this.logger.LogInviteUserError(userPrincipalName, "InvitedUser was null.");
+            }
+            else if (response.InvitedUser.Id == null)
+            {
+                this.logger.LogInviteUserError(userPrincipalName, "InvitedUser.Id was null.");
+            }
+
+            return response?.InvitedUser?.Id;
+        }
+        catch (ServiceException ex)
+        {
+            this.logger.LogInviteUserError(userPrincipalName, ex.Message);
             return null;
         }
     }
@@ -134,7 +170,6 @@ public partial class BCProviderClient(
             return false;
         }
     }
-
 
     public async Task<bool> RemoveAuthMethods(string userPrincipalName)
     {
@@ -326,4 +361,7 @@ public static partial class BCProviderClientLoggingExtensions
 
     [LoggerMessage(12, LogLevel.Error, "An error occurred while deleting auth method {oDataType}: {message}")]
     public static partial void LogDeleteUserAuthMethodFailure(this ILogger<BCProviderClient> logger, string? oDataType, string message);
+
+    [LoggerMessage(13, LogLevel.Error, "An error occurred while inviting user {userPrincipalName}. Reason: {reason}")]
+    public static partial void LogInviteUserError(this ILogger<BCProviderClient> logger, string userPrincipalName, string? reason);
 }

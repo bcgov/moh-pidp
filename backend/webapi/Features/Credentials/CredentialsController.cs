@@ -91,6 +91,16 @@ public class CredentialsController(IPidpAuthorizationService authorizationServic
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
+    [HttpPost("bc-provider/invite")]
+    [Authorize(Roles = Roles.FeatureFlag)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> CreateGuestInvite([FromServices] ICommandHandler<BCProviderInvite.Command, IDomainResult> handler,
+                                                       [FromHybrid][AutoValidateAlways] BCProviderInvite.Command command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
+            .ToActionResult();
+
     [HttpPost("link-ticket")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
