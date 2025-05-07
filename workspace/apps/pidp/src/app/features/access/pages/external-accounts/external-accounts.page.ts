@@ -18,6 +18,7 @@ import {
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
+import { PartyService } from '@app/core/party/party.service';
 import { DialogExternalAccountCreateComponent } from '@app/shared/components/success-dialog/components/external-account-create.component';
 import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
 
@@ -25,6 +26,8 @@ import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/br
 import { AccessRoutes } from '../../access.routes';
 import { InstructionCardComponent } from './components/instruction-card.component';
 import { InstructionCard } from './components/instruction-card.model';
+import { ExternalAccountsResource } from './external-accounts-resource.service';
+import { InvitationSteps } from './external-accounts.model';
 
 @Component({
   selector: 'app-external-accounts',
@@ -50,9 +53,11 @@ export class ExternalAccountsPage {
   public emailSupport: string;
 
   public constructor(
-    private router: Router,
-    private dialog: MatDialog,
     @Inject(APP_CONFIG) private config: AppConfig,
+    private dialog: MatDialog,
+    private resource: ExternalAccountsResource,
+    private partyService: PartyService,
+    private router: Router,
   ) {
     this.registerSvgIcons();
     this.emailSupport = this.config.emails.providerIdentitySupport;
@@ -172,6 +177,12 @@ export class ExternalAccountsPage {
   public onContinue(index: number, value: string): void {
     // Handle the continue action for each step
     console.log(`Step ${index + 1} completed with value:`, value);
+
+    if (index + 1 === InvitationSteps.USER_PRINCIPAL_NAME) {
+      this.resource
+        .createExternalAccount(this.partyService.partyId, value)
+        .subscribe();
+    }
 
     // Move to the next step if not the last one
     if (index < this.cards().length - 1) {
