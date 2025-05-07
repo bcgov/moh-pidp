@@ -31,7 +31,7 @@ public interface IBCProviderClient
     /// Sends a Entra B2B guest account invite to an external Entra account.
     /// </summary>
     /// <param name="userPrincipalName"></param>
-    /// <returns> ID of the created Guest user. </returns>
+    /// <returns> UPN of the created Guest user. </returns>
     public Task<string?> SendInvite(string userPrincipalName);
 
     /// <summary>

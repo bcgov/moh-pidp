@@ -94,12 +94,12 @@ public partial class BCProviderClient(
             {
                 this.logger.LogInviteUserError(userPrincipalName, "InvitedUser was null.");
             }
-            else if (response.InvitedUser.Id == null)
+            else if (response.InvitedUser.UserPrincipalName == null)
             {
-                this.logger.LogInviteUserError(userPrincipalName, "InvitedUser.Id was null.");
+                this.logger.LogInviteUserError(userPrincipalName, "InvitedUser.UserPrincipalName was null.");
             }
 
-            return response?.InvitedUser?.Id;
+            return response?.InvitedUser?.UserPrincipalName;
         }
         catch (ServiceException ex)
         {
