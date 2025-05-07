@@ -94,12 +94,17 @@ public partial class BCProviderClient(
             {
                 this.logger.LogInviteUserError(userPrincipalName, "InvitedUser was null.");
             }
-            else if (response.InvitedUser.UserPrincipalName == null)
+            else if (response.InvitedUser.Id == null)
+            {
+                this.logger.LogInviteUserError(userPrincipalName, "InvitedUser.ObjectId was null.");
+            }
+
+            var upn = await this.GetUserPrincipalName(response?.InvitedUser?.Id);
+            if (upn == null)
             {
                 this.logger.LogInviteUserError(userPrincipalName, "InvitedUser.UserPrincipalName was null.");
             }
-
-            return response?.InvitedUser?.UserPrincipalName;
+            return upn;
         }
         catch (ServiceException ex)
         {
@@ -280,6 +285,14 @@ public partial class BCProviderClient(
 
         this.logger.LogNoUniqueUserPrincipalNameFound(validCharacters);
         return null;
+    }
+
+    private async Task<string?> GetUserPrincipalName(string? objectId)
+    {
+        var user = await this.client.Users[objectId]
+            .GetAsync(request => request.QueryParameters.Select = ["userPrincipalName"]);
+
+        return user?.UserPrincipalName;
     }
 
     private string RemoveMailNicknameInvalidCharacters(string mailNickname)
