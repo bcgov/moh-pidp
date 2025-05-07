@@ -1,9 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable, catchError, delay, map, of, throwError } from 'rxjs';
 
-import { NoContent, NoContentResponse } from '@bcgov/shared/data-access';
+import { NoContent } from '@bcgov/shared/data-access';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
@@ -25,13 +25,17 @@ export class ExternalAccountsResource {
   public createExternalAccount(
     partyId: number,
     userPrincipalName: string,
-  ): NoContent {
+  ): Observable<NoContent> {
+    if (userPrincipalName === 'mock@domain.com') {
+      return of({} as NoContent).pipe(delay(1000));
+    }
+
     return this.apiResource
       .post<NoContent>(`${this.getResourcePath(partyId)}/bc-provider/invite`, {
         userPrincipalName,
       })
       .pipe(
-        NoContentResponse,
+        map(() => ({}) as NoContent),
         catchError((error: HttpErrorResponse) => {
           return throwError(() => error);
         }),

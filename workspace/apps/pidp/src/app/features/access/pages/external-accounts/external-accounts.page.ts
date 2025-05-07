@@ -188,6 +188,13 @@ export class ExternalAccountsPage {
     // Handle the continue action for each step
     console.log(`Step ${index + 1} completed with value:`, value);
 
+    if (index + 1 === InvitationSteps.COMPLETED) {
+      // Handle completion of all steps
+      console.log('All steps completed!');
+      this.router.navigate([value]);
+      this.showSuccessDialog();
+    }
+
     if (index + 1 === InvitationSteps.USER_PRINCIPAL_NAME) {
       this.loadingOverlay.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
       this.resource
@@ -196,6 +203,11 @@ export class ExternalAccountsPage {
           tap(() => {
             this.loadingOverlay.close();
             this.toastService.openSuccessToast('Account invited successfully!');
+
+            // Move to the next step if not the last one
+            if (index < this.cards().length - 1) {
+              this.currentStep = index + 2;
+            }
           }),
           catchError(() => {
             this.loadingOverlay.close();
@@ -204,16 +216,6 @@ export class ExternalAccountsPage {
           }),
         )
         .subscribe();
-    }
-
-    // Move to the next step if not the last one
-    if (index < this.cards().length - 1) {
-      this.currentStep = index + 2;
-    } else {
-      // Handle completion of all steps
-      console.log('All steps completed!');
-      this.router.navigate([value]);
-      this.showSuccessDialog();
     }
   }
 
