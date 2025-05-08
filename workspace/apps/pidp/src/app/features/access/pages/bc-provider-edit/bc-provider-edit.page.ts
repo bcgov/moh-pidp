@@ -10,7 +10,6 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogConfig } from '@angular/material/dialog';
@@ -170,7 +169,7 @@ export class BcProviderEditPage
   private resource = inject(BcProviderEditResource);
 
   public ngOnInit(): void {
-    let username$ = this.resource
+    const username$ = this.resource
       .get(this.partyService.partyId)
       .pipe(map((user) => user?.bcProviderId || ''));
 
