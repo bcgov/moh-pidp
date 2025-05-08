@@ -17,7 +17,7 @@ export class ExternalAccountsFormState extends AbstractFormState<ExternalAccount
 
   public get json(): ExternalAccountsFormData | undefined {
     if (!this.formInstance) {
-      return;
+      return undefined;
     }
 
     const values = this.formInstance.getRawValue();
