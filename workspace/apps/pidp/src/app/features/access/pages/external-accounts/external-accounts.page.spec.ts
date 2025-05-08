@@ -1,9 +1,12 @@
+import { HttpClient } from '@angular/common/http';
 import { NO_ERRORS_SCHEMA, TemplateRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
+
+import { provideAutoSpy } from 'jest-auto-spies';
 
 import { APP_CONFIG } from '@app/app.config';
 
@@ -31,6 +34,7 @@ describe('ExternalAccountsPage', () => {
           provide: DomSanitizer,
           useValue: { bypassSecurityTrustResourceUrl: jest.fn() },
         },
+        provideAutoSpy(HttpClient),
       ],
       schemas: [NO_ERRORS_SCHEMA],
     });
