@@ -1,7 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-
-import { scrypt } from 'crypto';
 
 import { InstructionCardComponent } from './instruction-card.component';
 import { InstructionCard } from './instruction-card.model';
