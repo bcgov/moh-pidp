@@ -25,8 +25,8 @@ import {
 })
 export class AccessRequestCardComponent {
   @Input() public icon: IconProp;
-  @Input() public heading: string = '';
-  @Input() public description: string = '';
+  @Input() public heading = '';
+  @Input() public description = '';
   @Output() public action: EventEmitter<void>;
   @Input() public actionDisabled?: boolean;
   @Input() public completed?: boolean;

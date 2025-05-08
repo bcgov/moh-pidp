@@ -1,0 +1,76 @@
+<div class="box container" uiPidpInjectViewportCss>
+  <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
+  <div class="content">
+    <section class="intro">
+      <div class="content-header">
+        <h1>Bring your own account</h1>
+        <p>
+          Use an existing professional account from your organization to access
+          healthcare (provider) information reducing the need to switch accounts
+          or make a new account.
+        </p>
+      </div>
+    </section>
+    <section class="main">
+      <div class="card">
+        <div class="card__card-title">
+          <h2>Instructions</h2>
+        </div>
+        <div class="card__card-wrapper">
+          @for (card of cards(); track $index) {
+          <app-instruction-card
+            [cardData]="card"
+            [isActive]="isCardActive($index)"
+            [isCompleted]="isCardCompleted($index)"
+            [routePath]="AccessRoutes.routePath(AccessRoutes.HALO)"
+            (continueEvent)="onContinue($index, $event)">
+          </app-instruction-card>
+          }
+        </div>
+      </div>
+      <div class="card">
+        <div class="assistance-box">
+          <div class="assistance-header"><h2>Need assistance?</h2></div>
+          <div class="assistance-content">
+            <mat-icon
+              class="assistance-content__icon"
+              [svgIcon]="'need-assistance'"></mat-icon>
+            <ul>
+              <li>
+                I'm more interested in
+                <a href="/access/bc-provider-application"
+                  >BCProvider
+                  <mat-icon class="right-icon"
+                    >keyboard_arrow_right</mat-icon
+                  ></a
+                >
+              </li>
+              <li>
+                Have a question and need to talk to us directly?
+                <a uiAnchor scheme="mailto" [href]="emailSupport"
+                  >Contact us<mat-icon class="right-icon"
+                    >keyboard_arrow_right</mat-icon
+                  ></a
+                >
+              </li>
+              <li>
+                Here is OneHealthID's
+                <a href="/help"
+                  >FAQ page<mat-icon class="right-icon"
+                    >keyboard_arrow_right</mat-icon
+                  ></a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<ng-template #successDialog>
+  <app-success-dialog
+    title="Account information completed"
+    [componentType]="componentType"></app-success-dialog>
+</ng-template>
