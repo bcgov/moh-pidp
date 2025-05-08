@@ -144,11 +144,13 @@ export class AccessStateBuilder {
         () => [new ImmsBCEformsPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
-        this.insertSection('externalAccounts', profileStatus),
+        this.insertSection('externalAccounts', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new ExternalAccountsPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
-        this.insertSection('halo', profileStatus),
+        this.insertSection('halo', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new HaloPortalSection(profileStatus, this.router)],
       ),
     ];
