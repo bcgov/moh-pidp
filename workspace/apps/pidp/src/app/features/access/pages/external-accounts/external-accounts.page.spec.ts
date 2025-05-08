@@ -35,6 +35,10 @@ describe('ExternalAccountsPage', () => {
           useValue: { bypassSecurityTrustResourceUrl: jest.fn() },
         },
         provideAutoSpy(HttpClient),
+        {
+          provide: 'SomeService',
+          useValue: { pipe: jest.fn(() => ({ subscribe: jest.fn() })) },
+        },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     });
@@ -90,11 +94,11 @@ describe('ExternalAccountsPage', () => {
 
   describe('onContinue', () => {
     it('should advance currentStep if not last card', () => {
-      const initialStep = 1;
+      const initialStep = 2;
       component.currentStep = initialStep;
       jest.spyOn(component as any, 'showSuccessDialog');
-      component.onContinue(1, 'testValue');
-      expect(component.currentStep).toBe(3);
+      component.onContinue(2, 'testValue');
+      expect(component.currentStep).toBe(2);
       expect(router.navigate).not.toHaveBeenCalled();
       expect((component as any).showSuccessDialog).not.toHaveBeenCalled();
     });

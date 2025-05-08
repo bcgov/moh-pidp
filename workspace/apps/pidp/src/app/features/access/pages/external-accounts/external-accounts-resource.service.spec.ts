@@ -1,13 +1,19 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ExternalAccountsResourceService } from './external-accounts-resource.service';
+import { provideAutoSpy } from 'jest-auto-spies';
+
+import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
+
+import { ExternalAccountsResource } from './external-accounts-resource.service';
 
 describe('ExternalAccountsResourceService', () => {
-  let service: ExternalAccountsResourceService;
+  let service: ExternalAccountsResource;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(ExternalAccountsResourceService);
+    TestBed.configureTestingModule({
+      providers: [provideAutoSpy(ApiHttpClient)],
+    });
+    service = TestBed.inject(ExternalAccountsResource);
   });
 
   it('should be created', () => {
