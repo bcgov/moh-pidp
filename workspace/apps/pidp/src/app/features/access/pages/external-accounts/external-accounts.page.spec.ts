@@ -26,8 +26,6 @@ describe('ExternalAccountsPage', () => {
     TestBed.configureTestingModule({
       providers: [
         ExternalAccountsPage,
-        { provide: Router, useValue: { navigate: jest.fn() } },
-        { provide: MatDialog, useValue: { open: jest.fn() } },
         { provide: APP_CONFIG, useValue: mockConfig },
         { provide: MatIconRegistry, useValue: { addSvgIcon: jest.fn() } },
         {
@@ -35,10 +33,8 @@ describe('ExternalAccountsPage', () => {
           useValue: { bypassSecurityTrustResourceUrl: jest.fn() },
         },
         provideAutoSpy(HttpClient),
-        {
-          provide: 'SomeService',
-          useValue: { pipe: jest.fn(() => ({ subscribe: jest.fn() })) },
-        },
+        provideAutoSpy(MatDialog),
+        provideAutoSpy(Router),
       ],
       schemas: [NO_ERRORS_SCHEMA],
     });

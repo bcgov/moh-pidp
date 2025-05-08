@@ -4,9 +4,11 @@ import {
   Component,
   Inject,
   OnDestroy,
+  OnInit,
   TemplateRef,
   ViewChild,
   inject,
+  signal,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
@@ -99,7 +101,7 @@ export interface BcProviderEditInitialStateModel {
 })
 export class BcProviderEditPage
   extends AbstractFormPage<BcProviderEditFormState>
-  implements OnDestroy
+  implements OnDestroy, OnInit
 {
   public faCircleCheck = faCircleCheck;
   public faXmark = faXmark;
@@ -119,6 +121,7 @@ export class BcProviderEditPage
   public passwordShowTooltip = false;
   public providerIdentitySupport: string;
   public additionalSupportPhone: string;
+  public username = signal<string>('');
 
   public _untilDestroyed = new Subject();
 
@@ -166,12 +169,15 @@ export class BcProviderEditPage
   private partyService = inject(PartyService);
   private resource = inject(BcProviderEditResource);
 
-  public username = toSignal(
-    this.resource
+  public ngOnInit(): void {
+    let username$ = this.resource
       .get(this.partyService.partyId)
-      .pipe(map((user) => user?.bcProviderId || '')),
-    { initialValue: '' },
-  );
+      .pipe(map((user) => user?.bcProviderId || ''));
+
+    username$.subscribe((username) => {
+      this.username.set(username);
+    });
+  }
 
   public onSuccessDialogClose(): void {
     this.dialog.closeAll();
