@@ -38,13 +38,11 @@ import { NavigationService } from '@pidp/presentation';
 
 import { NoContent } from '@bcgov/shared/data-access';
 import {
-  AnchorDirective,
   ConfirmDialogComponent,
   CrossFieldErrorMatcher,
   DialogOptions,
   HtmlComponent,
   InjectViewportCssClassDirective,
-  TextButtonDirective,
   TooltipComponent,
 } from '@bcgov/shared/ui';
 
@@ -91,14 +89,12 @@ export interface BcProviderEditInitialStateModel {
     ReactiveFormsModule,
     SuccessDialogComponent,
     NgOptimizedImage,
-    TextButtonDirective,
     AsyncPipe,
     MatProgressBarModule,
     ConfirmDialogComponent,
     NgClass,
     FaIconComponent,
     TooltipComponent,
-    AnchorDirective,
   ],
 })
 export class BcProviderEditPage

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { NgOptimizedImage } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -40,7 +41,12 @@ describe('BcProviderEditPage', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [MatDialogModule, MatSnackBarModule, ReactiveFormsModule],
+      imports: [
+        MatDialogModule,
+        MatSnackBarModule,
+        ReactiveFormsModule,
+        NgOptimizedImage,
+      ],
       providers: [
         BcProviderEditPage,
         { provide: APP_CONFIG, useValue: APP_DI_CONFIG },
