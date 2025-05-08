@@ -24,6 +24,7 @@ export class ImmsBCEformsPortalSection implements IPortalSection {
   public faSyringe = faSyringe;
   public faUserCheck = faUserCheck;
   public keyWords: string[];
+  public errorReason: string;
   public completedMessage: string;
 
   public constructor(
@@ -34,6 +35,7 @@ export class ImmsBCEformsPortalSection implements IPortalSection {
     this.heading = 'Immunization Entry eForm';
     this.description = `Enrol here for access to the Immunization Entry eForm application.`;
     this.keyWords = profileStatus.status.immsBCEforms.keyWords || [];
+    this.errorReason = profileStatus.status.immsBCEforms.errorReason ?? '';
     this.completedMessage = Constants.enrolledText;
   }
 
