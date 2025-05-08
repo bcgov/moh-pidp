@@ -11,6 +11,7 @@ export class IconRegistryService {
   private matIconRegistry = inject(MatIconRegistry);
   private sanitizer = inject(DomSanitizer);
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   public registerIcon(iconName: string, fileName: string): void {
     this.matIconRegistry.addSvgIcon(
       iconName,
