@@ -1,0 +1,160 @@
+@use 'pidp-variables' as pidp;
+
+.viewport-all {
+  --gap: 1rem;
+  --font-size: 0.75rem;
+}
+
+.viewport-small,
+.viewport-medium,
+.viewport-large {
+  --gap: 1.25rem;
+  --font-size: 1rem;
+}
+.viewport-all {
+  --header-margin: unset;
+  --card-border-radius: calc(var(--gap) * 0.375);
+  --content-padding: var(--gap);
+  --form-card-width: unset;
+  padding: 1.25rem 0.75rem;
+}
+.viewport-medium,
+.viewport-large {
+  --header-margin: var(--gap) 0 0;
+  --content-padding: var(--gap) 0;
+  --form-card-width: 25rem;
+}
+
+.viewport-all {
+  & .content {
+    padding-bottom: var(--content-padding);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+
+    .content-header h1 {
+      color: pidp.$bcgov-color-primary;
+      font-size: 50px;
+      font-weight: 700;
+      word-wrap: break-word;
+    }
+
+    .main {
+      display: flex;
+      gap: 20px;
+      min-height: 340px;
+      margin: calc(var(--gap)) 0;
+
+      & .card {
+        display: flex;
+        flex-direction: column;
+        padding-right: calc(var(--gap) * 0.9);
+        line-height: 1.5rem;
+        margin-left: -1.5rem;
+
+        .stepper-title {
+          // TODO: move to pidp-variables.scss
+          color: #313132;
+          font-size: 1.5rem;
+          font-weight: 700;
+          margin-bottom: calc(var(--gap) / 2);
+          padding-left: 1.8rem;
+        }
+
+        .choose-account {
+          display: flex;
+          gap: 0.5rem;
+
+          button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid pidp.$grey-20;
+            padding: 25px;
+            :nth-child(3) {
+              order: 3;
+            }
+
+            mat-icon.left-icon {
+              margin-right: 0.5rem;
+            }
+
+            mat-icon.right-icon {
+              margin-left: auto;
+            }
+          }
+        }
+
+        .main-image-text {
+          display: flex;
+          color: #fff;
+          justify-content: center;
+          align-items: center;
+          font-size: larger;
+          height: 60px;
+          background-color: pidp.$bcgov-color-primary;
+        }
+
+        .main-image {
+          height: 430px;
+          width: 362px;
+          position: relative;
+
+          img {
+            height: 400px;
+          }
+        }
+      }
+      .pas-button-text {
+        font-size: smaller;
+      }
+    }
+  }
+}
+
+.smaller-text {
+  font-size: smaller;
+  margin: 0 10px;
+}
+
+.stepper-buttons {
+  margin-top: 10px;
+  & button {
+    border: 1px solid pidp.$grey-20;
+  }
+
+  & button:last-child {
+    margin-left: 10px;
+  }
+
+  & button.top-button {
+    margin-left: 0;
+  }
+}
+
+.pas-step-label {
+  margin: unset;
+  line-height: 1.3;
+}
+
+.viewport-xsmall,
+.viewport-small {
+  .main {
+    .main-image-container {
+      display: none !important;
+    }
+    .card {
+      .choose-account {
+        button {
+          padding: 14px !important;
+        }
+      }
+    }
+  }
+}
+
+.viewport-xsmall {
+  .choose-account {
+    flex-direction: column;
+  }
+}

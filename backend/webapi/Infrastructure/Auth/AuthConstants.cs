@@ -39,6 +39,8 @@ public static class Clients
 
 public static class Roles
 {
+    public const string FeatureFlag = "feature_pidp_demo";
+
     // PIdP Role Placeholders
     public const string Admin = "ADMIN";
     public const string User = "USER";

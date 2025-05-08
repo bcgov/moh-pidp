@@ -97,7 +97,9 @@ describe('bcProviderCompletedResolver', () => {
           if (result instanceof Observable) {
             result.subscribe(() => {
               try {
-                expect(router.navigateByUrl).toHaveBeenCalledWith('portal');
+                expect(router.navigateByUrl).toHaveBeenCalledWith(
+                  '/access/bc-provider-edit',
+                );
                 done();
               } catch (error: any) {
                 done(error);
