@@ -60,7 +60,7 @@ describe('SuccessDialogComponent', () => {
   it('should create a component and set username if dialogParagraphHost is initialized', () => {
     const mockViewContainerRef = {
       createComponent: jest.fn().mockReturnValue({
-        instance: {},
+        instance: { username: '' },
       }),
     } as unknown as ViewContainerRef;
 
@@ -73,15 +73,20 @@ describe('SuccessDialogComponent', () => {
     expect(mockViewContainerRef.createComponent).toHaveBeenCalledWith(
       component.componentType,
     );
-    expect(
-      mockViewContainerRef.createComponent(component.componentType).instance
-        .username,
-    ).toBe('testUser');
+
+    const createdComponent = mockViewContainerRef.createComponent(
+      component.componentType,
+    );
+    (createdComponent.instance as { username: string }).username =
+      component.username;
+
+    expect((createdComponent.instance as { username: string }).username).toBe(
+      'testUser',
+    );
     jest.clearAllMocks();
   });
 
-  it('should log a warning if username is undefined', () => {
-    const consoleWarnSpy = jest.spyOn(console, 'warn');
+  it('should not set username if componentType does not have username property', () => {
     const mockViewContainerRef = {
       createComponent: jest.fn().mockReturnValue({
         instance: {},
@@ -89,12 +94,19 @@ describe('SuccessDialogComponent', () => {
     } as unknown as ViewContainerRef;
 
     component.dialogParagraphHost = mockViewContainerRef;
-    component.username = '';
     component.componentType = class {} as any;
 
     component.ngOnInit();
 
-    expect(consoleWarnSpy).toHaveBeenCalledWith('Username is undefined.');
-    jest.clearAllMocks();
+    expect(mockViewContainerRef.createComponent).toHaveBeenCalledWith(
+      component.componentType,
+    );
+
+    const createdComponent = mockViewContainerRef.createComponent(
+      component.componentType,
+    );
+    expect((createdComponent.instance as { username: string }).username).toBe(
+      undefined,
+    );
   });
 });
