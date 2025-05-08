@@ -63,6 +63,11 @@
               (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.BC_PROVIDER_EDIT))"
               >Password and MFA reset</a
             >
+            <a
+              class="dropdown-links"
+              (click)="navigateTo(HistoryRoutes.routePath(HistoryRoutes.TRANSACTIONS))"
+              >History</a
+            >
           </div>
         </div>
       </a>
@@ -127,6 +132,11 @@
             class="sidenav-menu-item"
             (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.BC_PROVIDER_EDIT))"
             >Password and MFA reset</a
+          >
+          <a
+            class="sidenav-menu-item"
+            (click)="navigateTo(HistoryRoutes.routePath(HistoryRoutes.TRANSACTIONS))"
+            >History</a
           >
           <a
             *ngFor="let menuItem of menuItems"

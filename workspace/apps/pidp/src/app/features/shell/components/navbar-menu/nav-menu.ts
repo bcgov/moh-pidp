@@ -44,6 +44,7 @@ import { RoutePath } from '@bcgov/shared/utils';
 import { PartyService } from '@app/core/party/party.service';
 import { AccessRoutes } from '@app/features/access/access.routes';
 import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
+import { HistoryRoutes } from '@app/features/history/history.routes';
 import { AlertCode } from '@app/features/portal/enums/alert-code.enum';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { PermissionsService } from '@app/modules/permissions/permissions.service';
@@ -94,6 +95,7 @@ export class NavMenuComponent implements OnChanges, OnInit, OnDestroy {
   public isTopMenuVisible = false;
   public ProfileRoutes = ProfileRoutes;
   public AccessRoutes = AccessRoutes;
+  public HistoryRoutes = HistoryRoutes;
   public showCollegeAlert = false;
   public faBell = faBell;
   public AlertCode = AlertCode;
