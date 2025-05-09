@@ -1,0 +1,128 @@
+@use 'pidp-variables' as pidp;
+
+.viewport-all {
+  --gap: 1rem;
+  --font-size: 0.75rem;
+}
+
+.viewport-small,
+.viewport-medium,
+.viewport-large {
+  --gap: 1.25rem;
+  --font-size: 1rem;
+}
+.viewport-all {
+  --header-margin: unset;
+  --card-border-radius: calc(var(--gap) * 0.375);
+  --content-padding: var(--gap);
+  --form-card-width: unset;
+  padding: 1.25rem 0.75rem;
+}
+.viewport-medium,
+.viewport-large {
+  --header-margin: var(--gap) 0 0;
+  --content-padding: var(--gap) 0;
+  --form-card-width: 25rem;
+}
+
+.viewport-all {
+  & .content {
+    padding-bottom: var(--content-padding);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+
+    .content-header {
+      h1 {
+        color: pidp.$bcgov-color-primary;
+        font-size: 50px;
+        font-weight: 700;
+        word-wrap: break-word;
+      }
+
+      p {
+        color: pidp.$bcgov-color-text;
+      }
+    }
+
+    .main {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 20px;
+      min-height: 340px;
+      margin: calc(var(--gap)) 0;
+
+      & .card {
+        display: flex;
+        flex-direction: column;
+        padding-right: calc(var(--gap) * 0.9);
+        position: relative;
+        line-height: 1.5rem;
+
+        &__card-title h2 {
+          color: pidp.$bcgov-color-text;
+          font-size: 1.5rem;
+          font-weight: 700;
+          margin-bottom: calc(var(--gap) / 2);
+        }
+
+        &__card-wrapper {
+          padding: 1rem 0;
+        }
+      }
+
+      .assistance-box {
+        max-width: 300px;
+        border: 1px solid pidp.$grey-20;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        margin-top: 3.5rem;
+
+        .assistance-header h2 {
+          background-color: pidp.$btn-blue-color;
+          color: #fff;
+          padding: 1rem;
+          font-size: 1.5rem;
+          font-weight: 700;
+          text-align: center;
+          margin: 0;
+        }
+
+        .assistance-content {
+          display: flex;
+          justify-content: center;
+          padding: 20px;
+          flex-direction: column;
+          align-items: center;
+
+          &__icon {
+            width: 3.1875rem;
+            height: 3.75rem;
+
+            display: flex;
+            flex-shrink: 0;
+            justify-content: center;
+            margin-bottom: 1rem;
+          }
+
+          ul {
+            list-style-type: disc;
+            padding-left: 20px;
+
+            li {
+              margin-bottom: 15px;
+              color: pidp.$bcgov-color-text;
+
+              a:link,
+              a:visited {
+                color: pidp.$btn-blue-color;
+                text-decoration: none;
+                display: flex;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
