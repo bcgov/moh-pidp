@@ -69,6 +69,10 @@ export class TransactionsPage implements OnInit {
     this.navigateToRoot();
   }
 
+  public trackByTransactionId(index: number, transaction: Transaction): string {
+    return transaction.requestedOn;
+  }
+
   public ngOnInit(): void {
     const partyId = this.partyService.partyId;
     if (!partyId) {
