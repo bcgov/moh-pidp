@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { NgOptimizedImage } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -7,8 +8,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { randNumber, randTextRange } from '@ngneat/falso';
-import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 import { NavigationService } from '@pidp/presentation';
+import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
+
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
 import { FormUtilsService } from '@app/core/services/form-utils.service';
@@ -39,7 +41,12 @@ describe('BcProviderEditPage', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [MatDialogModule, MatSnackBarModule, ReactiveFormsModule],
+      imports: [
+        MatDialogModule,
+        MatSnackBarModule,
+        ReactiveFormsModule,
+        NgOptimizedImage,
+      ],
       providers: [
         BcProviderEditPage,
         { provide: APP_CONFIG, useValue: APP_DI_CONFIG },
@@ -105,5 +112,4 @@ describe('BcProviderEditPage', () => {
       });
     });
   });
-
 });
