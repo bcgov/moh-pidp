@@ -1,25 +1,39 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
-import {  MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { FeedbackFormState } from './feedback-form.component-form-state';
-import { AbstractFormDependenciesService, AbstractFormPage } from '@app/core/classes/abstract-form-page.class';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { catchError, Observable, of, tap } from 'rxjs';
-import { SuccessDialogComponent } from "../success-dialog/success-dialog.component";
-import { MatInputModule } from '@angular/material/input';
 import { NgIf } from '@angular/common';
-import html2canvas from 'html2canvas';
-import { FeedbackSendComponent } from '../success-dialog/components/feedback-send.component';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
-import { MatButtonModule } from '@angular/material/button';
-import { FeedbackFormDialogResource } from './feedback-form-dialog-resource.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { LoggerService } from '@app/core/services/logger.service';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import {
+  MatDialog,
+  MatDialogConfig,
+  MatDialogRef,
+} from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+
+import { Observable, catchError, of, tap } from 'rxjs';
+
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import {
+  LOADING_OVERLAY_DEFAULT_MESSAGE,
+  LoadingOverlayService,
+} from '@pidp/presentation';
+import html2canvas from 'html2canvas';
+
+import {
+  AbstractFormDependenciesService,
+  AbstractFormPage,
+} from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
-import { ProfileRoutes } from '@app/features/profile/profile.routes';
+import { LoggerService } from '@app/core/services/logger.service';
 import { ToastService } from '@app/core/services/toast.service';
-import { LOADING_OVERLAY_DEFAULT_MESSAGE, LoadingOverlayService } from '@pidp/presentation';
+import { ProfileRoutes } from '@app/features/profile/profile.routes';
+
+import { FeedbackSendComponent } from '../success-dialog/components/feedback-send.component';
+import { SuccessDialogComponent } from '../success-dialog/success-dialog.component';
+import { FeedbackFormDialogResource } from './feedback-form-dialog-resource.service';
+import { FeedbackFormState } from './feedback-form.component-form-state';
 
 @Component({
   selector: 'app-feedback-form-dialog',
@@ -33,22 +47,25 @@ import { LOADING_OVERLAY_DEFAULT_MESSAGE, LoadingOverlayService } from '@pidp/pr
     NgIf,
     ReactiveFormsModule,
     MatIconModule,
-    MatButtonModule
-],
+    MatButtonModule,
+  ],
 })
 export class FeedbackFormDialogComponent
-  extends AbstractFormPage<FeedbackFormState> implements OnInit
+  extends AbstractFormPage<FeedbackFormState>
+  implements OnInit
 {
   public formState: FeedbackFormState;
-  public showOverlayOnSubmit: boolean = false;
-  public showErrorCard: boolean = false;
+  public showOverlayOnSubmit = false;
+  public showErrorCard = false;
   public selectedFile: File | null = null;
   public componentType = FeedbackSendComponent;
   public faXmark = faXmark;
-  public disableSend: boolean = true;
-  public disableDisclaimer: boolean = true;
-  public accessAgreementLink: string = ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT);
-  public disclaimerText: string = `Please do not include any personal information when submitting this feedback. For additional information, please refer to <a href=${this.accessAgreementLink} target="_blank">this page</a>.`;
+  public disableSend = true;
+  public disableDisclaimer = true;
+  public accessAgreementLink: string = ProfileRoutes.routePath(
+    ProfileRoutes.USER_ACCESS_AGREEMENT,
+  );
+  public disclaimerText = `Please do not include any personal information when submitting this feedback. For additional information, please refer to <a href=${this.accessAgreementLink} target="_blank">this page</a>.`;
 
   @ViewChild('successDialog')
   public successDialogTemplate!: TemplateRef<FeedbackSendComponent>;
@@ -60,7 +77,6 @@ export class FeedbackFormDialogComponent
       textarea.style.height = 'auto';
       textarea.style.height = `${Math.min(textarea.scrollHeight, 200)}px`;
     });
-
   }
   public constructor(
     dependenciesService: AbstractFormDependenciesService,
@@ -77,20 +93,20 @@ export class FeedbackFormDialogComponent
     this.formState = new FeedbackFormState(fb, dialog);
   }
 
-
   protected performSubmission(): Observable<unknown> {
-    return new Observable;
+    return new Observable();
   }
 
   public onFeedbackChange(event: Event): void {
     event.preventDefault();
-    this.disableSend = this.disableDisclaimer = this.formState.feedback.value.length === 0;
+    this.disableSend = this.disableDisclaimer =
+      this.formState.feedback.value.length === 0;
   }
 
   public onFileSelected(): void {
     const inputNode: HTMLInputElement | null = document.querySelector('#file');
-    this.selectedFile= inputNode?.files ? inputNode.files[0] : null;
-    if((this.selectedFile?.size ?? 0) > 2 * 1024 * 1024) {
+    this.selectedFile = inputNode?.files ? inputNode.files[0] : null;
+    if ((this.selectedFile?.size ?? 0) > 2 * 1024 * 1024) {
       this.showErrorCard = true;
     } else {
       this.showErrorCard = false;
@@ -113,7 +129,7 @@ export class FeedbackFormDialogComponent
 
   public uploadFile(event: Event): void {
     event.preventDefault();
-    const element = document.getElementById("file");
+    const element = document.getElementById('file');
     element?.click();
   }
 
@@ -124,47 +140,51 @@ export class FeedbackFormDialogComponent
 
   public sendFeedback(event: Event): void {
     event.preventDefault();
-    if(this.showErrorCard){
+    if (this.showErrorCard) {
       return;
     }
 
     this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
     const formData = new FormData();
-    if(this.selectedFile) {
+    if (this.selectedFile) {
       formData.append('file', this.selectedFile, this.selectedFile?.name);
     }
     formData.append('feedback', this.formState.feedback.value);
     formData.append('partyid', this.partyService.partyId.toString());
 
-    this.feedbackFormDialogResource.postFeedback(formData).pipe(
-      tap(() => {
-        this.loadingOverlayService.close();
-        this.showSuccessDialog();
-      }),
-      catchError((err: HttpErrorResponse) => {
-        this.loadingOverlayService.close();
-        this.logger.error(
-          '[FeedbackFormDialogResource::postFeedback] error has occurred: ',
-          err,
-        );
-        this.toastService.openErrorToast('Error occurred while sending feedback');
-        return of(null);
-      }),
-    ).subscribe();
+    this.feedbackFormDialogResource
+      .postFeedback(formData)
+      .pipe(
+        tap(() => {
+          this.loadingOverlayService.close();
+          this.showSuccessDialog();
+        }),
+        catchError((err: HttpErrorResponse) => {
+          this.loadingOverlayService.close();
+          this.logger.error(
+            '[FeedbackFormDialogResource::postFeedback] error has occurred: ',
+            err,
+          );
+          this.toastService.openErrorToast(
+            'Error occurred while sending feedback',
+          );
+          return of(null);
+        }),
+      )
+      .subscribe();
   }
 
   public showSuccessDialog(): void {
-    if(this.formUtilsService.checkValidity(this.formState.form)) {
+    if (this.formUtilsService.checkValidity(this.formState.form)) {
       this.dialogRef.close();
       const config: MatDialogConfig = {
         disableClose: true,
         position: {
-          right: "0px"
+          right: '0px',
         },
         width: '380px',
       };
       this.dialog.open(this.successDialogTemplate, config);
     }
   }
-
 }
