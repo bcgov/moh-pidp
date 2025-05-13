@@ -12,9 +12,15 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
-import { Observable } from 'rxjs';
+
+import { Observable, catchError, of, tap } from 'rxjs';
 
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import {
+  LOADING_OVERLAY_DEFAULT_MESSAGE,
+  LoadingOverlayService,
+} from '@pidp/presentation';
+
 import html2canvas from 'html2canvas';
 
 import {
@@ -80,6 +86,7 @@ export class FeedbackFormDialogComponent
     dialog: MatDialog,
     public dialogRef: MatDialogRef<FeedbackFormDialogComponent>,
     private readonly feedbackFormDialogResource: FeedbackFormDialogResource,
+    private readonly loadingOverlayService: LoadingOverlayService,
     private readonly logger: LoggerService,
     private readonly partyService: PartyService,
     private readonly toastService: ToastService,
@@ -101,7 +108,8 @@ export class FeedbackFormDialogComponent
   public onFileSelected(): void {
     const inputNode: HTMLInputElement | null = document.querySelector('#file');
     this.selectedFile = inputNode?.files ? inputNode.files[0] : null;
-    if ((this.selectedFile?.size ?? 0) > 5 * 1024 * 1024) {
+
+    if ((this.selectedFile?.size ?? 0) > 2 * 1024 * 1024) {
       this.showErrorCard = true;
     } else {
       this.showErrorCard = false;
@@ -138,6 +146,8 @@ export class FeedbackFormDialogComponent
     if (this.showErrorCard) {
       return;
     }
+
+    this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
     const formData = new FormData();
     if (this.selectedFile) {
       formData.append('file', this.selectedFile, this.selectedFile?.name);
@@ -145,20 +155,26 @@ export class FeedbackFormDialogComponent
     formData.append('feedback', this.formState.feedback.value);
     formData.append('partyid', this.partyService.partyId.toString());
 
-    this.feedbackFormDialogResource.postFeedback(formData).subscribe(
-      () => {
-        this.showSuccessDialog();
-      },
-      (err: HttpErrorResponse) => {
-        this.logger.error(
-          '[FeedbackFormDialogResource::postFeedback] error has occurred: ',
-          err,
-        );
-        this.toastService.openErrorToast(
-          'Error occurred while sending feedback',
-        );
-      },
-    );
+    this.feedbackFormDialogResource
+      .postFeedback(formData)
+      .pipe(
+        tap(() => {
+          this.loadingOverlayService.close();
+          this.showSuccessDialog();
+        }),
+        catchError((err: HttpErrorResponse) => {
+          this.loadingOverlayService.close();
+          this.logger.error(
+            '[FeedbackFormDialogResource::postFeedback] error has occurred: ',
+            err,
+          );
+          this.toastService.openErrorToast(
+            'Error occurred while sending feedback',
+          );
+          return of(null);
+        }),
+      )
+      .subscribe();
   }
 
   public showSuccessDialog(): void {
