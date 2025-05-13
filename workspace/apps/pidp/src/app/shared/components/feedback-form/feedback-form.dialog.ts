@@ -12,6 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
+
 import { Observable, catchError, of, tap } from 'rxjs';
 
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -19,6 +20,7 @@ import {
   LOADING_OVERLAY_DEFAULT_MESSAGE,
   LoadingOverlayService,
 } from '@pidp/presentation';
+
 import html2canvas from 'html2canvas';
 
 import {
@@ -106,6 +108,7 @@ export class FeedbackFormDialogComponent
   public onFileSelected(): void {
     const inputNode: HTMLInputElement | null = document.querySelector('#file');
     this.selectedFile = inputNode?.files ? inputNode.files[0] : null;
+
     if ((this.selectedFile?.size ?? 0) > 2 * 1024 * 1024) {
       this.showErrorCard = true;
     } else {
