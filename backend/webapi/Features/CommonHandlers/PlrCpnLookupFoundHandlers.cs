@@ -64,13 +64,12 @@ public class UpdateBCProviderAfterPlrCpnLookupFound(
 
     public async Task Handle(PlrCpnLookupFound notification, CancellationToken cancellationToken)
     {
-        var userPrincipalName = await this.context.Credentials
-            .Where(credential => credential.PartyId == notification.PartyId
-                && credential.IdentityProvider == IdentityProviders.BCProvider)
-            .Select(credential => credential.IdpId)
-            .SingleOrDefaultAsync(cancellationToken);
+        var userPrincipalNames = await this.context.Parties
+            .Where(party => party.Id == notification.PartyId)
+            .Select(party => party.Upns)
+            .SingleAsync(cancellationToken);
 
-        if (userPrincipalName == null)
+        if (!userPrincipalNames.Any())
         {
             return;
         }
@@ -87,6 +86,9 @@ public class UpdateBCProviderAfterPlrCpnLookupFound(
             attributes.SetIsMoa(false);
         }
 
-        await this.bcProviderClient.UpdateAttributes(userPrincipalName, attributes.AsAdditionalData());
+        foreach (var upn in userPrincipalNames)
+        {
+            await this.bcProviderClient.UpdateAttributes(upn, attributes.AsAdditionalData());
+        }
     }
 }

@@ -7,6 +7,8 @@ import {
   OnInit,
   TemplateRef,
   ViewChild,
+  inject,
+  signal,
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,9 +21,11 @@ import { Router } from '@angular/router';
 import {
   EMPTY,
   Observable,
+  Subject,
   Subscription,
   catchError,
   exhaustMap,
+  map,
   noop,
   of,
   tap,
@@ -96,7 +100,7 @@ export interface BcProviderEditInitialStateModel {
 })
 export class BcProviderEditPage
   extends AbstractFormPage<BcProviderEditFormState>
-  implements OnInit, OnDestroy
+  implements OnDestroy, OnInit
 {
   public faCircleCheck = faCircleCheck;
   public faXmark = faXmark;
@@ -104,7 +108,6 @@ export class BcProviderEditPage
   public formState: BcProviderEditFormState;
   public AccessRoutes = AccessRoutes;
   public showErrorCard = false;
-  public username = '';
   public errorMatcher = new CrossFieldErrorMatcher();
   public componentType = DialogBcproviderEditComponent;
   public identityProvider$: Observable<IdentityProvider>;
@@ -115,6 +118,11 @@ export class BcProviderEditPage
   public progressSubscription!: Subscription;
   public mfaShowTooltip = false;
   public passwordShowTooltip = false;
+  public providerIdentitySupport: string;
+  public additionalSupportPhone: string;
+  public username = signal<string>('');
+
+  public _untilDestroyed = new Subject();
 
   public breadcrumbsData: Array<{ title: string; path: string }> = [
     { title: 'Home', path: '' },
@@ -134,6 +142,9 @@ export class BcProviderEditPage
   @ViewChild('mfaDialog')
   public mfaDialogTemplate!: TemplateRef<any>;
 
+  @ViewChild('errorDialog')
+  public errorDialogTemplate!: TemplateRef<any>;
+
   public get isResetButtonEnabled(): boolean {
     return this.formState.form.valid;
   }
@@ -143,8 +154,6 @@ export class BcProviderEditPage
     dependenciesService: AbstractFormDependenciesService,
     fb: FormBuilder,
     private readonly navigationService: NavigationService,
-    private readonly partyService: PartyService,
-    private readonly resource: BcProviderEditResource,
     private readonly router: Router,
     private readonly authorizedUserService: AuthorizedUserService,
     private readonly authService: AuthService,
@@ -152,6 +161,21 @@ export class BcProviderEditPage
     super(dependenciesService);
     this.formState = new BcProviderEditFormState(fb);
     this.identityProvider$ = this.authorizedUserService.identityProvider$;
+    this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
+    this.additionalSupportPhone = this.config.phones.additionalSupport;
+  }
+
+  private partyService = inject(PartyService);
+  private resource = inject(BcProviderEditResource);
+
+  public ngOnInit(): void {
+    const username$ = this.resource
+      .get(this.partyService.partyId)
+      .pipe(map((user) => user?.bcProviderId || ''));
+
+    username$.subscribe((username) => {
+      this.username.set(username);
+    });
   }
 
   public onSuccessDialogClose(): void {
@@ -220,16 +244,6 @@ export class BcProviderEditPage
     this.router.navigateByUrl(FaqRoutes.BASE_PATH);
   }
 
-  public ngOnInit(): void {
-    const partyId = this.partyService.partyId;
-
-    this.resource
-      .get(partyId)
-      .subscribe((bcProviderObject: BcProviderEditInitialStateModel) => {
-        this.username = bcProviderObject.bcProviderId;
-      });
-  }
-
   public ngOnDestroy(): void {
     if (this.progressSubscription) {
       this.progressSubscription.unsubscribe();
@@ -277,9 +291,8 @@ export class BcProviderEditPage
           this.showResetCompleteDialog();
         }),
         catchError(() => {
-          this.progressBarValue = 90;
-          this.progressComplete = false;
-          this.showErrorCard = true;
+          this.dialog.closeAll();
+          this.showMfaErrorDialog();
           return of(noop());
         }),
       )
@@ -340,6 +353,31 @@ export class BcProviderEditPage
       .open(this.mfaDialogTemplate, { data, disableClose: true })
       .afterClosed()
       .pipe(exhaustMap((result) => (result ? this.logout() : EMPTY)))
+      .subscribe();
+  }
+
+  private showMfaErrorDialog(): void {
+    const data: DialogOptions = {
+      title: 'An error occured',
+      bottomBorder: false,
+      titlePosition: 'center',
+      bodyTextPosition: 'center',
+      component: HtmlComponent,
+      data: {
+        content: `We apologize, your authentication credentials could not be reset. Contact our support desk at <a href="mailto:${this.providerIdentitySupport}">${this.providerIdentitySupport}</a> or by phone at <a href="tel:${this.additionalSupportPhone}">${this.additionalSupportPhone}</a>.<br /> Please mention that this is a BCProvider MFA reset request.`,
+      },
+      imageSrc: '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
+      imageType: 'banner',
+      width: '31rem',
+      height: '24rem',
+      actionText: 'Back',
+      actionTypePosition: 'center',
+      cancelHide: true,
+      progressBar: true,
+    };
+    this.dialog
+      .open(this.errorDialogTemplate, { data })
+      .afterClosed()
       .subscribe();
   }
 
