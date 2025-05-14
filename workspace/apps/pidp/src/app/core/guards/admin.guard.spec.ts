@@ -14,8 +14,8 @@ import { Role } from '@app/shared/enums/roles.enum';
 import { adminGuard } from './admin.guard';
 
 describe('adminGuard', () => {
-  let activatedRouteSnapshotSpy: Spy<ActivatedRouteSnapshot>;
-  let routerStateSnapshotSpy: Spy<RouterStateSnapshot>;
+  let activatedRouteSpy: Spy<ActivatedRouteSnapshot>;
+  let routerStateSpy: Spy<RouterStateSnapshot>;
   let authorizedUserServiceSpy: Spy<AuthorizedUserService>;
   let router: Router;
 
@@ -29,9 +29,12 @@ describe('adminGuard', () => {
           }),
         },
         provideAutoSpy(Router),
+        provideAutoSpy(ActivatedRouteSnapshot),
+        provideAutoSpy(RouterStateSnapshot),
       ],
     });
-
+    activatedRouteSpy = TestBed.inject<any>(ActivatedRouteSnapshot);
+    routerStateSpy = TestBed.inject<any>(RouterStateSnapshot);
     authorizedUserServiceSpy = TestBed.inject<any>(AuthorizedUserService);
     router = TestBed.inject(Router);
   });
@@ -42,7 +45,7 @@ describe('adminGuard', () => {
 
       when('the guard is called', () => {
         TestBed.runInInjectionContext(() =>
-          adminGuard(activatedRouteSnapshotSpy, routerStateSnapshotSpy),
+          adminGuard(activatedRouteSpy, routerStateSpy),
         );
 
         then('the user should be redirected to the root route', () => {
@@ -58,7 +61,7 @@ describe('adminGuard', () => {
 
       when('the guard is called', () => {
         TestBed.runInInjectionContext(() =>
-          adminGuard(activatedRouteSnapshotSpy, routerStateSnapshotSpy),
+          adminGuard(activatedRouteSpy, routerStateSpy),
         );
 
         then('the user should be redirected to the root route', () => {
@@ -73,7 +76,7 @@ describe('adminGuard', () => {
       ]);
       when('the guard is called', () => {
         const result = TestBed.runInInjectionContext(() =>
-          adminGuard(activatedRouteSnapshotSpy, routerStateSnapshotSpy),
+          adminGuard(activatedRouteSpy, routerStateSpy),
         );
         then('the user should access the route', () => {
           expect(result).toBeTruthy();

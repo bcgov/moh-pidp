@@ -36,8 +36,8 @@ export class ComplianceTrainingPage {
   public title: string;
 
   public constructor(
-    private route: ActivatedRoute,
-    private router: Router,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
   ) {
     this.title = this.route.snapshot.data.title;
   }

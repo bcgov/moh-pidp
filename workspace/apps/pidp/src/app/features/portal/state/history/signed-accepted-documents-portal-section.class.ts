@@ -14,7 +14,7 @@ export class SignedAcceptedDocumentsPortalSection implements IPortalSection {
   public heading: string;
   public description: string;
 
-  public constructor(private router: Router) {
+  public constructor(private readonly router: Router) {
     this.key = 'signedAcceptedDocuments';
     this.heading = 'View Signed or Accepted Documents';
     this.description = 'View Agreement(s)';

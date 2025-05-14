@@ -150,13 +150,13 @@ export class BcProviderEditPage
   }
 
   public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
+    @Inject(APP_CONFIG) private readonly config: AppConfig,
     dependenciesService: AbstractFormDependenciesService,
     fb: FormBuilder,
-    private navigationService: NavigationService,
-    private router: Router,
-    private authorizedUserService: AuthorizedUserService,
-    private authService: AuthService,
+    private readonly navigationService: NavigationService,
+    private readonly router: Router,
+    private readonly authorizedUserService: AuthorizedUserService,
+    private readonly authService: AuthService,
   ) {
     super(dependenciesService);
     this.formState = new BcProviderEditFormState(fb);

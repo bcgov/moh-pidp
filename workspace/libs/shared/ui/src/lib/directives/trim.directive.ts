@@ -8,8 +8,8 @@ import { NgControl } from '@angular/forms';
 })
 export class TrimDirective {
   public constructor(
-    private el: ElementRef<HTMLInputElement>,
-    @Optional() private ngControl: NgControl,
+    private readonly el: ElementRef<HTMLInputElement>,
+    @Optional() private readonly ngControl: NgControl,
   ) {}
 
   @HostListener('blur') public onBlur(): void {

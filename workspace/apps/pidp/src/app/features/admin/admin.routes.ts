@@ -1,7 +1,7 @@
 export class AdminRoutes {
-  public static BASE_PATH = 'admin';
+  public static readonly BASE_PATH = 'admin';
 
-  public static PARTIES = 'parties';
+  public static readonly PARTIES = 'parties';
 
   /**
    * @description
