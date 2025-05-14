@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import {
   ActivatedRoute,
@@ -10,7 +10,15 @@ import {
   Scroll,
 } from '@angular/router';
 
-import { Observable, delay, filter, map, mergeMap } from 'rxjs';
+import {
+  Observable,
+  Subject,
+  delay,
+  filter,
+  map,
+  mergeMap,
+  takeUntil,
+} from 'rxjs';
 
 import { contentContainerSelector } from '@bcgov/shared/ui';
 
@@ -25,7 +33,9 @@ import { UtilsService } from '@core/services/utils.service';
   standalone: true,
   imports: [RouterOutlet],
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
+  private readonly destroy$ = new Subject<void>();
+
   public constructor(
     private readonly activatedRoute: ActivatedRoute,
     private readonly titleService: Title,
@@ -51,10 +61,16 @@ export class AppComponent implements OnInit, AfterViewInit {
       .pipe(
         filter((event: Event) => event instanceof NavigationEnd),
         delay(0),
+        takeUntil(this.destroy$),
       )
       .subscribe(() => {
         this.snowplowService.trackPageView();
       });
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
   /**
    * @description
@@ -74,6 +90,7 @@ export class AppComponent implements OnInit, AfterViewInit {
           return route;
         }),
         mergeMap((route: ActivatedRoute) => route.data),
+        takeUntil(this.destroy$),
       )
       .subscribe((routeData: Data) =>
         this.titleService.setTitle(routeData.title),
