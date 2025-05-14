@@ -30,9 +30,9 @@ export interface IDocument extends IDocumentMetaData {
   providedIn: 'root',
 })
 export class DocumentService {
-  private documents: IDocumentMetaData[];
+  private readonly documents: IDocumentMetaData[];
 
-  public constructor(@Inject(APP_CONFIG) private config: AppConfig) {
+  public constructor(@Inject(APP_CONFIG) private readonly config: AppConfig) {
     this.documents = [
       {
         type: DocumentType.PIDP_COLLECTION_NOTICE,

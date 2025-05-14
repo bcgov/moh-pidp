@@ -20,9 +20,9 @@ export interface IAccessTokenService {
   providedIn: 'root',
 })
 export class AccessTokenService implements IAccessTokenService {
-  private jwtHelper: JwtHelperService;
+  private readonly jwtHelper: JwtHelperService;
 
-  public constructor(private keycloakService: KeycloakService) {
+  public constructor(private readonly keycloakService: KeycloakService) {
     this.jwtHelper = new JwtHelperService();
   }
 

@@ -27,13 +27,19 @@ import { UtilsService } from '@core/services/utils.service';
 })
 export class AppComponent implements OnInit, AfterViewInit {
   public constructor(
-    private activatedRoute: ActivatedRoute,
-    private titleService: Title,
-    private routeStateService: RouteStateService,
-    private utilsService: UtilsService,
-    private router: Router,
-    private snowplowService: SnowplowService,
-  ) {}
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly titleService: Title,
+    private readonly routeStateService: RouteStateService,
+    private readonly utilsService: UtilsService,
+    private readonly router: Router,
+    private readonly snowplowService: SnowplowService,
+  ) {
+    this.router.events.subscribe((evt) => {
+      if (evt instanceof NavigationEnd) {
+        this.snowplowService.trackPageView();
+      }
+    });
+  }
 
   public ngOnInit(): void {
     this.setPageTitle(this.routeStateService.onNavigationEnd());

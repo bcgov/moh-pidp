@@ -31,8 +31,8 @@ export class PrescriptionRefillEformsPortalSection implements IPortalSection {
   public completedMessage: string;
 
   public constructor(
-    private profileStatus: ProfileStatus,
-    private router: Router,
+    private readonly profileStatus: ProfileStatus,
+    private readonly router: Router,
   ) {
     this.key = 'prescriptionRefillEforms';
     this.heading = 'Provincial Prescription Renewal Support Service eForm';

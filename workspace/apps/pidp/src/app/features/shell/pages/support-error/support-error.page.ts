@@ -25,8 +25,8 @@ export class SupportErrorPage {
   public additionalSupportPhone: string;
 
   public constructor(
-    private router: Router,
-    @Inject(APP_CONFIG) private config: AppConfig,
+    private readonly router: Router,
+    @Inject(APP_CONFIG) private readonly config: AppConfig,
   ) {
     this.headerConfig = { theme: 'light', allowMobileToggle: false };
     this.providerIdentitySupport = this.config.emails.providerIdentitySupport;

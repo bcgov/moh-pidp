@@ -19,7 +19,7 @@ export class LayoutHeaderFooterComponent {
 
   public constructor(
     viewportService: ViewportService,
-    private router: Router,
+    private readonly router: Router,
   ) {
     viewportService.viewportBroadcast$.subscribe((viewport) =>
       this.onViewportChange(viewport),

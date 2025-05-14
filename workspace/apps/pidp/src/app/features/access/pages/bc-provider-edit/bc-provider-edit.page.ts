@@ -7,6 +7,8 @@ import {
   OnInit,
   TemplateRef,
   ViewChild,
+  inject,
+  signal,
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,9 +21,11 @@ import { Router } from '@angular/router';
 import {
   EMPTY,
   Observable,
+  Subject,
   Subscription,
   catchError,
   exhaustMap,
+  map,
   noop,
   of,
   tap,
@@ -35,13 +39,11 @@ import { NavigationService } from '@pidp/presentation';
 
 import { NoContent } from '@bcgov/shared/data-access';
 import {
-  AnchorDirective,
   ConfirmDialogComponent,
   CrossFieldErrorMatcher,
   DialogOptions,
   HtmlComponent,
   InjectViewportCssClassDirective,
-  TextButtonDirective,
   TooltipComponent,
 } from '@bcgov/shared/ui';
 
@@ -88,19 +90,17 @@ export interface BcProviderEditInitialStateModel {
     ReactiveFormsModule,
     SuccessDialogComponent,
     NgOptimizedImage,
-    TextButtonDirective,
     AsyncPipe,
     MatProgressBarModule,
     ConfirmDialogComponent,
     NgClass,
     FaIconComponent,
     TooltipComponent,
-    AnchorDirective,
   ],
 })
 export class BcProviderEditPage
   extends AbstractFormPage<BcProviderEditFormState>
-  implements OnInit, OnDestroy
+  implements OnDestroy, OnInit
 {
   public faCircleCheck = faCircleCheck;
   public faXmark = faXmark;
@@ -108,7 +108,6 @@ export class BcProviderEditPage
   public formState: BcProviderEditFormState;
   public AccessRoutes = AccessRoutes;
   public showErrorCard = false;
-  public username = '';
   public errorMatcher = new CrossFieldErrorMatcher();
   public componentType = DialogBcproviderEditComponent;
   public identityProvider$: Observable<IdentityProvider>;
@@ -121,6 +120,9 @@ export class BcProviderEditPage
   public passwordShowTooltip = false;
   public providerIdentitySupport: string;
   public additionalSupportPhone: string;
+  public username = signal<string>('');
+
+  public _untilDestroyed = new Subject();
 
   public breadcrumbsData: Array<{ title: string; path: string }> = [
     { title: 'Home', path: '' },
@@ -148,21 +150,32 @@ export class BcProviderEditPage
   }
 
   public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
+    @Inject(APP_CONFIG) private readonly config: AppConfig,
     dependenciesService: AbstractFormDependenciesService,
     fb: FormBuilder,
-    private navigationService: NavigationService,
-    private partyService: PartyService,
-    private resource: BcProviderEditResource,
-    private router: Router,
-    private authorizedUserService: AuthorizedUserService,
-    private authService: AuthService,
+    private readonly navigationService: NavigationService,
+    private readonly router: Router,
+    private readonly authorizedUserService: AuthorizedUserService,
+    private readonly authService: AuthService,
   ) {
     super(dependenciesService);
     this.formState = new BcProviderEditFormState(fb);
     this.identityProvider$ = this.authorizedUserService.identityProvider$;
     this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
     this.additionalSupportPhone = this.config.phones.additionalSupport;
+  }
+
+  private partyService = inject(PartyService);
+  private resource = inject(BcProviderEditResource);
+
+  public ngOnInit(): void {
+    const username$ = this.resource
+      .get(this.partyService.partyId)
+      .pipe(map((user) => user?.bcProviderId || ''));
+
+    username$.subscribe((username) => {
+      this.username.set(username);
+    });
   }
 
   public onSuccessDialogClose(): void {
@@ -229,16 +242,6 @@ export class BcProviderEditPage
 
   public onLearnMore(): void {
     this.router.navigateByUrl(FaqRoutes.BASE_PATH);
-  }
-
-  public ngOnInit(): void {
-    const partyId = this.partyService.partyId;
-
-    this.resource
-      .get(partyId)
-      .subscribe((bcProviderObject: BcProviderEditInitialStateModel) => {
-        this.username = bcProviderObject.bcProviderId;
-      });
   }
 
   public ngOnDestroy(): void {
