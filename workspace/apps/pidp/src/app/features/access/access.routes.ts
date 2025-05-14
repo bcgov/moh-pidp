@@ -1,5 +1,5 @@
 export class AccessRoutes {
-  public static BASE_PATH = 'access';
+  public static readonly BASE_PATH = 'access';
 
   public static ACCESS_REQUESTS = 'access-requests';
   public static BC_PROVIDER_APPLICATION = 'bc-provider-application';
@@ -13,6 +13,8 @@ export class AccessRoutes {
   public static PROVIDER_REPORTING_PORTAL = 'provider-reporting-portal';
   public static SPECIAL_AUTH_EFORMS = 'sa-eforms';
   public static PROVINCIAL_ATTACHMENT_SYSTEM = 'provincial-attachment-system';
+  public static EXTERNAL_ACCOUNTS = 'external-accounts';
+  public static HALO = 'halo';
 
   /**
    * @description

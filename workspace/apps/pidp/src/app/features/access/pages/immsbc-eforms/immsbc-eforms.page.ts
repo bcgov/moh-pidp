@@ -14,7 +14,6 @@ import {
   PageComponent,
   PageFooterActionDirective,
   PageFooterComponent,
-  PageHeaderComponent,
   PageSectionComponent,
   PageSectionSubheaderComponent,
   PageSectionSubheaderDescDirective,
@@ -53,7 +52,6 @@ import {
     PageComponent,
     PageFooterActionDirective,
     PageFooterComponent,
-    PageHeaderComponent,
     PageSectionComponent,
     PageSectionSubheaderComponent,
     PageSectionSubheaderDescDirective,
@@ -79,13 +77,13 @@ export class ImmsBCEformsPage implements OnInit, AfterViewInit {
   ];
 
   public constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private partyService: PartyService,
-    private resource: ImmsBCEformsResource,
-    private logger: LoggerService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly partyService: PartyService,
+    private readonly resource: ImmsBCEformsResource,
+    private readonly logger: LoggerService,
     documentService: DocumentService,
-    private snowplowService: SnowplowService,
+    private readonly snowplowService: SnowplowService,
   ) {
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;

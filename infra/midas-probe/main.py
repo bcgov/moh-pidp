@@ -20,8 +20,8 @@ def get_ip_from_host(host):
     try:
         ip_address = socket.gethostbyname(host)
         return ip_address
-    except socket.error as err:
-        print(f"Error: {err}")   
+    except socket.gaierror:
+        return None  
 
 
 def check_services(output_type):
@@ -31,7 +31,6 @@ def check_services(output_type):
     cluster = environ.get('cluster')
     notouch = environ.get('notouch')
     gslb_host = environ.get('gslb_host')
-    who_is_active = "GOLD"  
     data = {}
 
     # this is the magic to connect to the OCP cluster for running kubernetes commands
@@ -75,11 +74,10 @@ def check_services(output_type):
         
         who_is_active = get_ip_from_host(gslb_host)
         if who_is_active:
-            logging.info(f'who_am_i: {cluster.upper()}; who_is_active: {who_is_active.upper()}')                 
+            logging.info(f'who_am_i: {cluster.upper()}; who_is_active: {who_is_active.upper()}')
             if cluster.upper() == "GOLD" and who_is_active == "142.34.64.4":
                 success = False
-        else:
-            success = False
+                
 
         if success:
             return_color = "green"                        
