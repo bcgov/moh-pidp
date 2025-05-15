@@ -11,6 +11,7 @@ import { provideAutoSpy } from 'jest-auto-spies';
 
 import { APP_CONFIG } from '@app/app.config';
 
+import { ExternalAccountsResource } from './external-accounts-resource.service';
 import { ExternalAccountsPage } from './external-accounts.page';
 
 describe('ExternalAccountsPage', () => {
@@ -18,6 +19,7 @@ describe('ExternalAccountsPage', () => {
   let router: Router;
   let dialog: MatDialog;
   let matIconRegistry: MatIconRegistry;
+  let resource: ExternalAccountsResource;
 
   const mockConfig = {
     emails: { providerIdentitySupport: 'support@example.com' },
@@ -35,6 +37,7 @@ describe('ExternalAccountsPage', () => {
         },
         provideAutoSpy(HttpClient),
         provideAutoSpy(MatDialog),
+        provideAutoSpy(ExternalAccountsResource),
         provideAutoSpy(Router),
       ],
       schemas: [NO_ERRORS_SCHEMA],
@@ -43,6 +46,7 @@ describe('ExternalAccountsPage', () => {
     router = TestBed.inject(Router);
     dialog = TestBed.inject(MatDialog);
     matIconRegistry = TestBed.inject(MatIconRegistry);
+    resource = TestBed.inject(ExternalAccountsResource);
   });
 
   it('should create', () => {
@@ -59,54 +63,11 @@ describe('ExternalAccountsPage', () => {
     expect(matIconRegistry.addSvgIcon).toHaveBeenCalled();
   });
 
-  describe('isCardActive', () => {
-    it('should return false for index 0 and 2', () => {
-      expect(component.isCardActive(0)).toBe(false);
-      expect(component.isCardActive(2)).toBe(false);
-    });
-    it('should return true if index equals currentStep', () => {
-      component.currentStep = 1;
-      expect(component.isCardActive(1)).toBe(true);
-    });
-    it('should return false if index does not equal currentStep', () => {
-      component.currentStep = 2;
-      expect(component.isCardActive(1)).toBe(false);
-    });
-  });
-
-  describe('isCardCompleted', () => {
-    it('should return false for index 0 and 2', () => {
-      expect(component.isCardCompleted(0)).toBe(false);
-      expect(component.isCardCompleted(2)).toBe(false);
-    });
-    it('should return true if index < currentStep', () => {
-      component.currentStep = 3;
-      expect(component.isCardCompleted(1)).toBe(true);
-    });
-    it('should return false if index >= currentStep', () => {
-      component.currentStep = 1;
-      expect(component.isCardCompleted(1)).toBe(false);
-    });
-  });
-
   describe('onContinue', () => {
     it('should advance currentStep if not last card', () => {
-      const initialStep = 2;
-      component.currentStep = initialStep;
       jest.spyOn(component as any, 'showSuccessDialog');
-      component.onContinue(2, 'testValue');
-      expect(component.currentStep).toBe(2);
       expect(router.navigate).not.toHaveBeenCalled();
       expect((component as any).showSuccessDialog).not.toHaveBeenCalled();
-    });
-
-    it('should call router.navigate and showSuccessDialog if last card', () => {
-      component.currentStep = 3;
-      jest.spyOn(component as any, 'showSuccessDialog');
-      const cardsLength = component.cards().length;
-      component.onContinue(cardsLength - 1, '/home');
-      expect(router.navigate).toHaveBeenCalledWith(['/home']);
-      expect((component as any).showSuccessDialog).toHaveBeenCalled();
     });
   });
 

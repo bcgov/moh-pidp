@@ -1,7 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 
-import { Observable, catchError, map, throwError } from 'rxjs';
+import { Observable, catchError, delay, map, of, throwError } from 'rxjs';
 
 import { NoContent } from '@bcgov/shared/data-access';
 
@@ -13,6 +13,7 @@ import { PortalResource } from '@app/features/portal/portal-resource.service';
   providedIn: 'root',
 })
 export class ExternalAccountsResource {
+  public currentStep = signal(0);
   public constructor(
     private apiResource: ApiHttpClient,
     private portalResource: PortalResource,
@@ -26,6 +27,10 @@ export class ExternalAccountsResource {
     partyId: number,
     userPrincipalName: string,
   ): Observable<NoContent> {
+    if (userPrincipalName === 'mock@domain.com') {
+      return of({} as NoContent).pipe(delay(1000));
+    }
+
     return this.apiResource
       .post<NoContent>(`${this.getResourcePath(partyId)}/bc-provider/invite`, {
         userPrincipalName,
@@ -40,5 +45,9 @@ export class ExternalAccountsResource {
 
   private getResourcePath(partyId: number): string {
     return `parties/${partyId}/credentials`;
+  }
+
+  setStep(step: number) {
+    this.currentStep.set(step);
   }
 }

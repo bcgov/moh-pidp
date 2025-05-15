@@ -4,6 +4,7 @@ import {
   Inject,
   TemplateRef,
   ViewChild,
+  computed,
   inject,
   signal,
 } from '@angular/core';
@@ -118,7 +119,6 @@ export class ExternalAccountsPage {
     );
   }
 
-  public currentStep = 1;
   @ViewChild('successDialog')
   public successDialogTemplate!: TemplateRef<Element>;
 
@@ -168,20 +168,10 @@ export class ExternalAccountsPage {
     },
   ]);
 
-  public isCardActive(index: number): boolean {
-    //TODO : to be removed.
-    if (index === 0 || index === 2) {
-      return false;
-    }
-    return index === this.currentStep;
-  }
+  public isCardActive = computed(() => this.resource.currentStep());
 
   public isCardCompleted(index: number): boolean {
-    //TODO : to be removed.
-    if (index === 0 || index === 2) {
-      return false;
-    }
-    return index < this.currentStep;
+    return index < this.resource.currentStep();
   }
 
   public onContinue(index: number, value: string): void {
@@ -191,6 +181,7 @@ export class ExternalAccountsPage {
     if (index + 1 === InvitationSteps.COMPLETED) {
       // Handle completion of all steps
       console.log('All steps completed!');
+      this.resource.currentStep.set(0);
       this.router.navigate([value]);
       this.showSuccessDialog();
     }
@@ -206,7 +197,7 @@ export class ExternalAccountsPage {
 
             // Move to the next step if not the last one
             if (index < this.cards().length - 1) {
-              this.currentStep = index + 2;
+              this.resource.currentStep.set(index + 1);
             }
           }),
           catchError(() => {
@@ -216,11 +207,25 @@ export class ExternalAccountsPage {
           }),
         )
         .subscribe();
+    } else {
+      this.resource.currentStep.set(index + 1);
     }
   }
 
   private showSuccessDialog(): void {
     const config: MatDialogConfig = {};
     this.dialog.open(this.successDialogTemplate, config);
+  }
+
+  public verifyEmail(): number {
+    let updatedStep = this.resource.currentStep();
+    this.resource.currentStep.update((prev) => {
+      if (prev + 1 === InvitationSteps.EMAIL_VERIFICATION) {
+        updatedStep = prev + 1;
+        return updatedStep;
+      }
+      return prev;
+    });
+    return updatedStep;
   }
 }
