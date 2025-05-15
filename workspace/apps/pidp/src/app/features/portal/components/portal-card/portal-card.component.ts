@@ -65,9 +65,9 @@ export class PortalCardComponent {
   }
 
   public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
-    private router: Router,
-    private authService: AuthService,
+    @Inject(APP_CONFIG) private readonly config: AppConfig,
+    private readonly router: Router,
+    private readonly authService: AuthService,
   ) {
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
   }

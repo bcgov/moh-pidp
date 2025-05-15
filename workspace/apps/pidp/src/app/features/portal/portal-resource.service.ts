@@ -14,6 +14,9 @@ export class PortalResource {
   public constructor(private apiResource: ApiHttpClient) {}
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
+    if (!partyId) {
+      return of(null);
+    }
     return this.apiResource
       .get<ProfileStatus>(`parties/${partyId}/profile-status`)
       .pipe(

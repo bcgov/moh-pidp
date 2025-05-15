@@ -16,7 +16,7 @@ export interface BcProviderChangePasswordRequest {
 
 @Injectable({ providedIn: 'root' })
 export class BcProviderEditResource {
-  public constructor(private apiResource: ApiHttpClient) {}
+  public constructor(private readonly apiResource: ApiHttpClient) {}
 
   public get(partyId: number): Observable<BcProviderEditInitialStateModel> {
     const url = `parties/${partyId}/credentials/bc-provider`;
@@ -26,6 +26,16 @@ export class BcProviderEditResource {
   public changePassword(data: BcProviderChangePasswordRequest): NoContent {
     const url = `parties/${data.partyId}/credentials/bc-provider/password`;
     return this.apiResource.post<NoContent>(url, data).pipe(
+      NoContentResponse,
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => error);
+      }),
+    );
+  }
+
+  public resetMfa(partyId: number): NoContent {
+    const url = `parties/${partyId}/credentials/bc-provider/mfa`;
+    return this.apiResource.delete<NoContent>(url).pipe(
       NoContentResponse,
       catchError((error: HttpErrorResponse) => {
         return throwError(() => error);

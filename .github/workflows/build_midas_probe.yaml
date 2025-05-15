@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@master
 
       - name: Build image with docker-compose
         working-directory: "./infra/midas-probe"
@@ -41,9 +41,14 @@ jobs:
         run: |
           docker tag midas-probe image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/midas-probe:latest
           docker push image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/midas-probe:latest
+
+      - name: Install CLI tools from GitHub
+        uses: redhat-actions/openshift-tools-installer@v1
+        with: 
+          oc: "4"
       
       - name: OC Login to Gold OCP
-        uses: redhat-actions/oc-login@v1.2
+        uses: redhat-actions/oc-login@v1.3
         with:
           openshift_server_url: ${{secrets.GOLD_OPENSHIFT_CLUSTER_URL}}
           openshift_token: ${{secrets.GOLD_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
@@ -59,7 +64,7 @@ jobs:
           helm upgrade --install --values ./midas-probe/values.yaml --set environment=${{ github.event.inputs.Environment }} midas-probe midas-probe
 
   build-midas-goldDR:
-    name: Build Midas Probe-GOLD
+    name: Build Midas Probe-GOLDDR
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -82,8 +87,13 @@ jobs:
           docker tag midas-probe image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/midas-probe:latest
           docker push image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/midas-probe --all-tags
       
-      - name: OC Login to Gold OCP
-        uses: redhat-actions/oc-login@v1.2
+      
+      - name: Install CLI tools from GitHub
+        uses: redhat-actions/openshift-tools-installer@v1
+        with:
+          oc: "4"
+      - name: OC Login to GoldDR OCP
+        uses: redhat-actions/oc-login@v1.3
         with:
           openshift_server_url: ${{secrets.GOLDDR_OPENSHIFT_CLUSTER_URL}}
           openshift_token: ${{secrets.GOLDDR_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
@@ -95,5 +105,5 @@ jobs:
           helm upgrade --install --values ./midas-common/values.yaml --namespace f088b1-tools midas-common midas-common
           oc project f088b1-${{ github.event.inputs.Environment }}
           echo installing midas-probe helm chart...
-          helm upgrade --install --values ./midas-probe/values.yaml --set environment=${{ github.event.inputs.Environment }} --namespace f088b1-${{ github.event.inputs.Environment }} midas-probe midas-probe
+          helm upgrade --install --values ./midas-probe/values.yaml --set cluster=GOLDDR --set environment=${{ github.event.inputs.Environment }} --namespace f088b1-${{ github.event.inputs.Environment }} midas-probe midas-probe
   

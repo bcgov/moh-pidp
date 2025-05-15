@@ -14,7 +14,6 @@ import {
   PageComponent,
   PageFooterActionDirective,
   PageFooterComponent,
-  PageHeaderComponent,
   PageSectionComponent,
   PageSectionSubheaderComponent,
   PageSectionSubheaderDescDirective,
@@ -25,7 +24,9 @@ import { PartyService } from '@app/core/party/party.service';
 import { DocumentService } from '@app/core/services/document.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
+import { AccessRoutes } from '../../access.routes';
 import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolment-error.component';
 import { ProviderReportingPortalResource } from './provider-reporting-portal-resource.service';
 
@@ -38,6 +39,7 @@ import { ProviderReportingPortalResource } from './provider-reporting-portal-res
     AlertComponent,
     AlertContentDirective,
     AnchorDirective,
+    BreadcrumbComponent,
     EnrolmentErrorComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
@@ -45,7 +47,6 @@ import { ProviderReportingPortalResource } from './provider-reporting-portal-res
     PageComponent,
     PageFooterActionDirective,
     PageFooterComponent,
-    PageHeaderComponent,
     PageSectionComponent,
     PageSectionSubheaderComponent,
     PageSectionSubheaderDescDirective,
@@ -58,27 +59,31 @@ export class ProviderReportingPortalPage implements OnInit {
   public completed: boolean | null;
   public accessRequestFailed: boolean;
   public enrolmentError: boolean;
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    { title: 'Home', path: '' },
+    {
+      title: 'Access',
+      path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
+    },
+    { title: 'Provider Reporting Portal', path: '' },
+  ];
 
   public constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private partyService: PartyService,
-    private resource: ProviderReportingPortalResource,
-    private logger: LoggerService,
-    private documentService: DocumentService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly partyService: PartyService,
+    private readonly resource: ProviderReportingPortalResource,
+    private readonly logger: LoggerService,
+    private readonly documentService: DocumentService,
   ) {
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
     this.collectionNotice =
-      documentService.getProviderReportingPortalCollectionNotice();
+      this.documentService.getProviderReportingPortalCollectionNotice();
     this.completed =
       routeData.providerReportingPortalStatusCode === StatusCode.COMPLETED;
     this.accessRequestFailed = false;
     this.enrolmentError = false;
-  }
-
-  public onBack(): void {
-    this.navigateToRoot();
   }
 
   public onRequestAccess(): void {

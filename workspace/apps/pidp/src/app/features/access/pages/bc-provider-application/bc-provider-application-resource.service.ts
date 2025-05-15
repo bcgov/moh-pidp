@@ -15,8 +15,8 @@ import { PortalResource } from '@app/features/portal/portal-resource.service';
 })
 export class BcProviderApplicationResource {
   public constructor(
-    private apiResource: ApiHttpClient,
-    private portalResource: PortalResource,
+    private readonly apiResource: ApiHttpClient,
+    private readonly portalResource: PortalResource,
   ) {}
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
@@ -34,7 +34,7 @@ export class BcProviderApplicationResource {
       .pipe(map((upn) => upn));
   }
 
-  // Currently automatically links to BC Provider
+  // Currently automatically links to BCProvider
   public createLinkTicket(partyId: number): NoContent {
     return this.apiResource
       .post<NoContent>(`${this.getResourcePath(partyId)}/link-ticket`, {

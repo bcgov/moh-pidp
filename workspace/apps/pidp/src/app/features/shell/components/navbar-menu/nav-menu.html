@@ -10,6 +10,7 @@
       <span
         [ngClass]="{'menu-notification-dot': alerts?.includes(AlertCode.TRANSIENT_ERROR) || alerts?.includes(AlertCode.PLR_BAD_STANDING)}"></span>
     </button>
+    <app-feedback-button *ngIf="featureFlag()"></app-feedback-button>
   </div>
   <div *ngIf="isTopMenuVisible" uiPidpInjectViewportCss>
     <div class="content-menu">
@@ -55,6 +56,17 @@
               class="dropdown-links"
               (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT))"
               >User Access Agreement</a
+            >
+            <a
+              *ngIf="hasCredential(IdentityProvider.BC_PROVIDER)"
+              class="dropdown-links"
+              (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.BC_PROVIDER_EDIT))"
+              >Password and MFA reset</a
+            >
+            <a
+              class="dropdown-links"
+              (click)="navigateTo(HistoryRoutes.routePath(HistoryRoutes.TRANSACTIONS))"
+              >History</a
             >
           </div>
         </div>
@@ -114,6 +126,17 @@
             class="sidenav-menu-item"
             (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT))"
             >User Access Agreement</a
+          >
+          <a
+            *ngIf="hasCredential(IdentityProvider.BC_PROVIDER)"
+            class="sidenav-menu-item"
+            (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.BC_PROVIDER_EDIT))"
+            >Password and MFA reset</a
+          >
+          <a
+            class="sidenav-menu-item"
+            (click)="navigateTo(HistoryRoutes.routePath(HistoryRoutes.TRANSACTIONS))"
+            >History</a
           >
           <a
             *ngFor="let menuItem of menuItems"

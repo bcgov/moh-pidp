@@ -117,8 +117,6 @@ public class PlrStandingsDigest
             && record.PlrStatusCode == PlrStatusCode.Pending
             && record.PlrStatusReasonCode == PlrStatusReasonCode.NonPracticing);
 
-    public IEnumerable<string> LicenceNumbers => this.records.Where(record => record.LicenceNumber != null).Select(record => record.LicenceNumber!);
-
     public IEnumerable<string> Cpns => this.records.Select(record => record.Cpn);
 
     private PlrStandingsDigest(bool error, IEnumerable<DigestRecord>? records = null)
@@ -239,5 +237,6 @@ public class PlrStatusChangeLog
     public int Id { get; set; }
     public string Cpn { get; set; } = string.Empty;
     public bool IsGoodStanding { get; set; }
+    public string? IdentifierType { get; set; }
     public string? ProviderRoleType { get; set; }
 }

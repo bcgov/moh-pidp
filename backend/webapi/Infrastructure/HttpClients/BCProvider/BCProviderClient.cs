@@ -11,8 +11,9 @@ public partial class BCProviderClient(
 {
     private readonly GraphServiceClient client = client;
     private readonly ILogger<BCProviderClient> logger = logger;
-    private readonly string domain = config.BCProviderClient.Domain;
+    private readonly string appUrl = config.ApplicationUrl;
     private readonly string clientId = config.BCProviderClient.ClientId;
+    private readonly string domain = config.BCProviderClient.Domain;
 
     public async Task<object?> GetAttribute(string userPrincipalName, string attributeName)
     {
@@ -68,6 +69,46 @@ public partial class BCProviderClient(
         catch (Exception e)
         {
             this.logger.LogAccountCreationFailure(userPrincipal, e);
+            return null;
+        }
+    }
+
+    public async Task<string?> SendInvite(string userPrincipalName)
+    {
+        var invitation = new Invitation
+        {
+            InvitedUserEmailAddress = userPrincipalName,
+            InviteRedirectUrl = this.appUrl,
+            SendInvitationMessage = false,
+            InvitedUserType = "Guest"
+        };
+
+        try
+        {
+            var response = await this.client.Invitations.PostAsync(invitation);
+            if (response == null)
+            {
+                this.logger.LogInviteUserError(userPrincipalName, "Response was null.");
+            }
+            else if (response.InvitedUser == null)
+            {
+                this.logger.LogInviteUserError(userPrincipalName, "InvitedUser was null.");
+            }
+            else if (response.InvitedUser.Id == null)
+            {
+                this.logger.LogInviteUserError(userPrincipalName, "InvitedUser.ObjectId was null.");
+            }
+
+            var upn = await this.GetUserPrincipalName(response?.InvitedUser?.Id);
+            if (upn == null)
+            {
+                this.logger.LogInviteUserError(userPrincipalName, "InvitedUser.UserPrincipalName was null.");
+            }
+            return upn;
+        }
+        catch (ServiceException ex)
+        {
+            this.logger.LogInviteUserError(userPrincipalName, ex.Message);
             return null;
         }
     }
@@ -135,6 +176,98 @@ public partial class BCProviderClient(
         }
     }
 
+    public async Task<bool> RemoveAuthMethods(string userPrincipalName)
+    {
+        var allMethodsDeleted = false;
+        // This is a workaround for the re-register MFA feature that does not exist in the Graph API,
+        // so we will delete all auth methods which will prompt the user to re-register.
+        // We are attempting 3 times since Graph API does not support default auth method,
+        // and attempting to delete the default auth method will result in an error.
+        var maxAttempts = 3;
+        var attempt = 0;
+        while (!allMethodsDeleted && attempt < maxAttempts)
+        {
+            attempt++;
+            var authMethods = await this.GetUserAuthMethods(userPrincipalName);
+            if (authMethods?.Value is null)
+            {
+                // the user has no auth methods
+                return true;
+            }
+            // We cannot delete the PasswordAuthenticationMethod
+            var filteredAuthMethods = authMethods.Value.Where(authMethod => authMethod is not PasswordAuthenticationMethod).ToList();
+            if (filteredAuthMethods.Count == 0)
+            {
+                allMethodsDeleted = true;
+                break;
+            }
+            try
+            {
+                foreach (var authMethod in filteredAuthMethods)
+                {
+                    // If the request returns an error, it's possible that the auth method is default and cannot be deleted.
+                    // In this case, we want to continue deleting the other auth methods.
+                    try
+                    {
+                        switch (authMethod)
+                        {
+                            case EmailAuthenticationMethod:
+                                await this.client.Users[userPrincipalName].Authentication.EmailMethods[authMethod.Id].DeleteAsync();
+                                break;
+                            case Fido2AuthenticationMethod:
+                                await this.client.Users[userPrincipalName].Authentication.Fido2Methods[authMethod.Id].DeleteAsync();
+                                break;
+                            case MicrosoftAuthenticatorAuthenticationMethod:
+                                await this.client.Users[userPrincipalName].Authentication.MicrosoftAuthenticatorMethods[authMethod.Id].DeleteAsync();
+                                break;
+                            case PhoneAuthenticationMethod:
+                                await this.client.Users[userPrincipalName].Authentication.PhoneMethods[authMethod.Id].DeleteAsync();
+                                break;
+                            case SoftwareOathAuthenticationMethod:
+                                await this.client.Users[userPrincipalName].Authentication.SoftwareOathMethods[authMethod.Id].DeleteAsync();
+                                break;
+                            case TemporaryAccessPassAuthenticationMethod:
+                                await this.client.Users[userPrincipalName].Authentication.TemporaryAccessPassMethods[authMethod.Id].DeleteAsync();
+                                break;
+                            case WindowsHelloForBusinessAuthenticationMethod:
+                                await this.client.Users[userPrincipalName].Authentication.WindowsHelloForBusinessMethods[authMethod.Id].DeleteAsync();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        this.logger.LogDeleteUserAuthMethodFailure(authMethod.OdataType, ex.Message);
+                        allMethodsDeleted = false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogDeleteUserAuthMethodFailure(" possibly set as default auth method", ex.Message);
+                return false;
+            }
+        }
+        return allMethodsDeleted;
+    }
+
+    private async Task<AuthenticationMethodCollectionResponse?> GetUserAuthMethods(string userPrincipalName)
+    {
+        try
+        {
+            var authMethods = await this.client.Users[userPrincipalName].Authentication.Methods
+                .GetAsync();
+
+            return authMethods;
+        }
+        catch
+        {
+            this.logger.LogGetUserAuthMethodsFailure(userPrincipalName);
+            return null;
+        }
+    }
+
     private async Task<string?> CreateUniqueUserPrincipalName(NewUserRepresentation user)
     {
         var joinedFullName = $"{user.FirstName}.{user.LastName}";
@@ -152,6 +285,14 @@ public partial class BCProviderClient(
 
         this.logger.LogNoUniqueUserPrincipalNameFound(validCharacters);
         return null;
+    }
+
+    private async Task<string?> GetUserPrincipalName(string? objectId)
+    {
+        var user = await this.client.Users[objectId]
+            .GetAsync(request => request.QueryParameters.Select = ["userPrincipalName"]);
+
+        return user?.UserPrincipalName;
     }
 
     private string RemoveMailNicknameInvalidCharacters(string mailNickname)
@@ -227,4 +368,13 @@ public static partial class BCProviderClientLoggingExtensions
 
     [LoggerMessage(10, LogLevel.Error, "Failed to update the user '{userPrincipalName}'.")]
     public static partial void LogUserUpdateFailure(this ILogger<BCProviderClient> logger, string userPrincipalName);
+
+    [LoggerMessage(11, LogLevel.Error, "Failed to retrieve authentication methods for the user '{userPrincipalName}'.")]
+    public static partial void LogGetUserAuthMethodsFailure(this ILogger<BCProviderClient> logger, string userPrincipalName);
+
+    [LoggerMessage(12, LogLevel.Error, "An error occurred while deleting auth method {oDataType}: {message}")]
+    public static partial void LogDeleteUserAuthMethodFailure(this ILogger<BCProviderClient> logger, string? oDataType, string message);
+
+    [LoggerMessage(13, LogLevel.Error, "An error occurred while inviting user {userPrincipalName}. Reason: {reason}")]
+    public static partial void LogInviteUserError(this ILogger<BCProviderClient> logger, string userPrincipalName, string? reason);
 }

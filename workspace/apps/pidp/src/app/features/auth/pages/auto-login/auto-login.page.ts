@@ -14,11 +14,11 @@ import { AuthService } from '../../services/auth.service';
 })
 export class AutoLoginPage implements OnInit {
   public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
-    private authService: AuthService,
-    private route: ActivatedRoute,
-    private router: Router,
-  ) {}
+    @Inject(APP_CONFIG) private readonly config: AppConfig,
+    private readonly authService: AuthService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+  ) { }
 
   public ngOnInit(): void {
     const idpHint = this.route.snapshot.queryParamMap.get('idp_hint') ?? '';
@@ -28,6 +28,7 @@ export class AutoLoginPage implements OnInit {
         .login({
           idpHint: idpHint,
           redirectUri: this.config.applicationUrl,
+          prompt: 'login'
         })
         .subscribe();
     } else {

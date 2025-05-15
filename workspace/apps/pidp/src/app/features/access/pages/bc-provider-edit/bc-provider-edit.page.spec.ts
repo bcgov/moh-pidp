@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { NgOptimizedImage } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -13,14 +14,16 @@ import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
 import { FormUtilsService } from '@app/core/services/form-utils.service';
+import { AuthService } from '@app/features/auth/services/auth.service';
+import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
 
+import { BcProviderEditResource } from './bc-provider-edit-resource.service';
 import { BcProviderEditPage } from './bc-provider-edit.page';
 
 describe('BcProviderEditPage', () => {
   let component: BcProviderEditPage;
   let partyServiceSpy: Spy<PartyService>;
   let formUtilsServiceSpy: Spy<FormUtilsService>;
-  let navigationServiceSpy: Spy<NavigationService>;
 
   let mockActivatedRoute: { snapshot: any };
   let mockBcProviderForm: { newPassword: string; confirmPassword: string };
@@ -38,7 +41,12 @@ describe('BcProviderEditPage', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [MatDialogModule, MatSnackBarModule, ReactiveFormsModule],
+      imports: [
+        MatDialogModule,
+        MatSnackBarModule,
+        ReactiveFormsModule,
+        NgOptimizedImage,
+      ],
       providers: [
         BcProviderEditPage,
         { provide: APP_CONFIG, useValue: APP_DI_CONFIG },
@@ -57,11 +65,13 @@ describe('BcProviderEditPage', () => {
         provideAutoSpy(FormUtilsService),
         provideAutoSpy(NavigationService),
         provideAutoSpy(Router),
+        provideAutoSpy(AuthService),
+        provideAutoSpy(BcProviderEditResource),
+        provideAutoSpy(AuthorizedUserService),
       ],
     });
     component = TestBed.inject(BcProviderEditPage);
     formUtilsServiceSpy = TestBed.inject<any>(FormUtilsService);
-    navigationServiceSpy = TestBed.inject<any>(NavigationService);
     partyServiceSpy = TestBed.inject<any>(PartyService);
   });
 
@@ -98,18 +108,6 @@ describe('BcProviderEditPage', () => {
 
         then('enrolment button will be enabled', () => {
           expect(component.isResetButtonEnabled).toBe(false);
-        });
-      });
-    });
-  });
-
-  describe('METHOD: onBack', () => {
-    given('user wants to go back to the previous page', () => {
-      when('onBack is invoked', () => {
-        component.onBack();
-
-        then('router should navigate to root route', () => {
-          expect(navigationServiceSpy.navigateToRoot).toHaveBeenCalled();
         });
       });
     });

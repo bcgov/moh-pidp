@@ -1,6 +1,5 @@
 import { NgIf, NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, Inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
@@ -9,6 +8,7 @@ import { EMPTY, Observable, exhaustMap, of, switchMap } from 'rxjs';
 
 import {
   AnchorDirective,
+  ConfirmDialogComponent,
   DialogOptions,
   ExpansionPanelComponent,
   HtmlComponent,
@@ -17,7 +17,6 @@ import {
   PidpViewport,
   ViewportService,
 } from '@bcgov/shared/ui';
-import { ConfirmDialogComponent } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import {
@@ -25,6 +24,7 @@ import {
   MicrosoftLogLevel,
 } from '@app/core/services/client-logs.service';
 import { DocumentService } from '@app/core/services/document.service';
+import { SnowplowService } from '@app/core/services/snowplow.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { AdminRoutes } from '@app/features/admin/admin.routes';
 import { BannerComponent } from '@app/shared/components/banner/banner.component';
@@ -32,6 +32,7 @@ import { NeedHelpComponent } from '@app/shared/components/need-help/need-help.co
 
 import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { AuthService } from '../../services/auth.service';
+import { LinkAccountConfirmResource } from '../link-account-confirm/link-account-confirm-resource.service';
 import { BannerFindResponse } from './banner-find.response.model';
 import { LoginResource } from './login-resource.service';
 import { component } from './login.constants';
@@ -58,7 +59,7 @@ export interface LoginPageRouteData {
     BannerComponent,
   ],
 })
-export class LoginPage implements OnInit {
+export class LoginPage implements OnInit, AfterViewInit {
   public viewportOptions = PidpViewport;
 
   public bcscMobileSetupUrl: string;
@@ -78,15 +79,17 @@ export class LoginPage implements OnInit {
   }
 
   public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
-    private authService: AuthService,
-    private clientLogsService: ClientLogsService,
-    private route: ActivatedRoute,
-    private dialog: MatDialog,
-    private documentService: DocumentService,
-    private viewportService: ViewportService,
-    private loginResource: LoginResource,
-    private logger: LoggerService,
+    @Inject(APP_CONFIG) private readonly config: AppConfig,
+    private readonly authService: AuthService,
+    private readonly clientLogsService: ClientLogsService,
+    private readonly route: ActivatedRoute,
+    private readonly dialog: MatDialog,
+    private readonly documentService: DocumentService,
+    private readonly viewportService: ViewportService,
+    private readonly linkAccountConfirmResource: LinkAccountConfirmResource,
+    private readonly snowplowService: SnowplowService,
+    private readonly loginResource: LoginResource,
+    private readonly logger: LoggerService,
   ) {
     const routeSnapshot = this.route.snapshot;
 
@@ -127,6 +130,11 @@ export class LoginPage implements OnInit {
         );
       },
     );
+  }
+
+  public ngAfterViewInit(): void {
+    // refresh link urls now that we set the links
+    this.snowplowService.refreshLinkClickTracking();
   }
 
   private onViewportChange(viewport: PidpViewport): void {
@@ -182,7 +190,8 @@ export class LoginPage implements OnInit {
   }
 
   private login(idpHint: IdentityProvider): Observable<void> {
-    return this.createClientLogIfNeeded(idpHint).pipe(
+    return this.linkAccountConfirmResource.cancelLink().pipe(
+      switchMap(() => this.createClientLogIfNeeded(idpHint)),
       switchMap(() =>
         this.authService.login({
           idpHint: idpHint,

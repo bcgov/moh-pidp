@@ -19,8 +19,8 @@ export class UserAccessAgreementPortalSection implements IPortalSection {
   public description: string;
 
   public constructor(
-    private profileStatus: ProfileStatus,
-    private router: Router,
+    private readonly profileStatus: ProfileStatus,
+    private readonly router: Router,
   ) {
     this.key = 'userAccessAgreement';
     this.heading = 'User Access Agreement';

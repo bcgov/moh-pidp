@@ -1,6 +1,6 @@
-<form [formGroup]="formState.form" (submit)="onSubmit()">
-  <div class="container" uiPidpInjectViewportCss>
-    <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
+<div class="container" uiPidpInjectViewportCss>
+  <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
+  <form [formGroup]="formState.form" (submit)="onSubmit()">
     <div class="content">
       <section class="care-team">
         <header>
@@ -177,15 +177,6 @@
       </section>
       <section class="actions">
         <button
-          mat-stroked-button
-          uiPageFooterAction
-          type="button"
-          color="primary"
-          (click)="onBack()">
-          Back Home
-        </button>
-
-        <button
           mat-flat-button
           uiPageFooterAction
           type="submit"
@@ -194,5 +185,5 @@
         </button>
       </section>
     </div>
-  </div>
-</form>
+  </form>
+</div>

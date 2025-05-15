@@ -30,9 +30,9 @@ export interface IDocument extends IDocumentMetaData {
   providedIn: 'root',
 })
 export class DocumentService {
-  private documents: IDocumentMetaData[];
+  private readonly documents: IDocumentMetaData[];
 
-  public constructor(@Inject(APP_CONFIG) private config: AppConfig) {
+  public constructor(@Inject(APP_CONFIG) private readonly config: AppConfig) {
     this.documents = [
       {
         type: DocumentType.PIDP_COLLECTION_NOTICE,
@@ -341,12 +341,10 @@ export class DocumentService {
   }
 
   public getProviderReportingPortalCollectionNotice(): string {
-    return `
-      Lotus ipsum root brussels sprout turnip greens beet greens mustard okra earthnut pea fennel radicchio
-      kohlrabi soko gram arugula carrot plantain welsh onion courgette. Dandelion mustard spinach bush
-      tomato beet greens lentil salsify garbanzo. Chickweed celery maize summer purslane black-eyed pea
-      epazote melon bell pepper salad bitterleaf soybean corn wattle seed.
-    `;
+    return `The Provider Reporting Portal (PRP) serves as a gateway for delivering analytics reports to healthcare providers across British Columbia.
+    Whether supporting quality improvement initiatives or prescription monitoring, the portal empowers you with actionable reporting insights.
+     These are your reports, your patients, your insights.
+   `;
   }
 
   public getImmsBCEformsCollectionNotice(): string {

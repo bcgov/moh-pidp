@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 using Pidp.Data;
-using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Mail;
@@ -68,33 +67,11 @@ public class SAEforms
                 .SingleAsync();
 
             if (dto.AlreadyEnroled
-                || dto.Email == null)
+                || dto.Email == null
+                || !IsEligible(await this.plrClient.GetStandingsDigestAsync(dto.Cpn)))
             {
                 this.logger.LogAccessRequestDenied();
                 return DomainResult.Failed();
-            }
-
-            if (dto.Cpn == null)
-            {
-                // Check status of Endorsements
-                var endorsementCpns = await this.context.ActiveEndorsementRelationships(command.PartyId)
-                    .Select(relationship => relationship.Party!.Cpn)
-                    .ToListAsync();
-
-                var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
-                if (!endorsementPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding)
-                {
-                    this.logger.LogAccessRequestDenied();
-                    return DomainResult.Failed();
-                }
-            }
-            else
-            {
-                if (!IsEligible(await this.plrClient.GetStandingsDigestAsync(dto.Cpn)))
-                {
-                    this.logger.LogAccessRequestDenied();
-                    return DomainResult.Failed();
-                }
             }
 
             foreach (var userId in dto.UserIds)

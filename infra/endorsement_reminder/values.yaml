@@ -3,8 +3,9 @@ cron: 0 8 * * *
 global:
   vanityURL: "healthprovideridentityportal.gov.bc.ca"
   commit_sha: ""
+  license_plate: "f088b1"
   image:
-    registry: image-registry.openshift-image-registry.svc:5000/d8a8f9-tools
+    registry: image-registry.openshift-image-registry.svc:5000/f088b1-tools
     repository: endorsement-reminder
     # Overrides the image tag whose default is the chart appVersion.
     tag: develop

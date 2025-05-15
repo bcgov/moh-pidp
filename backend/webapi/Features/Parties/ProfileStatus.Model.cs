@@ -102,9 +102,14 @@ public partial class ProfileStatus
                     return StatusCode.Complete;
                 }
 
-                this.Alerts.Add(profile.PartyPlrStanding.Error
-                    ? Alert.TransientError
-                    : Alert.PlrBadStanding);
+                // CPS Postgrads do not want to see the bad standing alert
+                // however, they are still not considered in Good Standing for all systems
+                if (!profile.PartyPlrStanding.IsCpsPostgrad)
+                {
+                    this.Alerts.Add(profile.PartyPlrStanding.Error
+                        ? Alert.TransientError
+                        : Alert.PlrBadStanding);
+                }
 
                 return StatusCode.Error;
             }
@@ -179,6 +184,22 @@ public partial class ProfileStatus
             }
         }
 
+        public class ExternalAccountsSection : ProfileSection
+        {
+            internal override string SectionName => "externalAccounts";
+            public override string[] KeyWords => ["account"];
+
+            protected override StatusCode Compute(ProfileData profile) => StatusCode.Incomplete;
+        }
+
+        public class HaloSection : ProfileSection
+        {
+            internal override string SectionName => "halo";
+            public override string[] KeyWords => ["pas-emr, emr"];
+
+            protected override StatusCode Compute(ProfileData profile) => StatusCode.Incomplete;
+        }
+
         public class HcimAccountTransferSection : ProfileSection
         {
             internal override string SectionName => "hcimAccountTransfer";
@@ -203,7 +224,9 @@ public partial class ProfileStatus
                 {
                     { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
                     _ when profile.HasEnrolment(AccessTypeCode.ImmsBCEforms) => StatusCode.Complete,
-                    { PartyPlrStanding.HasGoodStanding: true } => StatusCode.Incomplete,
+                    _ when ImmsBCEforms.IsEligible(profile.PartyPlrStanding) ||
+                        profile.EndorsementPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding ||
+                        profile.EndorsementPlrStanding.With(IdentifierType.Nurse).HasGoodStanding => StatusCode.Incomplete,
                     _ => StatusCode.Locked
                 };
             }
@@ -292,7 +315,7 @@ public partial class ProfileStatus
             {
                 return profile switch
                 {
-                    { UserIsBCProvider: false } or { HasPrpAuthorizedLicence: false } => StatusCode.Locked,
+                    { HasBCProviderCredential: false } => StatusCode.Locked,
                     _ when profile.HasEnrolment(AccessTypeCode.ProviderReportingPortal) => StatusCode.Complete,
                     _ when profile.PartyPlrStanding
                         .With(ProviderReportingPortal.AllowedIdentifierTypes)
@@ -318,10 +341,7 @@ public partial class ProfileStatus
                 {
                     { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
                     _ when profile.HasEnrolment(AccessTypeCode.SAEforms) => StatusCode.Complete,
-                    _ when SAEforms.IsEligible(profile.PartyPlrStanding)
-                        || profile.EndorsementPlrStanding
-                            .With(ProviderRoleType.MedicalDoctor)
-                            .HasGoodStanding => StatusCode.Incomplete,
+                    _ when SAEforms.IsEligible(profile.PartyPlrStanding) => StatusCode.Incomplete,
                     _ => StatusCode.Locked
                 };
             }

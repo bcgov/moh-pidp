@@ -48,6 +48,8 @@ public class Party : BaseAuditable
 
     public ICollection<Credential> Credentials { get; set; } = [];
 
+    public ICollection<InvitedEntraAccount> InvitedEntraAccounts { get; set; } = [];
+
     /// <summary>
     /// The First Name + Last Name of the Party.
     /// </summary>
@@ -83,6 +85,13 @@ public class Party : BaseAuditable
         .OrderByDescending(credential => credential.IdentityProvider == IdentityProviders.BCServicesCard)
         .Select(credential => credential.UserId)
         .First();
+
+    [Projectable]
+    public IEnumerable<string> Upns => this.Credentials
+        .Where(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
+        .Select(credential => credential.IdpId!)
+        .Union(this.InvitedEntraAccounts
+            .Select(account => account.UserPrincipalName));
 
     /// <summary>
     /// Uses the Party's Licence Declaration to search PLR for records.

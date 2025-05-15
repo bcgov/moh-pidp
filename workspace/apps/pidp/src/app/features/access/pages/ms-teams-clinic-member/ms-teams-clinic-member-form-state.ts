@@ -8,8 +8,8 @@ import { ClinicId } from './ms-teams-clinic-member.model';
 
 export class MsTeamsClinicMemberFormState extends AbstractFormState<ClinicId> {
   public constructor(
-    private fb: FormBuilder,
-    private formUtilsService: FormUtilsService,
+    private readonly fb: FormBuilder,
+    private readonly formUtilsService: FormUtilsService,
   ) {
     super();
 

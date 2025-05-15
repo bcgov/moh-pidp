@@ -5,15 +5,16 @@
   --gap: 1rem;
   --font-size: 0.75rem;
   --content-padding: var(--gap);
-  padding: calc(var(--gap)) calc(var(--gap) * 4) 0 calc(var(--gap) * 4);
+  padding: 1.25rem 0.75rem;
 
   & header {
     margin: var(--header-margin);
+    padding-top: 1rem;
 
     & h1 {
       margin: 0;
       color: #003366;
-      font-size: 50px;
+      font-size: 3.125rem;
       font-weight: 700;
       word-wrap: break-word;
     }
@@ -24,10 +25,6 @@
     display: flex;
     flex-direction: column;
     gap: var(--gap);
-
-    .link-intro-text {
-      padding-top: 1rem;
-    }
 
     .option-text {
       padding-left: 0;
@@ -112,7 +109,7 @@
         height: 25rem;
         border-radius: 1.25rem;
         border: 1px solid #ccc;
-        background-color: #ebebeb;
+        background-color: #f2f2f2;
         box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 
         .instructions-container {
@@ -214,6 +211,12 @@
       .idir-account {
         margin-top: 1.19rem;
       }
+
+      .card-hover:hover {
+        background-color: #f2f2f2;
+        cursor: pointer;
+      }
+
       .link-button {
         img {
           -webkit-transform: scaleX(-1);

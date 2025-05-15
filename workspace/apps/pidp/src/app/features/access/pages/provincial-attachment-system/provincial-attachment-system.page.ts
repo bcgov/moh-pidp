@@ -12,9 +12,7 @@ import { BehaviorSubject, Observable, of, switchMap, tap } from 'rxjs';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
-import {
-  InjectViewportCssClassDirective,
-} from '@bcgov/shared/ui';
+import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import {
@@ -22,11 +20,13 @@ import {
   DiscoveryResource,
 } from '@app/core/party/discovery-resource.service';
 import { PartyService } from '@app/core/party/party.service';
+import { SnowplowService } from '@app/core/services/snowplow.service';
 import { ToastService } from '@app/core/services/toast.service';
 import { AuthService } from '@app/features/auth/services/auth.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
 import { AccessRoutes } from '../../access.routes';
 import { BcProviderEditResource } from '../bc-provider-edit/bc-provider-edit-resource.service';
@@ -35,7 +35,7 @@ import {
   bcProviderTutorialLink,
   provincialAttachmentSystemWebsite,
 } from './provincial-attachment-system.constants';
-import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
+
 @Component({
   selector: 'app-provincial-attachment-system',
   standalone: true,
@@ -80,21 +80,25 @@ export class ProvincialAttachmentSystemPage implements OnInit {
   public StatusCode = StatusCode;
   public AccessRoutes = AccessRoutes;
   public breadcrumbsData: Array<{ title: string; path: string }> = [
-    {title: 'Home', path: ''},
-    {title: 'Access', path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS)},
-    {title: 'PAS', path: ''},
+    { title: 'Home', path: '' },
+    {
+      title: 'Access',
+      path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
+    },
+    { title: 'PAS', path: '' },
   ];
   private readonly provincialAttachmentSystemWebsite: string;
 
   public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
-    private authService: AuthService,
-    private bcProviderResource: BcProviderEditResource,
-    private discoveryResource: DiscoveryResource,
-    private portalResource: PortalResource,
-    private partyService: PartyService,
-    private router: Router,
-    private toastService: ToastService,
+    @Inject(APP_CONFIG) private readonly config: AppConfig,
+    private readonly authService: AuthService,
+    private readonly bcProviderResource: BcProviderEditResource,
+    private readonly discoveryResource: DiscoveryResource,
+    private readonly portalResource: PortalResource,
+    private readonly partyService: PartyService,
+    private readonly router: Router,
+    private readonly toastService: ToastService,
+    private readonly snowplowService: SnowplowService,
   ) {
     this.selectedIndex = -1;
     this.provincialAttachmentSystemWebsite = provincialAttachmentSystemWebsite;
@@ -171,6 +175,7 @@ export class ProvincialAttachmentSystemPage implements OnInit {
   }
 
   private navigateToExternalUrl(url: string): void {
+    this.snowplowService.trackLinkClick(this.provincialAttachmentSystemWebsite);
     window.open(url, '_blank');
     this.router.navigateByUrl('/');
   }

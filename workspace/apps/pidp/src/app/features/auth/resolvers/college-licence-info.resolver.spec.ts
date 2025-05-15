@@ -38,9 +38,12 @@ describe('collegeLicenceInfoResolver', () => {
         },
         provideAutoSpy(PortalResource),
         provideAutoSpy(Router),
+        provideAutoSpy(ActivatedRouteSnapshot),
+        provideAutoSpy(RouterStateSnapshot),
       ],
     });
-
+    activatedRouteSnapshotSpy = TestBed.inject<any>(ActivatedRouteSnapshot);
+    routerStateSnapshotSpy = TestBed.inject<any>(RouterStateSnapshot);
     partyServiceSpy = TestBed.inject(PartyService) as Spy<PartyService>;
     portalResource = TestBed.inject(PortalResource) as Spy<PortalResource>;
     router = TestBed.inject(Router);

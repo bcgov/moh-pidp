@@ -54,9 +54,9 @@ export class PartiesPage implements OnInit {
   public production: string;
 
   public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
-    private adminResource: AdminResource,
-    private dialog: MatDialog,
+    @Inject(APP_CONFIG) private readonly config: AppConfig,
+    private readonly adminResource: AdminResource,
+    private readonly dialog: MatDialog,
     route: ActivatedRoute,
   ) {
     this.title = route.snapshot.data.title;

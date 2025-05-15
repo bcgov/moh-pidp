@@ -4,6 +4,8 @@ import {
   EventEmitter,
   Input,
   OnChanges,
+  OnDestroy,
+  OnInit,
   Output,
   SimpleChanges,
   ViewChild,
@@ -24,6 +26,8 @@ import {
   RouterOutlet,
 } from '@angular/router';
 
+import { Observable, Subject, takeUntil } from 'rxjs';
+
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faBell } from '@fortawesome/free-regular-svg-icons';
 
@@ -37,8 +41,18 @@ import {
 } from '@bcgov/shared/ui';
 import { RoutePath } from '@bcgov/shared/utils';
 
+import { PartyService } from '@app/core/party/party.service';
+import { AccessRoutes } from '@app/features/access/access.routes';
+import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
+import { HistoryRoutes } from '@app/features/history/history.routes';
 import { AlertCode } from '@app/features/portal/enums/alert-code.enum';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
+import { PermissionsService } from '@app/modules/permissions/permissions.service';
+import { Role } from '@app/shared/enums/roles.enum';
+
+import { FeedbackButtonComponent } from '../../../../shared/components/feedback-button/feedback-button.component';
+import { Credential } from './nav-menu.model';
+import { NavMenuResource } from './nav-menu.resource.service';
 
 @Component({
   selector: 'app-nav-menu',
@@ -60,9 +74,10 @@ import { ProfileRoutes } from '@app/features/profile/profile.routes';
     RouterOutlet,
     FaIconComponent,
     NgClass,
+    FeedbackButtonComponent,
   ],
 })
-export class NavMenuComponent implements OnChanges {
+export class NavMenuComponent implements OnChanges, OnInit, OnDestroy {
   @Input() public alerts: AlertCode[] | null = [];
   @Input() public menuItems!: DashboardMenuItem[];
   @Input() public emailSupport!: string;
@@ -79,21 +94,47 @@ export class NavMenuComponent implements OnChanges {
   public isLogoutMenuItemVisible = false;
   public isTopMenuVisible = false;
   public ProfileRoutes = ProfileRoutes;
+  public AccessRoutes = AccessRoutes;
+  public HistoryRoutes = HistoryRoutes;
   public showCollegeAlert = false;
   public faBell = faBell;
   public AlertCode = AlertCode;
+  public credentials: Credential[] | null = [];
+  public credentials$: Observable<Credential[] | null>;
+  private readonly unsubscribe$ = new Subject<void>();
+  public IdentityProvider = IdentityProvider;
 
   public constructor(
-    private viewportService: ViewportService,
-    private router: Router,
+    private readonly viewportService: ViewportService,
+    private readonly router: Router,
+    private readonly resource: NavMenuResource,
+    private readonly partyService: PartyService,
+    private readonly permissionsService: PermissionsService,
   ) {
     this.viewportService.viewportBroadcast$.subscribe((viewport) =>
       this.onViewportChange(viewport),
     );
+    const partyId = this.partyService.partyId;
+    this.credentials$ = this.resource.getCredentials(partyId);
   }
+
+  public featureFlag(): boolean {
+    return this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]);
+  }
+
+  public ngOnInit(): void {
+    this.handleLinkedAccounts();
+  }
+
   public ngOnChanges(_: SimpleChanges): void {
     this.refresh();
   }
+
+  public ngOnDestroy(): void {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
   public onMiniMenuButtonClick(): void {
     // Toggle display of the sidenav.
     this.isSidenavOpened = !this.isSidenavOpened;
@@ -137,6 +178,11 @@ export class NavMenuComponent implements OnChanges {
     }
     return undefined;
   }
+
+  public hasCredential(idp: IdentityProvider): boolean | undefined {
+    return this.credentials?.some((c) => c.identityProvider === idp);
+  }
+
   public onLogout(): void {
     this.logout.emit();
   }
@@ -144,6 +190,14 @@ export class NavMenuComponent implements OnChanges {
     if (this.showMiniMenuButton && this.sidenavMode === 'over') {
       this.sidenav.close();
     }
+  }
+
+  private handleLinkedAccounts(): void {
+    this.credentials$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((credentials) => {
+        this.credentials = credentials;
+      });
   }
 
   private onViewportChange(viewport: PidpViewport): void {

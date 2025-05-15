@@ -14,32 +14,18 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  helm-deployment:
-    runs-on: 'ubuntu-latest'
-    steps:
-      - uses: actions/checkout@v1 
-  
-      - name: Authenticate and set context
-        uses: redhat-actions/oc-login@v1.1
-        with:
-          openshift_server_url: ${{secrets.OPENSHIFT_CLUSTER_URL}}
-          openshift_token: ${{secrets.OPENSHIFT_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
-  
-      - name: Helm Deploy / install command
-        run: |
-          echo current installed helm releases
-          helm list --namespace d8a8f9-test
-  
-          echo installing helm chart...
-          helm upgrade --wait --values ./deploy/test_values.yaml --namespace d8a8f9-test test charts/pidp --debug 
-
   helm-deployment-gold:
     runs-on: 'ubuntu-latest'
     steps:
-      - uses: actions/checkout@v1 
+      - uses: actions/checkout@master
+
+      - name: Install CLI tools from GitHub
+        uses: redhat-actions/openshift-tools-installer@v1
+        with: 
+          oc: "4"
   
       - name: Authenticate and set context
-        uses: redhat-actions/oc-login@v1.1
+        uses: redhat-actions/oc-login@v1.3
         with:
           openshift_server_url: ${{secrets.GOLD_OPENSHIFT_CLUSTER_URL}}
           openshift_token: ${{secrets.GOLD_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
@@ -50,14 +36,19 @@ jobs:
           helm list --namespace f088b1-test
   
           echo installing helm chart...
-          helm upgrade --wait --values ./deploy/test_values.yaml --set global.license_plate=f088b1 --set global.image.registry=image-registry.openshift-image-registry.svc:5000/f088b1-tools --namespace f088b1-test test charts/pidp --debug 
+          helm upgrade --wait --values ./deploy/test_values.yaml --namespace f088b1-test test charts/pidp --debug 
   helm-deployment-golddr:
     runs-on: 'ubuntu-latest'
     steps:
-      - uses: actions/checkout@v1 
+      - uses: actions/checkout@master
+
+      - name: Install CLI tools from GitHub
+        uses: redhat-actions/openshift-tools-installer@v1
+        with: 
+          oc: "4"
   
       - name: Authenticate and set context
-        uses: redhat-actions/oc-login@v1.1
+        uses: redhat-actions/oc-login@v1.3
         with:
           openshift_server_url: ${{secrets.GOLDDR_OPENSHIFT_CLUSTER_URL}}
           openshift_token: ${{secrets.GOLDDR_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
@@ -68,4 +59,4 @@ jobs:
           helm list --namespace f088b1-test
   
           echo installing helm chart...
-          helm upgrade --wait --values ./deploy/test_values.yaml --set global.license_plate=f088b1 --set  global.image.registry=image-registry.openshift-image-registry.svc:5000/f088b1-tools --namespace f088b1-test test charts/pidp --debug 
+          helm upgrade --wait --values ./deploy/test_values.yaml --namespace f088b1-test test charts/pidp --debug 

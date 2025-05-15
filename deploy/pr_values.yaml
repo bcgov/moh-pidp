@@ -3,9 +3,9 @@ global:
   vanityURL: "healthprovideridentityportal.gov.bc.ca"
   commit_sha: ""
   image:
-    registry: image-registry.openshift-image-registry.svc:5000/d8a8f9-tools
+    registry: image-registry.openshift-image-registry.svc:5000/f088b1-tools
     tag: dev
-  license_plate: "d8a8f9"
+  license_plate: "f088b1"
 
 database:
   autoCreate: true
@@ -20,8 +20,7 @@ redis:
 
 nginx:
   replicaCount: 1
-  fluentbit:
-    enabled: false
+
 
 frontend:
   replicaCount: 1
@@ -32,8 +31,6 @@ webapi:
   replicaCount: 1
   aspnetcore:
     environment: Staging
-  fluentbit:
-    enabled: false
 
 plr-intake:
   replicaCount: 1

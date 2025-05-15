@@ -9,5 +9,3 @@ public class File(string filename, byte[] data, string mediaType)
     public byte[] Data { get; set; } = data;
     public string MediaType { get; set; } = mediaType;
 }
-
-public class Pdf(string filename, byte[] data) : File(filename, data, "application/pdf") { }

@@ -24,15 +24,17 @@ export class BcProviderPortalSection implements IPortalSection {
   public faFileLines = faFileLines;
   public faUserCheck = faUserCheck;
   public keyWords: string[];
+  public completedMessage: string;
 
   public constructor(
-    private profileStatus: ProfileStatus,
-    private router: Router,
+    private readonly profileStatus: ProfileStatus,
+    private readonly router: Router,
   ) {
     this.key = 'bcProvider';
-    this.heading = 'BC Provider Account';
+    this.heading = 'BCProvider Account';
     this.description = `A reusable credential for access to health data in BC.`;
     this.keyWords = profileStatus.status.bcProvider.keyWords || [];
+    this.completedMessage = 'Account Linked';
   }
 
   public get hint(): string {
@@ -61,11 +63,8 @@ export class BcProviderPortalSection implements IPortalSection {
 
   public get status(): string {
     const statusCode = this.getStatusCode();
-    return statusCode === StatusCode.AVAILABLE
-      ? ''
-      : statusCode === StatusCode.COMPLETED
-        ? 'Completed'
-        : 'Incomplete';
+    const statusMsg =  statusCode === StatusCode.COMPLETED ? 'Completed': 'Incomplete';
+    return statusCode === StatusCode.AVAILABLE ? '' : statusMsg;
   }
 
   public get icon(): IconProp {

@@ -1,6 +1,6 @@
 import { NgIf } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -24,6 +24,7 @@ import {
 import { PartyService } from '@app/core/party/party.service';
 import { DocumentService } from '@app/core/services/document.service';
 import { LoggerService } from '@app/core/services/logger.service';
+import { SnowplowService } from '@app/core/services/snowplow.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
@@ -59,7 +60,7 @@ import {
     SafePipe,
   ],
 })
-export class PrescriptionRefillEformsPage implements OnInit {
+export class PrescriptionRefillEformsPage implements OnInit, AfterViewInit {
   public title: string;
   public collectionNotice: string;
   public completed: boolean | null;
@@ -78,17 +79,18 @@ export class PrescriptionRefillEformsPage implements OnInit {
   ];
 
   public constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private partyService: PartyService,
-    private resource: PrescriptionRefillEformsResource,
-    private logger: LoggerService,
-    private documentService: DocumentService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly partyService: PartyService,
+    private readonly resource: PrescriptionRefillEformsResource,
+    private readonly logger: LoggerService,
+    private readonly documentService: DocumentService,
+    private readonly snowplowService: SnowplowService,
   ) {
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
     this.collectionNotice =
-      documentService.getPrescriptionRefilleFormsCollectionNotice();
+      this.documentService.getPrescriptionRefilleFormsCollectionNotice();
     this.completed =
       routeData.prescriptionRefillEformsStatusCode === StatusCode.COMPLETED;
     this.accessRequestFailed = false;
@@ -96,10 +98,6 @@ export class PrescriptionRefillEformsPage implements OnInit {
     this.prescriptionRefillEformsUrl = prescriptionRefillRequestEformsUrl;
     this.prescriptionRefillEformsSupportEmail =
       prescriptionRefillRequestEformsSupportEmail;
-  }
-
-  public onBack(): void {
-    this.navigateToRoot();
   }
 
   public onRequestAccess(): void {
@@ -135,6 +133,10 @@ export class PrescriptionRefillEformsPage implements OnInit {
       this.logger.error('No status code was provided');
       return this.navigateToRoot();
     }
+  }
+
+  public ngAfterViewInit(): void {
+    this.snowplowService.refreshLinkClickTracking();
   }
 
   private navigateToRoot(): void {

@@ -1,4 +1,4 @@
-import { AsyncPipe, NgClass, NgFor, NgIf } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import {
   Component,
   HostListener,
@@ -18,7 +18,6 @@ import {
 
 import {
   InjectViewportCssClassDirective,
-  LayoutHeaderFooterComponent,
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
@@ -42,12 +41,9 @@ import { AccessRequestCardComponent } from '../../components/access-request-card
     FaIconComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
-    NgClass,
     NgIf,
-    LayoutHeaderFooterComponent,
     AccessRequestCardComponent,
     NgFor,
-    AsyncPipe,
   ],
 })
 export class AccessRequestsPage implements OnInit, OnDestroy {
@@ -61,8 +57,8 @@ export class AccessRequestsPage implements OnInit, OnDestroy {
   public faArrowUp = faArrowUp;
   public faMagnifyingGlass = faMagnifyingGlass;
   public logoutRedirectUrl: string;
-  public showBackToTopButton: boolean = false;
-  public showSearchIcon: boolean = true;
+  public showBackToTopButton = false;
+  public showSearchIcon = true;
   public isMobile = true;
   public providerIdentitySupport: string;
   public filteredAccessSections: IAccessSection[] | undefined = [];
@@ -70,13 +66,13 @@ export class AccessRequestsPage implements OnInit, OnDestroy {
     { title: 'Home', path: '' },
     { title: 'Access', path: '' },
   ];
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
 
   public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
-    private partyService: PartyService,
-    private portalService: PortalService,
-    private portalResource: PortalResource,
+    @Inject(APP_CONFIG) private readonly config: AppConfig,
+    private readonly partyService: PartyService,
+    private readonly portalService: PortalService,
+    private readonly portalResource: PortalResource,
   ) {
     this.accessState$ = this.portalService.accessState$;
     this.providerIdentitySupport = this.config.emails.providerIdentitySupport;

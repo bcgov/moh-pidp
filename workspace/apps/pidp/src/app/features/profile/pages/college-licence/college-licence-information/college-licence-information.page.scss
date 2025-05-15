@@ -52,8 +52,6 @@ $darkgrey: pidp.$bcgov-color-text;
     & button {
       margin-top: 1rem;
       width: 75px;
-      font: bold;
-      font-weight: 700;
     }
   }
   padding: 1.25rem 0.75rem 0px 0px;
@@ -110,7 +108,6 @@ $darkgrey: pidp.$bcgov-color-text;
         padding-top: 0.25rem;
         margin-bottom: 0;
       }
-
     }
   }
   .status-active {
@@ -152,9 +149,7 @@ $darkgrey: pidp.$bcgov-color-text;
       font-weight: 700;
       margin-right: 5px;
     }
-
   }
-
 }
 .viewport-large,
 .viewport-medium,
@@ -179,7 +174,6 @@ $darkgrey: pidp.$bcgov-color-text;
     grid-template-columns: 50% 50%;
     grid-gap: 3px;
   }
-
 }
 
 .viewport-small {
@@ -279,7 +273,7 @@ $darkgrey: pidp.$bcgov-color-text;
   & .card-styles {
     padding: 1rem;
     width: auto !important;
-    height:21rem !important;
+    height: 21rem !important;
     h2 {
       font-size: 1.25rem;
     }

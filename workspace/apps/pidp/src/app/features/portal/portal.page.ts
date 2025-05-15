@@ -1,6 +1,6 @@
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { AsyncPipe, NgIf, NgOptimizedImage } from '@angular/common';
-import { Component, HostListener, OnInit } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Observable, map } from 'rxjs';
@@ -12,6 +12,7 @@ import { faArrowUp, faBookmark } from '@fortawesome/free-solid-svg-icons';
 import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
+import { SnowplowService } from '@app/core/services/snowplow.service';
 
 import { AccessRoutes } from '../access/access.routes';
 import { OrganizationInfoRoutes } from '../organization-info/organization-info.routes';
@@ -38,10 +39,10 @@ import { PortalResource } from './portal-resource.service';
     AsyncPipe,
   ],
 })
-export class PortalPage implements OnInit {
+export class PortalPage implements OnInit, AfterViewInit {
   public faBookmark = faBookmark;
   public faArrowUp = faArrowUp;
-  public showBackToTopButton: boolean = false;
+  public showBackToTopButton = false;
   public ProfileRoutes = ProfileRoutes;
   public AccessRoutes = AccessRoutes;
   public OrganizationInfoRoutes = OrganizationInfoRoutes;
@@ -53,6 +54,7 @@ export class PortalPage implements OnInit {
     private partyService: PartyService,
     private resource: PortalResource,
     private router: Router,
+    private snowplowService: SnowplowService,
   ) {}
 
   @HostListener('window:scroll', [])
@@ -78,5 +80,10 @@ export class PortalPage implements OnInit {
     this.alerts$ = this.resource
       .getProfileStatus(this.partyService.partyId)
       .pipe(map((profileStatus) => profileStatus?.alerts ?? []));
+  }
+
+  public ngAfterViewInit(): void {
+    // refresh link urls now that we set the links
+    this.snowplowService.refreshLinkClickTracking();
   }
 }

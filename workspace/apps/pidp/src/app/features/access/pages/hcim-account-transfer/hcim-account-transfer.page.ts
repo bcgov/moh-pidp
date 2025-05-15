@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,7 +8,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, Observable } from 'rxjs';
 
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 import {
   AlertActionsDirective,
@@ -19,7 +18,6 @@ import {
   PageComponent,
   PageFooterActionDirective,
   PageFooterComponent,
-  PageHeaderComponent,
   PageSectionComponent,
   PageSectionSubheaderComponent,
   PageSectionSubheaderDescDirective,
@@ -33,6 +31,7 @@ import {
 } from '@app/core/classes/abstract-form-page.class';
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
+import { SnowplowService } from '@app/core/services/snowplow.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
@@ -64,7 +63,6 @@ import {
     AlertContentDirective,
     AnchorDirective,
     BreadcrumbComponent,
-    FaIconComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
     MatFormFieldModule,
@@ -73,7 +71,6 @@ import {
     PageComponent,
     PageFooterActionDirective,
     PageFooterComponent,
-    PageHeaderComponent,
     PageSectionComponent,
     PageSectionSubheaderComponent,
     PageSectionSubheaderDescDirective,
@@ -84,7 +81,7 @@ import {
 })
 export class HcimAccountTransferPage
   extends AbstractFormPage<HcimAccountTransferFormState>
-  implements OnInit
+  implements OnInit, AfterViewInit
 {
   public title: string;
   public formState: HcimAccountTransferFormState;
@@ -115,12 +112,13 @@ export class HcimAccountTransferPage
 
   public constructor(
     dependenciesService: AbstractFormDependenciesService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private partyService: PartyService,
-    private resource: HcimAccountTransferResource,
-    private logger: LoggerService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly partyService: PartyService,
+    private readonly resource: HcimAccountTransferResource,
+    private readonly logger: LoggerService,
     fb: FormBuilder,
+    private readonly snowplowService: SnowplowService,
   ) {
     super(dependenciesService);
 
@@ -139,10 +137,6 @@ export class HcimAccountTransferPage
     this.healthRegistriesAdminPhone = healthNetBcAdminPhone;
   }
 
-  public onBack(): void {
-    this.navigateToRoot();
-  }
-
   public ngOnInit(): void {
     const partyId = this.partyService.partyId;
 
@@ -155,6 +149,10 @@ export class HcimAccountTransferPage
       this.logger.error('No status code was provided');
       return this.navigateToRoot();
     }
+  }
+
+  public ngAfterViewInit(): void {
+    this.snowplowService.refreshLinkClickTracking();
   }
 
   protected performSubmission(): Observable<HcimAccountTransferResponse> {

@@ -1,4 +1,4 @@
-<div class="container-box" uiPidpInjectViewportCss>
+<div class="container-box container" uiPidpInjectViewportCss>
   <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
   <div class="content-box">
     <header>
@@ -101,7 +101,10 @@
               ></ng-template
             >
           </div>
-          <div class="bc-provider card-styles">
+          <div
+            class="bc-provider card-styles card-hover"
+            (click)="navigateTo()"
+            (keyup)="navigateTo()">
             <div class="card-header-icon">
               <div class="card-icon">
                 <img
@@ -109,7 +112,7 @@
                   alt="contact" />
               </div>
             </div>
-            <h2>BC Provider</h2>
+            <h2>BCProvider</h2>
             <p>Access a growing number of provincial health applications</p>
             <div
               *ngIf="hasCredential(IdentityProvider.BC_PROVIDER); else linkBCProvider"
@@ -129,7 +132,11 @@
           </div>
         </div>
         <div class="third-column-cards">
-          <div class="health-authority card-styles">
+          <div
+            class="health-authority card-styles"
+            [ngClass]="{ 'card-hover': !hasCredential(IdentityProvider.PHSA) }"
+            (click)="!hasCredential(IdentityProvider.PHSA) && onLinkAccount(IdentityProvider.PHSA)"
+            (keyup)="!hasCredential(IdentityProvider.PHSA) && onLinkAccount(IdentityProvider.PHSA)">
             <div class="card-header-icon">
               <div class="card-icon">
                 <img

@@ -1,32 +1,22 @@
 @use 'pidp-variables' as pidp;
 
-.viewport-all {
-  --gap: 1rem;
-  --font-size: 0.75rem;
-}
-
 .viewport-small,
 .viewport-medium,
 .viewport-large {
   --gap: 1.25rem;
   --font-size: 1rem;
-}
-.viewport-all {
-  --content-padding: var(--gap) 0;
-  --image-display: none;
-  --teams-image-width: 458px;
-  --teams-image-height: 400px;
-  padding: 1.25rem 0.75rem;
-}
-
-.viewport-small,
-.viewport-medium,
-.viewport-large {
   --content-padding: var(--gap) 0;
   --image-display: unset;
 }
 
 .viewport-all {
+  --gap: 1rem;
+  --font-size: 0.75rem;
+  --content-padding: var(--gap) 0;
+  --image-display: none;
+  --teams-image-width: 458px;
+  --teams-image-height: 400px;
+  padding: 1.25rem 0.75rem;
   & header {
     & h1 {
       color: #036;
@@ -102,9 +92,6 @@
   & .actions {
     display: flex;
     margin: var(--gap) var(--gap) 0;
-    & button:not(:last-child) {
-      margin-right: var(--gap);
-    }
   }
 }
 

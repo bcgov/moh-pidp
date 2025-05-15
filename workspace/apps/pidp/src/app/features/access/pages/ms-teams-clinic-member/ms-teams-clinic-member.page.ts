@@ -87,13 +87,13 @@ export class MsTeamsClinicMemberPage
 
   public constructor(
     dependenciesService: AbstractFormDependenciesService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private partyService: PartyService,
-    private resource: MsTeamsClinicMemberResource,
-    private logger: LoggerService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly partyService: PartyService,
+    private readonly resource: MsTeamsClinicMemberResource,
+    private readonly logger: LoggerService,
     fb: FormBuilder,
-    private loadingOverlayService: LoadingOverlayService,
+    private readonly loadingOverlayService: LoadingOverlayService,
   ) {
     super(dependenciesService);
     const routeData = this.route.snapshot.data;
@@ -111,10 +111,6 @@ export class MsTeamsClinicMemberPage
   public onSelectPrivacyOfficer(selection: MatSelectChange): void {
     this.selectedPrivacyOfficer = selection.value;
     this.clinicId = selection.value.clinicId;
-  }
-
-  public onBack(): void {
-    this.navigateToRoot();
   }
 
   public onRequestAccess(): void {

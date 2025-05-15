@@ -1,18 +1,29 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import {
   ActivatedRoute,
   Data,
   Event,
+  NavigationEnd,
+  Router,
   RouterOutlet,
   Scroll,
 } from '@angular/router';
 
-import { Observable, delay, map, mergeMap } from 'rxjs';
+import {
+  Observable,
+  Subject,
+  delay,
+  filter,
+  map,
+  mergeMap,
+  takeUntil,
+} from 'rxjs';
 
 import { contentContainerSelector } from '@bcgov/shared/ui';
 
 import { RouteStateService } from '@core/services/route-state.service';
+import { SnowplowService } from '@core/services/snowplow.service';
 import { UtilsService } from '@core/services/utils.service';
 
 @Component({
@@ -22,19 +33,45 @@ import { UtilsService } from '@core/services/utils.service';
   standalone: true,
   imports: [RouterOutlet],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
+  private readonly destroy$ = new Subject<void>();
+
   public constructor(
-    private activatedRoute: ActivatedRoute,
-    private titleService: Title,
-    private routeStateService: RouteStateService,
-    private utilsService: UtilsService,
-  ) {}
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly titleService: Title,
+    private readonly routeStateService: RouteStateService,
+    private readonly utilsService: UtilsService,
+    private readonly router: Router,
+    private readonly snowplowService: SnowplowService,
+  ) {
+    this.router.events.subscribe((evt) => {
+      if (evt instanceof NavigationEnd) {
+        this.snowplowService.trackPageView();
+      }
+    });
+  }
 
   public ngOnInit(): void {
     this.setPageTitle(this.routeStateService.onNavigationEnd());
     this.handleRouterScrollEvents(this.routeStateService.onScrollEvent());
   }
 
+  public ngAfterViewInit(): void {
+    this.router.events
+      .pipe(
+        filter((event: Event) => event instanceof NavigationEnd),
+        delay(0),
+        takeUntil(this.destroy$),
+      )
+      .subscribe(() => {
+        this.snowplowService.trackPageView();
+      });
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
   /**
    * @description
    * Set the HTML page <title> on route event.
@@ -53,6 +90,7 @@ export class AppComponent implements OnInit {
           return route;
         }),
         mergeMap((route: ActivatedRoute) => route.data),
+        takeUntil(this.destroy$),
       )
       .subscribe((routeData: Data) =>
         this.titleService.setTitle(routeData.title),

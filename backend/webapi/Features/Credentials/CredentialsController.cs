@@ -81,6 +81,26 @@ public class CredentialsController(IPidpAuthorizationService authorizationServic
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
+    [HttpDelete("bc-provider/mfa")]
+    [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> ResetBCProviderMfa([FromServices] ICommandHandler<BCProviderResetMfa.Command, IDomainResult> handler,
+                                                        [FromRoute] BCProviderResetMfa.Command command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
+            .ToActionResult();
+
+    [HttpPost("bc-provider/invite")]
+    [Authorize(Roles = Roles.FeatureFlag)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> CreateGuestInvite([FromServices] ICommandHandler<BCProviderInvite.Command, IDomainResult> handler,
+                                                       [FromHybrid][AutoValidateAlways] BCProviderInvite.Command command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
+            .ToActionResult();
+
     [HttpPost("link-ticket")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -107,11 +127,12 @@ public class CredentialsController(IPidpAuthorizationService authorizationServic
         return result.ToActionResult();
     }
 
-    [HttpDelete("/api/[controller]")]
+    [HttpDelete("/api/[controller]/link-ticket/cookie")]
+    [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult DeleteCredential()
+    public ActionResult DeleteCredentialLinkCookie()
     {
         this.Response.Cookies.Append(
             Cookies.CredentialLinkTicket.Key,
