@@ -5,11 +5,11 @@
       <h1>BCProvider account information</h1>
     </header>
     <div class="content">
-      <h3>
+      <p>
         <strong>
           Welcome {{ (fullName$ | async) }} to your BCProvider knowledge center!
         </strong>
-      </h3>
+      </p>
       <p>
         The OneHealthID Service is designed to use the digital identity created
         by the BC Services Card as a foundation for your BCProvider account.
@@ -24,9 +24,68 @@
       </p>
       <p>
         <strong>
-          Do you not have a BCProvider account? setup is quick and easy.
+          Do you not have a BCProvider account? Setup is quick and easy.
         </strong>
       </p>
+      <div class="uplifting-container">
+        <p class="title">Uplift your existing BCProvider account</p>
+        <p class="sub-heading">
+          If you have an existing ImmsBC credential, please uplift the account
+          instead of creating a new BCProvider account
+        </p>
+        <div class="button-container">
+          <button
+            mat-flat-button
+            type="button"
+            color="primary"
+            (click)="onUplift()">
+            Start uplift
+            <img src="/assets/images/icons/icon-vector.svg" alt="vector" />
+          </button>
+
+          <a (click)="showInstructions = !showInstructions"
+            ><u>Instructions</u></a
+          >
+        </div>
+        <div class="instructions-container">
+          <div
+            *ngIf="showInstructions"
+            id="upliftAccount"
+            class="active-layout">
+            <h3>
+              You get more out of OneHealthID when you sign in with BCProvider.
+            </h3>
+            <ol>
+              <li>
+                Go to Microsoft account and select
+                <strong>Sign in</strong>. Please use your BCProvider login and
+                not your vendor login.
+              </li>
+              <li>
+                Enter in your email address (example:
+                first.lastname&#64;bcprovider.ca) then select
+                <strong>Next</strong>.
+              </li>
+              <li>
+                Type your password and select the
+                <strong>Keep me signed in box</strong> if you want to go
+                straight into your account next time.
+              </li>
+              <li>
+                Select <strong>Sign in</strong>. You may need to authenticate
+                using Microsoft authenticator.
+              </li>
+              <li>
+                At this point OneHealthID will have all the necessary
+                information needed, and you will
+                <strong>automatically be redirected</strong> back into
+                OneHealthID application.
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
       <div class="cards">
         <div class="card card-basic">
           <div class="card-container">
@@ -37,67 +96,28 @@
               <p>
                 For brand new users that are looking for the flexibility and
                 security of BC Services card and a BCProvider account.
+                <app-need-help></app-need-help>
               </p>
               <div class="form-button-box">
                 <button
-                  mat-flat-button
+                  class="btn-setup"
+                  mat-stroked-button
                   type="button"
                   color="primary"
                   (click)="setLayout('createAccount')">
                   First time setup
                 </button>
               </div>
-              <app-need-help></app-need-help>
-            </div>
-            <div class="card-footer">
-              <hr />
-              <div class="bcgov-logo">
-                <picture>
-                  <source
-                    type="image/webp"
-                    srcset="/assets/images/BC_HLTH_H_CMYK_pos.webp" />
-                  <source
-                    type="image/png"
-                    srcset="/assets/images/BC_HLTH_H_CMYK_pos.png" />
-                  <img
-                    title="BC Government Logo"
-                    alt="BC Ministry of Health Logo"
-                    loading="lazy"
-                    aria-label="BC Ministry of Health Logo" />
-                </picture>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card card-uplifting">
-          <img
-            ngSrc="/assets/images/bc-provider-uplift-account-300x451.jpg"
-            alt="BCProvider uplifting account"
-            fill
-            priority />
-          <div class="card-container">
-            <div class="card-header">
-              <strong>Uplift your existing BCProvider account</strong>
-            </div>
-            <div class="card-body"></div>
-            <div class="card-footer">
-              <button
-                class="icon-button"
-                color="primary"
-                matTooltip="Uplift your BCProvider account"
-                aria-label="Uplift your BCProvider account"
-                (click)="setLayout('upliftAccount')">
-                <fa-icon [icon]="faCircleRight"></fa-icon>
-              </button>
             </div>
           </div>
         </div>
         <div class="card card-advantage">
           <div class="card-container">
-            <div class="card-badge">
-              <fa-icon class="fa-2x" [icon]="faLockOpen"></fa-icon>
-            </div>
             <div class="card-header">
+              <img
+                class="lock-icon"
+                src="/assets/images/icons/light-lock.svg"
+                alt="lock" />
               <strong>Advantage with BCProvider</strong>
             </div>
             <div class="card-body">
@@ -108,16 +128,12 @@
                 with your existing information, and we will automatically take
                 care of the secure uplift.
               </p>
-              <app-need-help></app-need-help>
             </div>
           </div>
         </div>
       </div>
 
       <ng-container [ngSwitch]="activeLayout">
-        <ng-container
-          *ngSwitchCase="'upliftAccount'"
-          [ngTemplateOutlet]="upliftAccount"></ng-container>
         <ng-container
           *ngSwitchCase="'createAccount'"
           [ngTemplateOutlet]="createAccount"></ng-container>
@@ -128,43 +144,6 @@
     </div>
   </div>
 </div>
-
-<ng-template #upliftAccount>
-  <div id="upliftAccount" class="active-layout">
-    <h3>You get more out of OneHealthID when you sign in with BCProvider.</h3>
-    <ol>
-      <li>
-        Go to Microsoft account and select
-        <strong>Sign in</strong>.
-      </li>
-      <li>
-        Type the email, phone number, or Skype sign-in that you use for other
-        services(Outlook, Excel, etc.), then select
-        <strong>Next</strong>.
-      </li>
-      <li>
-        Type your password and select the
-        <strong>Keep me signed in box</strong> if you want to go straight into
-        your account next time (not recommended for shared computers).
-      </li>
-      <li>Select <strong>Sign in</strong>.</li>
-      <li>
-        At this point OneHealthID will have all the necessary information need,
-        and you will <strong>automatically be redirected</strong> back into
-        OneHealthID application.
-      </li>
-      <li>
-        <button
-          mat-flat-button
-          type="button"
-          color="primary"
-          (click)="onUplift()">
-          Get started!
-        </button>
-      </li>
-    </ol>
-  </div>
-</ng-template>
 
 <ng-template #createAccount>
   <div id="createAccount" class="active-layout">

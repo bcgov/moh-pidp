@@ -1,4 +1,11 @@
-import { AsyncPipe, NgFor, NgIf } from '@angular/common';
+import {
+  AsyncPipe,
+  NgFor,
+  NgIf,
+  NgSwitch,
+  NgSwitchCase,
+  NgSwitchDefault,
+} from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,7 +13,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Observable, catchError, map, of, tap } from 'rxjs';
 
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faAngleRight, faStethoscope } from '@fortawesome/free-solid-svg-icons';
 
 import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
@@ -35,13 +41,15 @@ import { CollegeLicenceInformationDetailComponent } from './components/college-l
     AsyncPipe,
     BreadcrumbComponent,
     CollegeLicenceInformationDetailComponent,
-    FaIconComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
     NgFor,
     CollegeLicenceDeclarationPage,
     NgIf,
     PortalAlertComponent,
+    NgSwitch,
+    NgSwitchCase,
+    NgSwitchDefault,
   ],
 })
 export class CollegeLicenceInformationPage implements OnInit {
@@ -55,17 +63,17 @@ export class CollegeLicenceInformationPage implements OnInit {
   public collegeCertifications$!: Observable<CollegeCertification[]>;
   public alerts: ProfileStatusAlert[] = [];
   public faAngleRight = faAngleRight;
-  public showCollegeLicenceDeclarationPage: boolean = false;
+  public showCollegeLicenceDeclarationPage = false;
 
   public constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private partyService: PartyService,
-    private resource: CollegeLicenceInformationResource,
-    private logger: LoggerService,
-    private portalResource: PortalResource,
-    private readonly utilsService: UtilsService,
-    private portalService: PortalService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly partyService: PartyService,
+    private readonly resource: CollegeLicenceInformationResource,
+    private readonly logger: LoggerService,
+    private readonly portalResource: PortalResource,
+    private readonly portalService: PortalService,
+    private readonly utilsService: UtilsService
   ) {
     this.title = this.route.snapshot.data.title;
   }

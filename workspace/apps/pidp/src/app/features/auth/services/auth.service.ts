@@ -15,7 +15,7 @@ export interface IAuthService {
   providedIn: 'root',
 })
 export class AuthService implements IAuthService {
-  public constructor(private keycloakService: KeycloakService) {}
+  public constructor(private readonly keycloakService: KeycloakService) {}
 
   public login(options?: KeycloakLoginOptions): Observable<void> {
     return from(this.keycloakService.login(options));

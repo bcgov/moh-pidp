@@ -41,15 +41,9 @@ public class UpdateKeycloakAfterCollegeLicenceUpdated(
             return;
         }
 
-        var isPharmacist = PlrStandingsDigest.FromRecords(records)
-            .With(IdentifierType.Pharmacist)
-            .HasGoodStanding;
-
         foreach (var userId in party.Credentials.Select(credential => credential.UserId))
         {
-            await this.bus.Publish(UpdateKeycloakAttributes.FromUpdateAction(userId, user => user
-                .SetCollegeLicenceInformation(records)
-                .SetIsPharm(isPharmacist)), cancellationToken);
+            await this.bus.Publish(UpdateKeycloakAttributes.FromUpdateAction(userId, user => user.SetCollegeLicenceInformation(records)), cancellationToken);
         }
     }
 }

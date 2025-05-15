@@ -136,7 +136,7 @@ export class BcProviderApplicationPage
   ];
 
   public fullName$!: Observable<string>;
-
+  public showInstructions = false;
   public activeLayout: 'upliftAccount' | 'createAccount' | '';
 
   @ViewChild('successDialog')
@@ -147,19 +147,19 @@ export class BcProviderApplicationPage
   }
 
   public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
+    @Inject(APP_CONFIG) private readonly config: AppConfig,
     dependenciesService: AbstractFormDependenciesService,
     fb: FormBuilder,
-    private authService: AuthService,
-    private documentService: DocumentService,
-    private loadingOverlayService: LoadingOverlayService,
-    private logger: LoggerService,
-    private router: Router,
-    private navigationService: NavigationService,
-    private partyService: PartyService,
-    private resource: BcProviderApplicationResource,
-    private route: ActivatedRoute,
-    private utilsService: UtilsService,
+    private readonly authService: AuthService,
+    private readonly documentService: DocumentService,
+    private readonly loadingOverlayService: LoadingOverlayService,
+    private readonly logger: LoggerService,
+    private readonly router: Router,
+    private readonly navigationService: NavigationService,
+    private readonly partyService: PartyService,
+    private readonly resource: BcProviderApplicationResource,
+    private readonly route: ActivatedRoute,
+    private readonly utilsService: UtilsService,
   ) {
     super(dependenciesService);
     this.formState = new BcProviderApplicationFormState(fb);
@@ -182,12 +182,23 @@ export class BcProviderApplicationPage
 
   public onUplift(): void {
     const data: DialogOptions = {
-      title: 'Redirecting',
+      title: 'You will be redirected',
+      bottomBorder: false,
+      titlePosition: 'center',
+      bodyTextPosition: 'center',
       component: HtmlComponent,
       data: {
         content: this.documentService.getRedirectingToSignInNotice(),
       },
+      imageSrc: '/assets/images/online-marketing-hIgeoQjS_iE-unsplash.jpg',
+      imageType: 'banner',
+      width: '31rem',
+      height: '24rem',
+      actionText: 'Confirm',
+      actionTypePosition: 'center',
+      class: 'dialog-container dialog-padding',
     };
+
     this.dialog
       .open(ConfirmDialogComponent, { data })
       .afterClosed()
@@ -255,10 +266,11 @@ export class BcProviderApplicationPage
         .split('/')
         .includes(AccessRoutes.PROVINCIAL_ATTACHMENT_SYSTEM)
     ) {
-      this.router.navigate([
-        AccessRoutes.BASE_PATH,
-        AccessRoutes.PROVINCIAL_ATTACHMENT_SYSTEM,
-      ]);
+      this.router.navigateByUrl(
+        AccessRoutes.routePath(AccessRoutes.PROVINCIAL_ATTACHMENT_SYSTEM),
+      );
+    } else if (this.previousUrl.split('/').includes(AccessRoutes.HALO)) {
+      this.router.navigateByUrl(AccessRoutes.routePath(AccessRoutes.HALO));
     } else {
       this.navigationService.navigateToRoot();
     }
@@ -284,7 +296,7 @@ export class BcProviderApplicationPage
         );
       }),
       catchError(() => {
-        // TODO: what to do on error?
+
         this.logger.error('Link Request creation failed');
 
         return of(null);

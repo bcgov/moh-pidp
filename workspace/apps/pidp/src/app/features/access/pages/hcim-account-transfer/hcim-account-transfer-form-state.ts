@@ -5,7 +5,7 @@ import { AbstractFormState } from '@bcgov/shared/ui';
 import { HcimAccountTransfer } from './hcim-account-transfer.model';
 
 export class HcimAccountTransferFormState extends AbstractFormState<HcimAccountTransfer> {
-  public constructor(private fb: FormBuilder) {
+  public constructor(private readonly fb: FormBuilder) {
     super();
 
     this.buildForm();
@@ -21,7 +21,7 @@ export class HcimAccountTransferFormState extends AbstractFormState<HcimAccountT
 
   public get json(): HcimAccountTransfer | undefined {
     if (!this.formInstance) {
-      return;
+      return undefined;
     }
 
     return this.formInstance.getRawValue();

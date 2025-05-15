@@ -476,6 +476,68 @@ namespace Pidp.Data.Migrations
                     b.ToTable("EndorsementRequest");
                 });
 
+            modelBuilder.Entity("Pidp.Models.FeedbackLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AttachmentInformation")
+                        .HasColumnType("text");
+
+                    b.Property<Instant>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Feedback")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Instant>("Modified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("PartyId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PartyId");
+
+                    b.ToTable("FeedbackLog");
+                });
+
+            modelBuilder.Entity("Pidp.Models.InvitedEntraAccount", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<Instant>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Instant>("InvitedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Instant>("Modified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("PartyId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserPrincipalName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PartyId");
+
+                    b.ToTable("InvitedEntraAccount");
+                });
+
             modelBuilder.Entity("Pidp.Models.Lookups.AccessType", b =>
                 {
                     b.Property<int>("Code")
@@ -1446,6 +1508,28 @@ namespace Pidp.Data.Migrations
                     b.Navigation("RequestingParty");
                 });
 
+            modelBuilder.Entity("Pidp.Models.FeedbackLog", b =>
+                {
+                    b.HasOne("Pidp.Models.Party", "Party")
+                        .WithMany()
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Party");
+                });
+
+            modelBuilder.Entity("Pidp.Models.InvitedEntraAccount", b =>
+                {
+                    b.HasOne("Pidp.Models.Party", "Party")
+                        .WithMany("InvitedEntraAccounts")
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Party");
+                });
+
             modelBuilder.Entity("Pidp.Models.MSTeamsClinic", b =>
                 {
                     b.HasOne("Pidp.Models.Party", "PrivacyOfficer")
@@ -1604,6 +1688,8 @@ namespace Pidp.Data.Migrations
                     b.Navigation("AccessRequests");
 
                     b.Navigation("Credentials");
+
+                    b.Navigation("InvitedEntraAccounts");
 
                     b.Navigation("LicenceDeclaration");
                 });

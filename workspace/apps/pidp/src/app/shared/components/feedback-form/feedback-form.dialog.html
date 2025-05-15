@@ -1,0 +1,109 @@
+<div class="feedback-container" uiPidpInjectViewportCss>
+  <header class="feedback-header">
+    <div class="close-button">
+      <button
+        class="icon-button"
+        aria-label="Close"
+        (click)="onCloseClick($event)">
+        <mat-icon class="mat-icon"> close </mat-icon>
+      </button>
+    </div>
+    <h1>How was your experience using OneHealthID?</h1>
+  </header>
+  <div class="content">
+    <section class="form-card">
+      <div class="feedback-form">
+        <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
+          <div class="form-content">
+            <div>
+              <mat-form-field>
+                <textarea
+                  id="auto-expand"
+                  class="textarea-field"
+                  matInput
+                  formControlName="feedback"
+                  type="text"
+                  placeholder="Enter here"
+                  maxlength="1000"
+                  aria-labelledby="feedback"
+                  (input)="onFeedbackChange($event)">
+                </textarea>
+                <mat-error>{{ formState.getErrorMessage() }}</mat-error>
+              </mat-form-field>
+            </div>
+
+            <mat-form-field class="split-input" appearance="outline">
+              <div class="split-placeholder">
+                <div class="left-placeholder">
+                  <span class="screenshot">Screenshot</span>
+                  <button
+                    class="icon-button"
+                    aria-label="Take Screenshot"
+                    (click)="takeScreenshot($event)">
+                    <img
+                      src="assets/images/icons/icon-screenshot.svg"
+                      alt="Screenshot" />
+                  </button>
+                </div>
+                <div class="right-placeholder">
+                  <span class="attach">Attach</span>
+                  <button
+                    class="icon-button"
+                    aria-label="Take Screenshot"
+                    (click)="uploadFile($event)">
+                    <img
+                      src="assets/images/icons/icon-file-attach.svg"
+                      alt="File Upload" />
+                  </button>
+                  <input
+                    id="file"
+                    hidden
+                    type="file"
+                    formControlName="attachment"
+                    accept="image/*"
+                    (change)="onFileSelected()" />
+                </div>
+              </div>
+              <input matInput />
+            </mat-form-field>
+            <div *ngIf="selectedFile">
+              <span class="file-name">{{selectedFile.name}}</span>
+            </div>
+            <ng-container *ngIf="showErrorCard">
+              <section class="error-card" [class.show-card]="showErrorCard">
+                <p class="error-card">File size should be less than 2MB</p>
+              </section>
+            </ng-container>
+
+            <div class="disclaimer-container">
+              <div class="disclaimer-field">
+                <div
+                  id="auto-expand"
+                  class="textarea-field-disclaimer"
+                  [innerHTML]="disclaimerText"
+                  [class.disabled]="disableDisclaimer"></div>
+              </div>
+            </div>
+
+            <div class="form-button-container">
+              <button
+                class="send-button"
+                mat-flat-button
+                type="submit"
+                color="primary"
+                [disabled]="disableSend"
+                (click)="sendFeedback($event)">
+                Send
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+  </div>
+</div>
+
+<ng-template #successDialog>
+  <app-success-dialog title="Thank You!" [componentType]="componentType">
+  </app-success-dialog>
+</ng-template>
