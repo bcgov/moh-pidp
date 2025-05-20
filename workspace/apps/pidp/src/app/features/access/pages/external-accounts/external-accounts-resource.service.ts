@@ -46,8 +46,4 @@ export class ExternalAccountsResource {
   private getResourcePath(partyId: number): string {
     return `parties/${partyId}/credentials`;
   }
-
-  setStep(step: number) {
-    this.currentStep.set(step);
-  }
 }

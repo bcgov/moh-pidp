@@ -126,11 +126,10 @@ export class ExternalAccountsPage {
     {
       id: 1,
       icon: 'instruction-document',
-      title: 'Choose from the options',
-      description:
-        'Select from the list of accepted domains below and enter your complete username (e.g., joe@bchealthcompany.com).',
+      title: 'Start your search here',
+      description: 'Search from the list of accepted domains below.',
       type: 'dropdown',
-      placeholder: 'Yukon',
+      placeholder: 'Search for a domain or use keywords',
       options: [
         { label: 'Yukon', value: 'yukon' },
         { label: 'British Columbia', value: 'bc' },
@@ -177,6 +176,11 @@ export class ExternalAccountsPage {
   public onContinue(index: number, value: string): void {
     // Handle the continue action for each step
     console.log(`Step ${index + 1} completed with value:`, value);
+    this.cards().forEach((card) => {
+      if (card.id === InvitationSteps.USER_PRINCIPAL_NAME) {
+        card.placeholder = value;
+      }
+    });
 
     if (index + 1 === InvitationSteps.COMPLETED) {
       // Handle completion of all steps
