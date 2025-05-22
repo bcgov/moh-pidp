@@ -1,5 +1,6 @@
 import { NgIf, NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AfterViewInit, Component, Inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
@@ -24,8 +25,8 @@ import {
   MicrosoftLogLevel,
 } from '@app/core/services/client-logs.service';
 import { DocumentService } from '@app/core/services/document.service';
-import { SnowplowService } from '@app/core/services/snowplow.service';
 import { LoggerService } from '@app/core/services/logger.service';
+import { SnowplowService } from '@app/core/services/snowplow.service';
 import { AdminRoutes } from '@app/features/admin/admin.routes';
 import { BannerComponent } from '@app/shared/components/banner/banner.component';
 import { NeedHelpComponent } from '@app/shared/components/need-help/need-help.component';
