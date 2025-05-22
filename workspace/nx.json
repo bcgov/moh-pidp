@@ -56,7 +56,6 @@
       "!{projectRoot}/src/test-setup.[jt]s"
     ]
   },
-  "nxCloudId": "6810ed24cf54396a82878643",
   "useInferencePlugins": false,
   "defaultBase": "main"
 }

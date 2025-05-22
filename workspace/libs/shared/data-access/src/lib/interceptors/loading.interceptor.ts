@@ -1,11 +1,4 @@
-import {
-  HTTP_INTERCEPTORS,
-  HttpContextToken,
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
-  HttpRequest,
-} from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpContextToken, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable, Provider } from '@angular/core';
 
 import { Observable, finalize } from 'rxjs';
