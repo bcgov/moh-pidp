@@ -1,5 +1,5 @@
 export class AccessRoutes {
-  public static BASE_PATH = 'access';
+  public static readonly BASE_PATH = 'access';
 
   public static ACCESS_REQUESTS = 'access-requests';
   public static BC_PROVIDER_APPLICATION = 'bc-provider-application';

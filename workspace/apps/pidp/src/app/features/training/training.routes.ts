@@ -1,7 +1,7 @@
 export class TrainingRoutes {
-  public static BASE_PATH = 'training';
+  public static readonly BASE_PATH = 'training';
 
-  public static COMPLIANCE_TRAINING = 'compliance-training';
+  public static readonly COMPLIANCE_TRAINING = 'compliance-training';
 
   /**
    * @description

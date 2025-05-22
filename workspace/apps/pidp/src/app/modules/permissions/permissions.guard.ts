@@ -14,19 +14,19 @@ import { Observable } from 'rxjs';
 import { PermissionsService } from './permissions.service';
 
 export abstract class PermissionsGuard {
-  public static canActivate: CanActivateFn = (
+  public static readonly canActivate: CanActivateFn = (
     route: ActivatedRouteSnapshot,
   ) => {
     return this.checkPermissions(route);
   };
 
-  public static canActivateChild: CanActivateChildFn = (
+  public static readonly canActivateChild: CanActivateChildFn = (
     childRoute: ActivatedRouteSnapshot,
   ) => {
     return this.checkPermissions(childRoute);
   };
 
-  public static canMatch: CanMatchFn = (route: Route) => {
+  public static readonly canMatch: CanMatchFn = (route: Route) => {
     return this.checkPermissions(route);
   };
 

@@ -38,8 +38,8 @@ export class BcProviderUpliftPage {
   public providerIdentitySupport: string;
 
   public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
-    private authService: AuthService,
+    @Inject(APP_CONFIG) private readonly config: AppConfig,
+    private readonly authService: AuthService,
   ) {
     this.bcscMobileSetupUrl = this.config.urls.bcscMobileSetup;
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;

@@ -39,6 +39,8 @@ describe('userAccessAgreementResolver', () => {
     TestBed.configureTestingModule({
       providers: [
         provideAutoSpy(UserAccessAgreementResource),
+        provideAutoSpy(ActivatedRouteSnapshot),
+        provideAutoSpy(RouterStateSnapshot),
         {
           provide: PartyService,
           useValue: createSpyFromClass(PartyService, {
@@ -53,7 +55,8 @@ describe('userAccessAgreementResolver', () => {
       UserAccessAgreementResource,
     );
     partyServiceSpy = TestBed.inject<any>(PartyService);
-
+    activatedRouteSnapshotSpy = TestBed.inject<any>(ActivatedRouteSnapshot);
+    routerStateSnapshotSpy = TestBed.inject<any>(RouterStateSnapshot);
     mockProfileStatus = MockProfileStatus.get();
   });
 
