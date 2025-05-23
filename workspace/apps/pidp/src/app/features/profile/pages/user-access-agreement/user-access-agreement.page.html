@@ -37,7 +37,7 @@
         color="primary"
         type="button"
         (click)="onBack()">
-        Home
+        {{completed ? 'Home' : 'Back to top'}}
       </button>
       <button
         *ngIf="!completed"
