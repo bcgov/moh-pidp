@@ -122,7 +122,9 @@ export class UserAccessAgreementPage implements OnInit {
   }
 
   public onBack(): void {
-    this.navigateToRoot();
+    if (this.completed) {
+      this.navigateToRoot();
+    }
     this.utilsService.scrollTop();
   }
 
