@@ -60,12 +60,26 @@ describe('UserAccessAgreementPage', () => {
   });
 
   describe('METHOD: onBack', () => {
-    given('user wants to go back to the previous page', () => {
+    given(
+      'user has completed the UAA and wants to go back to the previous page',
+      () => {
+        when('onBack is invoked', () => {
+          component.completed = true;
+          component.onBack();
+          then('router should navigate to root route', () => {
+            const rootRoute = mockActivatedRoute.snapshot.data.routes.root;
+            expect(router.navigate).toHaveBeenCalledWith([rootRoute]);
+          });
+        });
+      },
+    );
+
+    given('user has not completed the UAA and clicks on back', () => {
       when('onBack is invoked', () => {
+        component.completed = false;
         component.onBack();
-        then('router should navigate to root route', () => {
-          const rootRoute = mockActivatedRoute.snapshot.data.routes.root;
-          expect(router.navigate).toHaveBeenCalledWith([rootRoute]);
+        then('router should not be called', () => {
+          expect(router.navigate).not.toHaveBeenCalled();
         });
       });
     });
