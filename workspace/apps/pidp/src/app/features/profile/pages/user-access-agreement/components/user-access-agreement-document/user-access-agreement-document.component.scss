@@ -37,6 +37,10 @@ ul {
 
       .ordered-list {
         list-style-type: lower-alpha;
+
+        .body-text {
+          margin-top: 0;
+        }
       }
 
       .margin-left-2 {

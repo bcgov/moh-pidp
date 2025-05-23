@@ -10,7 +10,7 @@
   <ng-container *ngIf="transactions$ | async as transactions">
     <ng-container *ngIf="transactions.length; else noTransactions">
       <div
-        *ngFor="let transaction of transactions; let i = index; ngForTrackBy: trackByTransactionId"
+        *ngFor="let transaction of transactions; let i = index; trackBy: trackByTransactionId"
         class="transaction">
         <div class="transaction-text">
           {{ transaction.accessTypeCode | lookupCode: 'accessTypes' }}
