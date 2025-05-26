@@ -8,10 +8,12 @@ using Pidp;
 using Pidp.Data;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Models;
+using MassTransit;
 
 public class EmailService(
-    IChesClient chesClient,
+    IBus bus,
     IClock clock,
+    IChesClient chesClient,
     ISmtpEmailClient smtpEmailClient,
     PidpConfiguration config,
     PidpDbContext context) : IEmailService
@@ -19,6 +21,7 @@ public class EmailService(
     public const string PidpEmail = "OneHealthID@gov.bc.ca";
     public const string PidpSupportPhone = "250-448-1262";
 
+    private readonly IBus bus = bus;
     private readonly IChesClient chesClient = chesClient;
     private readonly IClock clock = clock;
     private readonly ISmtpEmailClient smtpEmailClient = smtpEmailClient;
@@ -32,20 +35,25 @@ public class EmailService(
             email.Subject = $"THE FOLLOWING EMAIL IS A TEST: {email.Subject}";
         }
 
-        if (this.config.ChesClient.Enabled && await this.chesClient.HealthCheckAsync())
+        if (this.config.ChesClient.Enabled)
         {
-            var msgId = await this.chesClient.SendAsync(email);
-            await this.CreateEmailLog(email, SendType.Ches, msgId);
-
-            if (msgId != null)
+            await this.bus.Publish<EmailMessage>(new
             {
-                return;
-            }
+                email.From,
+                email.To,
+                email.Cc,
+                email.Subject,
+                email.Body,
+                Document = email.Attachments.First()?.Data,
+                email.Attachments.First()?.Filename,
+                email.Attachments.First()?.MediaType
+            });
         }
-
-        // Fall back to SMTP client
-        await this.CreateEmailLog(email, SendType.Smtp);
-        await this.smtpEmailClient.SendAsync(email);
+        else
+        {
+            await this.smtpEmailClient.SendAsync(email);
+            await this.CreateEmailLog(email, SendType.Smtp);
+        }
     }
 
     public async Task<int> UpdateEmailLogStatuses(int limit)
