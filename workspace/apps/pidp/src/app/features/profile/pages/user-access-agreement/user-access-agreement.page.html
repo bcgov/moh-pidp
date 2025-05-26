@@ -23,32 +23,34 @@
 
     <p *ngIf="!completed" class="padding-container">
       <span
-        >I,
-        <b>{{ (fullName$ | async) }}</b
-        >, represent and warrant that all information provided in connection with
-        my application for access to the System(s), is true and correct.</span
+        >I, <b>{{ (fullName$ | async) }}</b>, represent and warrant that all
+        information provided in connection with my application for access to the
+        System(s), is true and correct.</span
       >
     </p>
 
     <div class="button-container">
-      <button
-        class="back-button"
-        mat-stroked-button
-        uiPageFooterAction
-        color="primary"
-        type="button"
-        (click)="onBack()">
-        Home
-      </button>
-      <button
-        *ngIf="!completed"
-        mat-flat-button
-        uiPageFooterAction
-        color="primary"
-        type="button"
-        (click)="onAcceptAgreement()">
-        Accept Agreement
-      </button>
+      <ng-container *ngIf="completed; else notCompleted">
+        <button
+          class="back-button"
+          mat-stroked-button
+          uiPageFooterAction
+          color="primary"
+          type="button"
+          (click)="onBack()">
+          Home
+        </button>
+      </ng-container>
+      <ng-template #notCompleted>
+        <button
+          mat-flat-button
+          uiPageFooterAction
+          color="primary"
+          type="button"
+          (click)="onAcceptAgreement()">
+          Accept Agreement
+        </button>
+      </ng-template>
     </div>
   </ui-page>
 </div>
