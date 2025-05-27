@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 
 import {
   FormatDatePipe,
+  InjectViewportCssClassDirective,
   PageComponent,
   PageFooterActionDirective,
   PageFooterComponent,
@@ -19,6 +20,7 @@ import {
 import { PartyService } from '@app/core/party/party.service';
 import { LoggerService } from '@app/core/services/logger.service';
 import { LookupCodePipe } from '@app/modules/lookup/lookup-code.pipe';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
 import { Transaction } from './transaction.model';
 import { TransactionsResource } from './transactions-resource.service';
@@ -30,6 +32,7 @@ import { TransactionsResource } from './transactions-resource.service';
   standalone: true,
   imports: [
     AsyncPipe,
+    BreadcrumbComponent,
     FormatDatePipe,
     LookupCodePipe,
     MatButtonModule,
@@ -42,24 +45,32 @@ import { TransactionsResource } from './transactions-resource.service';
     PageSectionComponent,
     PageSectionSubheaderComponent,
     PageSectionSubheaderDescDirective,
+    InjectViewportCssClassDirective,
   ],
 })
 export class TransactionsPage implements OnInit {
   public title: string;
   public transactions$!: Observable<Transaction[]>;
-
+  public breadcrumbsData: Array<{ title: string; path: string }> = [
+    { title: 'Home', path: '' },
+    { title: 'History', path: '' },
+  ];
   public constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private resource: TransactionsResource,
-    private partyService: PartyService,
-    private logger: LoggerService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly resource: TransactionsResource,
+    private readonly partyService: PartyService,
+    private readonly logger: LoggerService,
   ) {
     this.title = this.route.snapshot.data.title;
   }
 
   public onBack(): void {
     this.navigateToRoot();
+  }
+
+  public trackByTransactionId(index: number, transaction: Transaction): string {
+    return transaction.requestedOn;
   }
 
   public ngOnInit(): void {

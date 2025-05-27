@@ -12,53 +12,53 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
-$pidp-primary: mat.define-palette($material-theme-primary, 500);
-$pidp-accent: mat.define-palette($material-theme-secondary, 500);
+$pidp-primary: mat.m2-define-palette($material-theme-primary, 500);
+$pidp-accent: mat.m2-define-palette($material-theme-secondary, 500);
 
 // Define typography for headings and body found within the mat-typography class.
 // Available typography classes: https://material.angular.io/guide/typography#using-typography-styles-in-your-application
 // Typography with corresponding native elements have been provided with the
 // exception of body-2 to ensure it matches it's body-1 sibling.
 // Reading typography from a config: https://material.angular.io/guide/typography#reading-typography-values-from-a-config
-$pidp-typography: mat.define-typography-config(
+$pidp-typography: mat.m2-define-typography-config(
   $font-family: pidp.$bcgov-font-family,
   // Native element: <h1>
   $headline-5:
-    mat.define-typography-level(var.$mat-theme-headline-font-size, 2.5rem, 500),
+    mat.m2-define-typography-level(var.$mat-theme-headline-font-size, 2.5rem, 500),
   // Native element: <h2>
   $headline-6:
-    mat.define-typography-level(var.$mat-theme-title-font-size, 2rem, 500),
+    mat.m2-define-typography-level(var.$mat-theme-title-font-size, 2rem, 500),
   // Native element: <h3>
   $subtitle-1:
-    mat.define-typography-level(
+    mat.m2-define-typography-level(
       var.$mat-theme-subheading-2-font-size,
       1.5rem,
       500
     ),
   // Native element: <h4>
   $subtitle-2:
-    mat.define-typography-level(
+    mat.m2-define-typography-level(
       var.$mat-theme-subheading-1-font-size,
       1.5rem,
       500
     ),
   // Native element: <body>
   $body-1:
-    mat.define-typography-level(var.$mat-theme-body-1-font-size, 1.75rem, 400),
+    mat.m2-define-typography-level(var.$mat-theme-body-1-font-size, 1.75rem, 400),
   // Native element: None
   $body-2:
-    mat.define-typography-level(var.$mat-theme-body-2-font-size, 1.75rem, 400),
+    mat.m2-define-typography-level(var.$mat-theme-body-2-font-size, 1.75rem, 400),
   // Native element: <button>
   $button:
-    mat.define-typography-level(var.$mat-theme-button-font-size, 0.875rem, 400),
+    mat.m2-define-typography-level(var.$mat-theme-button-font-size, 0.875rem, 400),
 );
 
 // The warn palette is optional (defaults to red).
-$pidp-warn: mat.define-palette($bcgov-red, 800);
+$pidp-warn: mat.m2-define-palette($bcgov-red, 800);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
-$pidp-theme: mat.define-light-theme(
+$pidp-theme: mat.m2-define-light-theme(
   (
     color: (
       primary: $pidp-primary,

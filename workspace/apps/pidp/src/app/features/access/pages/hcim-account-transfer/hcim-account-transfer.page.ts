@@ -8,7 +8,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, Observable } from 'rxjs';
 
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 
 import {
   AlertActionsDirective,
@@ -19,7 +18,6 @@ import {
   PageComponent,
   PageFooterActionDirective,
   PageFooterComponent,
-  PageHeaderComponent,
   PageSectionComponent,
   PageSectionSubheaderComponent,
   PageSectionSubheaderDescDirective,
@@ -65,7 +63,6 @@ import {
     AlertContentDirective,
     AnchorDirective,
     BreadcrumbComponent,
-    FaIconComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
     MatFormFieldModule,
@@ -74,7 +71,6 @@ import {
     PageComponent,
     PageFooterActionDirective,
     PageFooterComponent,
-    PageHeaderComponent,
     PageSectionComponent,
     PageSectionSubheaderComponent,
     PageSectionSubheaderDescDirective,
@@ -116,13 +112,13 @@ export class HcimAccountTransferPage
 
   public constructor(
     dependenciesService: AbstractFormDependenciesService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private partyService: PartyService,
-    private resource: HcimAccountTransferResource,
-    private logger: LoggerService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly partyService: PartyService,
+    private readonly resource: HcimAccountTransferResource,
+    private readonly logger: LoggerService,
     fb: FormBuilder,
-    private snowplowService: SnowplowService,
+    private readonly snowplowService: SnowplowService,
   ) {
     super(dependenciesService);
 

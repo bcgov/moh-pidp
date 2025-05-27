@@ -84,13 +84,13 @@ export class CollegeLicenceDeclarationPage
 
   public constructor(
     dependenciesService: AbstractFormDependenciesService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private partyService: PartyService,
-    private resource: CollegeLicenceDeclarationResource,
-    private logger: LoggerService,
-    private lookupService: LookupService,
-    private dataService: CommonDataService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly partyService: PartyService,
+    private readonly resource: CollegeLicenceDeclarationResource,
+    private readonly logger: LoggerService,
+    private readonly lookupService: LookupService,
+    private readonly dataService: CommonDataService,
     fb: FormBuilder,
   ) {
     super(dependenciesService);

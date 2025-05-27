@@ -27,7 +27,7 @@ export enum MicrosoftLogLevel {
   providedIn: 'root',
 })
 export class ClientLogsService {
-  public constructor(private apiResource: ApiHttpClient) {}
+  public constructor(private readonly apiResource: ApiHttpClient) {}
 
   public createClientLog(log: ClientLog): NoContent {
     return this.apiResource.post<NoContent>('client-logs', log).pipe(

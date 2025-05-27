@@ -86,15 +86,15 @@ export class MsTeamsPrivacyOfficerPage
 
   public constructor(
     dependenciesService: AbstractFormDependenciesService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private partyService: PartyService,
-    private resource: MsTeamsPrivacyOfficerResource,
-    private logger: LoggerService,
-    private utilsService: UtilsService,
-    private documentService: DocumentService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly partyService: PartyService,
+    private readonly resource: MsTeamsPrivacyOfficerResource,
+    private readonly logger: LoggerService,
+    private readonly utilsService: UtilsService,
+    private readonly documentService: DocumentService,
     fb: FormBuilder,
-    private loadingOverlayService: LoadingOverlayService,
+    private readonly loadingOverlayService: LoadingOverlayService,
   ) {
     super(dependenciesService);
     const routeData = this.route.snapshot.data;

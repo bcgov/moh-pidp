@@ -1,9 +1,9 @@
 export class HistoryRoutes {
-  public static BASE_PATH = 'history';
+  public static readonly BASE_PATH = 'history';
 
-  public static TRANSACTIONS = 'transactions';
-  public static SIGNED_ACCEPTED_DOCUMENTS = 'signed-or-accepted-documents';
-  public static VIEW_DOCUMENT = 'view-document';
+  public static readonly TRANSACTIONS = 'transactions';
+  public static readonly SIGNED_ACCEPTED_DOCUMENTS = 'signed-or-accepted-documents';
+  public static readonly VIEW_DOCUMENT = 'view-document';
 
   /**
    * @description

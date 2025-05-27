@@ -79,18 +79,18 @@ export class PrescriptionRefillEformsPage implements OnInit, AfterViewInit {
   ];
 
   public constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private partyService: PartyService,
-    private resource: PrescriptionRefillEformsResource,
-    private logger: LoggerService,
-    private documentService: DocumentService,
-    private snowplowService: SnowplowService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly partyService: PartyService,
+    private readonly resource: PrescriptionRefillEformsResource,
+    private readonly logger: LoggerService,
+    private readonly documentService: DocumentService,
+    private readonly snowplowService: SnowplowService,
   ) {
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
     this.collectionNotice =
-      documentService.getPrescriptionRefilleFormsCollectionNotice();
+      this.documentService.getPrescriptionRefilleFormsCollectionNotice();
     this.completed =
       routeData.prescriptionRefillEformsStatusCode === StatusCode.COMPLETED;
     this.accessRequestFailed = false;

@@ -45,9 +45,9 @@ export class ViewDocumentPage implements OnInit {
   public loadedDocument!: ViewDocumentDirective;
 
   public constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    private documentService: DocumentService,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+    private readonly documentService: DocumentService,
   ) {
     this.title = route.snapshot.data.title;
   }

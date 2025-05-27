@@ -17,7 +17,7 @@ import { filter } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class RouteStateService {
-  public constructor(private router: Router) {}
+  public constructor(private readonly router: Router) {}
 
   /**
    * @description
