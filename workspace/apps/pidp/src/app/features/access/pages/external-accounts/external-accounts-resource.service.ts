@@ -61,10 +61,6 @@ export class ExternalAccountsResource {
     partyId: number,
     userPrincipalName: string,
   ): Observable<NoContent> {
-    if (userPrincipalName === 'mock@domain.com') {
-      return of({} as NoContent).pipe(delay(1000));
-    }
-
     return this.apiResource
       .post<NoContent>(
         `${this.getResourcePath(partyId)}/credentials/bc-provider/invite`,

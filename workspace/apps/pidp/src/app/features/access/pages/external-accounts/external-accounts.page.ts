@@ -182,7 +182,7 @@ export class ExternalAccountsPage implements OnInit {
   public isCardActive(index: number): boolean {
     const step = this.resource.currentStep();
     // Enable both step 3 (index 2) and step 4 (index 3) together if step >= 2
-    if (step >= 2) {
+    if (step >= InvitationSteps.EMAIL_VERIFICATION) {
       return (
         index === InvitationSteps.EMAIL_VERIFICATION - 1 ||
         index === InvitationSteps.COMPLETED - 1
@@ -253,7 +253,15 @@ export class ExternalAccountsPage implements OnInit {
         distinctUntilChanged(),
         tap((token) => {
           console.log('Email verification token:', token);
-          this.emailValidationToken.set(token);
+          if (token) {
+            this.emailValidationToken.set(token);
+            // Make step 3 and 4 active if token is present
+
+            this.resource.currentStep.set(
+              InvitationSteps.EMAIL_VERIFICATION - 1 ||
+                InvitationSteps.COMPLETED - 1,
+            );
+          }
         }),
         switchMap((token) =>
           token
@@ -280,15 +288,18 @@ export class ExternalAccountsPage implements OnInit {
       )
       .subscribe({
         next: (res) => {
+          this.loadingOverlay.close();
           console.log('Email verification response:', res);
           if (res !== null) {
             this.resource.currentStep.set(3);
           }
         },
         error: (error) => {
+          this.loadingOverlay.close();
           console.error('Error during email verification:', error);
         },
         complete: () => {
+          this.loadingOverlay.close();
           console.log('Email verification process completed.');
         },
       });
