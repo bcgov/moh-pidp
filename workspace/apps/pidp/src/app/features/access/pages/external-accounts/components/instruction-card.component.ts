@@ -3,6 +3,8 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnChanges,
+  OnInit,
   Output,
   computed,
   signal,
@@ -35,7 +37,7 @@ import { InstructionCard } from './instruction-card.model';
   templateUrl: './instruction-card.component.html',
   styleUrl: './instruction-card.component.scss',
 })
-export class InstructionCardComponent {
+export class InstructionCardComponent implements OnChanges {
   @Input()
   public cardData: InstructionCard = {} as InstructionCard;
   @Input() public routePath = '';
@@ -67,6 +69,34 @@ export class InstructionCardComponent {
     'Yuking.ca',
   ];
 
+  // Computed signal for filtered results
+  public searchResults = computed(() => {
+    return this.searchResultsData() || [];
+  });
+
+  public onContinue(value?: string): void {
+    this.selectedDomain.set(value || '');
+    const localPart = this.searchTerm();
+    const domain = this.selectedDomain();
+    if (localPart && domain) {
+      this.email = `${localPart}@${domain}`;
+    }
+    if (this.cardData.type === 'input') {
+      this.continueEvent.emit(this.email);
+    } else {
+      this.continueEvent.emit(value);
+    }
+  }
+
+  public ngOnChanges() {
+    console.log('ngOnChanges called with isActive:', this.isActive);
+    if (!this.isActive) {
+      this.searchControl.disable();
+    } else {
+      this.searchControl.enable();
+    }
+  }
+
   // Convert the observable to a signal
   private searchResultsData = toSignal(
     this.searchControl.valueChanges.pipe(
@@ -89,25 +119,4 @@ export class InstructionCardComponent {
     ),
     { initialValue: [] },
   );
-
-  // Computed signal for filtered results
-  searchResults = computed(() => {
-    return this.searchResultsData() || [];
-  });
-
-  public onContinue(value?: string): void {
-    console.log('onContinue', value);
-
-    this.selectedDomain.set(value || '');
-    const localPart = this.searchTerm();
-    const domain = this.selectedDomain();
-    if (localPart && domain) {
-      this.email = `${localPart}@${domain}`;
-    }
-    if (this.cardData.type === 'input') {
-      this.continueEvent.emit(this.email);
-    } else {
-      this.continueEvent.emit(value);
-    }
-  }
 }

@@ -1,5 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { Observable, catchError, delay, map, of, throwError } from 'rxjs';
 
@@ -13,7 +14,8 @@ import { PortalResource } from '@app/features/portal/portal-resource.service';
   providedIn: 'root',
 })
 export class ExternalAccountsResource {
-  public currentStep = signal(0);
+  public currentStep = signal(1);
+
   public constructor(
     private apiResource: ApiHttpClient,
     private portalResource: PortalResource,
@@ -21,6 +23,38 @@ export class ExternalAccountsResource {
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
     return this.portalResource.getProfileStatus(partyId);
+  }
+
+  public checkIfEmailIsVerified(
+    partyId: number,
+    userPrincipalName: string,
+  ): Observable<NoContent> {
+    return this.apiResource
+      .post<NoContent>(`${this.getResourcePath(partyId)}/verified-emails`, {
+        email: userPrincipalName,
+      })
+      .pipe(
+        map(() => ({}) as NoContent),
+        catchError((error: HttpErrorResponse) => {
+          return throwError(() => error);
+        }),
+      );
+  }
+
+  public verifyEmail(partyId: number, token: string): Observable<NoContent> {
+    return this.apiResource
+      .post<NoContent>(
+        `${this.getResourcePath(partyId)}/verified-emails/verify`,
+        {
+          token,
+        },
+      )
+      .pipe(
+        map(() => ({}) as NoContent),
+        catchError((error: HttpErrorResponse) => {
+          return throwError(() => error);
+        }),
+      );
   }
 
   public createExternalAccount(
@@ -32,9 +66,12 @@ export class ExternalAccountsResource {
     }
 
     return this.apiResource
-      .post<NoContent>(`${this.getResourcePath(partyId)}/bc-provider/invite`, {
-        userPrincipalName,
-      })
+      .post<NoContent>(
+        `${this.getResourcePath(partyId)}/credentials/bc-provider/invite`,
+        {
+          userPrincipalName,
+        },
+      )
       .pipe(
         map(() => ({}) as NoContent),
         catchError((error: HttpErrorResponse) => {
@@ -44,6 +81,6 @@ export class ExternalAccountsResource {
   }
 
   private getResourcePath(partyId: number): string {
-    return `parties/${partyId}/credentials`;
+    return `parties/${partyId}`;
   }
 }

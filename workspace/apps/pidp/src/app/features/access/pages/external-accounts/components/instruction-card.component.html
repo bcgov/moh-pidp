@@ -24,6 +24,7 @@
               <input
                 type="text"
                 matInput
+                [disabled]="!isActive"
                 [placeholder]="cardData.placeholder || ''"
                 [formControl]="searchControl"
                 [matAutocomplete]="auto" />

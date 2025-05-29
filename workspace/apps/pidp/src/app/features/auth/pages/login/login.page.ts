@@ -74,6 +74,7 @@ export class LoginPage implements OnInit, AfterViewInit {
   public isMobileTitleVisible = this.viewport === PidpViewport.xsmall;
 
   private endorsementToken: string | null = null;
+  private emailVerificationToken: string | null = null;
 
   public get otherLoginOptionsIcon(): string {
     return this.showOtherLoginOptions ? 'indeterminate_check_box' : 'add_box';
@@ -109,6 +110,10 @@ export class LoginPage implements OnInit, AfterViewInit {
   public ngOnInit(): void {
     this.endorsementToken =
       this.route.snapshot.queryParamMap.get('endorsement-token');
+
+    this.emailVerificationToken = this.route.snapshot.queryParamMap.get(
+      'email-verification-token',
+    );
 
     if (this.endorsementToken) {
       this.clientLogsService
@@ -203,6 +208,9 @@ export class LoginPage implements OnInit, AfterViewInit {
               : '') +
             (this.endorsementToken
               ? `?endorsement-token=${this.endorsementToken}`
+              : '') +
+            (this.emailVerificationToken
+              ? `?email-verification-token=${this.emailVerificationToken}`
               : ''),
         }),
       ),

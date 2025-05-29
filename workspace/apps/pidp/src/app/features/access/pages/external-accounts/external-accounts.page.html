@@ -20,7 +20,7 @@
           @for (card of cards(); let i = $index; track i) {
           <app-instruction-card
             [cardData]="card"
-            [isActive]="isCardActive() === i"
+            [isActive]="isCardActive(i)"
             [isCompleted]="isCardCompleted(i)"
             [routePath]="AccessRoutes.routePath(AccessRoutes.HALO)"
             (continueEvent)="onContinue(i, $event)">
@@ -29,9 +29,6 @@
         </div>
       </div>
       <div>
-        <div>
-          <button (click)="verifyEmail()">Verify Email</button>
-        </div>
         <div class="assistance-box">
           <div class="assistance-header"><h2>Need assistance?</h2></div>
           <div class="assistance-content">
