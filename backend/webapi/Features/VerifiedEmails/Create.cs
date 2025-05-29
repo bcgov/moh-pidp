@@ -18,12 +18,17 @@ using Pidp.Models.DomainEvents;
 
 public class Create
 {
-    public class Command : ICommand
+    public class Command : ICommand<Model>
     {
         [JsonIgnore]
         [HybridBindProperty(Source.Route)]
         public int PartyId { get; set; }
         public string Email { get; set; } = string.Empty;
+    }
+
+    public class Model
+    {
+        public bool IsVerified { get; set; }
     }
 
     public class CommandValidator : AbstractValidator<Command>
@@ -39,18 +44,21 @@ public class Create
         IClock clock,
         IEmailService emailService,
         PidpConfiguration config,
-        PidpDbContext context) : ICommandHandler<Command>
+        PidpDbContext context) : ICommandHandler<Command, Model>
     {
         private readonly string applicationUrl = config.ApplicationUrl;
         private readonly IClock clock = clock;
         private readonly IEmailService emailService = emailService;
         private readonly PidpDbContext context = context;
 
-        public async Task HandleAsync(Command command)
+        public async Task<Model> HandleAsync(Command command)
         {
             await this.SendVerificationEmailAsync(command.Email, Guid.NewGuid());
 
-            return;
+            return new Model
+            {
+                IsVerified = false
+            };
         }
 
         private async Task SendVerificationEmailAsync(string recipientEmail, Guid token)

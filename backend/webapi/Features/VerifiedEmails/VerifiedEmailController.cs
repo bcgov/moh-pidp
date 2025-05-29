@@ -17,10 +17,10 @@ public class VerifiedEmailsController(IPidpAuthorizationService authorizationSer
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateVerifiedEmail([FromServices] ICommandHandler<Create.Command> handler,
-                                                         [FromHybrid][AutoValidateAlways] Create.Command command)
+    public async Task<ActionResult<Create.Model>> CreateVerifiedEmail([FromServices] ICommandHandler<Create.Command, Create.Model> handler,
+                                                                      [FromHybrid][AutoValidateAlways] Create.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
-            .ToActionResult();
+            .ToActionResultOfT();
 
     [HttpPost("verify")]
     [ProducesResponseType(StatusCodes.Status200OK)]
