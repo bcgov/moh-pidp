@@ -31,7 +31,7 @@ export class UserAccessAgreementDocumentComponent {
   public readonly title: string;
   public breadcrumbsData: Array<{ title: string; path: string }> = [
     { title: 'Home', path: '' },
-    { title: 'UAA', path: '' },
+    { title: 'Use Policy Agreement', path: '' },
   ];
 
   public constructor() {
