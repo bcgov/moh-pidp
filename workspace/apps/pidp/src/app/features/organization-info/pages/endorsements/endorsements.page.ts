@@ -121,16 +121,16 @@ export class EndorsementsPage
 
   public constructor(
     dependenciesService: AbstractFormDependenciesService,
-    private route: ActivatedRoute,
-    private partyService: PartyService,
-    private resource: EndorsementsResource,
-    private logger: LoggerService,
-    private navigationService: NavigationService,
-    private lookupService: LookupService,
+    private readonly route: ActivatedRoute,
+    private readonly partyService: PartyService,
+    private readonly resource: EndorsementsResource,
+    private readonly logger: LoggerService,
+    private readonly navigationService: NavigationService,
+    private readonly lookupService: LookupService,
     viewportService: ViewportService,
-    private utilsService: UtilsService,
+    private readonly utilsService: UtilsService,
     fb: FormBuilder,
-    private loadingOverlayService: LoadingOverlayService,
+    private readonly loadingOverlayService: LoadingOverlayService,
   ) {
     super(dependenciesService);
 

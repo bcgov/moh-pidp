@@ -14,7 +14,7 @@ export interface BcProviderApplicationFormData {
 }
 
 export class BcProviderApplicationFormState extends AbstractFormState<BcProviderApplicationFormData> {
-  public constructor(private fb: FormBuilder) {
+  public constructor(private readonly fb: FormBuilder) {
     super();
 
     this.buildForm();
@@ -30,7 +30,7 @@ export class BcProviderApplicationFormState extends AbstractFormState<BcProvider
 
   public get json(): BcProviderApplicationFormData | undefined {
     if (!this.formInstance) {
-      return;
+      return undefined;
     }
 
     const values = this.formInstance.getRawValue();

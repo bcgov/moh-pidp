@@ -65,13 +65,13 @@ export class CollegeLicenceInformationPage implements OnInit {
   public showCollegeLicenceDeclarationPage = false;
 
   public constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private partyService: PartyService,
-    private resource: CollegeLicenceInformationResource,
-    private logger: LoggerService,
-    private portalResource: PortalResource,
-    private portalService: PortalService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly partyService: PartyService,
+    private readonly resource: CollegeLicenceInformationResource,
+    private readonly logger: LoggerService,
+    private readonly portalResource: PortalResource,
+    private readonly portalService: PortalService,
   ) {
     this.title = this.route.snapshot.data.title;
   }

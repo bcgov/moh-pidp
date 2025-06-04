@@ -11,8 +11,8 @@ import { ToastService } from '@app/core/services/toast.service';
 })
 export class LinkAccountConfirmResource {
   public constructor(
-    private apiResource: ApiHttpClient,
-    private toastService: ToastService,
+    private readonly apiResource: ApiHttpClient,
+    private readonly toastService: ToastService,
   ) {}
 
   public linkAccount(): Observable<number> {

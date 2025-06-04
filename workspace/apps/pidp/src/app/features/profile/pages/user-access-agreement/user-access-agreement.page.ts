@@ -13,7 +13,6 @@ import {
   InjectViewportCssClassDirective,
   PageComponent,
   PageFooterActionDirective,
-  PageFooterComponent,
 } from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
@@ -41,7 +40,6 @@ import { UserAccessAgreementResource } from './user-access-agreement-resource.se
     NgIf,
     PageComponent,
     PageFooterActionDirective,
-    PageFooterComponent,
   ],
 })
 export class UserAccessAgreementPage implements OnInit {
@@ -54,12 +52,12 @@ export class UserAccessAgreementPage implements OnInit {
   public fullName$!: Observable<string>;
 
   public constructor(
-    private route: ActivatedRoute,
-    private router: Router,
-    private partyService: PartyService,
-    private resource: UserAccessAgreementResource,
-    private logger: LoggerService,
-    private utilsService: UtilsService,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly partyService: PartyService,
+    private readonly resource: UserAccessAgreementResource,
+    private readonly logger: LoggerService,
+    private readonly utilsService: UtilsService,
   ) {
     this.title = this.route.snapshot.data.title;
 
@@ -125,7 +123,6 @@ export class UserAccessAgreementPage implements OnInit {
 
   public onBack(): void {
     this.navigateToRoot();
-    this.utilsService.scrollTop();
   }
 
   private navigateToRoot(): void {

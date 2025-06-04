@@ -10,7 +10,7 @@ import { AuthGuardService } from './abstract-auth-guard.service';
 export class AuthorizationRedirectGuardService extends AuthGuardService {
   public constructor(
     protected authService: AuthService,
-    private router: Router,
+    private readonly router: Router,
   ) {
     super(authService);
   }

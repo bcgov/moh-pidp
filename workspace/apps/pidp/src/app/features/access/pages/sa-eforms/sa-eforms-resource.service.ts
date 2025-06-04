@@ -14,8 +14,8 @@ import { PortalResource } from '@app/features/portal/portal-resource.service';
 })
 export class SaEformsResource {
   public constructor(
-    private apiResource: ApiHttpClient,
-    private portalResource: PortalResource,
+    private readonly apiResource: ApiHttpClient,
+    private readonly portalResource: PortalResource,
   ) {}
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
