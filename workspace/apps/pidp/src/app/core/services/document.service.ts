@@ -48,7 +48,7 @@ export class DocumentService {
       },
       {
         type: DocumentType.USER_ACCESS_AGREEMENT,
-        title: 'Access Harmonization User Access Agreement',
+        title: 'OneHealthID Service Use Policy Agreement',
       },
       {
         type: DocumentType.MS_TEAMS_DECLARATION_AGREEMENT,
