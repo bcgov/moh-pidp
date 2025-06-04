@@ -31,7 +31,7 @@ public class BCProviderInvite
         public CommandValidator()
         {
             this.RuleFor(x => x.PartyId).GreaterThan(0);
-            this.RuleFor(x => x.UserPrincipalName).NotEmpty();
+            this.RuleFor(x => x.UserPrincipalName).NotEmpty().EmailAddress();
         }
     }
 
@@ -52,6 +52,17 @@ public class BCProviderInvite
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {
+            var emailIsVerified = await this.context.VerifiedEmails
+                .Where(verifiedEmail => verifiedEmail.PartyId == command.PartyId
+                    && verifiedEmail.IsVerified
+                    && verifiedEmail.Email.ToLower() == command.UserPrincipalName.ToLower())
+                .AnyAsync();
+
+            if (!emailIsVerified)
+            {
+                return DomainResult.Failed();
+            }
+
             var createdUpn = await this.client.SendInvite(command.UserPrincipalName);
             if (createdUpn == null)
             {

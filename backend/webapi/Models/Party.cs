@@ -50,6 +50,8 @@ public class Party : BaseAuditable
 
     public ICollection<InvitedEntraAccount> InvitedEntraAccounts { get; set; } = [];
 
+    public ICollection<VerifiedEmail> VerifiedEmails { get; set; } = [];
+
     /// <summary>
     /// The First Name + Last Name of the Party.
     /// </summary>

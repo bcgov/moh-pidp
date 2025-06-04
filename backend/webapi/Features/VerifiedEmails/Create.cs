@@ -1,20 +1,15 @@
-namespace Pidp.Features.VerifiedEmail;
+namespace Pidp.Features.VerifiedEmails;
 
-using System.Text.Json.Serialization;
 using FluentValidation;
 using Flurl;
 using HybridModelBinding;
-using MassTransit;
-using MediatR;
-using NodaTime;
+using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 using Pidp.Data;
-using Pidp.Extensions;
-using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;
-using Pidp.Models.DomainEvents;
 
 public class Create
 {
@@ -41,23 +36,42 @@ public class Create
     }
 
     public class CommandHandler(
-        IClock clock,
         IEmailService emailService,
         PidpConfiguration config,
         PidpDbContext context) : ICommandHandler<Command, Model>
     {
         private readonly string applicationUrl = config.ApplicationUrl;
-        private readonly IClock clock = clock;
         private readonly IEmailService emailService = emailService;
         private readonly PidpDbContext context = context;
 
         public async Task<Model> HandleAsync(Command command)
         {
-            await this.SendVerificationEmailAsync(command.Email, Guid.NewGuid());
+            var verifiedEmail = await this.context.VerifiedEmails
+                .Where(verifiedEmail => verifiedEmail.PartyId == command.PartyId
+                    && verifiedEmail.Email.ToLower() == command.Email.ToLower())
+                .SingleOrDefaultAsync();
+
+            if (verifiedEmail == null)
+            {
+                verifiedEmail = new VerifiedEmail
+                {
+                    PartyId = command.PartyId,
+                    Token = Guid.NewGuid(),
+                    Email = command.Email
+                };
+
+                this.context.VerifiedEmails.Add(verifiedEmail);
+                await this.context.SaveChangesAsync();
+            }
+
+            if (!verifiedEmail.IsVerified)
+            {
+                await this.SendVerificationEmailAsync(verifiedEmail.Email, verifiedEmail.Token);
+            }
 
             return new Model
             {
-                IsVerified = false
+                IsVerified = verifiedEmail.IsVerified
             };
         }
 

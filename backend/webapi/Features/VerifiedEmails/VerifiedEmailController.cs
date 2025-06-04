@@ -1,4 +1,4 @@
-namespace Pidp.Features.VerifiedEmail;
+namespace Pidp.Features.VerifiedEmails;
 
 using DomainResults.Common;
 using DomainResults.Mvc;
@@ -25,8 +25,8 @@ public class VerifiedEmailsController(IPidpAuthorizationService authorizationSer
     [HttpPost("verify")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> VerifyEmail([FromServices] ICommandHandler<Verify.Command> handler,
-                                                 [FromHybrid][AutoValidateAlways] Verify.Command command)
+    public async Task<ActionResult<Verify.Model>> VerifyEmail([FromServices] ICommandHandler<Verify.Command, IDomainResult<Verify.Model>> handler,
+                                                              [FromHybrid][AutoValidateAlways] Verify.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
-            .ToActionResult();
+            .ToActionResultOfT();
 }
