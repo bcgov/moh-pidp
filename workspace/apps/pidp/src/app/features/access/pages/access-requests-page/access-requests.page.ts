@@ -32,19 +32,18 @@ import { Constants } from '@app/shared/constants';
 import { AccessRequestCardComponent } from '../../components/access-request-card/access-request-card.component';
 
 @Component({
-  selector: 'app-access-request-page',
-  templateUrl: './access-requests.page.html',
-  styleUrls: ['./access-requests.page.scss'],
-  standalone: true,
-  imports: [
-    BreadcrumbComponent,
-    FaIconComponent,
-    InjectViewportCssClassDirective,
-    MatButtonModule,
-    NgIf,
-    AccessRequestCardComponent,
-    NgFor,
-  ],
+    selector: 'app-access-request-page',
+    templateUrl: './access-requests.page.html',
+    styleUrls: ['./access-requests.page.scss'],
+    imports: [
+        BreadcrumbComponent,
+        FaIconComponent,
+        InjectViewportCssClassDirective,
+        MatButtonModule,
+        NgIf,
+        AccessRequestCardComponent,
+        NgFor,
+    ]
 })
 export class AccessRequestsPage implements OnInit, OnDestroy {
   /**

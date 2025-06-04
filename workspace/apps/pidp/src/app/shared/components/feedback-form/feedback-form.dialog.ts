@@ -38,19 +38,18 @@ import { FeedbackFormDialogResource } from './feedback-form-dialog-resource.serv
 import { FeedbackFormState } from './feedback-form.component-form-state';
 
 @Component({
-  selector: 'app-feedback-form-dialog',
-  templateUrl: './feedback-form.dialog.html',
-  styleUrl: './feedback-form.dialog.scss',
-  standalone: true,
-  imports: [
-    SuccessDialogComponent,
-    MatFormFieldModule,
-    MatInputModule,
-    NgIf,
-    ReactiveFormsModule,
-    MatIconModule,
-    MatButtonModule,
-  ],
+    selector: 'app-feedback-form-dialog',
+    templateUrl: './feedback-form.dialog.html',
+    styleUrl: './feedback-form.dialog.scss',
+    imports: [
+        SuccessDialogComponent,
+        MatFormFieldModule,
+        MatInputModule,
+        NgIf,
+        ReactiveFormsModule,
+        MatIconModule,
+        MatButtonModule,
+    ]
 })
 export class FeedbackFormDialogComponent
   extends AbstractFormPage<FeedbackFormState>

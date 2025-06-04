@@ -26,11 +26,10 @@ import { FeedbackButtonComponent } from '../../../../shared/components/feedback-
 import { NavMenuComponent } from '../navbar-menu/nav-menu';
 
 @Component({
-  selector: 'app-portal-dashboard',
-  templateUrl: './portal-dashboard.component.html',
-  styleUrls: ['./portal-dashboard.component.scss'],
-  standalone: true,
-  imports: [AsyncPipe, NavMenuComponent, FeedbackButtonComponent, NgIf],
+    selector: 'app-portal-dashboard',
+    templateUrl: './portal-dashboard.component.html',
+    styleUrls: ['./portal-dashboard.component.scss'],
+    imports: [AsyncPipe, NavMenuComponent, FeedbackButtonComponent, NgIf]
 })
 export class PortalDashboardComponent implements IDashboard, OnInit {
   public logoutRedirectUrl: string;

@@ -16,19 +16,18 @@ import { ViewportService } from '../../../../services/viewport.service';
 import { DashboardRouteMenuItem } from '../../models/dashboard-menu-item.model';
 
 @Component({
-  selector: 'ui-dashboard-route-menu-item',
-  templateUrl: './dashboard-route-menu-item.component.html',
-  styleUrls: ['./dashboard-route-menu-item.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    MatListModule,
-    RouterLinkActive,
-    RouterLink,
-    NgIf,
-    MatIconModule,
-    AsyncPipe,
-  ],
+    selector: 'ui-dashboard-route-menu-item',
+    templateUrl: './dashboard-route-menu-item.component.html',
+    styleUrls: ['./dashboard-route-menu-item.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatListModule,
+        RouterLinkActive,
+        RouterLink,
+        NgIf,
+        MatIconModule,
+        AsyncPipe,
+    ]
 })
 export class DashboardRouteMenuItemComponent {
   /**

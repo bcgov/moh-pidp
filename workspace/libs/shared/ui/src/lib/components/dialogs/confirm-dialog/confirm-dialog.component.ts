@@ -34,24 +34,23 @@ import { DialogContentOutput } from '../dialog-output.model';
 import { DIALOG_DEFAULT_OPTION } from '../dialogs-properties.provider';
 
 @Component({
-  selector: 'ui-confirm-dialog',
-  templateUrl: './confirm-dialog.component.html',
-  styleUrls: ['./confirm-dialog.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    AnchorDirective,
-    MatDialogTitle,
-    NgIf,
-    MatIconModule,
-    MatDialogContent,
-    MatDialogActions,
-    MatButtonModule,
-    MatDialogClose,
-    AnchorDirective,
-    MatProgressBarModule,
-    AsyncPipe,
-  ],
+    selector: 'ui-confirm-dialog',
+    templateUrl: './confirm-dialog.component.html',
+    styleUrls: ['./confirm-dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        AnchorDirective,
+        MatDialogTitle,
+        NgIf,
+        MatIconModule,
+        MatDialogContent,
+        MatDialogActions,
+        MatButtonModule,
+        MatDialogClose,
+        AnchorDirective,
+        MatProgressBarModule,
+        AsyncPipe,
+    ]
 })
 export class ConfirmDialogComponent implements OnInit, AfterViewInit {
   public options: DialogOptions;

@@ -14,16 +14,15 @@ import {
 import { AccessRoutes } from '@app/features/access/access.routes';
 
 @Component({
-  selector: 'app-breadcrumb',
-  templateUrl: './breadcrumb.component.html',
-  styleUrl: './breadcrumb.component.scss',
-  standalone: true,
-  imports: [
-    CommonModule,
-    InjectViewportCssClassDirective,
-    FaIconComponent,
-    TextButtonDirective,
-  ],
+    selector: 'app-breadcrumb',
+    templateUrl: './breadcrumb.component.html',
+    styleUrl: './breadcrumb.component.scss',
+    imports: [
+        CommonModule,
+        InjectViewportCssClassDirective,
+        FaIconComponent,
+        TextButtonDirective,
+    ]
 })
 export class BreadcrumbComponent {
   public faAngleRight = faAngleRight;

@@ -23,21 +23,20 @@ import { FaqRoutes } from '../../faq.routes';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
 @Component({
-  selector: 'app-mfa-setup',
-  templateUrl: './mfa-setup.page.html',
-  styleUrls: ['./mfa-setup.page.scss'],
-  standalone: true,
-  imports: [
-    AnchorDirective,
-    BreadcrumbComponent,
-    FaIconComponent,
-    MatButtonModule,
-    NgIf,
-    PageComponent,
-    PageSectionComponent,
-    PageSectionSubheaderComponent,
-    InjectViewportCssClassDirective,
-  ],
+    selector: 'app-mfa-setup',
+    templateUrl: './mfa-setup.page.html',
+    styleUrls: ['./mfa-setup.page.scss'],
+    imports: [
+        AnchorDirective,
+        BreadcrumbComponent,
+        FaIconComponent,
+        MatButtonModule,
+        NgIf,
+        PageComponent,
+        PageSectionComponent,
+        PageSectionSubheaderComponent,
+        InjectViewportCssClassDirective,
+    ]
 })
 export class MfaSetupPage implements OnInit {
   public providerIdentitySupport: string;

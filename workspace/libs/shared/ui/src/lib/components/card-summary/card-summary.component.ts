@@ -15,20 +15,19 @@ import { CardHintDirective } from '../card/card-hint.directive';
 import { CardComponent } from '../card/card.component';
 
 @Component({
-  selector: 'ui-card-summary',
-  templateUrl: './card-summary.component.html',
-  styleUrls: ['./card-summary.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    CardActionsDirective,
-    CardComponent,
-    CardContentDirective,
-    CardHintDirective,
-    MatButtonModule,
-    NgIf,
-    NgTemplateOutlet,
-  ],
+    selector: 'ui-card-summary',
+    templateUrl: './card-summary.component.html',
+    styleUrls: ['./card-summary.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        CardActionsDirective,
+        CardComponent,
+        CardContentDirective,
+        CardHintDirective,
+        MatButtonModule,
+        NgIf,
+        NgTemplateOutlet,
+    ]
 })
 export class CardSummaryComponent {
   @Input() public icon?: string;

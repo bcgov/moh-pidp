@@ -21,12 +21,11 @@ import { ContextHelpContentDirective } from '../context-help-content.directive';
 import { ContextHelpTitleDirective } from '../context-help-title.directive';
 
 @Component({
-  selector: 'ui-context-help',
-  templateUrl: './context-help.component.html',
-  styleUrls: ['./context-help.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [MatButtonModule, MatMenuModule, MatIconModule, NgIf],
+    selector: 'ui-context-help',
+    templateUrl: './context-help.component.html',
+    styleUrls: ['./context-help.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [MatButtonModule, MatMenuModule, MatIconModule, NgIf]
 })
 export class ContextHelpComponent {
   @Input() public xPosition: MenuPositionX;
