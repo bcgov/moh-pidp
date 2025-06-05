@@ -15,8 +15,6 @@ import {
   PageFooterActionDirective,
   PageFooterComponent,
   PageSectionComponent,
-  PageSectionSubheaderComponent,
-  PageSectionSubheaderDescDirective,
   SafePipe,
 } from '@bcgov/shared/ui';
 
@@ -31,26 +29,24 @@ import { EnrolmentErrorComponent } from '../../components/enrolment-error/enrolm
 import { ProviderReportingPortalResource } from './provider-reporting-portal-resource.service';
 
 @Component({
-    selector: 'app-provider-reporting-portal',
-    templateUrl: './provider-reporting-portal.page.html',
-    styleUrls: ['./provider-reporting-portal.page.scss'],
-    imports: [
-        AlertComponent,
-        AlertContentDirective,
-        AnchorDirective,
-        BreadcrumbComponent,
-        EnrolmentErrorComponent,
-        InjectViewportCssClassDirective,
-        MatButtonModule,
-        NgIf,
-        PageComponent,
-        PageFooterActionDirective,
-        PageFooterComponent,
-        PageSectionComponent,
-        PageSectionSubheaderComponent,
-        PageSectionSubheaderDescDirective,
-        SafePipe,
-    ]
+  selector: 'app-provider-reporting-portal',
+  templateUrl: './provider-reporting-portal.page.html',
+  styleUrls: ['./provider-reporting-portal.page.scss'],
+  imports: [
+    AlertComponent,
+    AlertContentDirective,
+    AnchorDirective,
+    BreadcrumbComponent,
+    EnrolmentErrorComponent,
+    InjectViewportCssClassDirective,
+    MatButtonModule,
+    NgIf,
+    PageComponent,
+    PageFooterActionDirective,
+    PageFooterComponent,
+    PageSectionComponent,
+    SafePipe,
+  ],
 })
 export class ProviderReportingPortalPage implements OnInit {
   public title: string;

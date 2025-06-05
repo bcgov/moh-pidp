@@ -25,13 +25,11 @@ import {
   PageComponent,
   PageFooterActionDirective,
   PageFooterComponent,
-  PageHeaderComponent,
   PageSectionComponent,
   PageSectionSubheaderComponent,
   PageSectionSubheaderDescDirective,
   PreferredNameFormComponent,
   ToggleContentChange,
-  ToggleContentComponent,
 } from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
@@ -56,32 +54,30 @@ import { PersonalInformationResource } from './personal-information-resource.ser
 import { PersonalInformation } from './personal-information.model';
 
 @Component({
-    selector: 'app-personal-information',
-    templateUrl: './personal-information.page.html',
-    styleUrls: ['./personal-information.page.scss'],
-    viewProviders: [PersonalInformationResource],
-    imports: [
-        AsyncPipe,
-        BreadcrumbComponent,
-        ContactFormComponent,
-        InjectViewportCssClassDirective,
-        IsHighAssurancePipe,
-        InjectViewportCssClassDirective,
-        MatButtonModule,
-        MatExpansionModule,
-        MatIconModule,
-        NgIf,
-        PageComponent,
-        PageFooterActionDirective,
-        PageFooterComponent,
-        PageHeaderComponent,
-        PageSectionComponent,
-        PageSectionSubheaderComponent,
-        PageSectionSubheaderDescDirective,
-        PreferredNameFormComponent,
-        ToggleContentComponent,
-        UserInfoComponent,
-    ]
+  selector: 'app-personal-information',
+  templateUrl: './personal-information.page.html',
+  styleUrls: ['./personal-information.page.scss'],
+  viewProviders: [PersonalInformationResource],
+  imports: [
+    AsyncPipe,
+    BreadcrumbComponent,
+    ContactFormComponent,
+    InjectViewportCssClassDirective,
+    IsHighAssurancePipe,
+    InjectViewportCssClassDirective,
+    MatButtonModule,
+    MatExpansionModule,
+    MatIconModule,
+    NgIf,
+    PageComponent,
+    PageFooterActionDirective,
+    PageFooterComponent,
+    PageSectionComponent,
+    PageSectionSubheaderComponent,
+    PageSectionSubheaderDescDirective,
+    PreferredNameFormComponent,
+    UserInfoComponent,
+  ],
 })
 export class PersonalInformationPage
   extends AbstractFormPage<PersonalInformationFormState>

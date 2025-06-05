@@ -34,7 +34,6 @@ import {
   tap,
 } from 'rxjs';
 
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faCircleRight } from '@fortawesome/free-regular-svg-icons';
 import {
   faAngleRight,
@@ -80,29 +79,27 @@ import { BcProviderApplicationFormState } from './bc-provider-application-form-s
 import { BcProviderApplicationResource } from './bc-provider-application-resource.service';
 
 @Component({
-    selector: 'app-bc-provider-application',
-    templateUrl: './bc-provider-application.page.html',
-    styleUrls: ['./bc-provider-application.page.scss'],
-    imports: [
-        AsyncPipe,
-        BreadcrumbComponent,
-        FaIconComponent,
-        InjectViewportCssClassDirective,
-        MatButtonModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatTooltipModule,
-        NeedHelpComponent,
-        NgIf,
-        NgOptimizedImage,
-        NgSwitch,
-        NgSwitchCase,
-        NgSwitchDefault,
-        NgTemplateOutlet,
-        ReactiveFormsModule,
-        SuccessDialogComponent,
-        FaIconComponent,
-    ]
+  selector: 'app-bc-provider-application',
+  templateUrl: './bc-provider-application.page.html',
+  styleUrls: ['./bc-provider-application.page.scss'],
+  imports: [
+    AsyncPipe,
+    BreadcrumbComponent,
+    InjectViewportCssClassDirective,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatTooltipModule,
+    NeedHelpComponent,
+    NgIf,
+    NgOptimizedImage,
+    NgSwitch,
+    NgSwitchCase,
+    NgSwitchDefault,
+    NgTemplateOutlet,
+    ReactiveFormsModule,
+    SuccessDialogComponent,
+  ],
 })
 export class BcProviderApplicationPage
   extends AbstractFormPage<BcProviderApplicationFormState>
@@ -295,7 +292,6 @@ export class BcProviderApplicationPage
         );
       }),
       catchError(() => {
-
         this.logger.error('Link Request creation failed');
 
         return of(null);
