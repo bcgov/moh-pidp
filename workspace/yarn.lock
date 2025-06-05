@@ -2434,17 +2434,30 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.57.1.tgz#de633db3ec2ef6a3c89e2f19038063e8a122e2c2"
   integrity sha512-d9zaMRSTIKDLhctzH12MtXvJKSSUhaHcjV+2Z+GK+EEY7XKpP5yR4x+N3TAcHTcu963nIr+TMcCb4DBCYX1z6Q==
 
-"@fortawesome/angular-fontawesome@~0.14.1":
-  version "0.14.1"
-  resolved "https://registry.yarnpkg.com/@fortawesome/angular-fontawesome/-/angular-fontawesome-0.14.1.tgz#9b711b2f4e8df3ec18e29a0abc720a96fa029b78"
-  integrity sha512-Yb5HLiEOAxjSLEcaOM51CKIrzdfvoDafXVJERm9vufxfZkVZPZJgrZRgqwLVpejgq4/Ez6TqHZ6SqmJwdtRF6g==
+"@fortawesome/angular-fontawesome@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@fortawesome/angular-fontawesome/-/angular-fontawesome-1.0.0.tgz#bfb03a45aca22d446f1cc0d4be85490257eecc05"
+  integrity sha512-EC2fYuXIuw2ld1kzJi+zysWus6OeGGfLQtbh0hW9zyyq5aBo8ZJkcJKBsVQ8E6Mg7nHyTWaXn+sdcXTPDWz+UQ==
   dependencies:
-    tslib "^2.6.2"
+    "@fortawesome/fontawesome-svg-core" "^6.7.1"
+    tslib "^2.8.1"
 
 "@fortawesome/fontawesome-common-types@6.5.1":
   version "6.5.1"
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-6.5.1.tgz#fdb1ec4952b689f5f7aa0bffe46180bb35490032"
   integrity sha512-GkWzv+L6d2bI5f/Vk6ikJ9xtl7dfXtoRu3YGE6nq0p/FFqA1ebMOAWg3XgRyb0I6LYyYkiAo+3/KrwuBp8xG7A==
+
+"@fortawesome/fontawesome-common-types@6.7.2":
+  version "6.7.2"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-common-types/-/fontawesome-common-types-6.7.2.tgz#7123d74b0c1e726794aed1184795dbce12186470"
+  integrity sha512-Zs+YeHUC5fkt7Mg1l6XTniei3k4bwG/yo3iFUtZWd/pMx9g3fdvkSK9E0FOC+++phXOka78uJcYb8JaFkW52Xg==
+
+"@fortawesome/fontawesome-svg-core@^6.7.1":
+  version "6.7.2"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-svg-core/-/fontawesome-svg-core-6.7.2.tgz#0ac6013724d5cc327c1eb81335b91300a4fce2f2"
+  integrity sha512-yxtOBWDrdi5DD5o1pmVdq3WMCvnobT0LU6R8RyyVXPvFRd2o79/0NCuQoCjNTeZz9EzA9xS3JxNWfv54RIHFEA==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "6.7.2"
 
 "@fortawesome/fontawesome-svg-core@~6.5.1":
   version "6.5.1"
@@ -9873,11 +9886,6 @@ jiti@^1.20.0:
   resolved "https://registry.yarnpkg.com/jiti/-/jiti-1.21.7.tgz#9dd81043424a3d28458b193d965f0d18a2300ba9"
   integrity sha512-/imKNG4EbWNrVjoNC/1H5/9GFy+tqjGBHCaSsN+P2RnPqjsLmv6UD3Ej+Kj8nBWaRAwyk7kK5ZUc+OEatnTR3A==
 
-js-sha256@^0.11.0:
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/js-sha256/-/js-sha256-0.11.0.tgz#256a921d9292f7fe98905face82e367abaca9576"
-  integrity sha512-6xNlKayMZvds9h1Y1VWc0fQHQ82BxTXizWPEtEeGvmOUYpBRy4gbWroHLpzowe6xiQhHpelCQiE7HEdznyBL9Q==
-
 js-tokens@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
@@ -10063,11 +10071,6 @@ jsprim@^2.0.2:
     json-schema "0.4.0"
     verror "1.10.0"
 
-jwt-decode@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/jwt-decode/-/jwt-decode-4.0.0.tgz#2270352425fd413785b2faf11f6e755c5151bd4b"
-  integrity sha512-+KJGIyHgkGuIq3IEBNftfhW/LfWhXUIY6OmyVWjliu5KH1y0fw7VQ8YndE2O4qZdMSd9SqbnC8GOcZEy0Om7sA==
-
 karma-source-map-support@1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/karma-source-map-support/-/karma-source-map-support-1.4.0.tgz#58526ceccf7e8730e56effd97a4de8d712ac0d6b"
@@ -10075,20 +10078,17 @@ karma-source-map-support@1.4.0:
   dependencies:
     source-map-support "^0.5.5"
 
-keycloak-angular@~15.0.0:
-  version "15.0.0"
-  resolved "https://registry.yarnpkg.com/keycloak-angular/-/keycloak-angular-15.0.0.tgz#9a633cac72eb2681c18f324f951fee50ebd4ac33"
-  integrity sha512-GUiIKDspnH94YQ2jSL5zw+aXtpK80E78Znjn2en8d1Xhvs5kGy58qmemtuOVEafRBNeKUz/cPvD87Ha+EnPDRA==
+keycloak-angular@~19.0.0:
+  version "19.0.2"
+  resolved "https://registry.yarnpkg.com/keycloak-angular/-/keycloak-angular-19.0.2.tgz#97d43d1c0ae3817bf6c6a304b5700c83c84c9332"
+  integrity sha512-GzQKC/jFJLZRmUxWOEXkla+6shDAZFAOe6Z3qsw916Ckb/UhZnO704HMZrd8xyVB3RH6xOcNCp45oHmIiqJ7dA==
   dependencies:
     tslib "^2.3.1"
 
-keycloak-js@^25.0.0:
-  version "25.0.6"
-  resolved "https://registry.yarnpkg.com/keycloak-js/-/keycloak-js-25.0.6.tgz#ea2e74d907f251c93080c6e2245d9d858bd4b329"
-  integrity sha512-Km+dc+XfNvY6a4az5jcxTK0zPk52ns9mAxLrHj7lF3V+riVYvQujfHmhayltJDjEpSOJ4C8a57LFNNKnNnRP2g==
-  dependencies:
-    js-sha256 "^0.11.0"
-    jwt-decode "^4.0.0"
+keycloak-js@^26.0.0:
+  version "26.2.0"
+  resolved "https://registry.yarnpkg.com/keycloak-js/-/keycloak-js-26.2.0.tgz#0924feec13a014563b2e041e255657c24c145714"
+  integrity sha512-CrFcXTN+d6J0V/1v3Zpioys6qHNWE6yUzVVIsCUAmFn9H14GZ0vuYod+lt+SSpMgWGPuneDZBSGBAeLBFuqjsw==
 
 keygrip@~1.1.0:
   version "1.1.0"
@@ -13722,12 +13722,12 @@ tsconfig-paths@^4.0.0, tsconfig-paths@^4.1.2:
     minimist "^1.2.6"
     strip-bom "^3.0.0"
 
-tslib@2.8.1, tslib@^2.8.0:
+tslib@2.8.1, tslib@^2.8.0, tslib@^2.8.1:
   version "2.8.1"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.8.1.tgz#612efe4ed235d567e8aba5f2a5fab70280ade83f"
   integrity sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==
 
-tslib@^2.0.0, tslib@^2.1.0, tslib@^2.3.0, tslib@^2.3.1, tslib@^2.4.0, tslib@^2.6.2:
+tslib@^2.0.0, tslib@^2.1.0, tslib@^2.3.0, tslib@^2.3.1, tslib@^2.4.0:
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.6.2.tgz#703ac29425e7b37cd6fd456e92404d46d1f3e4ae"
   integrity sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==
