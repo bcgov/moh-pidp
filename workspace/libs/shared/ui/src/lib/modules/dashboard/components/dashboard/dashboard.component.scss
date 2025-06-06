@@ -1,7 +1,6 @@
-@import 'palette';
-@import 'material/material-variables';
-@import 'bootstrap/bootstrap-imports';
-@import 'pidp-variables';
+@use 'pidp-variables' as pidp;
+@use 'bootstrap/scss/mixins' as mixin;
+@use 'material/material-variables' as *;
 
 // NOTE: mat-sidenav is modified globally
 // @see ./scss/material/components/_mat-sidenav.scss
@@ -10,7 +9,8 @@
   // Compensate for the application header, and the
   // progress indicator for HTTP requests and routing
   // @see dashboard-header.component.scss
-  top: $mat-theme-dashboard-header-height + $page-header-progress-bar-height; // .mat-toolbar height + .ngx-progress height
+  top: $mat-theme-dashboard-header-height +
+    pidp.$page-header-progress-bar-height; // .mat-toolbar height + .ngx-progress height
   bottom: 0;
   left: 0;
   right: 0;
@@ -33,7 +33,7 @@
     padding-bottom: 5rem;
   }
 
-  @include media-breakpoint-up(sm) {
+  @include mixin.media-breakpoint-up(sm) {
     padding-left: 5rem;
     padding-right: 5rem;
   }
