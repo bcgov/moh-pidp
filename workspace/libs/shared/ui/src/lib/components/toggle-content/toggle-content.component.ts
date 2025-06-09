@@ -15,25 +15,25 @@ import {
 import { ToggleContentChange } from './toggle-content-change.model';
 
 @Component({
-    selector: 'ui-toggle-content',
-    templateUrl: './toggle-content.component.html',
-    styleUrls: ['./toggle-content.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [MatSlideToggleModule, NgIf]
+  selector: 'ui-toggle-content',
+  templateUrl: './toggle-content.component.html',
+  styleUrls: ['./toggle-content.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [MatSlideToggleModule, NgIf],
 })
 export class ToggleContentComponent {
   @Input() public color: ThemePalette;
   @Input() public label!: string;
   @Input() public checked!: boolean;
-  @Output() public toggle: EventEmitter<ToggleContentChange>;
+  @Output() public toggleContent: EventEmitter<ToggleContentChange>;
 
   public constructor() {
     this.color = 'primary';
-    this.toggle = new EventEmitter<ToggleContentChange>();
+    this.toggleContent = new EventEmitter<ToggleContentChange>();
   }
 
   public onToggleContent({ checked }: MatSlideToggleChange): void {
     this.checked = !this.checked;
-    this.toggle.emit({ checked });
+    this.toggleContent.emit({ checked });
   }
 }
