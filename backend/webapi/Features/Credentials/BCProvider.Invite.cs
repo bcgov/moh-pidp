@@ -23,7 +23,7 @@ public class BCProviderInvite
         [JsonIgnore]
         [HybridBindProperty(Source.Route)]
         public int PartyId { get; set; }
-        public string UserPrincipalName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
     }
 
     public class CommandValidator : AbstractValidator<Command>
@@ -31,7 +31,7 @@ public class BCProviderInvite
         public CommandValidator()
         {
             this.RuleFor(x => x.PartyId).GreaterThan(0);
-            this.RuleFor(x => x.UserPrincipalName).NotEmpty().EmailAddress();
+            this.RuleFor(x => x.Email).NotEmpty().EmailAddress();
         }
     }
 
@@ -55,7 +55,7 @@ public class BCProviderInvite
             var emailIsVerified = await this.context.VerifiedEmails
                 .Where(verifiedEmail => verifiedEmail.PartyId == command.PartyId
                     && verifiedEmail.IsVerified
-                    && verifiedEmail.Email.ToLower() == command.UserPrincipalName.ToLower())
+                    && verifiedEmail.Email.ToLower() == command.Email.ToLower())
                 .AnyAsync();
 
             if (!emailIsVerified)
@@ -63,7 +63,7 @@ public class BCProviderInvite
                 return DomainResult.Failed();
             }
 
-            var createdUpn = await this.client.SendInvite(command.UserPrincipalName);
+            var createdUpn = await this.client.SendInvite(command.Email);
             if (createdUpn == null)
             {
                 return DomainResult.Failed();
