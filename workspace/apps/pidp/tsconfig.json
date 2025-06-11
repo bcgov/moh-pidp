@@ -32,7 +32,8 @@
       "@bcgov/shared/root-route": ["libs/shared/root-route/src/index.ts"],
       "@bcgov/shared/utils": ["libs/shared/utils/src/index.ts"]
     },
-    "target": "es2022"
+    "target": "es2022",
+    "esModuleInterop": true
   },
   "angularCompilerOptions": {
     "strictInjectionParameters": true,
