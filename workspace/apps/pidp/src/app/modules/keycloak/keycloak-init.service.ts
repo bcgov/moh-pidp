@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { KeycloakOptions, KeycloakService } from 'keycloak-angular';
+import { KeycloakService, ProvideKeycloakOptions } from 'keycloak-angular';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 
@@ -34,7 +34,7 @@ export class KeycloakInitService {
     }
   }
 
-  private getKeycloakOptions(): KeycloakOptions {
+  private getKeycloakOptions(): ProvideKeycloakOptions {
     return this.config.keycloakConfig;
   }
 }
