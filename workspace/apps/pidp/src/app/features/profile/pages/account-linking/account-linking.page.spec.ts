@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import {
   randFirstName,
@@ -12,6 +11,7 @@ import {
   randTextRange,
   randUserName,
 } from '@ngneat/falso';
+import { NavigationService } from '@pidp/presentation';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
 import { KeycloakService } from 'keycloak-angular';
 
@@ -25,7 +25,6 @@ import { AuthorizedUserService } from '@app/features/auth/services/authorized-us
 
 import { AccountLinkingResource } from './account-linking-resource.service';
 import { AccountLinkingPage } from './account-linking.page';
-import { NavigationService } from '@pidp/presentation';
 
 describe('AccountLinkingPage', () => {
   let component: AccountLinkingPage;
@@ -48,7 +47,7 @@ describe('AccountLinkingPage', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule],
+      imports: [HttpClientTestingModule, RouterModule.forRoot([])],
       providers: [
         AccountLinkingPage,
         {
@@ -77,7 +76,7 @@ describe('AccountLinkingPage', () => {
         provideAutoSpy(ApiHttpClient),
         provideAutoSpy(Router),
         provideAutoSpy(KeycloakService),
-        provideAutoSpy(NavigationService)
+        provideAutoSpy(NavigationService),
       ],
     });
 

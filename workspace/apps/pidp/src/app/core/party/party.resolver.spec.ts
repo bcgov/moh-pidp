@@ -4,9 +4,9 @@ import {
   ActivatedRouteSnapshot,
   ResolveFn,
   Router,
+  RouterModule,
   RouterStateSnapshot,
 } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 
 import { Observable } from 'rxjs';
 
@@ -39,7 +39,7 @@ describe('partyResolver', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
+      imports: [RouterModule.forRoot([])],
       providers: [
         {
           provide: APP_CONFIG,
