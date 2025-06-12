@@ -1,8 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable, inject, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Injectable, signal } from '@angular/core';
 
-import { Observable, catchError, delay, map, of, throwError } from 'rxjs';
+import { Observable, catchError, map, throwError } from 'rxjs';
 
 import { NoContent } from '@bcgov/shared/data-access';
 
@@ -35,44 +34,34 @@ export class ExternalAccountsResource {
       })
       .pipe(
         map(() => ({}) as NoContent),
-        catchError((error: HttpErrorResponse) => {
-          return throwError(() => error);
-        }),
+        catchError((error: HttpErrorResponse) => throwError(() => error)),
       );
   }
 
-  public verifyEmail(partyId: number, token: string): Observable<NoContent> {
+  public verifyEmail(
+    partyId: number,
+    token: string,
+  ): Observable<{ email: string }> {
     return this.apiResource
-      .post<NoContent>(
+      .post<{ email: string }>(
         `${this.getResourcePath(partyId)}/verified-emails/verify`,
-        {
-          token,
-        },
+        { token },
       )
-      .pipe(
-        map(() => ({}) as NoContent),
-        catchError((error: HttpErrorResponse) => {
-          return throwError(() => error);
-        }),
-      );
+      .pipe(catchError((error: HttpErrorResponse) => throwError(() => error)));
   }
 
   public createExternalAccount(
     partyId: number,
-    userPrincipalName: string,
+    email: string,
   ): Observable<NoContent> {
     return this.apiResource
       .post<NoContent>(
         `${this.getResourcePath(partyId)}/credentials/bc-provider/invite`,
-        {
-          userPrincipalName,
-        },
+        { email },
       )
       .pipe(
         map(() => ({}) as NoContent),
-        catchError((error: HttpErrorResponse) => {
-          return throwError(() => error);
-        }),
+        catchError((error: HttpErrorResponse) => throwError(() => error)),
       );
   }
 

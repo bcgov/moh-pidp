@@ -5,7 +5,7 @@ import { TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { provideAutoSpy } from 'jest-auto-spies';
 
@@ -39,6 +39,7 @@ describe('ExternalAccountsPage', () => {
         provideAutoSpy(MatDialog),
         provideAutoSpy(ExternalAccountsResource),
         provideAutoSpy(Router),
+        provideAutoSpy(ActivatedRoute),
       ],
       schemas: [NO_ERRORS_SCHEMA],
     });
