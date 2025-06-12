@@ -4,7 +4,6 @@ import {
   EventEmitter,
   Input,
   OnChanges,
-  OnInit,
   Output,
   computed,
   signal,
@@ -89,7 +88,6 @@ export class InstructionCardComponent implements OnChanges {
   }
 
   public ngOnChanges() {
-    console.log('ngOnChanges called with isActive:', this.isActive);
     if (!this.isActive) {
       this.searchControl.disable();
     } else {

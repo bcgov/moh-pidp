@@ -5,11 +5,9 @@ import {
   OnInit,
   TemplateRef,
   ViewChild,
-  computed,
   inject,
   signal,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -19,6 +17,7 @@ import {
   EMPTY,
   catchError,
   distinctUntilChanged,
+  finalize,
   map,
   of,
   switchMap,
@@ -252,55 +251,56 @@ export class ExternalAccountsPage implements OnInit {
         map((params) => params.get('email-verification-token')),
         distinctUntilChanged(),
         tap((token) => {
-          console.log('Email verification token:', token);
           if (token) {
             this.emailValidationToken.set(token);
             // Make step 3 and 4 active if token is present
-
             this.resource.currentStep.set(
-              InvitationSteps.EMAIL_VERIFICATION - 1 ||
-                InvitationSteps.COMPLETED - 1,
+              InvitationSteps.EMAIL_VERIFICATION - 1,
             );
           }
         }),
         switchMap((token) =>
           token
             ? this.resource.verifyEmail(this.partyService.partyId, token).pipe(
-                switchMap(() =>
+                switchMap((res: any) =>
                   this.resource
                     .createExternalAccount(
                       this.partyService.partyId,
-                      localStorage.getItem('userPrincipalName') || '',
+                      res.email || '',
                     )
                     .pipe(
                       tap(() => {
-                        this.loadingOverlay.close();
                         this.toastService.openSuccessToast(
                           'External Account invited successfully!',
                         );
                       }),
                     ),
                 ),
+                catchError((err) => {
+                  this.toastService.openErrorToast(
+                    'Email verification failed.',
+                  );
+                  return of(null);
+                }),
               )
-            : // If no token, return an observable that emits null
-              of(null),
+            : of(null),
         ),
+        finalize(() => this.loadingOverlay.close()),
       )
       .subscribe({
         next: (res) => {
           this.loadingOverlay.close();
-          console.log('Email verification response:', res);
           if (res !== null) {
             this.resource.currentStep.set(3);
+
+            // Remove the email-verification-token from the URL silently
+            this.router.navigate([], {
+              relativeTo: this.route,
+              queryParams: { 'email-verification-token': null },
+              queryParamsHandling: 'merge',
+              replaceUrl: true,
+            });
           }
-        },
-        error: (error) => {
-          this.loadingOverlay.close();
-          console.error('Error during email verification:', error);
-        },
-        complete: () => {
-          this.loadingOverlay.close();
-          console.log('Email verification process completed.');
         },
       });
   }
