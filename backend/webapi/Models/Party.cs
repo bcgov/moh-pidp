@@ -79,6 +79,11 @@ public class Party : BaseAuditable
     [Projectable]
     public string DisplayFullName => $"{this.DisplayFirstName} {this.DisplayLastName}";
 
+    [Projectable]
+    public bool EmailIsVerified(string email) => this.VerifiedEmails
+        .Any(verifiedEmail => verifiedEmail.IsVerified
+            && verifiedEmail.Email.ToLower() == email.ToLower());
+
     /// <summary>
     /// The "primary" Credential of a Party is the a) BC Services Card Credential or b) the only non-BC Services Card Credential.
     /// </summary>

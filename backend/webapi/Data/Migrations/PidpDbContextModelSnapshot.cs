@@ -521,6 +521,10 @@ namespace Pidp.Data.Migrations
                     b.Property<Instant>("InvitedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("InvitedUserPrincipalName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<Instant>("Modified")
                         .HasColumnType("timestamp with time zone");
 

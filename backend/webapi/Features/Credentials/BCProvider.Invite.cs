@@ -39,6 +39,7 @@ public class BCProviderInvite
         IBCProviderClient bcProviderClient,
         IBus bus,
         IClock clock,
+        ILogger<CommandHandler> logger,
         IPlrClient plrClient,
         PidpConfiguration config,
         PidpDbContext context) : ICommandHandler<Command, IDomainResult>
@@ -46,20 +47,37 @@ public class BCProviderInvite
         private readonly IBCProviderClient client = bcProviderClient;
         private readonly IBus bus = bus;
         private readonly IClock clock = clock;
+        private readonly ILogger<CommandHandler> logger = logger;
         private readonly IPlrClient plrClient = plrClient;
         private readonly PidpDbContext context = context;
         private readonly string clientId = config.BCProviderClient.ClientId;
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {
-            var emailIsVerified = await this.context.VerifiedEmails
-                .Where(verifiedEmail => verifiedEmail.PartyId == command.PartyId
-                    && verifiedEmail.IsVerified
-                    && verifiedEmail.Email.ToLower() == command.Email.ToLower())
-                .AnyAsync();
+            var dto = await this.context.Parties
+                .Where(party => party.Id == command.PartyId)
+                .Select(party => new
+                {
+                    EmailIsVerified = party.EmailIsVerified(command.Email),
+                    ExistingAccountPartyId = this.context.InvitedEntraAccounts
+                        .Where(account => account.InvitedUserPrincipalName.ToLower() == command.Email.ToLower())
+                        .Select(account => (int?)account.PartyId)
+                        .SingleOrDefault()
+                })
+                .SingleAsync();
 
-            if (!emailIsVerified)
+            if (!dto.EmailIsVerified)
             {
+                return DomainResult.Failed();
+            }
+            if (dto.ExistingAccountPartyId == command.PartyId)
+            {
+                // Account already invited
+                return DomainResult.Success();
+            }
+            if (dto.ExistingAccountPartyId.HasValue)
+            {
+                this.logger.LogEntraAccountAlreadyInvited(command.PartyId, command.Email, dto.ExistingAccountPartyId.Value);
                 return DomainResult.Failed();
             }
 
@@ -73,6 +91,7 @@ public class BCProviderInvite
             {
                 PartyId = command.PartyId,
                 UserPrincipalName = createdUpn,
+                InvitedUserPrincipalName = command.Email,
                 InvitedAt = this.clock.GetCurrentInstant(),
             });
             await this.context.SaveChangesAsync();
@@ -128,4 +147,10 @@ public class BCProviderInvite
             return DomainResult.Success();
         }
     }
+}
+
+public static partial class BCProviderInviteLoggingExtensions
+{
+    [LoggerMessage(1, LogLevel.Error, "Party {partyId} attempted to invite email {email} but was already invited by Party {existingAccountPartyId}.")]
+    public static partial void LogEntraAccountAlreadyInvited(this ILogger<BCProviderInvite.CommandHandler> logger, int partyId, string email, int existingAccountPartyId);
 }

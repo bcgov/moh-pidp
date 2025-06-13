@@ -13,7 +13,7 @@ using Pidp.Data;
 namespace Pidp.Data.Migrations
 {
     [DbContext(typeof(PidpDbContext))]
-    [Migration("20250604132138_VerifiedEmails")]
+    [Migration("20250612195147_VerifiedEmails")]
     partial class VerifiedEmails
     {
         /// <inheritdoc />
@@ -524,6 +524,10 @@ namespace Pidp.Data.Migrations
                     b.Property<Instant>("InvitedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("InvitedUserPrincipalName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<Instant>("Modified")
                         .HasColumnType("timestamp with time zone");
 
@@ -598,7 +602,7 @@ namespace Pidp.Data.Migrations
                         new
                         {
                             Code = 9,
-                            Name = "Access Harmonization User Access Agreement"
+                            Name = "OneHealthID Service Use Policy Agreement"
                         },
                         new
                         {

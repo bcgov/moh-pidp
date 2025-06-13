@@ -38,7 +38,7 @@ public class AccessTypeDataGenerator : ILookupDataGenerator<AccessType>
         new AccessType { Code = AccessTypeCode.PrescriptionRefillEforms, Name = "Prescription Refill eForm for Pharmacists"   },
         new AccessType { Code = AccessTypeCode.ProviderReportingPortal,  Name = "Provider Reporting Portal"                   },
         new AccessType { Code = AccessTypeCode.MSTeamsClinicMember,      Name = "MS Teams for Clinical Use - Clinic Member"   },
-        new AccessType { Code = AccessTypeCode.UserAccessAgreement,      Name = "OneHealthID Service Use Policy Agreement"  },
+        new AccessType { Code = AccessTypeCode.UserAccessAgreement,      Name = "OneHealthID Service Use Policy Agreement"    },
         new AccessType { Code = AccessTypeCode.ImmsBCEforms,             Name = "Immunization Entry eForm"                    }
     ];
 }

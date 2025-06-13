@@ -13,6 +13,13 @@ namespace Pidp.Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<string>(
+                name: "InvitedUserPrincipalName",
+                table: "InvitedEntraAccount",
+                type: "text",
+                nullable: false,
+                defaultValue: "");
+
             migrationBuilder.CreateTable(
                 name: "VerifiedEmail",
                 columns: table => new
@@ -48,6 +55,10 @@ namespace Pidp.Data.Migrations
         {
             migrationBuilder.DropTable(
                 name: "VerifiedEmail");
+
+            migrationBuilder.DropColumn(
+                name: "InvitedUserPrincipalName",
+                table: "InvitedEntraAccount");
         }
     }
 }
