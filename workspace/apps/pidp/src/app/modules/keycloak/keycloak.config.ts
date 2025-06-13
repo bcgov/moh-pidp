@@ -7,21 +7,14 @@ import {
   withAutoRefreshToken,
 } from 'keycloak-angular';
 
+import { environment } from '../../../environments/environment.prod';
 import { provideLookup } from '../lookup/lookup';
 import { PermissionsService } from '../permissions/permissions.service';
 
 export const provideKeycloakAngular = (): EnvironmentProviders =>
   provideKeycloak({
-    config: {
-      url: 'https://common-logon-dev.hlth.gov.bc.ca/auth',
-      realm: 'moh_applications',
-      clientId: 'PIDP-WEBAPP',
-    },
-    initOptions: {
-      onLoad: 'check-sso',
-      silentCheckSsoRedirectUri:
-        window.location.origin + '/assets/silent-check-sso.html',
-    },
+    config: environment.keycloakConfig.config,
+    initOptions: environment.keycloakConfig.initOptions,
     features: [withAutoRefreshToken({ onInactivityTimeout: 'none' })],
     providers: [
       importProvidersFrom(PermissionsService),
