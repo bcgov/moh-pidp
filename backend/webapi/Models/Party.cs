@@ -50,6 +50,8 @@ public class Party : BaseAuditable
 
     public ICollection<InvitedEntraAccount> InvitedEntraAccounts { get; set; } = [];
 
+    public ICollection<VerifiedEmail> VerifiedEmails { get; set; } = [];
+
     /// <summary>
     /// The First Name + Last Name of the Party.
     /// </summary>
@@ -76,6 +78,11 @@ public class Party : BaseAuditable
     /// </summary>
     [Projectable]
     public string DisplayFullName => $"{this.DisplayFirstName} {this.DisplayLastName}";
+
+    [Projectable]
+    public bool EmailIsVerified(string email) => this.VerifiedEmails
+        .Any(verifiedEmail => verifiedEmail.IsVerified
+            && verifiedEmail.Email.ToLower() == email.ToLower());
 
     /// <summary>
     /// The "primary" Credential of a Party is the a) BC Services Card Credential or b) the only non-BC Services Card Credential.

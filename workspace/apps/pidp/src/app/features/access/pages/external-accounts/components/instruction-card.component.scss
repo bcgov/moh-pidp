@@ -56,6 +56,7 @@
 
   .card-body {
     flex: 1;
+    padding-right: 3rem;
   }
 
   .card-title {
@@ -162,4 +163,35 @@
       opacity: 0.4;
     }
   }
+}
+
+/* Mat autocomplete styles */
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px;
+}
+
+.search-field {
+  width: 100%;
+  max-width: 100%;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-outline {
+  color: #e0e0e0;
+}
+
+::ng-deep
+  .mat-form-field-appearance-outline.mat-focused
+  .mat-form-field-outline-thick {
+  color: #d3d3d3;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-infix {
+  padding: 0.5em 0;
+}
+
+::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
+  margin: 0;
 }
