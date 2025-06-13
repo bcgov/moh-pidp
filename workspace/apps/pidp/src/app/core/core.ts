@@ -41,7 +41,7 @@ export const CORE_GUARD = new InjectionToken<string>('CORE_GUARD');
 
 const localhostCondition =
   createInterceptorCondition<IncludeBearerTokenCondition>({
-    urlPattern: /^(.*)?$/i,
+    urlPattern: /^(.+)?$/i,
   });
 
 export function provideCore(
