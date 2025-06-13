@@ -13,7 +13,7 @@ import {
 } from '@ngneat/falso';
 import { NavigationService } from '@pidp/presentation';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
-import { KeycloakService } from 'keycloak-angular';
+import Keycloak from 'keycloak-js';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
@@ -75,7 +75,7 @@ describe('AccountLinkingPage', () => {
         provideAutoSpy(AccountLinkingResource),
         provideAutoSpy(ApiHttpClient),
         provideAutoSpy(Router),
-        provideAutoSpy(KeycloakService),
+        provideAutoSpy(Keycloak),
         provideAutoSpy(NavigationService),
       ],
     });

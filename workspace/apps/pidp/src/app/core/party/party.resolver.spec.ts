@@ -12,7 +12,7 @@ import { Observable } from 'rxjs';
 
 import { randNumber } from '@ngneat/falso';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
-import { KeycloakService } from 'keycloak-angular';
+import Keycloak from 'keycloak-js';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 import { AuthRoutes } from '@app/features/auth/auth.routes';
@@ -56,7 +56,7 @@ describe('partyResolver', () => {
         provideAutoSpy(LoggerService),
         provideAutoSpy(DocumentService),
         provideAutoSpy(Router),
-        provideAutoSpy(KeycloakService),
+        provideAutoSpy(Keycloak),
         provideAutoSpy(ActivatedRouteSnapshot),
         provideAutoSpy(RouterStateSnapshot),
       ],
