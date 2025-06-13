@@ -5,8 +5,7 @@ import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import { of } from 'rxjs';
 
@@ -52,7 +51,7 @@ describe('CollegeLicenceDeclarationPage', () => {
         HttpClientTestingModule,
         MatDialogModule,
         ReactiveFormsModule,
-        RouterTestingModule,
+        RouterModule.forRoot([]),
       ],
       providers: [
         CollegeLicenceDeclarationPage,

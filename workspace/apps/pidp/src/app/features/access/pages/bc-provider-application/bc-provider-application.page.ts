@@ -34,7 +34,6 @@ import {
   tap,
 } from 'rxjs';
 
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faCircleRight } from '@fortawesome/free-regular-svg-icons';
 import {
   faAngleRight,
@@ -83,11 +82,9 @@ import { BcProviderApplicationResource } from './bc-provider-application-resourc
   selector: 'app-bc-provider-application',
   templateUrl: './bc-provider-application.page.html',
   styleUrls: ['./bc-provider-application.page.scss'],
-  standalone: true,
   imports: [
     AsyncPipe,
     BreadcrumbComponent,
-    FaIconComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
     MatFormFieldModule,
@@ -102,7 +99,6 @@ import { BcProviderApplicationResource } from './bc-provider-application-resourc
     NgTemplateOutlet,
     ReactiveFormsModule,
     SuccessDialogComponent,
-    FaIconComponent,
   ],
 })
 export class BcProviderApplicationPage
@@ -296,7 +292,6 @@ export class BcProviderApplicationPage
         );
       }),
       catchError(() => {
-
         this.logger.error('Link Request creation failed');
 
         return of(null);

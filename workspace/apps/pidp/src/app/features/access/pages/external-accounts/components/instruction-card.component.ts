@@ -8,17 +8,16 @@ import { MatSelectModule } from '@angular/material/select';
 import { InstructionCard } from './instruction-card.model';
 
 @Component({
-  selector: 'app-instruction-card',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatIconModule,
-  ],
-  templateUrl: './instruction-card.component.html',
-  styleUrl: './instruction-card.component.scss',
+    selector: 'app-instruction-card',
+    imports: [
+        CommonModule,
+        FormsModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatIconModule,
+    ],
+    templateUrl: './instruction-card.component.html',
+    styleUrl: './instruction-card.component.scss'
 })
 export class InstructionCardComponent {
   @Input()

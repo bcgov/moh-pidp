@@ -41,6 +41,8 @@ export abstract class AuthGuardService {
     routeRedirect: string | undefined,
   ): Observable<boolean | UrlTree> {
     return this.authService.isLoggedIn().pipe(
+      // TODO Is this correct to map to false?
+      map((authenticated) => authenticated ?? false),
       map(this.handleAccessCheck(routeRedirect)),
       catchError((error) => {
         console.error('Error occurred during access validation: ', error);

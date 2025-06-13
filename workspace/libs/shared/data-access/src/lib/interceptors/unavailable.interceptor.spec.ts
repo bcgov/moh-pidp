@@ -5,8 +5,7 @@ import {
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { Router, RouterModule } from '@angular/router';
 
 import { provideAutoSpy } from 'jest-auto-spies';
 
@@ -22,7 +21,7 @@ describe('UnavailableInterceptor', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterTestingModule],
+      imports: [HttpClientTestingModule, RouterModule.forRoot([])],
       providers: [unavailableInterceptorProvider, provideAutoSpy(Router)],
     });
 

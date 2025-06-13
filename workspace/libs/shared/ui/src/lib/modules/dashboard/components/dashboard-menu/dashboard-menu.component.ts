@@ -15,18 +15,17 @@ import {
 import { DashboardRouteMenuItemComponent } from '../dashboard-route-menu-item/dashboard-route-menu-item.component';
 
 @Component({
-  selector: 'ui-dashboard-menu',
-  templateUrl: './dashboard-menu.component.html',
-  styleUrls: ['./dashboard-menu.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    MatListModule,
-    NgFor,
-    NgSwitch,
-    NgSwitchCase,
-    DashboardRouteMenuItemComponent,
-  ],
+    selector: 'ui-dashboard-menu',
+    templateUrl: './dashboard-menu.component.html',
+    styleUrls: ['./dashboard-menu.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatListModule,
+        NgFor,
+        NgSwitch,
+        NgSwitchCase,
+        DashboardRouteMenuItemComponent,
+    ]
 })
 export class DashboardMenuComponent {
   /**

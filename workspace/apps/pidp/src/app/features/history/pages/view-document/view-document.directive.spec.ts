@@ -8,9 +8,7 @@ class StubComponent {}
 
 describe('ViewDocumentDirective', () => {
   beforeEach(async () => {
-    TestBed.configureTestingModule({
-      declarations: [StubComponent],
-    }).compileComponents();
+    TestBed.configureTestingModule({}).compileComponents();
   });
 
   it('should create an instance', () => {

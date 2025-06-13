@@ -6,11 +6,10 @@ import { AnchorDirective, ExpansionPanelComponent } from '@bcgov/shared/ui';
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 
 @Component({
-  selector: 'app-need-help',
-  templateUrl: './need-help.component.html',
-  styleUrls: ['./need-help.component.scss'],
-  standalone: true,
-  imports: [AnchorDirective, ExpansionPanelComponent, NgClass, NgIf],
+    selector: 'app-need-help',
+    templateUrl: './need-help.component.html',
+    styleUrls: ['./need-help.component.scss'],
+    imports: [AnchorDirective, ExpansionPanelComponent, NgClass, NgIf]
 })
 export class NeedHelpComponent {
   @Input() public showIcon: boolean;
