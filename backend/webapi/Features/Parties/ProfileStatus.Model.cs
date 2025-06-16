@@ -232,6 +232,26 @@ public partial class ProfileStatus
             }
         }
 
+        public class IvfSection : ProfileSection
+        {
+            internal override string SectionName => "ivf";
+            public override string[] KeyWords => ["doctors", "in", "vitro"];
+
+            protected override StatusCode Compute(ProfileData profile)
+            {
+                return profile switch
+                {
+                    _ when (profile.EndorsementPlrStanding.HasGoodStanding
+                        || profile.PartyPlrStanding
+                            .With(ProviderRoleType.MedicalDoctor, ProviderRoleType.RegisteredNursePractitioner)
+                            .HasGoodStanding)
+                        && profile.HasBCProviderCredential => StatusCode.Complete,
+                    { HasBCServicesCardCredential: true } => StatusCode.Incomplete,
+                    _ => StatusCode.Locked
+                };
+            }
+        }
+
         public class MSTeamsClinicMemberSection : ProfileSection
         {
             internal override string SectionName => "msTeamsClinicMember";
