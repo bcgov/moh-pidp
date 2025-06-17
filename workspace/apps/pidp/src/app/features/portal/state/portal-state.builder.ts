@@ -15,6 +15,7 @@ import { ExternalAccountsPortalSection } from './access/external-accounts-portal
 import { HaloPortalSection } from './access/halo-portal-section.class';
 import { HcimAccountTransferPortalSection } from './access/hcim-account-transfer-portal-section.class';
 import { ImmsBCEformsPortalSection } from './access/immsbc-eforms-portal-section.class';
+import { IvfPortalSection } from './access/ivf-portal-section.class';
 import { MsTeamsClinicMemberPortalSection } from './access/ms-teams-clinic-member-portal-section.class';
 import { MsTeamsPrivacyOfficerPortalSection } from './access/ms-teams-privacy-officer-portal-section.class';
 import { PrescriptionRefillEformsPortalSection } from './access/prescription-refill-eforms-portal-section.class';
@@ -152,6 +153,10 @@ export class AccessStateBuilder {
         this.insertSection('halo', profileStatus) &&
           this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new HaloPortalSection(profileStatus, this.router)],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('ivf', profileStatus),
+        () => [new IvfPortalSection(profileStatus, this.router)],
       ),
     ];
   }
