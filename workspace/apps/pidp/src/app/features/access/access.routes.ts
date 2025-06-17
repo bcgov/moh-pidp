@@ -15,6 +15,7 @@ export class AccessRoutes {
   public static PROVINCIAL_ATTACHMENT_SYSTEM = 'provincial-attachment-system';
   public static EXTERNAL_ACCOUNTS = 'external-accounts';
   public static HALO = 'halo';
+  public static IVF = 'ivf';
 
   /**
    * @description
