@@ -33,7 +33,7 @@
     gap: var(--gap);
 
     .content-header h1 {
-      color: #003366;
+      color: pidp.$bcgov-color-primary;
       font-size: 50px;
       font-weight: 700;
       word-wrap: break-word;
@@ -54,7 +54,7 @@
         flex: 1;
 
         .stepper-title {
-          color: #313132;
+          color: pidp.$bcgov-color-text;
           font-size: 1.5rem;
           font-weight: 700;
           margin-bottom: calc(var(--gap) / 2);
@@ -99,7 +99,7 @@
                 width: 70px;
                 height: 70px;
                 border-radius: 50%;
-                background: #003366;
+                background: pidp.$bcgov-color-primary;
                 color: #fff;
                 border: none;
                 display: flex;
@@ -198,16 +198,6 @@
     flex: 1 !important;
   }
 }
-
-// .viewport-large {
-//   div.auth-card {
-//     .card-footer {
-//       button {
-//         top: calc(100% - 205px);
-//       }
-//     }
-//   }
-// }
 
 .smaller-text {
   font-size: smaller;
