@@ -151,6 +151,6 @@ public class BCProviderInvite
 
 public static partial class BCProviderInviteLoggingExtensions
 {
-    [LoggerMessage(1, LogLevel.Error, "Party {partyId} attempted to invite email {email} but was already invited by Party {existingAccountPartyId}.")]
+    [LoggerMessage(1, LogLevel.Error, "Party {partyId} attempted to invite email {email}, which is already invited by Party {existingAccountPartyId}.")]
     public static partial void LogEntraAccountAlreadyInvited(this ILogger<BCProviderInvite.CommandHandler> logger, int partyId, string email, int existingAccountPartyId);
 }
