@@ -266,6 +266,8 @@ export class BcProviderApplicationPage
       );
     } else if (this.previousUrl.split('/').includes(AccessRoutes.HALO)) {
       this.router.navigateByUrl(AccessRoutes.routePath(AccessRoutes.HALO));
+    } else if (this.previousUrl.split('/').includes(AccessRoutes.IVF)) {
+      this.router.navigateByUrl(AccessRoutes.routePath(AccessRoutes.IVF));
     } else {
       this.navigationService.navigateToRoot();
     }
