@@ -18,6 +18,8 @@ import { MatSelectModule } from '@angular/material/select';
 
 import { debounceTime, distinctUntilChanged, of, switchMap } from 'rxjs';
 
+import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
+
 import { InstructionCard } from './instruction-card.model';
 
 @Component({
@@ -32,6 +34,7 @@ import { InstructionCard } from './instruction-card.model';
     MatIconModule,
     ReactiveFormsModule,
     MatAutocompleteModule,
+    InjectViewportCssClassDirective,
   ],
   templateUrl: './instruction-card.component.html',
   styleUrl: './instruction-card.component.scss',

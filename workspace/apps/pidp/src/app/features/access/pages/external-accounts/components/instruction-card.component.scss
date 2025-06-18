@@ -195,3 +195,11 @@
 ::ng-deep .mat-form-field-appearance-outline .mat-form-field-wrapper {
   margin: 0;
 }
+
+.viewport-xsmall {
+  .input-container {
+    &__wrapper {
+      flex-direction: column;
+    }
+  }
+}
