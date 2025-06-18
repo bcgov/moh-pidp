@@ -20,6 +20,7 @@ export const accessSectionKeys = [
   'provincialAttachmentSystem',
   'externalAccounts',
   'halo',
+  'ivf',
 ] as const;
 
 /**
@@ -50,4 +51,5 @@ export interface AccessGroup extends IAccessGroup {
   provincialAttachmentSystem: Section;
   externalAccounts: Section;
   halo: Section;
+  ivf: Section;
 }
