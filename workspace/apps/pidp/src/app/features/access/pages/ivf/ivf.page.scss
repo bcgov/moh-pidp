@@ -51,7 +51,7 @@
         padding-right: calc(var(--gap) * 0.9);
         position: relative;
         line-height: 1.5rem;
-        flex: 1;
+        flex: 1.8;
 
         .stepper-title {
           color: pidp.$bcgov-color-text;
@@ -64,13 +64,15 @@
       .ivf-button-container {
         display: flex;
         flex-direction: column;
-        flex: 2;
+        flex: 1;
         height: 25rem;
 
         .ivf-button {
           img {
             object-fit: cover;
             z-index: -2;
+            height: auto;
+            width: 629px;
           }
 
           div.auth-card {
@@ -101,7 +103,7 @@
                 border-radius: 50%;
                 background: pidp.$bcgov-color-primary;
                 color: #fff;
-                border: none;
+                border: 1px solid #fff;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -112,6 +114,9 @@
                     --surface-color-primary-button-disabled,
                     #edebe9
                   );
+                }
+                fa-icon {
+                  font-size: xx-large;
                 }
               }
             }
@@ -141,6 +146,11 @@
 
   .ivf-button-container {
     flex: 1 !important;
+  }
+  .card-footer {
+    button {
+      top: calc(100% - 1px) !important;
+    }
   }
 }
 
