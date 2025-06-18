@@ -1,1 +1,1 @@
-export const ivfWebsite = 'http://ivfportal.gov.bc.ca/';
+export const ivfWebsite = 'https://ivfportal.gov.bc.ca/';
