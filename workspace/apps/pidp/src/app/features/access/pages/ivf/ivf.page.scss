@@ -11,13 +11,7 @@
   --gap: 1.25rem;
   --font-size: 1rem;
 }
-.viewport-all {
-  --header-margin: unset;
-  --card-border-radius: calc(var(--gap) * 0.375);
-  --content-padding: var(--gap);
-  --form-card-width: unset;
-  padding: 1.25rem 0.75rem;
-}
+
 .viewport-medium,
 .viewport-large {
   --header-margin: var(--gap) 0 0;
@@ -26,6 +20,12 @@
 }
 
 .viewport-all {
+  --header-margin: unset;
+  --card-border-radius: calc(var(--gap) * 0.375);
+  --content-padding: var(--gap);
+  --form-card-width: unset;
+  padding: 1.25rem 0.75rem;
+
   & .content {
     padding-bottom: var(--content-padding);
     display: flex;
