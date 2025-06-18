@@ -18,7 +18,6 @@ export class IvfPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
   public heading: string;
   public description: string;
-  private readonly provincialAttachmentSystemWebsite: string;
   public faChartSimple = faChartSimple;
   public faUserCheck = faUserCheck;
   public keyWords: string[];
@@ -33,7 +32,6 @@ export class IvfPortalSection implements IPortalSection {
     this.description =
       'The IVF portal serves a secure program application interface between participating B.C. fertility clinics and the Ministry of Health for the administration of the publicly funded IVF Program.';
 
-    this.provincialAttachmentSystemWebsite = 'https://bchealthprovider.ca';
     this.keyWords = profileStatus.status.ivf.keyWords || [];
     this.completedMessage = 'Access Granted';
   }

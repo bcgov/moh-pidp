@@ -33,10 +33,8 @@ import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrum
 import { AccessRoutes } from '../../access.routes';
 import { BcProviderEditResource } from '../bc-provider-edit/bc-provider-edit-resource.service';
 import { BcProviderEditInitialStateModel } from '../bc-provider-edit/bc-provider-edit.page';
-import {
-  bcProviderTutorialLink,
-  provincialAttachmentSystemWebsite,
-} from '../provincial-attachment-system/provincial-attachment-system.constants';
+import { bcProviderTutorialLink } from '../provincial-attachment-system/provincial-attachment-system.constants';
+import { ivfWebsite } from './ivf-constants';
 
 @Component({
   selector: 'app-ivf',
@@ -89,7 +87,7 @@ export class IvfPage implements OnInit {
     },
     { title: 'IVF', path: '' },
   ];
-  private readonly provincialAttachmentSystemWebsite: string;
+  private readonly ivfWebsite: string;
   public sanitizer = inject(DomSanitizer);
   public matIconRegistry = inject(MatIconRegistry);
   public faArrowRight = faArrowRight;
@@ -107,7 +105,7 @@ export class IvfPage implements OnInit {
   ) {
     this.registerSvgIcons();
     this.selectedIndex = -1;
-    this.provincialAttachmentSystemWebsite = provincialAttachmentSystemWebsite;
+    this.ivfWebsite = ivfWebsite;
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
     this.bcProviderTutorial = bcProviderTutorialLink;
     this.lastSelectedIndex = 3;
@@ -127,7 +125,7 @@ export class IvfPage implements OnInit {
   }
 
   public navigateToPath(): void {
-    this.navigateToExternalUrl(this.provincialAttachmentSystemWebsite);
+    this.navigateToExternalUrl(this.ivfWebsite);
     this.authService.logout(this.logoutRedirectUrl);
   }
 
@@ -190,7 +188,7 @@ export class IvfPage implements OnInit {
   }
 
   private navigateToExternalUrl(url: string): void {
-    this.snowplowService.trackLinkClick(this.provincialAttachmentSystemWebsite);
+    this.snowplowService.trackLinkClick(this.ivfWebsite);
     window.open(url, '_blank');
     this.router.navigateByUrl('/');
   }
