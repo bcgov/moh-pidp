@@ -19,7 +19,6 @@ describe('ExternalAccountsPage', () => {
   let router: Router;
   let dialog: MatDialog;
   let matIconRegistry: MatIconRegistry;
-  let resource: ExternalAccountsResource;
 
   const mockConfig = {
     emails: { providerIdentitySupport: 'support@example.com' },
@@ -47,7 +46,6 @@ describe('ExternalAccountsPage', () => {
     router = TestBed.inject(Router);
     dialog = TestBed.inject(MatDialog);
     matIconRegistry = TestBed.inject(MatIconRegistry);
-    resource = TestBed.inject(ExternalAccountsResource);
   });
 
   it('should create', () => {

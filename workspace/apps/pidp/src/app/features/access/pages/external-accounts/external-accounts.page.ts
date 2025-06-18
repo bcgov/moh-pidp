@@ -262,7 +262,7 @@ export class ExternalAccountsPage implements OnInit {
         switchMap((token) =>
           token
             ? this.resource.verifyEmail(this.partyService.partyId, token).pipe(
-                switchMap((res: any) =>
+                switchMap((res) =>
                   this.resource
                     .createExternalAccount(
                       this.partyService.partyId,
@@ -276,7 +276,7 @@ export class ExternalAccountsPage implements OnInit {
                       }),
                     ),
                 ),
-                catchError((err) => {
+                catchError(() => {
                   this.toastService.openErrorToast(
                     'Email verification failed.',
                   );

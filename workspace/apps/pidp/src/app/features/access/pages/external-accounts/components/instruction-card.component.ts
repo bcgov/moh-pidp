@@ -87,7 +87,7 @@ export class InstructionCardComponent implements OnChanges {
     }
   }
 
-  public ngOnChanges() {
+  public ngOnChanges(): void {
     if (!this.isActive) {
       this.searchControl.disable();
     } else {
