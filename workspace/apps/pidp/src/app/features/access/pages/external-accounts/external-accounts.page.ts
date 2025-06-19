@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   Component,
   Inject,
+  OnInit,
   TemplateRef,
   ViewChild,
   inject,
@@ -10,9 +11,18 @@ import {
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { EMPTY, catchError, tap } from 'rxjs';
+import {
+  EMPTY,
+  catchError,
+  distinctUntilChanged,
+  finalize,
+  map,
+  of,
+  switchMap,
+  tap,
+} from 'rxjs';
 
 import {
   LOADING_OVERLAY_DEFAULT_MESSAGE,
@@ -52,13 +62,14 @@ import { InvitationSteps } from './external-accounts.model';
   templateUrl: './external-accounts.page.html',
   styleUrl: './external-accounts.page.scss',
 })
-export class ExternalAccountsPage {
+export class ExternalAccountsPage implements OnInit {
   public sanitizer = inject(DomSanitizer);
   public matIconRegistry = inject(MatIconRegistry);
 
   public AccessRoutes = AccessRoutes;
   public componentType = DialogExternalAccountCreateComponent;
   public emailSupport: string;
+  public emailValidationToken = signal<string | null>(null);
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -67,6 +78,7 @@ export class ExternalAccountsPage {
     private partyService: PartyService,
     private resource: ExternalAccountsResource,
     private router: Router,
+    private route: ActivatedRoute,
     private toastService: ToastService,
   ) {
     this.registerSvgIcons();
@@ -118,7 +130,6 @@ export class ExternalAccountsPage {
     );
   }
 
-  public currentStep = 1;
   @ViewChild('successDialog')
   public successDialogTemplate!: TemplateRef<Element>;
 
@@ -126,11 +137,10 @@ export class ExternalAccountsPage {
     {
       id: 1,
       icon: 'instruction-document',
-      title: 'Choose from the options',
-      description:
-        'Select from the list of accepted domains below and enter your complete username (e.g., joe@bchealthcompany.com).',
+      title: 'Start your search here',
+      description: 'Search from the list of accepted domains below.',
       type: 'dropdown',
-      placeholder: 'Yukon',
+      placeholder: 'Search for a domain or use keywords',
       options: [
         { label: 'Yukon', value: 'yukon' },
         { label: 'British Columbia', value: 'bc' },
@@ -169,44 +179,57 @@ export class ExternalAccountsPage {
   ]);
 
   public isCardActive(index: number): boolean {
-    //TODO : to be removed.
-    if (index === 0 || index === 2) {
-      return false;
+    const step = this.resource.currentStep();
+    // Enable both step 3 (index 2) and step 4 (index 3) together if step >= 2
+    if (step >= InvitationSteps.EMAIL_VERIFICATION) {
+      return (
+        index === InvitationSteps.EMAIL_VERIFICATION - 1 ||
+        index === InvitationSteps.COMPLETED - 1
+      );
     }
-    return index === this.currentStep;
+
+    return index === step;
   }
 
   public isCardCompleted(index: number): boolean {
-    //TODO : to be removed.
     if (index === 0 || index === 2) {
+      // Step 1 and Step 3 are not considered completed
       return false;
     }
-    return index < this.currentStep;
+    return index < this.resource.currentStep();
   }
 
   public onContinue(index: number, value: string): void {
     // Handle the continue action for each step
     console.log(`Step ${index + 1} completed with value:`, value);
+    this.cards().forEach((card) => {
+      if (card.id === InvitationSteps.USER_PRINCIPAL_NAME) {
+        card.placeholder = value;
+      }
+    });
 
     if (index + 1 === InvitationSteps.COMPLETED) {
       // Handle completion of all steps
       console.log('All steps completed!');
+      this.resource.currentStep.set(0);
       this.router.navigate([value]);
       this.showSuccessDialog();
     }
 
     if (index + 1 === InvitationSteps.USER_PRINCIPAL_NAME) {
+      // TODO: Remove this and get the email from verify endpoint
+      localStorage.setItem('userPrincipalName', value);
       this.loadingOverlay.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
       this.resource
-        .createExternalAccount(this.partyService.partyId, value)
+        .checkIfEmailIsVerified(this.partyService.partyId, value)
         .pipe(
           tap(() => {
             this.loadingOverlay.close();
-            this.toastService.openSuccessToast('Account invited successfully!');
+            this.toastService.openSuccessToast('Account checked successfully!');
 
             // Move to the next step if not the last one
             if (index < this.cards().length - 1) {
-              this.currentStep = index + 2;
+              this.resource.currentStep.set(index + 1);
             }
           }),
           catchError(() => {
@@ -216,7 +239,70 @@ export class ExternalAccountsPage {
           }),
         )
         .subscribe();
+    } else {
+      this.resource.currentStep.set(index + 1);
     }
+  }
+
+  public ngOnInit(): void {
+    this.loadingOverlay.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
+    this.route.queryParamMap
+      .pipe(
+        map((params) => params.get('email-verification-token')),
+        distinctUntilChanged(),
+        tap((token) => {
+          if (token) {
+            this.emailValidationToken.set(token);
+            // Make step 3 and 4 active if token is present
+            this.resource.currentStep.set(
+              InvitationSteps.EMAIL_VERIFICATION - 1,
+            );
+          }
+        }),
+        switchMap((token) =>
+          token
+            ? this.resource.verifyEmail(this.partyService.partyId, token).pipe(
+                switchMap((res) =>
+                  this.resource
+                    .createExternalAccount(
+                      this.partyService.partyId,
+                      res.email || '',
+                    )
+                    .pipe(
+                      tap(() => {
+                        this.toastService.openSuccessToast(
+                          'External Account invited successfully!',
+                        );
+                      }),
+                    ),
+                ),
+                catchError(() => {
+                  this.toastService.openErrorToast(
+                    'Email verification failed.',
+                  );
+                  return of(null);
+                }),
+              )
+            : of(null),
+        ),
+        finalize(() => this.loadingOverlay.close()),
+      )
+      .subscribe({
+        next: (res) => {
+          this.loadingOverlay.close();
+          if (res !== null) {
+            this.resource.currentStep.set(3);
+
+            // Remove the email-verification-token from the URL silently
+            this.router.navigate([], {
+              relativeTo: this.route,
+              queryParams: { 'email-verification-token': null },
+              queryParamsHandling: 'merge',
+              replaceUrl: true,
+            });
+          }
+        },
+      });
   }
 
   private showSuccessDialog(): void {

@@ -43,6 +43,7 @@ export class MockProfileStatus {
         immsBCEforms: { statusCode: StatusCode.AVAILABLE },
         externalAccounts: { statusCode: StatusCode.AVAILABLE },
         halo: { statusCode: StatusCode.AVAILABLE },
+        ivf: { statusCode: StatusCode.AVAILABLE },
       },
     };
   }

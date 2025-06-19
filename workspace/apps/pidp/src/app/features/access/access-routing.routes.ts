@@ -97,4 +97,9 @@ export const routes: Routes = [
     loadChildren: (): Promise<Routes> =>
       import('./pages/halo/halo-routing.routes').then((m) => m.routes),
   },
+  {
+    path: AccessRoutes.IVF,
+    loadChildren: (): Promise<Routes> =>
+      import('./pages/ivf/ivf-routing.routes').then((m) => m.routes),
+  },
 ];

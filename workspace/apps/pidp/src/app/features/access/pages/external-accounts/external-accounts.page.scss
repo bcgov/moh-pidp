@@ -59,6 +59,7 @@
         padding-right: calc(var(--gap) * 0.9);
         position: relative;
         line-height: 1.5rem;
+        flex-grow: 1;
 
         &__card-title h2 {
           color: pidp.$bcgov-color-text;

@@ -3,13 +3,11 @@
   <div class="content">
     <section class="intro">
       <div class="content-header">
-        <h1>Enrol for Access</h1>
+        <h1>In-Vitro Fertilization (IVF) program</h1>
         <p>
-          The Provincial Attachment System (PAS) is an online tool used by
-          primary care providers throughout the province to indicate their
-          ability to take on new patients. Through PAS, Attachment Coordinators
-          help match patients to family physicians and nurse practitioners in
-          their communities.
+          The IVF portal serves a secure program application interface between
+          participating B.C. fertility clinics and the Ministry of Health for
+          the administration of the publicly funded IVF Program.
         </p>
       </div>
     </section>
@@ -55,8 +53,9 @@
 
           <mat-step [completed]="false">
             <ng-template matStepLabel>
-              <p class="pas-step-label">
-                Invite others to the Provincial Attachment System (PAS)<br />
+              <p class="ivf-step-label">
+                Invite others (such as a fertility specialist) to the IVF
+                portal<br />
                 (Optional)
               </p>
             </ng-template>
@@ -79,18 +78,18 @@
                   </mat-step>
                   <mat-step editable="false" [completed]="false">
                     <ng-template matStepLabel
-                      >Completion and PAS login available</ng-template
+                      >Completion and IVF login available</ng-template
                     >
                   </mat-step>
                 </mat-stepper>
               </div>
               <ng-template #licenced>
                 <p class="guide-information">
-                  Do you work with others who need access to the PAS? For
-                  example, assistants or other members of your Care Team, who
-                  may or may not have a professional license? <br />If you do,
-                  then you can send trusted colleagues a OneHealthID access
-                  invitation by clicking the “Endorsements” button below.
+                  Do you work with others who need access to the IVF portal? For
+                  example, fertility specialists, who may or may not have a
+                  professional license? <br />If you do, then you can send
+                  trusted colleagues a OneHealthID access invitation by clicking
+                  the “Endorsements” button below.
                 </p>
               </ng-template>
               <button
@@ -126,12 +125,11 @@
 
           <mat-step [completed]="false">
             <ng-template matStepLabel>
-              Login to Provincial Attachment System with your BCProvider
+              Login to the IVF portal with your BCProvider
             </ng-template>
             <div>
               <p class="guide-information">
-                Use your newly created BCProvider to login to the Provincial
-                Attachment System
+                Use your newly created BCProvider to login to the IVF portal
               </p>
               <p
                 *ngIf="bcProviderStatusCode === StatusCode.COMPLETED"
@@ -151,10 +149,10 @@
                 mat-flat-button
                 type="button"
                 color="primary"
-                aria-labelledby="navigate-to-pas"
-                [disabled]="pas$ | async"
+                aria-labelledby="navigate-to-ivf"
+                [disabled]="ivf$ | async"
                 (click)="navigateToPath()">
-                Login to Provincial Attachment System with your BCProvider
+                Login to the IVF portal with your BCProvider
               </button>
             </div>
             <div class="stepper-buttons">
@@ -166,40 +164,35 @@
           </mat-step>
         </mat-stepper>
       </div>
-      <div class="pas-button-container">
-        <div class="card pas-button">
-          <img ngSrc="/assets/images/checkup.png" alt="checkup" priority fill />
+      <div class="ivf-button-container">
+        <div class="card ivf-button">
+          <img ngSrc="/assets/images/ivf.png" alt="checkup" priority fill />
           <div class="card-container auth-card">
-            <div class="card-header auth-card-header">
-              <h3><strong>Provincial Attachment System</strong></h3>
-            </div>
             <div class="card-footer auth-card-footer">
               <button
                 mat-flat-button
                 uiPageFooterAction
                 type="submit"
                 color="primary"
-                aria-labelledby="navigate-to-pas"
-                [disabled]="pas$ | async"
+                aria-labelledby="navigate-to-ivf"
+                [disabled]="ivf$ | async"
                 (click)="navigateToPath()">
-                Login
+                <fa-icon [icon]="faArrowRight"></fa-icon>
               </button>
             </div>
           </div>
         </div>
-        <ng-container *ngIf="hasCpn && (pas$ | async)">
-          <div class="pas-button-text">
-            <i>You will need BCProvider credential before logging in.</i>
+        <div class="main-image-text">
+          <div class="main-image-text-title">
+            <mat-icon
+              class="assistance-content__icon"
+              [svgIcon]="'ivf-icon'"></mat-icon
+            ><strong>In-Vitro Fertilization</strong>
           </div>
-        </ng-container>
-        <ng-container *ngIf="!hasCpn && (pas$ | async)">
-          <div class="pas-button-text">
-            <i
-              >You will need BCProvider credential, and an endorsement before
-              logging in.</i
-            >
+          <div class="main-image-text-instructions">
+            Login once the instructions are complete.
           </div>
-        </ng-container>
+        </div>
       </div>
     </section>
   </div>
