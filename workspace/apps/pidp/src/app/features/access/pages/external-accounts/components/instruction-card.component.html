@@ -1,6 +1,7 @@
 <!-- card.component.html -->
 <div
   class="card"
+  uiPidpInjectViewportCss
   [ngClass]="{
     active: isActive,
     completed: isCompleted,
@@ -20,17 +21,24 @@
         <!-- Dropdown Selection -->
         @case ('dropdown') {
           <div class="form-group">
-            <mat-select
-              class="form-control"
-              [disabled]="!isActive"
-              [placeholder]="cardData.placeholder || ''"
-              (selectionChange)="onContinue($event.value)">
-              @for (option of cardData.options; track $index) {
-                <mat-option [value]="option.value">
-                  {{ option.label }}
-                </mat-option>
-              }
-            </mat-select>
+            <mat-form-field class="search-field" appearance="outline">
+              <input
+                type="text"
+                matInput
+                [placeholder]="cardData.placeholder || ''"
+                [formControl]="searchControl"
+                [matAutocomplete]="auto" />
+              <mat-autocomplete
+                #auto="matAutocomplete"
+                (optionSelected)="onContinue($event.option.value)">
+                @for (option of searchResults(); track $index) {
+                  <mat-option [value]="option">
+                    {{ option }}
+                  </mat-option>
+                }
+              </mat-autocomplete>
+              <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
 
             @if (cardData.linkText) {
               <a
@@ -44,7 +52,6 @@
             }
           </div>
         }
-
         <!-- Input Field -->
         @case ('input') {
           <div class="form-group input-container">
@@ -62,6 +69,7 @@
                     inputField.invalid &&
                     (inputField.dirty || inputField.touched)
                 }"
+                [value]="email"
                 [(ngModel)]="email" />
 
               <button

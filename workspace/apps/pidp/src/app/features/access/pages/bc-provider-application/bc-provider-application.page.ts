@@ -34,7 +34,6 @@ import {
   tap,
 } from 'rxjs';
 
-import { faCircleRight } from '@fortawesome/free-regular-svg-icons';
 import {
   faAngleRight,
   faCircleCheck,
@@ -107,7 +106,6 @@ export class BcProviderApplicationPage
 {
   public faCircleCheck = faCircleCheck;
   public faAngleRight = faAngleRight;
-  public faCircleRight = faCircleRight;
   public faLockOpen = faLockOpen;
   public faUser = faUser;
   public faXmark = faXmark;
@@ -267,6 +265,8 @@ export class BcProviderApplicationPage
       );
     } else if (this.previousUrl.split('/').includes(AccessRoutes.HALO)) {
       this.router.navigateByUrl(AccessRoutes.routePath(AccessRoutes.HALO));
+    } else if (this.previousUrl.split('/').includes(AccessRoutes.IVF)) {
+      this.router.navigateByUrl(AccessRoutes.routePath(AccessRoutes.IVF));
     } else {
       this.navigationService.navigateToRoot();
     }

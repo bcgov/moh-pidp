@@ -89,17 +89,20 @@ public partial class BCProviderClient(
             if (response == null)
             {
                 this.logger.LogInviteUserError(userPrincipalName, "Response was null.");
+                return null;
             }
             else if (response.InvitedUser == null)
             {
                 this.logger.LogInviteUserError(userPrincipalName, "InvitedUser was null.");
+                return null;
             }
             else if (response.InvitedUser.Id == null)
             {
                 this.logger.LogInviteUserError(userPrincipalName, "InvitedUser.ObjectId was null.");
+                return null;
             }
 
-            var upn = await this.GetUserPrincipalName(response?.InvitedUser?.Id);
+            var upn = await this.GetUserPrincipalName(response.InvitedUser.Id);
             if (upn == null)
             {
                 this.logger.LogInviteUserError(userPrincipalName, "InvitedUser.UserPrincipalName was null.");
@@ -287,7 +290,7 @@ public partial class BCProviderClient(
         return null;
     }
 
-    private async Task<string?> GetUserPrincipalName(string? objectId)
+    private async Task<string?> GetUserPrincipalName(string objectId)
     {
         var user = await this.client.Users[objectId]
             .GetAsync(request => request.QueryParameters.Select = ["userPrincipalName"]);

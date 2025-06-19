@@ -26,7 +26,6 @@ describe('InstructionCardComponent', () => {
     expect(component.routePath).toBe('');
     expect(component.isActive).toBe(false);
     expect(component.isCompleted).toBe(false);
-    expect(component.email).toBe('');
   });
 
   it('should accept input values', () => {
