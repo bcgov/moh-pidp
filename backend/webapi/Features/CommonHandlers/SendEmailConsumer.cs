@@ -1,0 +1,70 @@
+namespace Pidp.Features.CommonHandlers;
+
+using MassTransit;
+using NodaTime;
+using Pidp.Data;
+using Pidp.Infrastructure.HttpClients.Mail;
+using Pidp.Models;
+
+public class SendEmailConsumer(
+    IClock clock,
+    IChesClient chesClient,
+    ILogger<SendEmailConsumer> logger,
+    PidpDbContext context) : IConsumer<EmailMessage>
+{
+    private readonly IClock clock = clock;
+    private readonly IChesClient chesClient = chesClient;
+    private readonly PidpDbContext context = context;
+    private readonly ILogger<SendEmailConsumer> logger = logger;
+
+    public async Task Consume(ConsumeContext<EmailMessage> context)
+    {
+        var message = context.Message;
+
+        var email = new Email(
+            from: message.From,
+            to: message.To,
+            cc: message.Cc ?? [],
+            subject: message.Subject,
+            body: message.Body,
+            attachments: message.Document != null && message.Filename != null && message.MediaType != null ? new[] { new File(message.Filename, await message.Document.Value, message.MediaType) } : []
+        );
+
+        if (!await this.chesClient.HealthCheckAsync())
+        {
+            this.logger.LogChesClientHealthCheckFailure();
+            throw new InvalidOperationException("Error communicating with CHES API");
+        }
+
+        // Call the CHES API to send the email
+        var msgId = await this.chesClient.SendAsync(email);
+        if (msgId == null)
+        {
+            this.logger.LogSendEmailFailure();
+            throw new InvalidOperationException("Error sending email");
+        }
+
+        await this.CreateEmailLog(email, SendType.Ches, msgId);
+
+    }
+
+    private async Task CreateEmailLog(Email email, string sendType, Guid? msgId = null)
+    {
+        this.context.EmailLogs.Add(new EmailLog(email, sendType, msgId, this.clock.GetCurrentInstant()));
+        await this.context.SaveChangesAsync();
+    }
+
+    private static class SendType
+    {
+        public const string Ches = "CHES";
+    }
+}
+
+internal static partial class SendEmailConsumerLoggingExtensions
+{
+    [LoggerMessage(1, LogLevel.Error, "Error communicating with CHES API.")]
+    public static partial void LogChesClientHealthCheckFailure(this ILogger<SendEmailConsumer> logger);
+
+    [LoggerMessage(2, LogLevel.Error, "Error sending email")]
+    public static partial void LogSendEmailFailure(this ILogger<SendEmailConsumer> logger);
+}
