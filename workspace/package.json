@@ -2,7 +2,6 @@
   "name": "workspace",
   "version": "1.0.0",
   "license": "MIT",
-  "types": "node_modules/keycloak-js/lib/keycloak.d.ts",
   "scripts": {
     "start": "nx serve",
     "build": "nx build",
