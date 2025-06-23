@@ -5,7 +5,8 @@
     "module": "es2022",
     "moduleResolution": "bundler",
     "types": ["jest", "node", "@hirez_io/jest-single"],
-    "target": "es2022"
+    "target": "es2022",
+    "lib": ["ES2021", "dom"]
   },
   "files": ["src/test-setup.ts"],
   "include": ["**/*.test.ts", "**/*.spec.ts", "**/*.d.ts", "jest.config.ts"]
