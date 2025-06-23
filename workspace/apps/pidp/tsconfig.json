@@ -19,6 +19,7 @@
     "noImplicitReturns": true,
     "noPropertyAccessFromIndexSignature": false,
     "noFallthroughCasesInSwitch": true,
+    "moduleResolution": "bundler",
     "paths": {
       "@env/*": ["apps/pidp/src/environment/*"],
       "@test/*": ["apps/pidp/src/test/*"],
