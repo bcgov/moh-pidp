@@ -2,6 +2,7 @@
   "name": "workspace",
   "version": "1.0.0",
   "license": "MIT",
+  "types": "./lib/keycloak.d.ts",
   "scripts": {
     "start": "nx serve",
     "build": "nx build",
@@ -111,4 +112,5 @@
     "classNameTemplate": "{classname}",
     "titleTemplate": "{title}"
   }
+  
 }
