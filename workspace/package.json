@@ -2,7 +2,7 @@
   "name": "workspace",
   "version": "1.0.0",
   "license": "MIT",
-  "types": "./lib/keycloak.d.ts",
+  "types": "node_modules/keycloak-js/lib/keycloak.d.ts",
   "scripts": {
     "start": "nx serve",
     "build": "nx build",
@@ -40,6 +40,7 @@
     "@ngneat/until-destroy": "~9.2.3",
     "@popperjs/core": "~2.11.8",
     "@rspack/core": ">=0.7",
+    "@types/keycloak-js": "^3.4.1",
     "@typescript-eslint/types": "^8.0.0",
     "bootstrap": "~5.3.2",
     "html2canvas": "^1.4.1",
@@ -112,5 +113,4 @@
     "classNameTemplate": "{classname}",
     "titleTemplate": "{title}"
   }
-  
 }
