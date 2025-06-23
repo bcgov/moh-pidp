@@ -34,8 +34,6 @@ import {
   tap,
 } from 'rxjs';
 
-import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { faCircleRight } from '@fortawesome/free-regular-svg-icons';
 import {
   faAngleRight,
   faCircleCheck,
@@ -87,7 +85,6 @@ import { BcProviderApplicationResource } from './bc-provider-application-resourc
   imports: [
     AsyncPipe,
     BreadcrumbComponent,
-    FaIconComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
     MatFormFieldModule,
@@ -102,7 +99,6 @@ import { BcProviderApplicationResource } from './bc-provider-application-resourc
     NgTemplateOutlet,
     ReactiveFormsModule,
     SuccessDialogComponent,
-    FaIconComponent,
   ],
 })
 export class BcProviderApplicationPage
@@ -111,7 +107,6 @@ export class BcProviderApplicationPage
 {
   public faCircleCheck = faCircleCheck;
   public faAngleRight = faAngleRight;
-  public faCircleRight = faCircleRight;
   public faLockOpen = faLockOpen;
   public faUser = faUser;
   public faXmark = faXmark;
@@ -271,6 +266,8 @@ export class BcProviderApplicationPage
       );
     } else if (this.previousUrl.split('/').includes(AccessRoutes.HALO)) {
       this.router.navigateByUrl(AccessRoutes.routePath(AccessRoutes.HALO));
+    } else if (this.previousUrl.split('/').includes(AccessRoutes.IVF)) {
+      this.router.navigateByUrl(AccessRoutes.routePath(AccessRoutes.IVF));
     } else {
       this.navigationService.navigateToRoot();
     }
@@ -296,7 +293,6 @@ export class BcProviderApplicationPage
         );
       }),
       catchError(() => {
-
         this.logger.error('Link Request creation failed');
 
         return of(null);
