@@ -8,7 +8,7 @@
     "lint:all": "nx run-many --all --target=lint",
     "test": "nx test",
     "test:all": "nx run-many --all --target=test",
-    "test:ci": "nx run-many --all --target=test --ci --reporters=default --reporters=jest-junit",
+    "test:ci": "nx run-many --all --target=test --ci --reporters=default --reporters=jest-junit --skipCache",
     "analyze": "nx build pidp --stats-json && webpack-bundle-analyzer dist/apps/pidp/stats.json"
   },
   "resolutions": {
