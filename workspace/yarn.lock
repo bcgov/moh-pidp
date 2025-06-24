@@ -4779,13 +4779,6 @@
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
 
-"@types/keycloak-js@^3.4.1":
-  version "3.4.1"
-  resolved "https://registry.yarnpkg.com/@types/keycloak-js/-/keycloak-js-3.4.1.tgz#32fe1c44ab750aa9e99bb62502ab782444765297"
-  integrity sha512-uWB18tdjmnABDxfS7XQULAy4rrL7mGxy1SN+ijvHJPbcIAhtZWqcJHrcMKruw7Eh4TKnLlK+vmIEmZDtpHFQmA==
-  dependencies:
-    keycloak-js "*"
-
 "@types/luxon@~3.3.8":
   version "3.3.8"
   resolved "https://registry.yarnpkg.com/@types/luxon/-/luxon-3.3.8.tgz#84dbf2d020a9209a272058725e168f21d331a67e"
@@ -10184,10 +10177,10 @@ keycloak-angular@~19.0.0:
   dependencies:
     tslib "^2.3.1"
 
-keycloak-js@*, keycloak-js@^26.0.0:
-  version "26.2.0"
-  resolved "https://registry.yarnpkg.com/keycloak-js/-/keycloak-js-26.2.0.tgz#0924feec13a014563b2e041e255657c24c145714"
-  integrity sha512-CrFcXTN+d6J0V/1v3Zpioys6qHNWE6yUzVVIsCUAmFn9H14GZ0vuYod+lt+SSpMgWGPuneDZBSGBAeLBFuqjsw==
+keycloak-js@26.1.5:
+  version "26.1.5"
+  resolved "https://registry.yarnpkg.com/keycloak-js/-/keycloak-js-26.1.5.tgz#a5b593d754d66c9230ac23bcda054eabd02835e1"
+  integrity sha512-5m8DQceKgBD+iVyy8GYeOiH3Hu12q6azAxhBRabVnZANt5BEi9r/qEXyOeye9yzrjqPF6RlH48TTTYNd1iXZMQ==
 
 keygrip@~1.1.0:
   version "1.1.0"
