@@ -11,12 +11,11 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { OverlayComponent } from '../overlay/overlay.component';
 
 @Component({
-  selector: 'ui-page',
-  templateUrl: './page.component.html',
-  styleUrls: ['./page.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [OverlayComponent, NgIf, ReactiveFormsModule, NgTemplateOutlet],
+    selector: 'ui-page',
+    templateUrl: './page.component.html',
+    styleUrls: ['./page.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [OverlayComponent, NgIf, ReactiveFormsModule, NgTemplateOutlet]
 })
 export class PageComponent {
   /**

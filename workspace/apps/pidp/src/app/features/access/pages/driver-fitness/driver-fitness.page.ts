@@ -32,20 +32,19 @@ import {
 } from './driver-fitness.constants';
 
 @Component({
-  selector: 'app-driver-fitness',
-  templateUrl: './driver-fitness.page.html',
-  styleUrls: ['./driver-fitness.page.scss'],
-  standalone: true,
-  imports: [
-    AnchorDirective,
-    BreadcrumbComponent,
-    EnrolmentErrorComponent,
-    InjectViewportCssClassDirective,
-    MatButtonModule,
-    NgIf,
-    PageFooterActionDirective,
-    RouterLink,
-  ],
+    selector: 'app-driver-fitness',
+    templateUrl: './driver-fitness.page.html',
+    styleUrls: ['./driver-fitness.page.scss'],
+    imports: [
+        AnchorDirective,
+        BreadcrumbComponent,
+        EnrolmentErrorComponent,
+        InjectViewportCssClassDirective,
+        MatButtonModule,
+        NgIf,
+        PageFooterActionDirective,
+        RouterLink,
+    ]
 })
 export class DriverFitnessPage implements OnInit, AfterViewInit {
   public completed: boolean | null;

@@ -55,27 +55,26 @@ import { Credential } from './nav-menu.model';
 import { NavMenuResource } from './nav-menu.resource.service';
 
 @Component({
-  selector: 'app-nav-menu',
-  templateUrl: './nav-menu.html',
-  styleUrls: ['./nav-menu.scss'],
-  standalone: true,
-  imports: [
-    InjectViewportCssClassDirective,
-    LayoutHeaderFooterComponent,
-    MatButtonModule,
-    MatIconModule,
-    MatSidenavModule,
-    MatTooltipModule,
-    NgFor,
-    NgIf,
-    NgTemplateOutlet,
-    RouterLink,
-    RouterLinkActive,
-    RouterOutlet,
-    FaIconComponent,
-    NgClass,
-    FeedbackButtonComponent,
-  ],
+    selector: 'app-nav-menu',
+    templateUrl: './nav-menu.html',
+    styleUrls: ['./nav-menu.scss'],
+    imports: [
+        InjectViewportCssClassDirective,
+        LayoutHeaderFooterComponent,
+        MatButtonModule,
+        MatIconModule,
+        MatSidenavModule,
+        MatTooltipModule,
+        NgFor,
+        NgIf,
+        NgTemplateOutlet,
+        RouterLink,
+        RouterLinkActive,
+        RouterOutlet,
+        FaIconComponent,
+        NgClass,
+        FeedbackButtonComponent,
+    ]
 })
 export class NavMenuComponent implements OnChanges, OnInit, OnDestroy {
   @Input() public alerts: AlertCode[] | null = [];

@@ -25,13 +25,11 @@ import {
   PageComponent,
   PageFooterActionDirective,
   PageFooterComponent,
-  PageHeaderComponent,
   PageSectionComponent,
   PageSectionSubheaderComponent,
   PageSectionSubheaderDescDirective,
   PreferredNameFormComponent,
   ToggleContentChange,
-  ToggleContentComponent,
 } from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
@@ -60,7 +58,6 @@ import { PersonalInformation } from './personal-information.model';
   templateUrl: './personal-information.page.html',
   styleUrls: ['./personal-information.page.scss'],
   viewProviders: [PersonalInformationResource],
-  standalone: true,
   imports: [
     AsyncPipe,
     BreadcrumbComponent,
@@ -75,12 +72,10 @@ import { PersonalInformation } from './personal-information.model';
     PageComponent,
     PageFooterActionDirective,
     PageFooterComponent,
-    PageHeaderComponent,
     PageSectionComponent,
     PageSectionSubheaderComponent,
     PageSectionSubheaderDescDirective,
     PreferredNameFormComponent,
-    ToggleContentComponent,
     UserInfoComponent,
   ],
 })

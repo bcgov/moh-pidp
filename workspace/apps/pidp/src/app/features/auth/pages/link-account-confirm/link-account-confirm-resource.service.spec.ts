@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { provideAutoSpy } from 'jest-auto-spies';
-import { KeycloakService } from 'keycloak-angular';
+import Keycloak from 'keycloak-js';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
@@ -19,7 +19,7 @@ describe('LinkAccountConfirmResource', () => {
           useValue: APP_DI_CONFIG,
         },
         provideAutoSpy(ApiHttpClient),
-        provideAutoSpy(KeycloakService),
+        provideAutoSpy(Keycloak),
       ],
     });
     service = TestBed.inject(LinkAccountConfirmResource);

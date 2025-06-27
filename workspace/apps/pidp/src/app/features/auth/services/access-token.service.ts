@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
-import { Observable, from, map } from 'rxjs';
+import { Observable, from, map, of } from 'rxjs';
 
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { KeycloakService } from 'keycloak-angular';
+import Keycloak, { KeycloakTokenParsed } from 'keycloak-js';
 
 import { AccessTokenParsed } from '../models/access-token-parsed.model';
 import { BrokerProfile } from '../models/broker-profile.model';
@@ -11,7 +11,7 @@ import { BrokerProfile } from '../models/broker-profile.model';
 export interface IAccessTokenService {
   token(): Observable<string>;
   isTokenExpired(): boolean;
-  decodeToken(): Observable<AccessTokenParsed | null>;
+  decodeToken(): Observable<KeycloakTokenParsed | null>;
   roles(): string[];
   clearToken(): void;
 }
@@ -21,17 +21,21 @@ export interface IAccessTokenService {
 })
 export class AccessTokenService implements IAccessTokenService {
   private readonly jwtHelper: JwtHelperService;
+  private readonly keycloak = inject(Keycloak);
 
-  public constructor(private readonly keycloakService: KeycloakService) {
+  public constructor() {
     this.jwtHelper = new JwtHelperService();
   }
 
   public token(): Observable<string> {
-    return from(this.keycloakService.getToken());
+    if (!this.keycloak.token) {
+      throw new Error('Keycloak token is not available');
+    }
+    return of(this.keycloak.token);
   }
 
   public isTokenExpired(): boolean {
-    return this.keycloakService.isTokenExpired();
+    return this.keycloak.isTokenExpired();
   }
 
   public decodeToken(): Observable<AccessTokenParsed> {
@@ -46,17 +50,15 @@ export class AccessTokenService implements IAccessTokenService {
     );
   }
 
-  public loadBrokerProfile(forceReload?: boolean): Observable<BrokerProfile> {
-    return from(
-      this.keycloakService.loadUserProfile(forceReload),
-    ) as Observable<BrokerProfile>;
+  public loadBrokerProfile(): Observable<BrokerProfile> {
+    return from(this.keycloak.loadUserProfile()) as Observable<BrokerProfile>;
   }
 
   public roles(): string[] {
-    return this.keycloakService.getUserRoles();
+    return this.keycloak.realmAccess?.roles ?? [];
   }
 
   public clearToken(): void {
-    this.keycloakService.clearToken();
+    this.keycloak.clearToken();
   }
 }
