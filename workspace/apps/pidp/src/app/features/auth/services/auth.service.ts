@@ -20,9 +20,8 @@ export class AuthService implements IAuthService {
     return from(this.keycloak.login(options));
   }
 
-  public isLoggedIn(): Observable<boolean | undefined> {
-    // TODO is authenticated a direct replacement for isLoggedIn?
-    return of(this.keycloak.authenticated);
+  public isLoggedIn(): Observable<boolean> {
+    return of(this.keycloak?.authenticated ?? false);
   }
 
   public logout(redirectUri: string): Observable<void> {
