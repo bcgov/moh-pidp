@@ -39,7 +39,7 @@ export interface CoreOptions {
 // create unique injection token for the guard
 export const CORE_GUARD = new InjectionToken<string>('CORE_GUARD');
 
-const localhostCondition =
+const bearerTokenCondition =
   createInterceptorCondition<IncludeBearerTokenCondition>({
     urlPattern: /^(.+)?$/i,
   });
@@ -53,7 +53,7 @@ export function provideCore(
     { provide: CORE_GUARD, useValue: 'CORE_GUARD' },
     {
       provide: INCLUDE_BEARER_TOKEN_INTERCEPTOR_CONFIG,
-      useValue: [localhostCondition],
+      useValue: [bearerTokenCondition],
     },
     provideAnimations(),
     provideNgxProgressBar(),
