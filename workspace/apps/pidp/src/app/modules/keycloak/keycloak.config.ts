@@ -15,7 +15,12 @@ export const provideKeycloakAngular = (): EnvironmentProviders =>
   provideKeycloak({
     config: environment.keycloakConfig.config,
     initOptions: environment.keycloakConfig.initOptions,
-    features: [withAutoRefreshToken({ onInactivityTimeout: 'none' })],
+    features: [
+      withAutoRefreshToken({
+        onInactivityTimeout: 'login',
+        sessionTimeout: 5000,
+      }),
+    ],
     providers: [
       importProvidersFrom(PermissionsService),
       provideLookup(),
