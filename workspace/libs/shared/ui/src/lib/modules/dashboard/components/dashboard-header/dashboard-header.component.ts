@@ -20,21 +20,20 @@ import { ViewportService } from '../../../../services/viewport.service';
 import { DashboardHeaderTheme } from '../../models/dashboard-header-config.model';
 
 @Component({
-  selector: 'ui-dashboard-header',
-  templateUrl: './dashboard-header.component.html',
-  styleUrls: ['./dashboard-header.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    MatToolbarModule,
-    NgIf,
-    MatButtonModule,
-    MatIconModule,
-    BcGovLogoComponent,
-    MatTooltipModule,
-    NgProgressComponent,
-    AsyncPipe,
-  ],
+    selector: 'ui-dashboard-header',
+    templateUrl: './dashboard-header.component.html',
+    styleUrls: ['./dashboard-header.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        MatToolbarModule,
+        NgIf,
+        MatButtonModule,
+        MatIconModule,
+        BcGovLogoComponent,
+        MatTooltipModule,
+        NgProgressComponent,
+        AsyncPipe,
+    ]
 })
 export class DashboardHeaderComponent {
   /**
