@@ -10,6 +10,11 @@
     <ProjectReference Include="..\webapi\pidp.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Services\CredentialDeletionService\CredentialsToDelete">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource >
+  </ItemGroup>
+  <ItemGroup>
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
