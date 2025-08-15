@@ -1,4 +1,5 @@
 export interface User {
-  firstName: string;
+  // firstName is now optional in BCSC
+  firstName?: string;
   lastName: string;
 }
