@@ -38,7 +38,8 @@ public partial class BCProviderClient(
 
     public async Task<User?> CreateBCProviderAccount(NewUserRepresentation userRepresentation)
     {
-        var userPrincipal = await this.CreateUniqueUserPrincipalName(userRepresentation);
+        var firstName = userRepresentation.FirstName;
+        var userPrincipal = await this.CreateUniqueUserPrincipalName(firstName, userRepresentation.LastName);
         if (userPrincipal == null)
         {
             return null;
@@ -47,9 +48,9 @@ public partial class BCProviderClient(
         var bcProviderAccount = new User()
         {
             AccountEnabled = true,
-            DisplayName = $"{userRepresentation.FirstName} {userRepresentation.LastName}", // Required
-            GivenName = userRepresentation.FirstName,
-            MailNickname = this.RemoveMailNicknameInvalidCharacters($"{userRepresentation.FirstName}{userRepresentation.LastName}"), // Required
+            DisplayName = $"{firstName} {userRepresentation.LastName}", // Required
+            GivenName = firstName,
+            MailNickname = this.RemoveMailNicknameInvalidCharacters($"{firstName}{userRepresentation.LastName}"), // Required
             Surname = userRepresentation.LastName,
             UserPrincipalName = userPrincipal,
             PasswordProfile = new PasswordProfile
@@ -271,9 +272,9 @@ public partial class BCProviderClient(
         }
     }
 
-    private async Task<string?> CreateUniqueUserPrincipalName(NewUserRepresentation user)
+    private async Task<string?> CreateUniqueUserPrincipalName(string? firstName, string lastName)
     {
-        var joinedFullName = $"{user.FirstName}.{user.LastName}";
+        var joinedFullName = string.IsNullOrEmpty(firstName) ? lastName : $"{firstName}.{lastName}";
         var validCharacters = this.RemoveUpnInvalidCharacters(joinedFullName);
 
         for (var i = 1; i <= 100; i++)

@@ -150,7 +150,7 @@ public class BCProviderCreate
             return DomainResult.Success(createdUser.UserPrincipalName);
         }
 
-        private async Task<Guid?> CreateKeycloakUser(string firstName, string lastName, string userPrincipalName, string email, string phone)
+        private async Task<Guid?> CreateKeycloakUser(string? firstName, string lastName, string userPrincipalName, string email, string phone)
         {
             var newUser = new UserRepresentation
             {

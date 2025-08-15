@@ -6,7 +6,7 @@ public class NewUserRepresentation
 {
     public string? Cpn { get; set; }
     public IEnumerable<string> EndorserData { get; set; } = [];
-    public string FirstName { get; set; } = string.Empty;
+    public string? FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public string Hpdid { get; set; } = string.Empty;
     public bool IsMd { get; set; }
