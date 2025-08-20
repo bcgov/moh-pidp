@@ -38,8 +38,7 @@ public partial class BCProviderClient(
 
     public async Task<User?> CreateBCProviderAccount(NewUserRepresentation userRepresentation)
     {
-        var firstName = userRepresentation.FirstName;
-        var userPrincipal = await this.CreateUniqueUserPrincipalName(firstName, userRepresentation.LastName);
+        var userPrincipal = await this.CreateUniqueUserPrincipalName(userRepresentation.FirstName, userRepresentation.LastName);
         if (userPrincipal == null)
         {
             return null;
@@ -48,9 +47,9 @@ public partial class BCProviderClient(
         var bcProviderAccount = new User()
         {
             AccountEnabled = true,
-            DisplayName = $"{firstName} {userRepresentation.LastName}", // Required
-            GivenName = firstName,
-            MailNickname = this.RemoveMailNicknameInvalidCharacters($"{firstName}{userRepresentation.LastName}"), // Required
+            DisplayName = $"{userRepresentation.FirstName} {userRepresentation.LastName}", // Required
+            GivenName = userRepresentation.FirstName,
+            MailNickname = this.RemoveMailNicknameInvalidCharacters($"{userRepresentation.FirstName}{userRepresentation.LastName}"), // Required
             Surname = userRepresentation.LastName,
             UserPrincipalName = userPrincipal,
             PasswordProfile = new PasswordProfile
