@@ -51,7 +51,7 @@ public class Create
             var party = new Party
             {
                 Birthdate = command.Birthdate,
-                FirstName = null,
+                FirstName = command.FirstName,
                 LastName = command.LastName,
             };
             party.Credentials.Add(new Credential
