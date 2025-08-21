@@ -1,3 +1,5 @@
+@use 'pidp-variables' as pidp;
+
 .viewport-all {
   padding: 1.25rem 0.75rem;
 
@@ -26,5 +28,34 @@
   h1 {
     font-size: 40px;
     line-height: 1.1;
+  }
+}
+
+.reach-out {
+  margin-top: 50px;
+}
+
+.link-container {
+  display: flex;
+  flex-direction: column;
+  width: 20%;
+  justify-content: flex-start;
+  align-items: center;
+  text-align: center;
+  height: 9rem;
+  padding: 2rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+  border: 1px solid #ccc;
+  background: #fff;
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  color: pidp.$bcgov-color-primary;
+  font-size: 1rem;
+  font-weight: 400;
+  text-decoration-line: underline;
+
+  .icon-question {
+    width: 2.5rem;
+    height: 2.5rem;
   }
 }

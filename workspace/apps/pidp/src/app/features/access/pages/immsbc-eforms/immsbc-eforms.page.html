@@ -28,9 +28,9 @@
       <ui-page-section-subheader
         icon="assignment"
         heading="Immunization Entry eForm">
-        <ng-container uiPageSectionSubheaderDesc>
+        <!-- <ng-container uiPageSectionSubheaderDesc>
           {{ completed ? 'Enrolment Complete.' : 'Collection Notice.' }}
-        </ng-container>
+        </ng-container> -->
       </ui-page-section-subheader>
     </ui-page-section>
 
@@ -59,13 +59,39 @@
     </ng-container>
 
     <ng-template #notCompleted>
-      <ui-page-section>
+      <!-- <ui-page-section>
         <p
           class="collection-notice"
           [innerHtml]="collectionNotice | safe: 'html'"></p>
+      </ui-page-section> -->
+      <ui-page-section>
+        <section class="example-section" [formGroup]="questionnaire">
+          <h4>Are you currently working with a Health Authority?</h4>
+          <p>
+            <mat-checkbox formControlName="healthAuth">Yes</mat-checkbox>
+            <mat-checkbox formControlName="healthAuthNo">No</mat-checkbox>
+          </p>
+          <h4>Do you have a Health Authority work email?</h4>
+          <p>
+            <mat-checkbox formControlName="workEmail">Yes</mat-checkbox>
+            <mat-checkbox formControlName="workEmailNo">No</mat-checkbox>
+          </p>
+        </section>
+        <section class="reach-out">
+          <p>
+            Please reach out to the eForms Enrollment team to request access.
+          </p>
+        </section>
+        <div class="link-container">
+          <img
+            class="icon-question"
+            src="/assets/images/icon-question.svg"
+            alt="Illustration of a call icon" />
+          eForms Support
+        </div>
       </ui-page-section>
     </ng-template>
-
+    <!--
     <ui-page-footer [mode]="'reverse'">
       <button
         *ngIf="!completed"
@@ -76,6 +102,6 @@
         (click)="onRequestAccess()">
         Next
       </button>
-    </ui-page-footer>
+    </ui-page-footer> -->
   </ui-page>
 </div>

@@ -1,7 +1,9 @@
 import { NgIf } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, inject } from '@angular/core';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { catchError, noop, of, tap } from 'rxjs';
@@ -56,6 +58,9 @@ import {
     PageSectionSubheaderComponent,
     PageSectionSubheaderDescDirective,
     SafePipe,
+    FormsModule,
+    ReactiveFormsModule,
+    MatCheckboxModule,
   ],
 })
 export class ImmsBCEformsPage implements OnInit, AfterViewInit {
@@ -75,6 +80,7 @@ export class ImmsBCEformsPage implements OnInit, AfterViewInit {
     },
     { title: 'Immunization Entry eForm', path: '' },
   ];
+  private readonly _formBuilder = inject(FormBuilder);
 
   public constructor(
     private readonly route: ActivatedRoute,
@@ -94,6 +100,13 @@ export class ImmsBCEformsPage implements OnInit, AfterViewInit {
     this.immsBCEformsSupportEmail = immsBCEformsSupportEmail;
     this.enrolmentError = false;
   }
+
+  public readonly questionnaire = this._formBuilder.group({
+    healthAuth: [false],
+    healthAuthNo: [false],
+    workEmail: [false],
+    workEmailNo: [false],
+  });
 
   public onRequestAccess(): void {
     this.resource
