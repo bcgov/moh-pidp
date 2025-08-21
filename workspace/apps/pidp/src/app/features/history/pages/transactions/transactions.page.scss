@@ -1,3 +1,5 @@
+@use 'pidp-variables' as pidp;
+
 .viewport-all {
   &.transaction-page-container {
     padding: 1.25rem 0.75rem;
@@ -69,7 +71,7 @@
   }
 
   .back-to-top:hover {
-    background-color: #003366;
+    background-color: pidp.$bcgov-color-primary;
   }
 }
 

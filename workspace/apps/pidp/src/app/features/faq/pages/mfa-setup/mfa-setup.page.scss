@@ -1,3 +1,5 @@
+@use 'pidp-variables' as pidp;
+
 h1 {
   margin-bottom: 0px;
   color: #036;
@@ -62,7 +64,7 @@ h2 {
   }
 
   .back-to-top:hover {
-    background-color: #003366;
+    background-color: pidp.$bcgov-color-primary;
   }
 }
 

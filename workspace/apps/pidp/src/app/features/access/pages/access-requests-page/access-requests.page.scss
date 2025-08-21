@@ -40,7 +40,7 @@
 
 .container.viewport-all {
   .content-header h1 {
-    color: #003366;
+    color: pidp.$bcgov-color-primary;
     font-size: 50px;
     font-weight: 700;
     word-wrap: break-word;
@@ -119,7 +119,7 @@
   }
 
   .back-to-top:hover {
-    background-color: #003366;
+    background-color: pidp.$bcgov-color-primary;
   }
 }
 

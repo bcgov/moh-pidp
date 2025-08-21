@@ -1,3 +1,5 @@
+@use 'pidp-variables' as pidp;
+
 ul {
   list-style-type: none;
   padding-left: 0;
@@ -7,7 +9,7 @@ ul {
 .viewport-all {
   padding: 1.25rem 0.75rem 0 0.75rem;
   .content-header h1 {
-    color: #003366;
+    color: pidp.$bcgov-color-primary;
     font-size: 50px;
     font-weight: 700;
     word-wrap: break-word;
