@@ -35,7 +35,7 @@ p {
         margin-bottom: 0.5rem;
       }
       & h1 {
-        color: #036;
+        color: pidp.$bcgov-color-primary;
         font-size: 3.125rem;
         font-weight: 700;
         margin-bottom: 0;
@@ -94,7 +94,7 @@ p {
       margin-top: 2rem;
       button {
         border-radius: 0.25rem;
-        border: 2px solid #036;
+        border: 2px solid pidp.$bcgov-color-primary;
         font-size: 1rem;
         letter-spacing: 0.0625rem;
       }
@@ -162,7 +162,7 @@ p {
         margin-bottom: 0.5rem;
       }
       & h1 {
-        color: #036;
+        color: pidp.$bcgov-color-primary;
         font-size: 2rem;
         font-weight: 700;
         margin-bottom: 0;

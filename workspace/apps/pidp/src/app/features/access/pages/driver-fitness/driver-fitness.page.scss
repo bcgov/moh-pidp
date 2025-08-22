@@ -1,4 +1,5 @@
 @use 'pidp-variables' as pidp;
+
 .viewport-all {
   --header-padding: 30px;
   --button-margin-right: 15px;
@@ -33,7 +34,7 @@ span {
 .viewport-all {
   &.box {
     h1 {
-      color: #036;
+      color: pidp.$bcgov-color-primary;
       font-size: 3.125rem;
       font-weight: 700;
       margin-bottom: 0;

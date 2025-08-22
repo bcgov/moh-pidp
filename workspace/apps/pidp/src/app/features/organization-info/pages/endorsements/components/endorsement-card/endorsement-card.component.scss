@@ -45,7 +45,7 @@ p {
     }
     & h3 {
       margin: var(--gap) var(--gap) var(--gap) 0;
-      color: #036;
+      color: pidp.$bcgov-color-primary;
       font-size: 1.125rem;
       font-weight: 700;
       // Ensure long email addresses will wrap instead of making the card wider.
@@ -105,10 +105,10 @@ p {
 
     & button.cancel,
     & button.approve {
-      color: #036;
+      color: pidp.$bcgov-color-primary;
       gap: var(--gap);
       border-radius: 0.25rem;
-      border: 2px solid #036;
+      border: 2px solid pidp.$bcgov-color-primary;
       background: #fff;
       max-width: 8.25rem;
       font-size: 1rem;

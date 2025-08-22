@@ -57,7 +57,7 @@
   --header-margin: unset;
   --avatar-size: 4rem;
   --content-padding: var(--gap);
-  ul li{
+  ul li {
     list-style-type: decimal;
   }
 }
@@ -84,7 +84,7 @@
   & header {
     margin: var(--header-margin);
     & h1 {
-      color: #036;
+      color: pidp.$bcgov-color-primary;
       font-size: 3.125rem;
       font-weight: 700;
     }
@@ -248,7 +248,7 @@
             }
 
             & .button-box-btn {
-              color: #036;
+              color: pidp.$bcgov-color-primary;
 
               & .reset-mfa-button {
                 display: flex;

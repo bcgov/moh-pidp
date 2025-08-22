@@ -231,11 +231,11 @@
     align-items: center;
     gap: 0.625rem;
     border-radius: 0.25rem;
-    color: #036;
+    color: pidp.$bcgov-color-primary;
     font-size: 1.125rem;
     font-weight: 700;
     letter-spacing: 0.0625rem;
-    border: 2px solid #036;
+    border: 2px solid pidp.$bcgov-color-primary;
     cursor: pointer;
     background: var(--Colours-primary, #fff);
     fa-icon {

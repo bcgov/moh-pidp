@@ -65,7 +65,7 @@ h1 {
   }
 
   & .content-header-box {
-    background-color: #036;
+    background-color: pidp.$bcgov-color-primary;
     min-height: var(--header-height);
     display: flex;
 
@@ -189,7 +189,7 @@ h1 {
   width: 115px;
   float: right;
   border-radius: 4px;
-  border: 2px solid #036 !important;
+  border: 2px solid pidp.$bcgov-color-primary !important;
   background: #fff;
   margin-top: 5px;
   margin-left: 2rem;
