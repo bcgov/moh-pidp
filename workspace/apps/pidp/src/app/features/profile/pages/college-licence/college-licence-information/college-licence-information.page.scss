@@ -10,13 +10,13 @@ $darkgrey: pidp.$bcgov-color-text;
   }
 
   .breadcrumb-top {
-    padding-bottom: 0px !important;
+    padding-bottom: 0 !important;
   }
   .breadcrumb ul {
     list-style: none;
     top: 0;
     right: 0;
-    padding: 0px;
+    padding: 0;
   }
 
   .breadcrumb fa-icon {
@@ -55,7 +55,7 @@ $darkgrey: pidp.$bcgov-color-text;
       width: 75px;
     }
   }
-  padding: 1.25rem 0.75rem 0px 0px;
+  padding: 1.25rem 0.75rem 0 0;
 
   .card-header-icon {
     display: flex;
@@ -98,7 +98,7 @@ $darkgrey: pidp.$bcgov-color-text;
       border-radius: 1.25rem;
       border: 1px solid #ccc;
       background: #fff;
-      box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
       width: 37rem;
       padding: 1.25rem;
 
@@ -157,8 +157,8 @@ $darkgrey: pidp.$bcgov-color-text;
 .viewport-small {
   display: flex;
   flex-direction: column;
-  padding-bottom: 0px;
-  padding-left: 0px !important;
+  padding-bottom: 0;
+  padding-left: 0 !important;
   & .header {
     padding: 6px 20px;
   }
@@ -181,9 +181,9 @@ $darkgrey: pidp.$bcgov-color-text;
   display: flex;
   flex-direction: column;
   max-width: 640px;
-  padding-left: 0px !important;
-  padding-bottom: 0px;
-  padding-top: 0px !important;
+  padding-left: 0 !important;
+  padding-bottom: 0;
+  padding-top: 0 !important;
   & .header {
     padding: 6px 20px;
   }
@@ -197,7 +197,7 @@ $darkgrey: pidp.$bcgov-color-text;
     margin-left: 15px;
     font-weight: 600;
     font-size: 25px !important;
-    padding-bottom: 0px !important;
+    padding-bottom: 0 !important;
   }
 
   & .college-licence-text {
@@ -205,7 +205,7 @@ $darkgrey: pidp.$bcgov-color-text;
   }
 
   & .section-top {
-    padding-top: 0px;
+    padding-top: 0;
   }
 
   & .info-box {

@@ -253,7 +253,7 @@ h1 {
   text-decoration: none;
   display: block;
   text-align: center;
-  padding: 5px 55px 0px 0px;
+  padding: 5px 55px 0 0;
   float: left;
   color: #313132;
   font-size: 30px;
@@ -264,7 +264,7 @@ h1 {
 .viewport-small {
   overflow: hidden;
   & .span-text {
-    padding: 12px 25px 0px 0px;
+    padding: 12px 25px 0 0;
     font-size: 25px;
   }
   & .content-menu {

@@ -54,7 +54,7 @@
         border-radius: 1.25rem;
         border: 1px solid #ccc;
         background: #fff;
-        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
         width: auto;
         height: 11.875rem;
         padding: 1.25rem;
@@ -110,7 +110,7 @@
         border-radius: 1.25rem;
         border: 1px solid #ccc;
         background-color: #f2f2f2;
-        box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+        box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
 
         .instructions-container {
           padding: 1.88rem 0.5rem 0 1.88rem;
@@ -230,7 +230,7 @@
         }
 
         div.auth-card {
-          padding: 20px 0px 55px 50px;
+          padding: 20px 0 55px 50px;
         }
 
         .card-container {

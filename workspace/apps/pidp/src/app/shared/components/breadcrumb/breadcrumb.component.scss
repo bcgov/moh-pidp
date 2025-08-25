@@ -4,7 +4,7 @@
     ul {
       display: flex;
       align-items: center;
-      padding: 0px;
+      padding: 0;
     }
 
     fa-icon {
@@ -35,7 +35,7 @@
 
 .viewport-small {
   .breadcrumb {
-    margin: 0px 20px 0px 5px;
+    margin: 0 20px 0 5px;
   }
   fa-icon {
     padding-left: 0.6rem;
@@ -50,7 +50,7 @@
 
 .viewport-xsmall {
   .breadcrumb {
-    margin: 0px 20px 0px 2px;
+    margin: 0 20px 0 2px;
 
     img {
       margin-right: 2px;
