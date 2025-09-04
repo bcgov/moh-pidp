@@ -59,6 +59,7 @@ public class ImmsBCEforms
                     UserId = party.PrimaryUserId,
                     party.Email,
                     party.DisplayFirstName,
+                    party.DisplayLastName,
                     party.Cpn,
                 })
                 .SingleAsync();
@@ -109,19 +110,21 @@ public class ImmsBCEforms
 
             await this.context.SaveChangesAsync();
 
-            await this.SendConfirmationEmailAsync(dto.Email, dto.DisplayFirstName);
+            var recipientName = dto.DisplayFirstName ?? dto.DisplayLastName;
+
+            await this.SendConfirmationEmailAsync(dto.Email, recipientName);
 
             return DomainResult.Success();
         }
 
-        private async Task SendConfirmationEmailAsync(string partyEmail, string firstName)
+        private async Task SendConfirmationEmailAsync(string partyEmail, string recipientName)
         {
             var link = $"<a href=\"https://www.eforms.healthbc.org/login\" target=\"_blank\" rel=\"noopener noreferrer\">link</a>";
             var email = new Email(
                 from: EmailService.PidpEmail,
                 to: partyEmail,
                 subject: "Immunization Entry eForm Enrolment Confirmation",
-                body: $"Hi {firstName},<br><br>You will need to visit this {link} each time you want to submit an eForm. It may be helpful to bookmark this {link} for future use."
+                body: $"Hi {recipientName},<br><br>You will need to visit this {link} each time you want to submit an eForm. It may be helpful to bookmark this {link} for future use."
             );
             await this.emailService.SendAsync(email);
         }

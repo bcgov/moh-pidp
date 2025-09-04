@@ -26,7 +26,7 @@ public class Party : BaseAuditable
 
     public LocalDate? Birthdate { get; set; }
 
-    public string FirstName { get; set; } = string.Empty;
+    public string? FirstName { get; set; }
 
     public string LastName { get; set; } = string.Empty;
 
@@ -63,7 +63,7 @@ public class Party : BaseAuditable
     /// The preferred first name if provided otherwise the first name.
     /// </summary>
     [Projectable]
-    public string DisplayFirstName => this.PreferredFirstName ?? this.FirstName;
+    public string? DisplayFirstName => this.PreferredFirstName ?? this.FirstName;
 
     /// <summary>
     /// Last name to display.
