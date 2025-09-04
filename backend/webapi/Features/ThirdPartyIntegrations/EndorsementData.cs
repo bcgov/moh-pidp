@@ -19,7 +19,7 @@ public class EndorsementData
     public class Model
     {
         public string? Hpdid { get; set; }
-        public string FirstName { get; set; } = string.Empty;
+        public string? FirstName { get; set; }
         public string LastName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public List<LicenceInformation> Licences { get; set; } = [];
