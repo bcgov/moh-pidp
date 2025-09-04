@@ -38,7 +38,7 @@ public partial class BCProviderClient(
 
     public async Task<User?> CreateBCProviderAccount(NewUserRepresentation userRepresentation)
     {
-        var userPrincipal = await this.CreateUniqueUserPrincipalName(userRepresentation);
+        var userPrincipal = await this.CreateUniqueUserPrincipalName(userRepresentation.FirstName, userRepresentation.LastName);
         if (userPrincipal == null)
         {
             return null;
@@ -271,9 +271,9 @@ public partial class BCProviderClient(
         }
     }
 
-    private async Task<string?> CreateUniqueUserPrincipalName(NewUserRepresentation user)
+    private async Task<string?> CreateUniqueUserPrincipalName(string? firstName, string lastName)
     {
-        var joinedFullName = $"{user.FirstName}.{user.LastName}";
+        var joinedFullName = string.IsNullOrEmpty(firstName) ? lastName : $"{firstName}.{lastName}";
         var validCharacters = this.RemoveUpnInvalidCharacters(joinedFullName);
 
         for (var i = 1; i <= 100; i++)

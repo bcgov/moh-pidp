@@ -20,7 +20,7 @@ public class Create
         public string IdentityProvider { get; set; } = string.Empty;
         public string IdpId { get; set; } = string.Empty;
         public LocalDate? Birthdate { get; set; }
-        public string FirstName { get; set; } = string.Empty;
+        public string? FirstName { get; set; }
         public string LastName { get; set; } = string.Empty;
     }
 
@@ -34,7 +34,7 @@ public class Create
             this.RuleFor(x => x.IdentityProvider).NotEmpty().Equal(user.GetIdentityProvider())
                 .NotEqual(IdentityProviders.BCProvider).WithMessage("Bc Provider cannot be used to create a Party");
             this.RuleFor(x => x.IdpId).NotEmpty().Equal(user.GetIdpId());
-            this.RuleFor(x => x.FirstName).NotEmpty().MatchesUserClaim(user, Claims.GivenName);
+            this.RuleFor(x => x.FirstName).MatchesUserClaim(user, Claims.GivenName);
             this.RuleFor(x => x.LastName).NotEmpty().MatchesUserClaim(user, Claims.FamilyName);
 
             this.When(x => x.IdentityProvider == IdentityProviders.BCServicesCard, () => this.RuleFor(x => x.Birthdate).NotEmpty().Equal(user?.GetBirthdate()).WithMessage("Must match the \"birthdate\" Claim on the current User"))

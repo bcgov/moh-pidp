@@ -6,7 +6,7 @@ export class PhsaUser implements User {
   public readonly identityProvider: IdentityProvider;
   public userId: string;
   public idpId: string;
-  public firstName: string;
+  public firstName: string | undefined;
   public lastName: string;
   public email: string;
 
