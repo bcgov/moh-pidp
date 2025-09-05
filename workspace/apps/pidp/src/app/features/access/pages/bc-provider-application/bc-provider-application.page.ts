@@ -81,7 +81,6 @@ import { BcProviderApplicationResource } from './bc-provider-application-resourc
   selector: 'app-bc-provider-application',
   templateUrl: './bc-provider-application.page.html',
   styleUrls: ['./bc-provider-application.page.scss'],
-  standalone: true,
   imports: [
     AsyncPipe,
     BreadcrumbComponent,

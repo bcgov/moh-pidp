@@ -36,27 +36,26 @@ import {
 } from './immsbc-eforms.constants';
 
 @Component({
-  selector: 'app-immsbc-eforms',
-  templateUrl: './immsbc-eforms.page.html',
-  styleUrls: ['./immsbc-eforms.page.scss'],
-  standalone: true,
-  imports: [
-    AlertComponent,
-    AlertContentDirective,
-    AnchorDirective,
-    BreadcrumbComponent,
-    EnrolmentErrorComponent,
-    InjectViewportCssClassDirective,
-    MatButtonModule,
-    NgIf,
-    PageComponent,
-    PageFooterActionDirective,
-    PageFooterComponent,
-    PageSectionComponent,
-    PageSectionSubheaderComponent,
-    PageSectionSubheaderDescDirective,
-    SafePipe,
-  ],
+    selector: 'app-immsbc-eforms',
+    templateUrl: './immsbc-eforms.page.html',
+    styleUrls: ['./immsbc-eforms.page.scss'],
+    imports: [
+        AlertComponent,
+        AlertContentDirective,
+        AnchorDirective,
+        BreadcrumbComponent,
+        EnrolmentErrorComponent,
+        InjectViewportCssClassDirective,
+        MatButtonModule,
+        NgIf,
+        PageComponent,
+        PageFooterActionDirective,
+        PageFooterComponent,
+        PageSectionComponent,
+        PageSectionSubheaderComponent,
+        PageSectionSubheaderDescDirective,
+        SafePipe,
+    ]
 })
 export class ImmsBCEformsPage implements OnInit, AfterViewInit {
   public title: string;

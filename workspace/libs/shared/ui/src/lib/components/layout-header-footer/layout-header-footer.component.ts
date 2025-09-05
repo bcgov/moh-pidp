@@ -7,11 +7,10 @@ import { PidpViewport, ViewportService } from '../../services';
 import { AnchorDirective } from '../anchor/anchor.directive';
 
 @Component({
-  selector: 'ui-layout-header-footer',
-  templateUrl: './layout-header-footer.component.html',
-  styleUrls: ['./layout-header-footer.component.scss'],
-  standalone: true,
-  imports: [AnchorDirective, InjectViewportCssClassDirective, NgIf],
+    selector: 'ui-layout-header-footer',
+    templateUrl: './layout-header-footer.component.html',
+    styleUrls: ['./layout-header-footer.component.scss'],
+    imports: [AnchorDirective, InjectViewportCssClassDirective, NgIf]
 })
 export class LayoutHeaderFooterComponent {
   @Input() public emailSupport!: string;

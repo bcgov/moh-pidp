@@ -38,28 +38,27 @@ import { MsTeamsPrivacyOfficerResource } from './ms-teams-privacy-officer-resour
 import { msTeamsSupportEmail } from './ms-teams.constants';
 
 @Component({
-  selector: 'app-ms-teams',
-  templateUrl: './ms-teams-privacy-officer.page.html',
-  styleUrls: ['./ms-teams-privacy-officer.page.scss'],
-  standalone: true,
-  imports: [
-    AddressFormComponent,
-    AnchorDirective,
-    BreadcrumbComponent,
-    EnrolmentErrorComponent,
-    InjectViewportCssClassDirective,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    NgIf,
-    NgSwitch,
-    NgSwitchCase,
-    NgSwitchDefault,
-    PageFooterActionDirective,
-    SafePipe,
-    ReactiveFormsModule,
-    RouterLink,
-  ],
+    selector: 'app-ms-teams',
+    templateUrl: './ms-teams-privacy-officer.page.html',
+    styleUrls: ['./ms-teams-privacy-officer.page.scss'],
+    imports: [
+        AddressFormComponent,
+        AnchorDirective,
+        BreadcrumbComponent,
+        EnrolmentErrorComponent,
+        InjectViewportCssClassDirective,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        NgIf,
+        NgSwitch,
+        NgSwitchCase,
+        NgSwitchDefault,
+        PageFooterActionDirective,
+        SafePipe,
+        ReactiveFormsModule,
+        RouterLink,
+    ]
 })
 export class MsTeamsPrivacyOfficerPage
   extends AbstractFormPage<MsTeamsPrivacyOfficerFormState>

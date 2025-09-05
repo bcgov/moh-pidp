@@ -48,19 +48,18 @@ import { ExternalAccountsResource } from './external-accounts-resource.service';
 import { InvitationSteps } from './external-accounts.model';
 
 @Component({
-  selector: 'app-external-accounts',
-  standalone: true,
-  imports: [
-    CommonModule,
-    BreadcrumbComponent,
-    InstructionCardComponent,
-    MatIconModule,
-    InjectViewportCssClassDirective,
-    SuccessDialogComponent,
-    AnchorDirective,
-  ],
-  templateUrl: './external-accounts.page.html',
-  styleUrl: './external-accounts.page.scss',
+    selector: 'app-external-accounts',
+    imports: [
+        CommonModule,
+        BreadcrumbComponent,
+        InstructionCardComponent,
+        MatIconModule,
+        InjectViewportCssClassDirective,
+        SuccessDialogComponent,
+        AnchorDirective,
+    ],
+    templateUrl: './external-accounts.page.html',
+    styleUrl: './external-accounts.page.scss'
 })
 export class ExternalAccountsPage implements OnInit {
   public sanitizer = inject(DomSanitizer);

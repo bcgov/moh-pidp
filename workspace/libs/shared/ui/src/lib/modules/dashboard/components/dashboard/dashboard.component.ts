@@ -28,17 +28,16 @@ import { DashboardMenuComponent } from '../dashboard-menu/dashboard-menu.compone
 
 @UntilDestroy()
 @Component({
-  selector: 'ui-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    DashboardHeaderComponent,
-    MatSidenavModule,
-    DashboardMenuComponent,
-    RouterOutlet,
-  ],
+    selector: 'ui-dashboard',
+    templateUrl: './dashboard.component.html',
+    styleUrls: ['./dashboard.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        DashboardHeaderComponent,
+        MatSidenavModule,
+        DashboardMenuComponent,
+        RouterOutlet,
+    ]
 })
 export class DashboardComponent implements OnInit {
   /**

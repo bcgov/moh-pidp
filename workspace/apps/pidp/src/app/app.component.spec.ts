@@ -1,8 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TestBed } from '@angular/core/testing';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, Data, NavigationEnd, Scroll } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import {
+  ActivatedRoute,
+  Data,
+  NavigationEnd,
+  RouterModule,
+  Scroll,
+} from '@angular/router';
 
 import { Observable, of } from 'rxjs';
 
@@ -40,7 +45,7 @@ describe('AppComponent', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
+      imports: [RouterModule.forRoot([])],
       providers: [
         AppComponent,
         {

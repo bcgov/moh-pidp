@@ -23,24 +23,23 @@ import { FormUtilsService } from '@core/services/form-utils.service';
 import { AddressAutocompleteComponent } from '../address-autocomplete/address-autocomplete.component';
 
 @Component({
-  selector: 'app-address-form',
-  templateUrl: './address-form.component.html',
-  styleUrls: ['./address-form.component.scss'],
-  standalone: true,
-  imports: [
-    AddressAutocompleteComponent,
-    InjectViewportCssClassDirective,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatInputModule,
-    MatOptionModule,
-    MatSelectModule,
-    NgFor,
-    NgIf,
-    NgxMaskDirective,
-    ReactiveFormsModule,
-  ],
+    selector: 'app-address-form',
+    templateUrl: './address-form.component.html',
+    styleUrls: ['./address-form.component.scss'],
+    imports: [
+        AddressAutocompleteComponent,
+        InjectViewportCssClassDirective,
+        MatButtonModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        MatOptionModule,
+        MatSelectModule,
+        NgFor,
+        NgIf,
+        NgxMaskDirective,
+        ReactiveFormsModule,
+    ]
 })
 export class AddressFormComponent implements OnInit {
   /**

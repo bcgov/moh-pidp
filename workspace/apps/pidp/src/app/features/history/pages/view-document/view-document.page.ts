@@ -21,21 +21,20 @@ import { HistoryRoutes } from '../../history.routes';
 import { ViewDocumentDirective } from './view-document.directive';
 
 @Component({
-  selector: 'app-view-document',
-  templateUrl: './view-document.page.html',
-  styleUrls: ['./view-document.page.scss'],
-  standalone: true,
-  imports: [
-    MatButtonModule,
-    NgIf,
-    PageComponent,
-    PageFooterActionDirective,
-    PageFooterComponent,
-    PageHeaderComponent,
-    PageSectionComponent,
-    SafePipe,
-    ViewDocumentDirective,
-  ],
+    selector: 'app-view-document',
+    templateUrl: './view-document.page.html',
+    styleUrls: ['./view-document.page.scss'],
+    imports: [
+        MatButtonModule,
+        NgIf,
+        PageComponent,
+        PageFooterActionDirective,
+        PageFooterComponent,
+        PageHeaderComponent,
+        PageSectionComponent,
+        SafePipe,
+        ViewDocumentDirective,
+    ]
 })
 export class ViewDocumentPage implements OnInit {
   public title: string;

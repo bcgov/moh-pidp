@@ -3,12 +3,11 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import { randTextRange } from '@ngneat/falso';
 import { createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
-import { KeycloakService } from 'keycloak-angular';
+import Keycloak from 'keycloak-js';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
@@ -40,7 +39,7 @@ describe('CollegeLicenceInformationPage', () => {
         HttpClientTestingModule,
         MatDialogModule,
         ReactiveFormsModule,
-        RouterTestingModule,
+        RouterModule.forRoot([]),
       ],
       providers: [
         CollegeLicenceInformationPage,
@@ -62,7 +61,7 @@ describe('CollegeLicenceInformationPage', () => {
         provideAutoSpy(Router),
         provideAutoSpy(LoggerService),
         provideAutoSpy(CollegeLicenceInformationResource),
-        provideAutoSpy(KeycloakService),
+        provideAutoSpy(Keycloak),
       ],
     });
     router = TestBed.inject(Router);
