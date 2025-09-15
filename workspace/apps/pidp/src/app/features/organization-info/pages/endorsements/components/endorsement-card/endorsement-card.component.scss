@@ -37,7 +37,7 @@ p {
     margin-bottom: var(--gap);
     & .icon-box {
       padding: 0 var(--gap);
-      border: 2px solid #fcba19;
+      border: 2px solid pidp.$bcgov-color-accent;
       border-radius: 50%;
       width: 3.75rem;
       height: 3.75rem;

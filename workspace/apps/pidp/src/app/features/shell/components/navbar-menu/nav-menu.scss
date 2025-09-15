@@ -238,7 +238,7 @@ h1 {
     }
 
     & a:not(.main-menu-item, .dropdown-profile):hover {
-      border-bottom: solid 4px #fcba19;
+      border-bottom: solid 4px pidp.$bcgov-color-accent;
     }
   }
 }
