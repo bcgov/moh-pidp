@@ -47,7 +47,7 @@ p {
     & .care-team {
       & .care-team-text {
         padding: var(--care-team-text-padding) 0;
-        color: #313132;
+        color: pidp.$bcgov-color-text;
         font-size: 1rem;
         font-weight: 400;
         line-height: 1.6875rem;
