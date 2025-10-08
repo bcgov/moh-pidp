@@ -114,7 +114,7 @@
 }
 
 .card-content a {
-  color: var(--Links, #1a5a96);
+  color: var(--Links, pidp.$bcgov-color-links);
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -127,7 +127,7 @@
 }
 
 .card-content a fa-icon {
-  color: var(--Links, #1a5a96);
+  color: var(--Links, pidp.$bcgov-color-links);
   float: right;
   padding-right: 3px;
 }
@@ -230,7 +230,7 @@
     cursor: pointer;
     background: var(--Colours-primary, #fff);
     fa-icon {
-      color: #1a5a96;
+      color: pidp.$bcgov-color-links;
     }
   }
 }
