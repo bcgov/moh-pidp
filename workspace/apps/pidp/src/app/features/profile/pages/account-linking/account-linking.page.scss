@@ -91,7 +91,7 @@
           align-items: center;
 
           span {
-            color: #2e8540;
+            color: pidp.$bcgov-color-semantic-success;
             font-size: 16px;
             font-weight: 700;
             margin-right: 5px;
@@ -109,7 +109,7 @@
         height: 25rem;
         border-radius: 1.25rem;
         border: 1px solid #ccc;
-        background-color: #f2f2f2;
+        background-color: pidp.$bcgov-color-background-grey;
         box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
 
         .instructions-container {
@@ -213,7 +213,7 @@
       }
 
       .card-hover:hover {
-        background-color: #f2f2f2;
+        background-color: pidp.$bcgov-color-background-grey;
         cursor: pointer;
       }
 
