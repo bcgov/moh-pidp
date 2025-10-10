@@ -91,7 +91,6 @@ export class ExternalAccountsPage implements OnInit {
       title: 'Access',
       path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
     },
-    { title: 'Halo', path: AccessRoutes.routePath(AccessRoutes.HALO) },
     { title: 'External Accounts', path: '' },
   ];
 
