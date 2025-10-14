@@ -7,10 +7,10 @@ import { ViewDocumentDirective } from './view-document.directive';
 class StubComponent {}
 
 describe('ViewDocumentDirective', () => {
-  beforeEach(async () => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [StubComponent],
-    }).compileComponents();
+      imports: [StubComponent],
+    });
   });
 
   it('should create an instance', () => {
