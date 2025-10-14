@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewContainerRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { ViewDocumentDirective } from './view-document.directive';
@@ -7,16 +7,18 @@ import { ViewDocumentDirective } from './view-document.directive';
 class StubComponent {}
 
 describe('ViewDocumentDirective', () => {
+  let fixture;
+  let component: ViewContainerRef;
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [StubComponent],
     });
+    fixture = TestBed.createComponent(StubComponent);
+    component = fixture.debugElement.componentInstance;
+    fixture.detectChanges();
   });
 
   it('should create an instance', () => {
-    const fixture = TestBed.createComponent(StubComponent);
-    const component = fixture.debugElement.componentInstance;
-
     const directive = new ViewDocumentDirective(component);
     expect(directive).toBeTruthy();
   });
