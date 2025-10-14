@@ -11,7 +11,13 @@ describe('ViewDocumentDirective', () => {
   let component: ViewContainerRef;
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [StubComponent],
+      providers: [
+        ViewDocumentDirective,
+        {
+          provide: ViewContainerRef,
+          useValue: {},
+        },
+      ],
     });
     fixture = TestBed.createComponent(StubComponent);
     component = fixture.debugElement.componentInstance;
