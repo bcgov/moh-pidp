@@ -58,12 +58,6 @@
               >Use Policy Agreement</a
             >
             <a
-              *ngIf="hasCredential(IdentityProvider.BC_PROVIDER)"
-              class="dropdown-links"
-              (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.BC_PROVIDER_EDIT))"
-              >Password and MFA reset</a
-            >
-            <a
               class="dropdown-links"
               (click)="navigateTo(HistoryRoutes.routePath(HistoryRoutes.TRANSACTIONS))"
               >History</a
@@ -90,6 +84,24 @@
               class="dropdown-links"
               (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.ACCOUNT_LINKING))"
               >Account Linking</a
+            >
+            <a
+              class="dropdown-links"
+              (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.EXTERNAL_ACCOUNTS))"
+              >External Accounts</a
+            >
+            <a
+              *ngIf="hasCredential(IdentityProvider.BC_PROVIDER) else noBCProvider"
+              class="dropdown-links"
+              (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.BC_PROVIDER_EDIT))"
+              >Password and MFA reset</a
+            >
+            <ng-template #noBCProvider>
+              <a
+                class="dropdown-links"
+                (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.BC_PROVIDER_APPLICATION))"
+                >Password and MFA reset</a
+              ></ng-template
             >
           </div>
         </div>
@@ -140,6 +152,16 @@
             class="sidenav-menu-item"
             (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT))"
             >Use Policy Agreement</a
+          >
+          <a
+            class="sidenav-menu-item"
+            (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.ACCOUNT_LINKING))"
+            >Account Linking</a
+          >
+          <a
+            class="sidenav-menu-item"
+            (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.EXTERNAL_ACCOUNTS))"
+            >External Accounts</a
           >
           <a
             *ngIf="hasCredential(IdentityProvider.BC_PROVIDER)"
