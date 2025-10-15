@@ -1,5 +1,7 @@
-import { Component, ViewContainerRef } from '@angular/core';
+import { Component, TemplateRef, ViewContainerRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+
+import { provideAutoSpy } from 'jest-auto-spies';
 
 import { ViewDocumentDirective } from './view-document.directive';
 
@@ -7,25 +9,26 @@ import { ViewDocumentDirective } from './view-document.directive';
 class StubComponent {}
 
 describe('ViewDocumentDirective', () => {
-  let fixture;
-  let component: ViewContainerRef;
+  let directive: ViewDocumentDirective;
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
         ViewDocumentDirective,
+        provideAutoSpy(StubComponent),
         {
           provide: ViewContainerRef,
           useValue: {},
         },
+        {
+          provide: TemplateRef,
+          useValue: {},
+        },
       ],
     });
-    fixture = TestBed.createComponent(StubComponent);
-    component = fixture.debugElement.componentInstance;
-    fixture.detectChanges();
+    directive = TestBed.inject(ViewDocumentDirective);
   });
 
   it('should create an instance', () => {
-    const directive = new ViewDocumentDirective(component);
     expect(directive).toBeTruthy();
   });
 });
