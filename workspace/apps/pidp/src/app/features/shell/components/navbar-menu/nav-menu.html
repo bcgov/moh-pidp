@@ -86,6 +86,7 @@
               >Account Linking</a
             >
             <a
+              *ngIf="featureFlag()"
               class="dropdown-links"
               (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.EXTERNAL_ACCOUNTS))"
               >External Accounts</a
@@ -159,6 +160,7 @@
             >Account Linking</a
           >
           <a
+            *ngIf="featureFlag()"
             class="sidenav-menu-item"
             (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.EXTERNAL_ACCOUNTS))"
             >External Accounts</a
