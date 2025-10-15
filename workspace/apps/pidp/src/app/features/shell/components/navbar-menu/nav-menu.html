@@ -80,6 +80,20 @@
         (click)="onMenuItemClicked()"
         >{{ menuItem.label }}
       </a>
+      <a class="main-menu-item">
+        <div class="dropdown">
+          <span class="content-with-alert">
+            <a class="dropdown-utilities">Utilities</a></span
+          >
+          <div class="dropdown-content">
+            <a
+              class="dropdown-links"
+              (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.ACCOUNT_LINKING))"
+              >Account Linking</a
+            >
+          </div>
+        </div>
+      </a>
       <button
         *ngIf="isLogoutButtonVisible"
         class="btn-signout"
