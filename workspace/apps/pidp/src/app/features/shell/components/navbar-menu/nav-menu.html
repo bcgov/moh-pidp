@@ -166,10 +166,17 @@
             >External Accounts</a
           >
           <a
-            *ngIf="hasCredential(IdentityProvider.BC_PROVIDER)"
+            *ngIf="hasCredential(IdentityProvider.BC_PROVIDER) else noBCProviderSidenav"
             class="sidenav-menu-item"
             (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.BC_PROVIDER_EDIT))"
             >Password and MFA reset</a
+          >
+          <ng-template #noBCProviderSidenav>
+            <a
+              class="sidenav-menu-item"
+              (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.BC_PROVIDER_APPLICATION))"
+              >BCProvider account</a
+            ></ng-template
           >
           <a
             class="sidenav-menu-item"
