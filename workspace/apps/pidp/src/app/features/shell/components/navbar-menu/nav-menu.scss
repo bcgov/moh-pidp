@@ -237,7 +237,7 @@ h1 {
       line-height: normal;
     }
 
-    & a:not(.main-menu-item, .dropdown-profile, .dropdown-utilities):hover {
+    & a:not(.main-menu-item, .dropdown-profile, .dropdown-accounts):hover {
       border-bottom: solid 4px #fcba19;
     }
   }
@@ -288,7 +288,7 @@ h1 {
 }
 
 .dropdown-profile,
-.dropdown-utilities {
+.dropdown-accounts {
   cursor: pointer;
   padding-right: 0 !important;
   padding-left: 0 !important;
