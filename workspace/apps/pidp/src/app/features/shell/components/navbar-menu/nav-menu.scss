@@ -229,7 +229,7 @@ h1 {
       float: left;
       position: relative;
       letter-spacing: 0.5px;
-      padding: 10px 10px;
+      padding: 10px 15px 10px 10px;
       transform: 0.3s;
       font-size: 18px;
       font-style: normal;
@@ -237,7 +237,7 @@ h1 {
       line-height: normal;
     }
 
-    & a:not(.main-menu-item, .dropdown-profile):hover {
+    & a:not(.main-menu-item, .dropdown-profile, .dropdown-accounts):hover {
       border-bottom: solid 4px #fcba19;
     }
   }
@@ -276,11 +276,7 @@ h1 {
 }
 
 .dropdown {
-  display: inline-block;
   margin-top: -10px;
-  margin-left: -35px;
-  position: absolute;
-  right: -10px;
 }
 
 .content-with-alert {
@@ -291,9 +287,11 @@ h1 {
   }
 }
 
-.dropdown-profile {
+.dropdown-profile,
+.dropdown-accounts {
   cursor: pointer;
-  padding-right: 20px !important;
+  padding-right: 0 !important;
+  padding-left: 0 !important;
 }
 
 .dropdown-content {

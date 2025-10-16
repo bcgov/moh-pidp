@@ -1,3 +1,4 @@
+import { CdkNoDataRow } from '@angular/cdk/table';
 import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import {
   Component,
@@ -75,6 +76,7 @@ import { NavMenuResource } from './nav-menu.resource.service';
     FaIconComponent,
     NgClass,
     FeedbackButtonComponent,
+    CdkNoDataRow,
   ],
 })
 export class NavMenuComponent implements OnChanges, OnInit, OnDestroy {
