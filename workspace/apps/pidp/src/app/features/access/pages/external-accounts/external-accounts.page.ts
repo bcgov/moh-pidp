@@ -171,15 +171,9 @@ export class ExternalAccountsPage implements OnInit {
       title: 'Instructions complete',
       placeholder: '',
       description:
-        'Click on one of the available applications to start using your own account.',
+        'Click on the "Continue" button to start using your own account.',
       type: 'final',
       buttonText: 'Continue',
-      applications: [
-        { name: 'HALO', url: AccessRoutes.routePath(AccessRoutes.HALO) },
-        { name: 'Example EMR', url: 'https://example.com/' },
-        { name: 'Example EMR2', url: 'https://example.com/' },
-        { name: 'Example EMR3', url: 'https://example.com/' },
-      ],
     },
   ]);
 

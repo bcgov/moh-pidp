@@ -102,16 +102,14 @@
 
         <!-- Final Setup -->
         @case ('final') {
-          <div class="form-group final-container">
+          <div class="form-group">
             @if (cardData.buttonText) {
-              @for (application of cardData.applications; track $index) {
-                <button
-                  class="btn btn-continue application-button"
-                  [disabled]="!isActive"
-                  (click)="onContinue(application.url)">
-                  {{ application.name }}
-                </button>
-              }
+              <button
+                class="btn btn-continue"
+                [disabled]="!isActive"
+                (click)="onContinue(routePath)">
+                {{ cardData.buttonText }}
+              </button>
             }
           </div>
         }
