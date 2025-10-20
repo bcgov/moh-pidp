@@ -163,18 +163,6 @@
       opacity: 0.4;
     }
   }
-
-  .final-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-
-    .application-button {
-      justify-self: flex-start;
-      width: 45%;
-      margin-bottom: 10px;
-    }
-  }
 }
 
 /* Mat autocomplete styles */

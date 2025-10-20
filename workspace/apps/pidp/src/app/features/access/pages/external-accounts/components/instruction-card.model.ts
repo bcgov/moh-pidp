@@ -48,9 +48,4 @@ export interface InstructionCard {
    * Display text on action button.
    */
   buttonText?: string;
-  /**
-   * @description
-   * Name and url of available applications.
-   */
-  applications?: Array<{ name: string; url: string }>;
 }
