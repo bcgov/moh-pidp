@@ -63,7 +63,7 @@ import { NeedHelpComponent } from '@app/shared/components/need-help/need-help.co
 import { DialogBcproviderEditComponent } from '@app/shared/components/success-dialog/components/dialog-bcprovider-edit.component';
 import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
 
-import { AccessRoutes } from '../../access.routes';
+import { AccessRoutes } from '../../../access/access.routes';
 import { BcProviderEditFormState } from './bc-provider-edit-form-state';
 import {
   BcProviderChangePasswordRequest,

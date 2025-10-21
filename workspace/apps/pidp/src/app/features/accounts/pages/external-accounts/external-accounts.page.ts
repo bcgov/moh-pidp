@@ -41,7 +41,7 @@ import { DialogExternalAccountCreateComponent } from '@app/shared/components/suc
 import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
 
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
-import { AccessRoutes } from '../../access.routes';
+import { AccessRoutes } from '../../../access/access.routes';
 import { InstructionCardComponent } from './components/instruction-card.component';
 import { InstructionCard } from './components/instruction-card.model';
 import { ExternalAccountsResource } from './external-accounts-resource.service';
