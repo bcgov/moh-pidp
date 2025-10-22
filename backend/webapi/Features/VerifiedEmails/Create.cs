@@ -77,7 +77,7 @@ public class Create
 
         private async Task SendVerificationEmailAsync(string recipientEmail, Guid token)
         {
-            var url = $"{this.applicationUrl}/access/external-accounts".SetQueryParam("email-verification-token", token);
+            var url = $"{this.applicationUrl}/accounts/external-accounts".SetQueryParam("email-verification-token", token);
             var link = $"<a href=\"{url}\" target=\"_blank\" rel=\"noopener noreferrer\">this link</a>";
 
             var email = new Email(

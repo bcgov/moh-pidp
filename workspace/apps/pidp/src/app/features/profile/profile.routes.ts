@@ -4,10 +4,10 @@ export class ProfileRoutes {
   public static readonly BASE_PATH = 'profile';
 
   public static readonly PERSONAL_INFO = 'personal-information';
-  public static readonly COLLEGE_LICENCE_DECLARATION = 'college-licence-declaration';
+  public static readonly COLLEGE_LICENCE_DECLARATION =
+    'college-licence-declaration';
   public static readonly COLLEGE_LICENCE_INFO = 'college-licence-info';
   public static readonly USER_ACCESS_AGREEMENT = 'user-access-agreement';
-  public static readonly ACCOUNT_LINKING = 'account-linking';
 
   /**
    * @description
@@ -46,12 +46,5 @@ export const routes: Routes = [
       import(
         './pages/college-licence/college-licence-information/college-licence-information-routing.routes'
       ).then((m) => m.routes),
-  },
-  {
-    path: ProfileRoutes.ACCOUNT_LINKING,
-    loadChildren: (): Promise<Routes> =>
-      import('./pages/account-linking/account-linking-routing.routes').then(
-        (m) => m.routes,
-      ),
   },
 ];
