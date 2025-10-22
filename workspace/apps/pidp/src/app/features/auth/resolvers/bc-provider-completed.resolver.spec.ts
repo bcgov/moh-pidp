@@ -59,10 +59,7 @@ describe('bcProviderCompletedResolver', () => {
 
       when('Resolver is called', () => {
         const result = TestBed.runInInjectionContext(() =>
-          bcProviderCompletedResolver(
-            actRouteSnapshotSpy,
-            routerSnapshotSpy,
-          ),
+          bcProviderCompletedResolver(actRouteSnapshotSpy, routerSnapshotSpy),
         );
 
         then('should return null', () => {
@@ -90,10 +87,7 @@ describe('bcProviderCompletedResolver', () => {
 
       when('Resolver is called', () => {
         const result = TestBed.runInInjectionContext(() =>
-          bcProviderCompletedResolver(
-            actRouteSnapshotSpy,
-            routerSnapshotSpy,
-          ),
+          bcProviderCompletedResolver(actRouteSnapshotSpy, routerSnapshotSpy),
         );
 
         then('should navigate to portal page', () => {
@@ -101,7 +95,7 @@ describe('bcProviderCompletedResolver', () => {
             result.subscribe(() => {
               try {
                 expect(router.navigateByUrl).toHaveBeenCalledWith(
-                  '/access/bc-provider-edit',
+                  '/accounts/bc-provider-edit',
                 );
                 done();
               } catch (error: any) {
@@ -123,10 +117,7 @@ describe('bcProviderCompletedResolver', () => {
 
       when('Resolver is called', () => {
         const result = TestBed.runInInjectionContext(() =>
-          bcProviderCompletedResolver(
-            actRouteSnapshotSpy,
-            routerSnapshotSpy,
-          ),
+          bcProviderCompletedResolver(actRouteSnapshotSpy, routerSnapshotSpy),
         );
 
         then('should return true and access to the route', () => {

@@ -22,7 +22,7 @@
             [cardData]="card"
             [isActive]="isCardActive(i)"
             [isCompleted]="isCardCompleted(i)"
-            [routePath]="AccessRoutes.routePath(AccessRoutes.HALO)"
+            [routePath]="AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS)"
             (continueEvent)="onContinue(i, $event)">
           </app-instruction-card>
           }
@@ -38,7 +38,7 @@
             <ul>
               <li>
                 I'm more interested in
-                <a href="/access/bc-provider-application"
+                <a href="/accounts/bc-provider-application"
                   >BCProvider
                   <mat-icon class="right-icon"
                     >keyboard_arrow_right</mat-icon

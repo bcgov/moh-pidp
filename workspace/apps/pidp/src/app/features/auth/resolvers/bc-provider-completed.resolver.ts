@@ -4,7 +4,7 @@ import { ResolveFn, Router } from '@angular/router';
 import { map } from 'rxjs';
 
 import { PartyService } from '@app/core/party/party.service';
-import { AccessRoutes } from '@app/features/access/access.routes';
+import { AccountsRoutes } from '@app/features/accounts/accounts.routes';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
@@ -24,7 +24,7 @@ export const bcProviderCompletedResolver: ResolveFn<
       return (
         profileStatus.status.bcProvider.statusCode === StatusCode.AVAILABLE ||
         router.navigateByUrl(
-          AccessRoutes.routePath(AccessRoutes.BC_PROVIDER_EDIT),
+          AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_EDIT),
         )
       );
     }),

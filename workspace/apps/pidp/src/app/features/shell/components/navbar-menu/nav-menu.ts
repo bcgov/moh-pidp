@@ -1,3 +1,4 @@
+import { CdkNoDataRow } from '@angular/cdk/table';
 import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import {
   Component,
@@ -42,7 +43,7 @@ import {
 import { RoutePath } from '@bcgov/shared/utils';
 
 import { PartyService } from '@app/core/party/party.service';
-import { AccessRoutes } from '@app/features/access/access.routes';
+import { AccountsRoutes } from '@app/features/accounts/accounts.routes';
 import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 import { HistoryRoutes } from '@app/features/history/history.routes';
 import { AlertCode } from '@app/features/portal/enums/alert-code.enum';
@@ -75,6 +76,7 @@ import { NavMenuResource } from './nav-menu.resource.service';
     FaIconComponent,
     NgClass,
     FeedbackButtonComponent,
+    CdkNoDataRow,
   ],
 })
 export class NavMenuComponent implements OnChanges, OnInit, OnDestroy {
@@ -94,7 +96,7 @@ export class NavMenuComponent implements OnChanges, OnInit, OnDestroy {
   public isLogoutMenuItemVisible = false;
   public isTopMenuVisible = false;
   public ProfileRoutes = ProfileRoutes;
-  public AccessRoutes = AccessRoutes;
+  public AccountsRoutes = AccountsRoutes;
   public HistoryRoutes = HistoryRoutes;
   public showCollegeAlert = false;
   public faBell = faBell;

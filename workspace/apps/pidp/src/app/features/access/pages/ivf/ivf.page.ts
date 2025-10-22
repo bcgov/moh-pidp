@@ -30,9 +30,9 @@ import { ProfileStatus } from '@app/features/portal/models/profile-status.model'
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
+import { BcProviderEditResource } from '../../../accounts/pages/bc-provider-edit/bc-provider-edit-resource.service';
+import { BcProviderEditInitialStateModel } from '../../../accounts/pages/bc-provider-edit/bc-provider-edit.page';
 import { AccessRoutes } from '../../access.routes';
-import { BcProviderEditResource } from '../bc-provider-edit/bc-provider-edit-resource.service';
-import { BcProviderEditInitialStateModel } from '../bc-provider-edit/bc-provider-edit.page';
 import { bcProviderTutorialLink } from '../provincial-attachment-system/provincial-attachment-system.constants';
 import { ivfWebsite } from './ivf-constants';
 

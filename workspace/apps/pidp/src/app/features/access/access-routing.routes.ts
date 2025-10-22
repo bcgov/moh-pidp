@@ -23,20 +23,6 @@ export const routes: Routes = [
       ).then((m) => m.routes),
   },
   {
-    path: AccessRoutes.BC_PROVIDER_APPLICATION,
-    loadChildren: (): Promise<Routes> =>
-      import(
-        './pages/bc-provider-application/bc-provider-application.route'
-      ).then((m) => m.routes),
-  },
-  {
-    path: AccessRoutes.BC_PROVIDER_EDIT,
-    loadChildren: (): Promise<Routes> =>
-      import('./pages/bc-provider-edit/bc-provider-edit.routes').then(
-        (m) => m.routes,
-      ),
-  },
-  {
     path: AccessRoutes.HCIM_ACCOUNT_TRANSFER,
     loadChildren: (): Promise<Routes> =>
       import(
@@ -84,13 +70,6 @@ export const routes: Routes = [
       import(
         './pages/provincial-attachment-system/provincial-attachment-system-routing.routes'
       ).then((m) => m.routes),
-  },
-  {
-    path: AccessRoutes.EXTERNAL_ACCOUNTS,
-    loadChildren: (): Promise<Routes> =>
-      import('./pages/external-accounts/external-accounts-routing.routes').then(
-        (m) => m.routes,
-      ),
   },
   {
     path: AccessRoutes.HALO,

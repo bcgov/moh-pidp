@@ -41,7 +41,7 @@ import { DialogExternalAccountCreateComponent } from '@app/shared/components/suc
 import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
 
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
-import { AccessRoutes } from '../../access.routes';
+import { AccessRoutes } from '../../../access/access.routes';
 import { InstructionCardComponent } from './components/instruction-card.component';
 import { InstructionCard } from './components/instruction-card.model';
 import { ExternalAccountsResource } from './external-accounts-resource.service';
@@ -91,7 +91,6 @@ export class ExternalAccountsPage implements OnInit {
       title: 'Access',
       path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
     },
-    { title: 'Halo', path: AccessRoutes.routePath(AccessRoutes.HALO) },
     { title: 'External Accounts', path: '' },
   ];
 
@@ -172,7 +171,7 @@ export class ExternalAccountsPage implements OnInit {
       title: 'Instructions complete',
       placeholder: '',
       description:
-        'Click the “Continue” button to start using your own account.',
+        'Click on the "Continue" button to start using your own account.',
       type: 'final',
       buttonText: 'Continue',
     },

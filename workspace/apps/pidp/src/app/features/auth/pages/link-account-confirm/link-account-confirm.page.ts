@@ -20,8 +20,8 @@ import {
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { AccessRoutes } from '@app/features/access/access.routes';
+import { AccountsRoutes } from '@app/features/accounts/accounts.routes';
 import { User } from '@app/features/auth/models/user.model';
-import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
 import { IdentityProvider } from '../../enums/identity-provider.enum';
@@ -118,7 +118,7 @@ export class LinkAccountConfirmPage implements OnInit {
       tap(() => {
         this.loadingOverlayService.close();
         this.router.navigate([
-          ProfileRoutes.routePath(ProfileRoutes.ACCOUNT_LINKING),
+          AccountsRoutes.routePath(AccountsRoutes.ACCOUNT_LINKING),
         ]);
       }),
     );

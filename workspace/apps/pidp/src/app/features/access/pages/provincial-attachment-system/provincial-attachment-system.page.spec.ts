@@ -12,7 +12,7 @@ import { AuthService } from '@app/features/auth/services/auth.service';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 import { PortalService } from '@app/features/portal/portal.service';
 
-import { BcProviderEditResource } from '../bc-provider-edit/bc-provider-edit-resource.service';
+import { BcProviderEditResource } from '../../../accounts/pages/bc-provider-edit/bc-provider-edit-resource.service';
 import { ProvincialAttachmentSystemPage } from './provincial-attachment-system.page';
 
 describe('ProvincialAttachmentSystemPage', () => {
