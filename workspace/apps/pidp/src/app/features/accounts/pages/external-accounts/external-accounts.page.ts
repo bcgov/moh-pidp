@@ -168,7 +168,7 @@ export class ExternalAccountsPage implements OnInit {
     {
       id: 4,
       icon: 'icon-complete',
-      title: 'Instructions complete',
+      title: 'Verification complete',
       placeholder: '',
       description:
         'Click on the "Continue" button to start using your own account.',
