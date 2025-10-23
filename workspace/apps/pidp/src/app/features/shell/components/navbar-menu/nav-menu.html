@@ -65,14 +65,16 @@
           </div>
         </div>
       </a>
-      <a
-        *ngFor="let menuItem of menuItems"
-        class="main-menu-item"
-        routerLinkActive="main-menu-item-active"
-        [routerLink]="getRouterLink(menuItem)"
-        [routerLinkActiveOptions]="getRouterLinkActiveOptions(menuItem)"
-        (click)="onMenuItemClicked()"
-        >{{ menuItem.label }}
+      <a class="main-menu-item">
+        <div class="dropdown">
+          <span class="content-with-alert">
+            <a
+              class="dropdown-accounts"
+              (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))"
+              >Access</a
+            >
+          </span>
+        </div>
       </a>
       <a class="main-menu-item">
         <div class="dropdown">
@@ -105,6 +107,13 @@
               ></ng-template
             >
           </div>
+        </div>
+      </a>
+      <a class="main-menu-item">
+        <div class="dropdown">
+          <span class="content-with-alert">
+            <a class="dropdown-accounts" (click)="navigateTo('/help')">Help</a>
+          </span>
         </div>
       </a>
       <button
@@ -156,6 +165,16 @@
           >
           <a
             class="sidenav-menu-item"
+            (click)="navigateTo(HistoryRoutes.routePath(HistoryRoutes.TRANSACTIONS))"
+            >History</a
+          >
+          <a
+            class="sidenav-menu-item"
+            (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))"
+            >Access</a
+          >
+          <a
+            class="sidenav-menu-item"
             (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.ACCOUNT_LINKING))"
             >Account Linking</a
           >
@@ -178,21 +197,7 @@
               >BCProvider account</a
             ></ng-template
           >
-          <a
-            class="sidenav-menu-item"
-            (click)="navigateTo(HistoryRoutes.routePath(HistoryRoutes.TRANSACTIONS))"
-            >History</a
-          >
-          <a
-            *ngFor="let menuItem of menuItems"
-            class="sidenav-menu-item"
-            routerLinkActive="sidenav-menu-item-active"
-            [routerLink]="getRouterLink(menuItem)"
-            [routerLinkActiveOptions]="getRouterLinkActiveOptions(menuItem)"
-            [fragment]="getRouterLinkFragment(menuItem)"
-            (click)="onMenuItemClicked()"
-            >{{ menuItem.label }}
-          </a>
+          <a class="sidenav-menu-item" (click)="navigateTo('/help')">Help</a>
           <a
             *ngIf="isLogoutMenuItemVisible"
             class="sidenav-menu-item"
