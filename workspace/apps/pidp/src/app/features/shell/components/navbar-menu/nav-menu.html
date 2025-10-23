@@ -112,7 +112,11 @@
       <a class="main-menu-item">
         <div class="dropdown">
           <span class="content-with-alert">
-            <a class="dropdown-accounts" (click)="navigateTo('/help')">Help</a>
+            <a
+              class="dropdown-accounts"
+              (click)="navigateTo(FaqRoutes.BASE_PATH)"
+              >Help</a
+            >
           </span>
         </div>
       </a>
@@ -197,7 +201,9 @@
               >BCProvider account</a
             ></ng-template
           >
-          <a class="sidenav-menu-item" (click)="navigateTo('/help')">Help</a>
+          <a class="sidenav-menu-item" (click)="navigateTo(FaqRoutes.BASE_PATH)"
+            >Help</a
+          >
           <a
             *ngIf="isLogoutMenuItemVisible"
             class="sidenav-menu-item"

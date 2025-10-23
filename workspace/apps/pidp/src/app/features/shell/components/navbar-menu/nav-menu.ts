@@ -42,6 +42,7 @@ import { PartyService } from '@app/core/party/party.service';
 import { AccessRoutes } from '@app/features/access/access.routes';
 import { AccountsRoutes } from '@app/features/accounts/accounts.routes';
 import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
+import { FaqRoutes } from '@app/features/faq/faq.routes';
 import { HistoryRoutes } from '@app/features/history/history.routes';
 import { AlertCode } from '@app/features/portal/enums/alert-code.enum';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
@@ -95,6 +96,7 @@ export class NavMenuComponent implements OnChanges, OnInit, OnDestroy {
   public AccountsRoutes = AccountsRoutes;
   public AccessRoutes = AccessRoutes;
   public HistoryRoutes = HistoryRoutes;
+  public FaqRoutes = FaqRoutes;
   public showCollegeAlert = false;
   public faBell = faBell;
   public AlertCode = AlertCode;
