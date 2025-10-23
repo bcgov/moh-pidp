@@ -91,7 +91,7 @@ export class ExternalAccountsPage implements OnInit {
       title: 'Access',
       path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
     },
-    { title: 'External Accounts', path: '' },
+    { title: 'External Account', path: '' },
   ];
 
   public registerSvgIcons(): void {

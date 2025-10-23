@@ -79,7 +79,7 @@
       <a class="main-menu-item">
         <div class="dropdown">
           <span class="content-with-alert">
-            <a class="dropdown-accounts">Accounts</a></span
+            <a class="dropdown-accounts">Account</a></span
           >
           <div class="dropdown-content">
             <a
@@ -91,19 +91,19 @@
               *ngIf="featureFlag()"
               class="dropdown-links"
               (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.EXTERNAL_ACCOUNTS))"
-              >External Accounts</a
+              >External Account</a
             >
             <a
               *ngIf="hasCredential(IdentityProvider.BC_PROVIDER) else noBCProvider"
               class="dropdown-links"
               (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_EDIT))"
-              >Password and MFA reset</a
+              >Password and MFA Reset</a
             >
             <ng-template #noBCProvider>
               <a
                 class="dropdown-links"
                 (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_APPLICATION))"
-                >BCProvider account</a
+                >BCProvider Account</a
               ></ng-template
             >
           </div>
@@ -186,19 +186,19 @@
             *ngIf="featureFlag()"
             class="sidenav-menu-item"
             (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.EXTERNAL_ACCOUNTS))"
-            >External Accounts</a
+            >External Account</a
           >
           <a
             *ngIf="hasCredential(IdentityProvider.BC_PROVIDER) else noBCProviderSidenav"
             class="sidenav-menu-item"
             (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_EDIT))"
-            >Password and MFA reset</a
+            >Password and MFA Reset</a
           >
           <ng-template #noBCProviderSidenav>
             <a
               class="sidenav-menu-item"
               (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_APPLICATION))"
-              >BCProvider account</a
+              >BCProvider Account</a
             ></ng-template
           >
           <a class="sidenav-menu-item" (click)="navigateTo(FaqRoutes.BASE_PATH)"
