@@ -95,7 +95,7 @@ describe('bcProviderCompletedResolver', () => {
             result.subscribe(() => {
               try {
                 expect(router.navigateByUrl).toHaveBeenCalledWith(
-                  '/accounts/bc-provider-edit',
+                  '/account/bc-provider-edit',
                 );
                 done();
               } catch (error: any) {

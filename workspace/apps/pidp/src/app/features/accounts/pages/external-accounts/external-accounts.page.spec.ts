@@ -55,7 +55,7 @@ describe('ExternalAccountsPage', () => {
   it('should initialize breadcrumbsData', () => {
     expect(component.breadcrumbsData.length).toBe(3);
     expect(component.breadcrumbsData[0].title).toBe('Home');
-    expect(component.breadcrumbsData[2].title).toBe('External Accounts');
+    expect(component.breadcrumbsData[2].title).toBe('External Account');
   });
 
   it('should register SVG icons on construction', () => {

@@ -42,6 +42,7 @@ import { AuthorizedUserService } from '@app/features/auth/services/authorized-us
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
+import { AccountsRoutes } from '../../accounts.routes';
 import { AccountLinkingResource } from './account-linking-resource.service';
 import { linkedAccountCardText } from './account-linking.constants';
 import { Credential } from './account-linking.model';
@@ -70,6 +71,7 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
   public credentials: Credential[] = [];
   public linkedAccountsIdp: IdentityProvider[] = [];
   public showInstructions = false;
+  public AccountRoutes = AccountsRoutes;
   private readonly unsubscribe$ = new Subject<void>();
 
   public constructor(
@@ -203,8 +205,12 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
 
   public navigateTo(): void {
     this.hasCredential(IdentityProvider.BC_PROVIDER)
-      ? this.onPageNavigate(['/accounts/bc-provider-edit'])
-      : this.onPageNavigate(['/accounts/bc-provider-application']);
+      ? this.onPageNavigate([
+          AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_EDIT),
+        ])
+      : this.onPageNavigate([
+          AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_APPLICATION),
+        ]);
   }
 
   public onPageNavigate(url: string[]): void {
