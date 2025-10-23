@@ -20,7 +20,6 @@ import {
 } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import {
-  IsActiveMatchOptions,
   Router,
   RouterLink,
   RouterLinkActive,
@@ -33,16 +32,14 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { faBell } from '@fortawesome/free-regular-svg-icons';
 
 import {
-  DashboardMenuItem,
-  DashboardRouteMenuItem,
   InjectViewportCssClassDirective,
   LayoutHeaderFooterComponent,
   PidpViewport,
   ViewportService,
 } from '@bcgov/shared/ui';
-import { RoutePath } from '@bcgov/shared/utils';
 
 import { PartyService } from '@app/core/party/party.service';
+import { AccessRoutes } from '@app/features/access/access.routes';
 import { AccountsRoutes } from '@app/features/accounts/accounts.routes';
 import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 import { HistoryRoutes } from '@app/features/history/history.routes';
@@ -81,7 +78,6 @@ import { NavMenuResource } from './nav-menu.resource.service';
 })
 export class NavMenuComponent implements OnChanges, OnInit, OnDestroy {
   @Input() public alerts: AlertCode[] | null = [];
-  @Input() public menuItems!: DashboardMenuItem[];
   @Input() public emailSupport!: string;
   @Input() public collegeRoute!: string;
   @Output() public logout = new EventEmitter<void>();
@@ -97,6 +93,7 @@ export class NavMenuComponent implements OnChanges, OnInit, OnDestroy {
   public isTopMenuVisible = false;
   public ProfileRoutes = ProfileRoutes;
   public AccountsRoutes = AccountsRoutes;
+  public AccessRoutes = AccessRoutes;
   public HistoryRoutes = HistoryRoutes;
   public showCollegeAlert = false;
   public faBell = faBell;
@@ -141,6 +138,7 @@ export class NavMenuComponent implements OnChanges, OnInit, OnDestroy {
     // Toggle display of the sidenav.
     this.isSidenavOpened = !this.isSidenavOpened;
   }
+
   public navigateToRoot(): void {
     this.router.navigateByUrl('/');
   }
@@ -153,45 +151,12 @@ export class NavMenuComponent implements OnChanges, OnInit, OnDestroy {
     this.router.navigateByUrl(route);
   }
 
-  public getRouterLink(
-    item: DashboardMenuItem | string,
-  ): RoutePath | undefined {
-    if (item instanceof DashboardRouteMenuItem) {
-      const routeItem: DashboardRouteMenuItem = item;
-      return routeItem.commands;
-    }
-    return undefined;
-  }
-  public getRouterLinkActiveOptions(item: DashboardMenuItem):
-    | {
-        exact: boolean;
-      }
-    | IsActiveMatchOptions {
-    if (item instanceof DashboardRouteMenuItem) {
-      const routeItem: DashboardRouteMenuItem = item;
-      return routeItem.linkActiveOptions;
-    }
-    throw new Error('getRouterLinkActiveOptions: not implemented');
-  }
-  public getRouterLinkFragment(item: DashboardMenuItem): string | undefined {
-    if (item instanceof DashboardRouteMenuItem) {
-      const routeItem: DashboardRouteMenuItem = item;
-      return routeItem.extras?.fragment;
-    }
-    return undefined;
-  }
-
   public hasCredential(idp: IdentityProvider): boolean | undefined {
     return this.credentials?.some((c) => c.identityProvider === idp);
   }
 
   public onLogout(): void {
     this.logout.emit();
-  }
-  public onMenuItemClicked(): void {
-    if (this.showMiniMenuButton && this.sidenavMode === 'over') {
-      this.sidenav.close();
-    }
   }
 
   private handleLinkedAccounts(): void {
@@ -206,6 +171,7 @@ export class NavMenuComponent implements OnChanges, OnInit, OnDestroy {
     this.viewport = viewport;
     this.refresh();
   }
+
   private refresh(): void {
     if (
       ![
