@@ -141,7 +141,8 @@ public class Create
                     UaaAgreementDate = party.AccessRequests
                         .Where(request => request.AccessTypeCode == AccessTypeCode.UserAccessAgreement)
                         .Select(request => request.RequestedOn)
-                        .SingleOrDefault()
+                        .SingleOrDefault(),
+                    party.OpId,
                 })
                 .SingleAsync(cancellationToken);
 
@@ -154,6 +155,7 @@ public class Create
             var attributes = new BCProviderAttributes(this.bcProviderClientId)
                 .SetHpdid(party.Hpdid!)
                 .SetLoa(3)
+                .SetOpId(party.OpId!)
                 .SetPidpEmail(party.Email!)
                 .SetIsRnp(plrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding)
                 .SetIsMd(plrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding)
