@@ -82,6 +82,7 @@ public class BCProviderCreate
 
             if (party.Email == null
                 || party.Hpdid == null
+                || party.OpId == null
                 || party.UaaAgreementDate == default)
             {
                 this.logger.LogInvalidState(command.PartyId, party);
@@ -106,6 +107,7 @@ public class BCProviderCreate
                 Cpn = party.Cpn,
                 Password = command.Password,
                 PidpEmail = party.Email,
+                OpId = party.OpId,
                 UaaDate = party.UaaAgreementDate.ToDateTimeOffset(),
                 IsMoa = !plrStanding.HasGoodStanding && endorsingPlrDigest.HasGoodStanding,
                 EndorserData = endorsingPlrDigest
