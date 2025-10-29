@@ -136,10 +136,11 @@ export class ExternalAccountsPage implements OnInit {
     {
       id: 1,
       icon: 'instruction-document',
-      title: 'Start your search here',
+      title: 'Search',
       description: 'Search from the list of accepted domains below.',
       type: 'dropdown',
-      placeholder: 'Search for a domain or use keywords',
+      placeholder:
+        'Search by the org (e.g. PHSA), region (e.g. Yukon), or domain (e.g. PHSA.ca or yk.ca)',
       options: [
         { label: 'Yukon', value: 'yukon' },
         { label: 'British Columbia', value: 'bc' },
@@ -150,7 +151,7 @@ export class ExternalAccountsPage implements OnInit {
     {
       id: 2,
       icon: 'instruction-pencil',
-      title: 'Enter account based on your choice in step one',
+      title: 'Enter your email address for PIdP0000x test',
       description: '',
       type: 'input',
       placeholder: 'username@example.com',
