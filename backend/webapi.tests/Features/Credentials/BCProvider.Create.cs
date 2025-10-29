@@ -42,6 +42,7 @@ public class BcProviderCreateTests : InMemoryDbTest
                 AccessTypeCode = AccessTypeCode.UserAccessAgreement,
                 RequestedOn = Instant.FromDateTimeOffset(DateTimeOffset.Now)
             });
+            party.OpId = "anOpId12345";
         });
         NewUserRepresentation? capturedNewUser = null;
         var bcProviderClient = A.Fake<IBCProviderClient>();
@@ -71,6 +72,7 @@ public class BcProviderCreateTests : InMemoryDbTest
         Assert.False(capturedNewUser.IsMoa);
         Assert.Equal(expectedRnp, capturedNewUser.IsRnp);
         Assert.Equal(party.Email, capturedNewUser.PidpEmail);
+        Assert.Equal(party.OpId, capturedNewUser.OpId);
         Assert.Equal(expectedPassword, capturedNewUser.Password);
 
         Assert.NotNull(capturedNewKeycloakUser);
