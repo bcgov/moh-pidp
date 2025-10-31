@@ -11,7 +11,7 @@ import {
 import { AlertType } from '@bcgov/shared/ui';
 
 import { AccessRoutes } from '@app/features/access/access.routes';
-import { ShellRoutes } from '@app/features/shell/shell.routes';
+import { Constants } from '@app/shared/constants';
 
 import { StatusCode } from '../../enums/status-code.enum';
 import { ProfileStatus } from '../../models/profile-status.model';
@@ -19,7 +19,6 @@ import { PortalSectionAction } from '../portal-section-action.model';
 import { PortalSectionKey } from '../portal-section-key.type';
 import { IPortalSection } from '../portal-section.model';
 import { Section } from '../section.model';
-import { Constants } from '@app/shared/constants';
 
 export class PrescriptionRefillEformsPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
@@ -36,8 +35,9 @@ export class PrescriptionRefillEformsPortalSection implements IPortalSection {
   ) {
     this.key = 'prescriptionRefillEforms';
     this.heading = 'Provincial Prescription Renewal Support Service eForm';
-    this.description = `Enrol here for access to the Provincial Prescription Renewal Support Service eForm`;
-    this.keyWords = profileStatus.status.prescriptionRefillEforms.keyWords || [];
+    this.description = `Please be informed that the Provincial Prescription Renewal Support Service (PPRSS) will be ending on Friday, October 31 2025.`;
+    this.keyWords =
+      profileStatus.status.prescriptionRefillEforms.keyWords || [];
     this.completedMessage = Constants.enrolledText;
   }
 
@@ -81,7 +81,7 @@ export class PrescriptionRefillEformsPortalSection implements IPortalSection {
   }
 
   public performAction(): Observable<void> | void {
-    this.router.navigate([ShellRoutes.routePath(this.action.route)]);
+    return;
   }
 
   private getSectionStatus(): Section {
