@@ -73,7 +73,7 @@ import { NeedHelpComponent } from '@app/shared/components/need-help/need-help.co
 import { DialogBcproviderCreateComponent } from '@app/shared/components/success-dialog/components/dialog-bcprovider-create.component';
 import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
 
-import { AccessRoutes } from '../../access.routes';
+import { AccessRoutes } from '../../../access/access.routes';
 import { BcProviderApplicationFormState } from './bc-provider-application-form-state';
 import { BcProviderApplicationResource } from './bc-provider-application-resource.service';
 

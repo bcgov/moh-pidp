@@ -41,7 +41,7 @@ import { DialogExternalAccountCreateComponent } from '@app/shared/components/suc
 import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
 
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
-import { AccessRoutes } from '../../access.routes';
+import { AccessRoutes } from '../../../access/access.routes';
 import { InstructionCardComponent } from './components/instruction-card.component';
 import { InstructionCard } from './components/instruction-card.model';
 import { ExternalAccountsResource } from './external-accounts-resource.service';
@@ -91,8 +91,7 @@ export class ExternalAccountsPage implements OnInit {
       title: 'Access',
       path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
     },
-    { title: 'Halo', path: AccessRoutes.routePath(AccessRoutes.HALO) },
-    { title: 'External Accounts', path: '' },
+    { title: 'External Account', path: '' },
   ];
 
   public registerSvgIcons(): void {
@@ -137,10 +136,11 @@ export class ExternalAccountsPage implements OnInit {
     {
       id: 1,
       icon: 'instruction-document',
-      title: 'Start your search here',
+      title: 'Search',
       description: 'Search from the list of accepted domains below.',
       type: 'dropdown',
-      placeholder: 'Search for a domain or use keywords',
+      placeholder:
+        'Search by the org (e.g. PHSA), region (e.g. Yukon), or domain (e.g. PHSA.ca or yk.ca)',
       options: [
         { label: 'Yukon', value: 'yukon' },
         { label: 'British Columbia', value: 'bc' },
@@ -151,7 +151,7 @@ export class ExternalAccountsPage implements OnInit {
     {
       id: 2,
       icon: 'instruction-pencil',
-      title: 'Enter account based on your choice in step one',
+      title: 'Enter your email address for PIdP0000x test',
       description: '',
       type: 'input',
       placeholder: 'username@example.com',
@@ -169,10 +169,10 @@ export class ExternalAccountsPage implements OnInit {
     {
       id: 4,
       icon: 'icon-complete',
-      title: 'Instructions complete',
+      title: 'Verification complete',
       placeholder: '',
       description:
-        'Click the “Continue” button to start using your own account.',
+        'Click on the "Continue" button to start using your own account.',
       type: 'final',
       buttonText: 'Continue',
     },

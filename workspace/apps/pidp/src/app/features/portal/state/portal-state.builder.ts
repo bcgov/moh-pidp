@@ -11,7 +11,6 @@ import { IAccessSection } from './access-section.model';
 import { AccountLinkingPortalSection } from './access/account-linking-portal-section.class';
 import { BcProviderPortalSection } from './access/bc-provider-portal-section.class';
 import { DriverFitnessPortalSection } from './access/driver-fitness-portal-section.class';
-import { ExternalAccountsPortalSection } from './access/external-accounts-portal-section.class';
 import { HaloPortalSection } from './access/halo-portal-section.class';
 import { HcimAccountTransferPortalSection } from './access/hcim-account-transfer-portal-section.class';
 import { ImmsBCEformsPortalSection } from './access/immsbc-eforms-portal-section.class';
@@ -87,10 +86,6 @@ export class AccessStateBuilder {
   private createAccessGroup(profileStatus: ProfileStatus): IAccessSection[] {
     return [
       ...ArrayUtils.insertResultIf<IAccessSection>(
-        this.insertSection('accountLinking', profileStatus),
-        () => [new AccountLinkingPortalSection(profileStatus, this.router)],
-      ),
-      ...ArrayUtils.insertResultIf<IAccessSection>(
         this.insertSection('saEforms', profileStatus),
         () => [new SaEformsPortalSection(profileStatus, this.router)],
       ),
@@ -99,10 +94,6 @@ export class AccessStateBuilder {
         () => [
           new PrescriptionRefillEformsPortalSection(profileStatus, this.router),
         ],
-      ),
-      ...ArrayUtils.insertResultIf<IAccessSection>(
-        this.insertSection('bcProvider', profileStatus),
-        () => [new BcProviderPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
         this.insertSection('hcimAccountTransfer', profileStatus),
@@ -143,11 +134,6 @@ export class AccessStateBuilder {
       ...ArrayUtils.insertResultIf<IAccessSection>(
         this.insertSection('immsBCEforms', profileStatus),
         () => [new ImmsBCEformsPortalSection(profileStatus, this.router)],
-      ),
-      ...ArrayUtils.insertResultIf<IAccessSection>(
-        this.insertSection('externalAccounts', profileStatus) &&
-          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
-        () => [new ExternalAccountsPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
         this.insertSection('halo', profileStatus) &&
