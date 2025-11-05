@@ -16,13 +16,6 @@ export const routes: Routes = [
       ),
   },
   {
-    path: AccessRoutes.PRESCRIPTION_REFILL_EFORMS,
-    loadChildren: (): Promise<Routes> =>
-      import(
-        './pages/prescription-refill-eforms/prescription-refill-eforms-routing.routes'
-      ).then((m) => m.routes),
-  },
-  {
     path: AccessRoutes.HCIM_ACCOUNT_TRANSFER,
     loadChildren: (): Promise<Routes> =>
       import(
