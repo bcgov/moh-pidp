@@ -29,8 +29,6 @@ export class MockProfileStatus {
           statusCode: StatusCode.AVAILABLE,
           incorrectLicenceType: false,
         },
-        prescriptionRefillEforms: { statusCode: StatusCode.AVAILABLE },
-        'prescription-refill-eforms': { statusCode: StatusCode.AVAILABLE },
         bcProvider: { statusCode: StatusCode.AVAILABLE },
         hcimAccountTransfer: { statusCode: StatusCode.AVAILABLE },
         driverFitness: { statusCode: StatusCode.AVAILABLE },

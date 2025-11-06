@@ -7,11 +7,6 @@ import {
   msTeamsSupportEmail,
 } from '@app/features/access/pages/ms-teams-privacy-officer/ms-teams.constants';
 import {
-  phsaInformationAccessAndPrivacyOfficeEmail,
-  prescriptionRefillRequestEformsSupportEmail,
-  prescriptionRenewalEformsSupportUrl,
-} from '@app/features/access/pages/prescription-refill-eforms/prescription-refill-eforms.constants';
-import {
   specialAuthorityEformsSupportEmail,
   specialAuthorityUrl,
 } from '@app/features/access/pages/sa-eforms/sa-eforms.constants';
@@ -37,13 +32,9 @@ export const environment: AppEnvironment = {
     providerIdentitySupport: 'OneHealthID@gov.bc.ca',
     specialAuthorityEformsSupport: specialAuthorityEformsSupportEmail,
     hcimAccountTransferSupport: hcimWebAccountTransferSupport,
-    prescriptionRefillRequestEformsSupport:
-      prescriptionRefillRequestEformsSupportEmail,
     driverFitnessSupport: driverFitnessSupportEmail,
     msTeamsSupport: msTeamsSupportEmail,
     doctorsTechnologyOfficeSupport: doctorsTechnologyOfficeEmail,
-    phsaInformationAccessAndPrivacyOffice:
-      phsaInformationAccessAndPrivacyOfficeEmail,
     immsBCEformsSupport: immsBCEformsSupportEmail,
   },
   urls: {
@@ -52,7 +43,6 @@ export const environment: AppEnvironment = {
     bcscMobileSetup: 'https://id.gov.bc.ca/account',
     specialAuthority: specialAuthorityUrl,
     doctorsTechnologyOffice: doctorsTechnologyOfficeUrl,
-    prescriptionRenewal: prescriptionRenewalEformsSupportUrl,
   },
   phones: {
     additionalSupport: '250-448-1262',

@@ -81,7 +81,6 @@ public partial class ProfileStatus
                     ProfileSection.Create<IvfSection>(data),
                     ProfileSection.Create<MSTeamsClinicMemberSection>(data),
                     ProfileSection.Create<MSTeamsPrivacyOfficerSection>(data),
-                    ProfileSection.Create<PrescriptionRefillEformsSection>(data),
                     ProfileSection.Create<ProviderReportingPortalSection>(data),
                     ProfileSection.Create<ProvincialAttachmentSystemSection>(data),
                     ProfileSection.Create<SAEformsSection>(data)

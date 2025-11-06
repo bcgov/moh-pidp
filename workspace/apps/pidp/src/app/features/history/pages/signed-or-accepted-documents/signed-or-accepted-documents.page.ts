@@ -114,8 +114,8 @@ export class SignedOrAcceptedDocumentsPage implements OnInit {
         status.userAccessAgreement = this.permissionsService.hasRole([
           Role.FEATURE_PIDP_DEMO,
         ])
-          ? { statusCode: StatusCode.COMPLETED}
-          : { statusCode: StatusCode.NOT_AVAILABLE};
+          ? { statusCode: StatusCode.COMPLETED }
+          : { statusCode: StatusCode.NOT_AVAILABLE };
 
         switch (document.type) {
           case DocumentType.PIDP_COLLECTION_NOTICE:
@@ -124,12 +124,6 @@ export class SignedOrAcceptedDocumentsPage implements OnInit {
           case DocumentType.USER_ACCESS_AGREEMENT:
             return (
               status?.userAccessAgreement.statusCode === StatusCode.COMPLETED
-            );
-
-          case DocumentType.PRESCRIPTION_REFILL_EFORMS_COLLECTION_NOTICE:
-            return (
-              status?.prescriptionRefillEforms.statusCode ===
-              StatusCode.COMPLETED
             );
 
           case DocumentType.PROVIDER_REPORTING_PORTAL_COLLECTION_NOTICE:
