@@ -45,8 +45,8 @@ import { SuccessDialogComponent } from '@app/shared/components/success-dialog/su
 
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { AccessRoutes } from '../../../access/access.routes';
-import { InstructionCardComponent } from './components/instruction-card.component';
-import { InstructionCard } from './components/instruction-card.model';
+import { InstructionCardComponent } from './components/instruction-card/instruction-card.component';
+import { InstructionCard } from './components/instruction-card/instruction-card.model';
 import { ExternalAccountsResource } from './external-accounts-resource.service';
 import {
   InvitationSteps,
