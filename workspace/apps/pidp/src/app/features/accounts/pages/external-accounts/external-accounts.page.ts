@@ -15,10 +15,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import {
   EMPTY,
+  Observable,
+  Subject,
   catchError,
   distinctUntilChanged,
   finalize,
   map,
+  merge,
   of,
   switchMap,
   tap,
@@ -45,7 +48,10 @@ import { AccessRoutes } from '../../../access/access.routes';
 import { InstructionCardComponent } from './components/instruction-card.component';
 import { InstructionCard } from './components/instruction-card.model';
 import { ExternalAccountsResource } from './external-accounts-resource.service';
-import { InvitationSteps } from './external-accounts.model';
+import {
+  InvitationSteps,
+  InvitedExternalAccount,
+} from './external-accounts.model';
 
 @Component({
   selector: 'app-external-accounts',
@@ -70,6 +76,8 @@ export class ExternalAccountsPage implements OnInit {
   public componentType = DialogExternalAccountCreateComponent;
   public emailSupport: string;
   public emailValidationToken = signal<string | null>(null);
+  private refreshAccounts$ = new Subject<void>();
+  public invitedExternalAccounts$!: Observable<InvitedExternalAccount[] | null>;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -246,6 +254,21 @@ export class ExternalAccountsPage implements OnInit {
 
   public ngOnInit(): void {
     this.loadingOverlay.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
+
+    // Merge initial load with refresh triggers
+    this.invitedExternalAccounts$ = merge(
+      of(void 0), // Initial load
+      this.refreshAccounts$, // Subsequent refreshes
+    ).pipe(
+      switchMap(() =>
+        this.resource.getInvitedExternalAccounts(this.partyService.partyId),
+      ),
+      catchError(() => {
+        this.toastService.openErrorToast('Failed to load external accounts.');
+        return of(null);
+      }),
+    );
+
     this.route.queryParamMap
       .pipe(
         map((params) => params.get('email-verification-token')),
@@ -273,6 +296,7 @@ export class ExternalAccountsPage implements OnInit {
                         this.toastService.openSuccessToast(
                           'External Account invited successfully!',
                         );
+                        this.refreshAccounts$.next();
                       }),
                     ),
                 ),

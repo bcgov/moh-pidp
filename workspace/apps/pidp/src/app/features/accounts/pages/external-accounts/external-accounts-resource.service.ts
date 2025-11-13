@@ -9,6 +9,8 @@ import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 
+import { InvitedExternalAccount } from './external-accounts.model';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -63,6 +65,18 @@ export class ExternalAccountsResource {
         map(() => ({}) as NoContent),
         catchError((error: HttpErrorResponse) => throwError(() => error)),
       );
+  }
+
+  public getInvitedExternalAccounts(
+    partyId: number,
+  ): Observable<InvitedExternalAccount[] | null> {
+    return this.apiResource
+      .get<InvitedExternalAccount[]>(
+        `${this.getResourcePath(
+          partyId,
+        )}/credentials/bc-provider/invited-accounts`,
+      )
+      .pipe(catchError((error: HttpErrorResponse) => throwError(() => error)));
   }
 
   private getResourcePath(partyId: number): string {

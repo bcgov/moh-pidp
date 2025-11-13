@@ -35,6 +35,7 @@
             <mat-icon
               class="assistance-content__icon"
               [svgIcon]="'need-assistance'"></mat-icon>
+            <pre>{{ invitedExternalAccounts$ | async | json }}</pre>
           </div>
         </div>
         <div class="assistance-box">
