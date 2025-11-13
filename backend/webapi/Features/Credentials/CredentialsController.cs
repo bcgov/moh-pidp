@@ -101,6 +101,15 @@ public class CredentialsController(IPidpAuthorizationService authorizationServic
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
+    [HttpGet("bc-provider/invited-accounts")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<List<BCProviderInvitedEntraAccounts.Model>>> GetBCProviderInvitedEntraAccounts([FromServices] IQueryHandler<BCProviderInvitedEntraAccounts.Query, IDomainResult<List<BCProviderInvitedEntraAccounts.Model>>> handler,
+                                                                                                    [FromRoute] BCProviderInvitedEntraAccounts.Query query)
+    => await this.AuthorizePartyBeforeHandleAsync(query.PartyId, handler, query)
+        .ToActionResultOfT();
+
     [HttpPost("link-ticket")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
