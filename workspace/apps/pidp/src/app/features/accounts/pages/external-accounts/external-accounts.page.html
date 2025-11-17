@@ -29,16 +29,43 @@
         </div>
       </div>
       <div>
-        <div class="assistance-box">
-          <div class="assistance-header"><h2>Invited Account</h2></div>
-          <div class="assistance-content">
-            <mat-icon
-              class="assistance-content__icon"
-              [svgIcon]="'need-assistance'"></mat-icon>
-            <pre>{{ invitedExternalAccounts$ | async | json }}</pre>
+        <div class="invited-accounts-box">
+          <div class="invited-accounts-header"><h2>Invited Accounts</h2></div>
+          <div class="invited-accounts-content">
+            <div class="card__card-wrapper invited-accounts">
+              @if (invitedExternalAccounts$ | async; as accounts;) { @if
+              (accounts.length > 0) {
+              <button
+                class="carousel-button carousel-button--left"
+                aria-label="Previous accounts"
+                [disabled]="!canGoPrevious()"
+                (click)="previousSlide()">
+                <mat-icon>chevron_left</mat-icon>
+              </button>
+
+              <div class="invited-accounts">
+                @for (account of getSortedAndSlicedAccounts(accounts); let i =
+                $index; track i) {
+                <app-invited-account-card
+                  [invitedUserPrincipalName]="account.invitedUserPrincipalName"
+                  [invitedAt]="account.invitedAt" />
+                }
+              </div>
+
+              <button
+                class="carousel-button carousel-button--right"
+                aria-label="Next accounts"
+                [disabled]="currentSlideIndex() * 2 + 2 >= accounts.length"
+                (click)="nextSlide()">
+                <mat-icon>chevron_right</mat-icon>
+              </button>
+              } @else {
+              <p>No invited accounts found.</p>
+              }}
+            </div>
           </div>
         </div>
-        <div class="assistance-box">
+        <!-- <div class="assistance-box">
           <div class="assistance-header"><h2>Need assistance?</h2></div>
           <div class="assistance-content">
             <mat-icon
@@ -72,7 +99,7 @@
               </li>
             </ul>
           </div>
-        </div>
+        </div> -->
       </div>
     </section>
   </div>

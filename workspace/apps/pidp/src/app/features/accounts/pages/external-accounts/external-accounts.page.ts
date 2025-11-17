@@ -1,3 +1,4 @@
+import { CdkNoDataRow } from '@angular/cdk/table';
 import { CommonModule } from '@angular/common';
 import {
   Component,
@@ -47,6 +48,7 @@ import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/br
 import { AccessRoutes } from '../../../access/access.routes';
 import { InstructionCardComponent } from './components/instruction-card/instruction-card.component';
 import { InstructionCard } from './components/instruction-card/instruction-card.model';
+import { InvitedAccountCardComponent } from './components/invited-account-card/invited-account-card.component';
 import { ExternalAccountsResource } from './external-accounts-resource.service';
 import {
   InvitationSteps,
@@ -64,6 +66,8 @@ import {
     InjectViewportCssClassDirective,
     SuccessDialogComponent,
     AnchorDirective,
+    InvitedAccountCardComponent,
+    CdkNoDataRow,
   ],
   templateUrl: './external-accounts.page.html',
   styleUrl: './external-accounts.page.scss',
@@ -139,6 +143,42 @@ export class ExternalAccountsPage implements OnInit {
 
   @ViewChild('successDialog')
   public successDialogTemplate!: TemplateRef<Element>;
+
+  public currentSlideIndex = signal(0);
+
+  public getDisplayedAccounts(
+    accounts: InvitedExternalAccount[],
+  ): InvitedExternalAccount[] {
+    const startIndex = this.currentSlideIndex() * 2;
+    return accounts.slice(startIndex, startIndex + 2);
+  }
+
+  public getSortedAndSlicedAccounts(
+    accounts: InvitedExternalAccount[],
+  ): InvitedExternalAccount[] {
+    const sorted = [...accounts].sort(
+      (a, b) =>
+        new Date(b.invitedAt).getTime() - new Date(a.invitedAt).getTime(),
+    );
+    const startIndex = this.currentSlideIndex() * 2;
+    return sorted.slice(startIndex, startIndex + 2);
+  }
+
+  public canGoNext(accounts: InvitedExternalAccount[]): boolean {
+    return (this.currentSlideIndex() + 1) * 2 < accounts.length;
+  }
+
+  public canGoPrevious(): boolean {
+    return this.currentSlideIndex() > 0;
+  }
+
+  public nextSlide(): void {
+    this.currentSlideIndex.update((index) => index + 1);
+  }
+
+  public previousSlide(): void {
+    this.currentSlideIndex.update((index) => index - 1);
+  }
 
   public cards = signal<InstructionCard[]>([
     {
@@ -263,8 +303,9 @@ export class ExternalAccountsPage implements OnInit {
       switchMap(() =>
         this.resource.getInvitedExternalAccounts(this.partyService.partyId),
       ),
-      catchError(() => {
+      catchError((err: any) => {
         this.toastService.openErrorToast('Failed to load external accounts.');
+        console.error(err);
         return of(null);
       }),
     );
