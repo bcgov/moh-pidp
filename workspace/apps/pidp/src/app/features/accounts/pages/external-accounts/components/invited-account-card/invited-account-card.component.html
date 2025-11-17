@@ -1,1 +1,17 @@
-<section uiPidpInjectViewportCss></section>
+<section uiPidpInjectViewportCss>
+  <div class="content">
+    <div class="icon-box">
+      <img src="/assets/images/icons/account-image.svg" alt="Account Icon" />
+    </div>
+    <div class="name-box">
+      <h3 class="name">{{ invitedUserPrincipalName }}</h3>
+    </div>
+  </div>
+  <div class="second-row">
+    <div class="extra-box-large">
+      <p>
+        <span>Invited: {{ invitedAt | date }}</span>
+      </p>
+    </div>
+  </div>
+</section>
