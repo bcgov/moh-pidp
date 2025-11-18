@@ -149,8 +149,8 @@ export class ExternalAccountsPage implements OnInit {
   public getDisplayedAccounts(
     accounts: InvitedExternalAccount[],
   ): InvitedExternalAccount[] {
-    const startIndex = this.currentSlideIndex() * 2;
-    return accounts.slice(startIndex, startIndex + 2);
+    const startIndex = this.currentSlideIndex();
+    return accounts.slice(startIndex, startIndex + 1);
   }
 
   public getSortedAndSlicedAccounts(
@@ -160,12 +160,12 @@ export class ExternalAccountsPage implements OnInit {
       (a, b) =>
         new Date(b.invitedAt).getTime() - new Date(a.invitedAt).getTime(),
     );
-    const startIndex = this.currentSlideIndex() * 2;
-    return sorted.slice(startIndex, startIndex + 2);
+    const startIndex = this.currentSlideIndex();
+    return sorted.slice(startIndex, startIndex + 1);
   }
 
   public canGoNext(accounts: InvitedExternalAccount[]): boolean {
-    return (this.currentSlideIndex() + 1) * 2 < accounts.length;
+    return this.currentSlideIndex() + 1 < accounts.length;
   }
 
   public canGoPrevious(): boolean {

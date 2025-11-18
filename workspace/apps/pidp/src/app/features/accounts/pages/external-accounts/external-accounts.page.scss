@@ -196,8 +196,8 @@
             transition: transform 0.3s ease-in-out;
 
             app-invited-account-card {
-              flex: 0 0 calc(50% - 0.5rem);
-              max-width: calc(50% - 0.5rem);
+              flex: 0 0 100%;
+              max-width: 100%;
             }
           }
         }
