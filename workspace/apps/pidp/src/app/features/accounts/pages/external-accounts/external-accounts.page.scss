@@ -76,77 +76,28 @@
         flex: 1;
       }
 
-      > div {
+      > div.side {
         // The wrapper containing invited-accounts-box and assistance-box
-        flex: 1;
-      }
-
-      .assistance-box {
-        max-width: 300px;
-        border: 1px solid pidp.$grey-20;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        margin-top: 3.5rem;
-
-        .assistance-header h2 {
-          background-color: pidp.$btn-blue-color;
-          color: #fff;
-          padding: 1rem;
-          font-size: 1.5rem;
-          font-weight: 700;
-          text-align: center;
-          margin: 0;
-        }
-
-        .assistance-content {
-          display: flex;
-          justify-content: center;
-          padding: 20px;
-          flex-direction: column;
-          align-items: center;
-
-          &__icon {
-            width: 3.1875rem;
-            height: 3.75rem;
-
-            display: flex;
-            flex-shrink: 0;
-            justify-content: center;
-            margin-bottom: 1rem;
-          }
-
-          ul {
-            list-style-type: disc;
-            padding-left: 20px;
-
-            li {
-              margin-bottom: 15px;
-              color: pidp.$bcgov-color-text;
-
-              a:link,
-              a:visited {
-                color: pidp.$btn-blue-color;
-                text-decoration: none;
-                display: flex;
-              }
-            }
-          }
-        }
+        flex: 0.3;
       }
 
       .invited-accounts-box {
         max-width: 700px; // Increased to accommodate buttons
-        border: 1px solid pidp.$grey-20;
+        // border: 1px solid pidp.$grey-20;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        margin-top: 3.5rem;
+        border-radius: 8px;
+        height: 359px;
 
         .invited-accounts-header h2 {
           background-color: pidp.$btn-blue-color;
           color: #fff;
-          padding: 1rem;
-          font-size: 1.5rem;
+          padding: 0.5rem;
+          font-size: 1rem;
           font-weight: 700;
           text-align: center;
           margin: 0;
+          border-top-left-radius: 8px;
+          border-top-right-radius: 8px;
         }
 
         .invited-accounts-content {
@@ -160,8 +111,8 @@
             background: pidp.$btn-blue-color;
             border: none;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 20px;
+            height: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -198,6 +149,62 @@
             app-invited-account-card {
               flex: 0 0 100%;
               max-width: 100%;
+            }
+          }
+        }
+      }
+
+      .assistance-box {
+        max-width: 300px;
+        border: 1px solid pidp.$grey-20;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        margin-top: 1.8rem;
+        border-radius: 8px;
+
+        .assistance-header h2 {
+          background-color: pidp.$btn-blue-color;
+          color: #fff;
+          padding: 0.5rem;
+          font-size: 1rem;
+          font-weight: 700;
+          text-align: center;
+          margin: 0;
+          border-top-left-radius: 8px;
+          border-top-right-radius: 8px;
+        }
+
+        .assistance-content {
+          display: flex;
+          justify-content: center;
+          padding: 10px;
+          flex-direction: column;
+          align-items: center;
+          font-size: 0.825rem;
+
+          &__icon {
+            width: 2.1875rem;
+            height: 2.75rem;
+
+            display: flex;
+            flex-shrink: 0;
+            justify-content: center;
+            margin-bottom: 1rem;
+          }
+
+          ul {
+            list-style-type: disc;
+            padding-left: 20px;
+
+            li {
+              margin-bottom: 15px;
+              color: pidp.$bcgov-color-text;
+
+              a:link,
+              a:visited {
+                color: pidp.$btn-blue-color;
+                text-decoration: none;
+                display: flex;
+              }
             }
           }
         }
