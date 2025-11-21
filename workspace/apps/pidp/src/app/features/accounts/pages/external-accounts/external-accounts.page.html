@@ -59,9 +59,19 @@
                 (click)="nextSlide()">
                 <mat-icon>chevron_right</mat-icon>
               </button>
-              } @else {
-              <p>No invited accounts found.</p>
-              }}
+              }}@else {
+              <div class="no-accounts-box">
+                <div class="icon-box">
+                  <img
+                    src="/assets/images/icons/account-image.svg"
+                    alt="Account Icon" />
+                </div>
+                <div class="no-accounts">
+                  <p>No accounts invited.</p>
+                  <i>Follow the instructions to invite external accounts.</i>
+                </div>
+              </div>
+              }
             </div>
           </div>
         </div>

@@ -151,6 +151,29 @@
               max-width: 100%;
             }
           }
+          .no-accounts-box {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            & .icon-box {
+              border: 2px solid pidp.$bcgov-color-text;
+              border-radius: 50%;
+              padding: 10px;
+              img {
+                width: 60px;
+                height: 60px;
+              }
+            }
+            .no-accounts {
+              font-size: 0.825rem;
+              color: pidp.$bcgov-color-text;
+              text-align: center;
+              width: 100%;
+            }
+          }
         }
       }
 

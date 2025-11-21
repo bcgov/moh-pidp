@@ -1,7 +1,7 @@
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 
-import { Observable, catchError, map, throwError } from 'rxjs';
+import { Observable, catchError, map, of, throwError } from 'rxjs';
 
 import { NoContent } from '@bcgov/shared/data-access';
 
@@ -76,7 +76,15 @@ export class ExternalAccountsResource {
           partyId,
         )}/credentials/bc-provider/invited-accounts`,
       )
-      .pipe(catchError((error: HttpErrorResponse) => throwError(() => error)));
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === HttpStatusCode.NotFound) {
+            return of(null);
+          }
+
+          throw error;
+        }),
+      );
   }
 
   private getResourcePath(partyId: number): string {
