@@ -39,6 +39,7 @@
                 class="carousel-button carousel-button--left"
                 aria-label="Previous accounts"
                 [disabled]="!canGoPrevious()"
+                [style.visibility]="accounts.length > 1 ? 'visible' : 'hidden'"
                 (click)="previousSlide()">
                 <mat-icon>chevron_left</mat-icon>
               </button>
@@ -55,7 +56,8 @@
               <button
                 class="carousel-button carousel-button--right"
                 aria-label="Next accounts"
-                [disabled]="currentSlideIndex() * 2 + 2 >= accounts.length"
+                [disabled]="!canGoNext(accounts)"
+                [style.visibility]="accounts.length > 1 ? 'visible' : 'hidden'"
                 (click)="nextSlide()">
                 <mat-icon>chevron_right</mat-icon>
               </button>
