@@ -235,3 +235,35 @@
     }
   }
 }
+
+.viewport-small,
+.viewport-medium {
+  .main {
+    flex-direction: column;
+
+    > div.side {
+      flex: unset;
+      width: 100%;
+    }
+    .side {
+      display: flex;
+      flex-direction: column;
+      width: 50%;
+      align-items: center;
+    }
+  }
+}
+
+.viewport-xsmall {
+  .main {
+    > div.side {
+      flex: unset !important;
+    }
+    .side {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      align-items: center;
+    }
+  }
+}
