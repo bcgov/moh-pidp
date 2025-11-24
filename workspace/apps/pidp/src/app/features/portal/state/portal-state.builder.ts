@@ -17,7 +17,6 @@ import { ImmsBCEformsPortalSection } from './access/immsbc-eforms-portal-section
 import { IvfPortalSection } from './access/ivf-portal-section.class';
 import { MsTeamsClinicMemberPortalSection } from './access/ms-teams-clinic-member-portal-section.class';
 import { MsTeamsPrivacyOfficerPortalSection } from './access/ms-teams-privacy-officer-portal-section.class';
-import { PrescriptionRefillEformsPortalSection } from './access/prescription-refill-eforms-portal-section.class';
 import { ProviderReportingPortalSection } from './access/provider-reporting-portal-section.class';
 import { ProvincialAttachmentSystemPortalSection } from './access/provincial-attachment-system-portal-section.class';
 import { SaEformsPortalSection } from './access/sa-eforms-portal-section.class';
@@ -88,12 +87,6 @@ export class AccessStateBuilder {
       ...ArrayUtils.insertResultIf<IAccessSection>(
         this.insertSection('saEforms', profileStatus),
         () => [new SaEformsPortalSection(profileStatus, this.router)],
-      ),
-      ...ArrayUtils.insertResultIf<IAccessSection>(
-        this.insertSection('prescriptionRefillEforms', profileStatus),
-        () => [
-          new PrescriptionRefillEformsPortalSection(profileStatus, this.router),
-        ],
       ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
         this.insertSection('hcimAccountTransfer', profileStatus),
@@ -223,12 +216,6 @@ export class PortalStateBuilder {
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('saEforms', profileStatus),
         () => [new SaEformsPortalSection(profileStatus, this.router)],
-      ),
-      ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.insertSection('prescriptionRefillEforms', profileStatus),
-        () => [
-          new PrescriptionRefillEformsPortalSection(profileStatus, this.router),
-        ],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('bcProvider', profileStatus),

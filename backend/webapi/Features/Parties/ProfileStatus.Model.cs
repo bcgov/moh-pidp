@@ -288,25 +288,6 @@ public partial class ProfileStatus
             }
         }
 
-        public class PrescriptionRefillEformsSection : ProfileSection
-        {
-            internal override string SectionName => "prescriptionRefillEforms";
-            public override string[] KeyWords => ["pharmacists", "rx"];
-
-            protected override StatusCode Compute(ProfileData profile)
-            {
-                return profile switch
-                {
-                    { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
-                    _ when profile.HasEnrolment(AccessTypeCode.PrescriptionRefillEforms) => StatusCode.Complete,
-                    _ when profile.PartyPlrStanding
-                        .With(PrescriptionRefillEforms.AllowedIdentifierTypes)
-                        .HasGoodStanding => StatusCode.Incomplete,
-                    _ => StatusCode.Locked
-                };
-            }
-        }
-
         public class ProvincialAttachmentSystemSection : ProfileSection
         {
             internal override string SectionName => "provincialAttachmentSystem";

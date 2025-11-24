@@ -100,15 +100,6 @@ public class AccessRequestsController(IPidpAuthorizationService authorizationSer
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
-    [HttpPost("prescription-refill-eforms")]
-    [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreatePrescriptionRefillEformsEnrolment([FromServices] ICommandHandler<PrescriptionRefillEforms.Command, IDomainResult> handler,
-                                                                             [FromRoute] PrescriptionRefillEforms.Command command)
-        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
-            .ToActionResult();
-
     [HttpPost("provider-reporting-portal")]
     [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
