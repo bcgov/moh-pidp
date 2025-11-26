@@ -8,6 +8,7 @@ import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
   imports: [InjectViewportCssClassDirective, DatePipe],
   templateUrl: './invited-account-card.component.html',
   styleUrl: './invited-account-card.component.scss',
+  standalone: true,
 })
 export class InvitedAccountCardComponent {
   @Input() public invitedUserPrincipalName!: string;
