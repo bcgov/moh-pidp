@@ -99,7 +99,7 @@ export class InstructionCardComponent implements OnChanges {
   }
 
   // Convert the observable to a signal
-  private searchResultsData = toSignal(
+  private readonly searchResultsData = toSignal(
     this.searchControl.valueChanges.pipe(
       debounceTime(300),
       distinctUntilChanged(),
