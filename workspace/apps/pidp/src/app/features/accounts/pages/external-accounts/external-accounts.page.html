@@ -28,7 +28,55 @@
           }
         </div>
       </div>
-      <div>
+      <div class="side">
+        <div class="invited-accounts-box">
+          <div class="invited-accounts-header"><h2>Invited Accounts</h2></div>
+          <div class="invited-accounts-content">
+            <div class="card__card-wrapper invited-accounts">
+              @if (invitedExternalAccounts$ | async; as accounts;) { @if
+              (accounts.length > 0) {
+              <button
+                class="carousel-button carousel-button--left"
+                aria-label="Previous accounts"
+                [disabled]="!canGoPrevious()"
+                [style.visibility]="accounts.length > 1 ? 'visible' : 'hidden'"
+                (click)="previousSlide()">
+                <mat-icon>chevron_left</mat-icon>
+              </button>
+
+              <div class="invited-accounts">
+                @for (account of getSortedAndSlicedAccounts(accounts); let i =
+                $index; track i) {
+                <app-invited-account-card
+                  [invitedUserPrincipalName]="account.invitedUserPrincipalName"
+                  [invitedAt]="account.invitedAt" />
+                }
+              </div>
+
+              <button
+                class="carousel-button carousel-button--right"
+                aria-label="Next accounts"
+                [disabled]="!canGoNext(accounts)"
+                [style.visibility]="accounts.length > 1 ? 'visible' : 'hidden'"
+                (click)="nextSlide()">
+                <mat-icon>chevron_right</mat-icon>
+              </button>
+              }}@else {
+              <div class="no-accounts-box">
+                <div class="icon-box">
+                  <img
+                    src="/assets/images/icons/account-image.svg"
+                    alt="Account Icon" />
+                </div>
+                <div class="no-accounts">
+                  <p>No accounts invited.</p>
+                  <i>Follow the instructions to invite external accounts.</i>
+                </div>
+              </div>
+              }
+            </div>
+          </div>
+        </div>
         <div class="assistance-box">
           <div class="assistance-header"><h2>Need assistance?</h2></div>
           <div class="assistance-content">

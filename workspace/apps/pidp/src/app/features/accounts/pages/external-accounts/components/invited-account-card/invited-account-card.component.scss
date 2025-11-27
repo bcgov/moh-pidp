@@ -1,0 +1,148 @@
+@use 'pidp-variables' as pidp;
+
+// Set variables
+h2,
+h3,
+label,
+span,
+p {
+  font-family: pidp.$bcgov-font-family;
+}
+
+.viewport-all {
+  --icon-font-size: 2.5rem;
+  --notice-font-size: 0.75rem;
+  --created-font-size: 0.75rem;
+  --gap: 1rem;
+}
+.viewport-large,
+.viewport-medium,
+.viewport-small {
+  --gap: 1.25rem;
+}
+
+// Begin layout
+.viewport-all {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: solid 1px pidp.$grey-30;
+  border-radius: 4px;
+  max-width: 23.3125rem;
+  padding: 1.25rem;
+  height: 250px;
+
+  & .content {
+    margin-bottom: var(--gap);
+    & .icon-box {
+      padding: 0 var(--gap);
+      border: 2px solid pidp.$bcgov-color-accent;
+      border-radius: 50%;
+      width: 2.75rem;
+      height: 2.75rem;
+      margin-right: 1rem;
+      img {
+        width: 30px;
+        height: 30px;
+      }
+    }
+    & h3 {
+      margin: var(--gap) var(--gap) var(--gap) 0;
+      color: pidp.$bcgov-color-text;
+      font-size: 0.825rem;
+      font-weight: 700;
+      // Ensure long email addresses will wrap instead of making the card wider.
+      word-break: break-all;
+    }
+  }
+  & .second-row {
+    font-size: 0.825rem;
+    & .school-box {
+      color: #313132;
+      font-size: 0.825rem;
+      font-weight: 400;
+      line-height: 1.2rem;
+    }
+    & .extra-box-large {
+      & .notice-box {
+        padding: 0 var(--gap);
+        font-size: var(--notice-font-size);
+        text-align: center;
+        &.notice-green {
+          background-color: pidp.$green;
+          color: #fff;
+        }
+        &.notice-yellow {
+          background-color: pidp.$yellow;
+          color: #fff;
+        }
+        &.notice-red {
+          background-color: pidp.$red;
+          color: #fff;
+        }
+      }
+      & .created-box {
+        font-size: var(--created-font-size);
+        text-align: center;
+      }
+    }
+    & .extra-box-xsmall {
+      padding-top: var(--gap);
+      & .notice-green {
+        color: pidp.$green;
+      }
+      & .notice-yellow {
+        color: pidp.$yellow;
+      }
+      & .notice-red {
+        color: pidp.$red;
+      }
+      & fa-icon {
+        margin-right: calc(var(--gap) / 2);
+      }
+    }
+  }
+}
+
+// larger format layout
+.viewport-large,
+.viewport-medium,
+.viewport-small {
+  & .content {
+    display: flex;
+    flex-direction: column;
+
+    & .icon-box {
+      grid-column: 1;
+      grid-row: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    & .spacer-left {
+      grid-column: 1;
+      grid-row: 2;
+    }
+    & .name-box {
+      grid-column: 2;
+      grid-row: 1;
+      display: flex;
+      align-items: center;
+      & h3 {
+        line-height: 1.2;
+      }
+    }
+    & .school-box {
+      grid-column: 2/4;
+      grid-row: 2;
+    }
+    & .extra-box-xsmall {
+      display: none;
+    }
+    & .extra-box-large {
+      grid-column: 3;
+      grid-row: 1;
+    }
+  }
+}

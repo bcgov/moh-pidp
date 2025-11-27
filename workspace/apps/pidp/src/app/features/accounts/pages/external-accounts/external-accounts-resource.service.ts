@@ -1,13 +1,15 @@
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 
-import { Observable, catchError, map, throwError } from 'rxjs';
+import { Observable, catchError, map, of, throwError } from 'rxjs';
 
 import { NoContent } from '@bcgov/shared/data-access';
 
 import { ApiHttpClient } from '@app/core/resources/api-http-client.service';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
+
+import { InvitedExternalAccount } from './external-accounts.model';
 
 @Injectable({
   providedIn: 'root',
@@ -62,6 +64,26 @@ export class ExternalAccountsResource {
       .pipe(
         map(() => ({}) as NoContent),
         catchError((error: HttpErrorResponse) => throwError(() => error)),
+      );
+  }
+
+  public getInvitedExternalAccounts(
+    partyId: number,
+  ): Observable<InvitedExternalAccount[] | null> {
+    return this.apiResource
+      .get<InvitedExternalAccount[]>(
+        `${this.getResourcePath(
+          partyId,
+        )}/credentials/bc-provider/invited-accounts`,
+      )
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === HttpStatusCode.NotFound) {
+            return of(null);
+          }
+
+          throw error;
+        }),
       );
   }
 

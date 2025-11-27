@@ -1,3 +1,4 @@
+import { CdkNoDataRow } from '@angular/cdk/table';
 import { CommonModule } from '@angular/common';
 import {
   Component,
@@ -15,10 +16,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import {
   EMPTY,
+  Observable,
+  Subject,
   catchError,
   distinctUntilChanged,
   finalize,
   map,
+  merge,
   of,
   switchMap,
   tap,
@@ -42,10 +46,14 @@ import { SuccessDialogComponent } from '@app/shared/components/success-dialog/su
 
 import { BreadcrumbComponent } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { AccessRoutes } from '../../../access/access.routes';
-import { InstructionCardComponent } from './components/instruction-card.component';
-import { InstructionCard } from './components/instruction-card.model';
+import { InstructionCardComponent } from './components/instruction-card/instruction-card.component';
+import { InstructionCard } from './components/instruction-card/instruction-card.model';
+import { InvitedAccountCardComponent } from './components/invited-account-card/invited-account-card.component';
 import { ExternalAccountsResource } from './external-accounts-resource.service';
-import { InvitationSteps } from './external-accounts.model';
+import {
+  InvitationSteps,
+  InvitedExternalAccount,
+} from './external-accounts.model';
 
 @Component({
   selector: 'app-external-accounts',
@@ -58,6 +66,8 @@ import { InvitationSteps } from './external-accounts.model';
     InjectViewportCssClassDirective,
     SuccessDialogComponent,
     AnchorDirective,
+    InvitedAccountCardComponent,
+    CdkNoDataRow,
   ],
   templateUrl: './external-accounts.page.html',
   styleUrl: './external-accounts.page.scss',
@@ -70,6 +80,8 @@ export class ExternalAccountsPage implements OnInit {
   public componentType = DialogExternalAccountCreateComponent;
   public emailSupport: string;
   public emailValidationToken = signal<string | null>(null);
+  private readonly refreshAccounts$ = new Subject<void>();
+  public invitedExternalAccounts$!: Observable<InvitedExternalAccount[] | null>;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -131,6 +143,42 @@ export class ExternalAccountsPage implements OnInit {
 
   @ViewChild('successDialog')
   public successDialogTemplate!: TemplateRef<Element>;
+
+  public currentSlideIndex = signal(0);
+
+  public getDisplayedAccounts(
+    accounts: InvitedExternalAccount[],
+  ): InvitedExternalAccount[] {
+    const startIndex = this.currentSlideIndex();
+    return accounts.slice(startIndex, startIndex + 1);
+  }
+
+  public getSortedAndSlicedAccounts(
+    accounts: InvitedExternalAccount[],
+  ): InvitedExternalAccount[] {
+    const sorted = [...accounts].sort(
+      (a, b) =>
+        new Date(b.invitedAt).getTime() - new Date(a.invitedAt).getTime(),
+    );
+    const startIndex = this.currentSlideIndex();
+    return sorted.slice(startIndex, startIndex + 1);
+  }
+
+  public canGoNext(accounts: InvitedExternalAccount[]): boolean {
+    return this.currentSlideIndex() + 1 < accounts.length;
+  }
+
+  public canGoPrevious(): boolean {
+    return this.currentSlideIndex() > 0;
+  }
+
+  public nextSlide(): void {
+    this.currentSlideIndex.update((index) => index + 1);
+  }
+
+  public previousSlide(): void {
+    this.currentSlideIndex.update((index) => index - 1);
+  }
 
   public cards = signal<InstructionCard[]>([
     {
@@ -246,6 +294,22 @@ export class ExternalAccountsPage implements OnInit {
 
   public ngOnInit(): void {
     this.loadingOverlay.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
+
+    // Merge initial load with refresh triggers
+    this.invitedExternalAccounts$ = merge(
+      of(void 0), // Initial load
+      this.refreshAccounts$, // Subsequent refreshes
+    ).pipe(
+      switchMap(() =>
+        this.resource.getInvitedExternalAccounts(this.partyService.partyId),
+      ),
+      catchError((err: any) => {
+        this.toastService.openErrorToast('Failed to load external accounts.');
+        console.error(err);
+        return of(null);
+      }),
+    );
+
     this.route.queryParamMap
       .pipe(
         map((params) => params.get('email-verification-token')),
@@ -273,6 +337,7 @@ export class ExternalAccountsPage implements OnInit {
                         this.toastService.openSuccessToast(
                           'External Account invited successfully!',
                         );
+                        this.refreshAccounts$.next();
                       }),
                     ),
                 ),
