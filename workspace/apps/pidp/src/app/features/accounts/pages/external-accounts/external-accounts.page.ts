@@ -80,7 +80,7 @@ export class ExternalAccountsPage implements OnInit {
   public componentType = DialogExternalAccountCreateComponent;
   public emailSupport: string;
   public emailValidationToken = signal<string | null>(null);
-  private refreshAccounts$ = new Subject<void>();
+  private readonly refreshAccounts$ = new Subject<void>();
   public invitedExternalAccounts$!: Observable<InvitedExternalAccount[] | null>;
 
   public constructor(
