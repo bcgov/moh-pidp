@@ -146,3 +146,13 @@ p {
     }
   }
 }
+
+.viewport-xsmall {
+  height: auto;
+
+  & .content {
+    & .icon-box {
+      padding: 0.3rem;
+    }
+  }
+}
