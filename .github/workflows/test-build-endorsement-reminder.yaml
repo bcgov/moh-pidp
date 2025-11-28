@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   promote-image-to-test-gold:
-    name: WebAPI Backend Promote to test - Gold
+    name: Promote endorsement-reminder from dev to test
     runs-on: ubuntu-latest
     steps:
       - name: Install oc
@@ -26,11 +26,21 @@ jobs:
         with:
           oc: "4.9"
 
-      - name: oc login
+      - name: oc login - GOLD
         run: |
           oc login --token=${{ secrets.GOLD_PIPELINE_SERVICE_ACCOUNT_TOKEN }} --server=${{ secrets.GOLD_OPENSHIFT_CLUSTER_URL }}
 
-      - name: Promote webapi from dev to test
+      - name: Promote endorsement-reminder from dev to test - GOLD
+        run: |
+          oc -n f088b1-tools tag \
+          f088b1-tools/endorsement-reminder:${{ env.ORIG_TAG }} \
+          f088b1-tools/endorsement-reminder:${{ env.PROMOTE_TAG }}
+
+      - name: oc login - GOLDDR
+        run: |
+          oc login --token=${{ secrets.GOLDDR_PIPELINE_SERVICE_ACCOUNT_TOKEN }} --server=${{ secrets.GOLDDR_OPENSHIFT_CLUSTER_URL }}
+
+      - name: Promote endorsement-reminder from dev to test - GOLDDR
         run: |
           oc -n f088b1-tools tag \
           f088b1-tools/endorsement-reminder:${{ env.ORIG_TAG }} \

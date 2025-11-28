@@ -13,7 +13,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  helm-deployment-endorsement-reminder-gold:
+  helm-deployment-endorsement-reminder:
     runs-on: 'ubuntu-latest'
     steps:
       - uses: actions/checkout@master
