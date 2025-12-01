@@ -263,6 +263,11 @@
       flex-direction: column;
       width: 100%;
       align-items: center;
+
+      & .invited-accounts-box {
+        height: auto;
+        max-width: 300px;
+      }
     }
   }
 }
