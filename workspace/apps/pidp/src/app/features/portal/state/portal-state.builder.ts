@@ -14,6 +14,7 @@ import { DriverFitnessPortalSection } from './access/driver-fitness-portal-secti
 import { HaloPortalSection } from './access/halo-portal-section.class';
 import { HcimAccountTransferPortalSection } from './access/hcim-account-transfer-portal-section.class';
 import { ImmsBCEformsPortalSection } from './access/immsbc-eforms-portal-section.class';
+import { ImmsbcPortalSection } from './access/immscbc-portal-section.class';
 import { IvfPortalSection } from './access/ivf-portal-section.class';
 import { MsTeamsClinicMemberPortalSection } from './access/ms-teams-clinic-member-portal-section.class';
 import { MsTeamsPrivacyOfficerPortalSection } from './access/ms-teams-privacy-officer-portal-section.class';
@@ -136,6 +137,10 @@ export class AccessStateBuilder {
       ...ArrayUtils.insertResultIf<IAccessSection>(
         this.insertSection('ivf', profileStatus),
         () => [new IvfPortalSection(profileStatus, this.router)],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('immsBC', profileStatus),
+        () => [new ImmsbcPortalSection(profileStatus, this.router)],
       ),
     ];
   }

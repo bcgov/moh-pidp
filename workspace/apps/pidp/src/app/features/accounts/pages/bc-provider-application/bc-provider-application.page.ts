@@ -268,6 +268,8 @@ export class BcProviderApplicationPage
       this.router.navigateByUrl(AccessRoutes.routePath(AccessRoutes.HALO));
     } else if (this.previousUrl.split('/').includes(AccessRoutes.IVF)) {
       this.router.navigateByUrl(AccessRoutes.routePath(AccessRoutes.IVF));
+    } else if (this.previousUrl.split('/').includes(AccessRoutes.IMMSBC)) {
+      this.router.navigateByUrl(AccessRoutes.routePath(AccessRoutes.IMMSBC));
     } else {
       this.navigationService.navigateToRoot();
     }
