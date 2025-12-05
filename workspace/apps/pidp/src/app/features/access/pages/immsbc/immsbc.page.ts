@@ -1,7 +1,7 @@
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { AsyncPipe, NgIf, NgOptimizedImage } from '@angular/common';
-import { Component, Inject, OnInit, inject } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatStepperModule } from '@angular/material/stepper';
@@ -9,7 +9,15 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router, RouterLink } from '@angular/router';
 
-import { BehaviorSubject, Observable, of, switchMap, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  Subject,
+  of,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
@@ -59,7 +67,7 @@ import { bcProviderTutorialLink } from '../provincial-attachment-system/provinci
     },
   ],
 })
-export class ImmsbcPage implements OnInit {
+export class ImmsbcPage implements OnInit, OnDestroy {
   public bcProvider$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     false,
   );
@@ -76,6 +84,7 @@ export class ImmsbcPage implements OnInit {
   public Destination = Destination;
   public StatusCode = StatusCode;
   public AccessRoutes = AccessRoutes;
+  private destroy$ = new Subject<void>();
   public breadcrumbsData: Array<{ title: string; path: string }> = [
     { title: 'Home', path: '' },
     {
@@ -135,12 +144,18 @@ export class ImmsbcPage implements OnInit {
     this.handleStepperState(profileStatus$);
   }
 
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   private handleStepperState(
     profileStatus$: Observable<ProfileStatus | null>,
   ): void {
     let selectedIndex = this.lastSelectedIndex;
     profileStatus$
       .pipe(
+        takeUntil(this.destroy$),
         tap((profileStatus: ProfileStatus | null) => {
           this.hasCpn = profileStatus?.status.collegeCertification.hasCpn;
           this.immsbcStatusCode = profileStatus?.status.immsBC.statusCode;
