@@ -110,7 +110,7 @@ export class ImmsbcPage implements OnInit, OnDestroy {
     this.selectedIndex = -1;
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
     this.bcProviderTutorial = bcProviderTutorialLink;
-    this.lastSelectedIndex = 3;
+    this.lastSelectedIndex = 2;
     this.destination$ = this.discoveryResource.getDestination(
       this.partyService.partyId,
     );
