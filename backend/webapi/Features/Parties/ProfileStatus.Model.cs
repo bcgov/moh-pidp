@@ -235,18 +235,18 @@ public partial class ProfileStatus
         public class ImmsBCSection : ProfileSection
         {
             internal override string SectionName => "immsBC";
-            public override string[] KeyWords => ["doctors", "nursing", "pharmacist"];
+            public override string[] KeyWords => ["pharmacist"];
 
             protected override StatusCode Compute(ProfileData profile)
             {
                 return profile switch
                 {
-                    _ when (profile.EndorsementPlrStanding.HasGoodStanding
-                        || profile.PartyPlrStanding
-                            .With(ProviderRoleType.MedicalDoctor, ProviderRoleType.RegisteredNursePractitioner)
-                            .HasGoodStanding)
+                    _ when profile.PartyPlrStanding
+                            .With(IdentifierType.Pharmacist)
+                            .HasGoodStanding
                         && profile.HasBCProviderCredential => StatusCode.Complete,
-                    { HasBCServicesCardCredential: true } => StatusCode.Incomplete,
+                    _ when profile.PartyPlrStanding
+                            .With(IdentifierType.Pharmacist).HasGoodStanding => StatusCode.Incomplete,
                     _ => StatusCode.Locked
                 };
             }
