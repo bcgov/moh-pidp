@@ -232,6 +232,26 @@ public partial class ProfileStatus
             }
         }
 
+        public class ImmsBCSection : ProfileSection
+        {
+            internal override string SectionName => "immsBC";
+            public override string[] KeyWords => ["pharmacist"];
+
+            protected override StatusCode Compute(ProfileData profile)
+            {
+                return profile switch
+                {
+                    _ when profile.PartyPlrStanding
+                            .With(IdentifierType.Pharmacist)
+                            .HasGoodStanding
+                        && profile.HasBCProviderCredential => StatusCode.Complete,
+                    _ when profile.PartyPlrStanding
+                            .With(IdentifierType.Pharmacist).HasGoodStanding => StatusCode.Incomplete,
+                    _ => StatusCode.Locked
+                };
+            }
+        }
+
         public class IvfSection : ProfileSection
         {
             internal override string SectionName => "ivf";

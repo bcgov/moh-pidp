@@ -74,4 +74,9 @@ export const routes: Routes = [
     loadChildren: (): Promise<Routes> =>
       import('./pages/ivf/ivf-routing.routes').then((m) => m.routes),
   },
+  {
+    path: AccessRoutes.IMMSBC,
+    loadChildren: (): Promise<Routes> =>
+      import('./pages/immsbc/immsbc-routing.routes').then((m) => m.routes),
+  },
 ];
