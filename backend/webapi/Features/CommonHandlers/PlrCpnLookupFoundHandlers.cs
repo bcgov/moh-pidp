@@ -86,6 +86,11 @@ public class UpdateBCProviderAfterPlrCpnLookupFound(
             attributes.SetIsMoa(false);
         }
 
+        if (notification.StandingsDigest.MspIdForOneCpn(notification.Cpn) is string mspId)
+        {
+            attributes.SetMspId(mspId);
+        }
+
         foreach (var upn in userPrincipalNames)
         {
             await this.bcProviderClient.UpdateAttributes(upn, attributes.AsAdditionalData());
