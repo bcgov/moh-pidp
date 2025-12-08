@@ -169,7 +169,8 @@ public class Create
             if (party.Cpn != null)
             {
                 attributes.SetCpn(party.Cpn);
-                if (plrStanding.MspIdForOneCpn(party.Cpn) is string mspId)
+                var mspId = plrStanding.MspIdForOneCpn(party.Cpn);
+                if (!string.IsNullOrEmpty(mspId))
                 {
                     attributes.SetMspId(mspId);
                 }

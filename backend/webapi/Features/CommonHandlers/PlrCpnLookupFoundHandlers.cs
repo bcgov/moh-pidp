@@ -86,7 +86,8 @@ public class UpdateBCProviderAfterPlrCpnLookupFound(
             attributes.SetIsMoa(false);
         }
 
-        if (notification.StandingsDigest.MspIdForOneCpn(notification.Cpn) is string mspId)
+        var mspId = notification.StandingsDigest.MspIdForOneCpn(notification.Cpn);
+        if (!string.IsNullOrEmpty(mspId))
         {
             attributes.SetMspId(mspId);
         }
