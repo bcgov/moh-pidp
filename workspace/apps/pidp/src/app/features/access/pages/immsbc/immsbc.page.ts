@@ -40,6 +40,7 @@ import { BcProviderEditResource } from '../../../accounts/pages/bc-provider-edit
 import { BcProviderEditInitialStateModel } from '../../../accounts/pages/bc-provider-edit/bc-provider-edit.page';
 import { AccessRoutes } from '../../access.routes';
 import { bcProviderTutorialLink } from '../provincial-attachment-system/provincial-attachment-system.constants';
+import { immsbcUATWebsite } from './immsbc-constants';
 
 @Component({
   selector: 'app-immsbc',
@@ -127,7 +128,7 @@ export class ImmsbcPage implements OnInit, OnDestroy {
   }
 
   public navigateToPath(): void {
-    console.log('toot!');
+    window.open(immsbcUATWebsite, '_blank');
   }
 
   public onCopy(): void {
