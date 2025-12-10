@@ -116,6 +116,15 @@ public class BCProviderCreate
                     .Cpns
             };
 
+            if (party.Cpn != null)
+            {
+                var mspId = plrStanding.MspIdForOneCpn(party.Cpn);
+                if (!string.IsNullOrEmpty(mspId))
+                {
+                    newUserRep.MspId = mspId;
+                }
+            }
+
             var createdUser = await this.client.CreateBCProviderAccount(newUserRep);
 
             if (createdUser == null || createdUser.UserPrincipalName == null)
