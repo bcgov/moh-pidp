@@ -270,6 +270,8 @@ export class BcProviderApplicationPage
       this.router.navigateByUrl(AccessRoutes.routePath(AccessRoutes.IVF));
     } else if (this.previousUrl.split('/').includes(AccessRoutes.IMMSBC)) {
       this.router.navigateByUrl(AccessRoutes.routePath(AccessRoutes.IMMSBC));
+    } else if (this.previousUrl.split('/').includes(AccessRoutes.PEMCOD)) {
+      this.router.navigateByUrl(AccessRoutes.routePath(AccessRoutes.PEMCOD));
     } else {
       this.navigationService.navigateToRoot();
     }

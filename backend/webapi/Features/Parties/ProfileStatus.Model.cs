@@ -308,6 +308,25 @@ public partial class ProfileStatus
             }
         }
 
+        public class PemcodSection : ProfileSection
+        {
+            internal override string SectionName => "pemcod";
+            public override string[] KeyWords => ["doctors", "nursing"];
+
+            protected override StatusCode Compute(ProfileData profile)
+            {
+                return profile switch
+                {
+                    _ when profile.PartyPlrStanding
+                            .With(ProviderRoleType.MedicalDoctor, ProviderRoleType.RegisteredNursePractitioner)
+                            .HasGoodStanding
+                        && profile.HasBCProviderCredential => StatusCode.Complete,
+                    { HasBCServicesCardCredential: true } => StatusCode.Incomplete,
+                    _ => StatusCode.Locked
+                };
+            }
+        }
+
         public class ProvincialAttachmentSystemSection : ProfileSection
         {
             internal override string SectionName => "provincialAttachmentSystem";
