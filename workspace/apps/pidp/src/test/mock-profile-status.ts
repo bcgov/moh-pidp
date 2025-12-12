@@ -43,6 +43,7 @@ export class MockProfileStatus {
         halo: { statusCode: StatusCode.AVAILABLE },
         ivf: { statusCode: StatusCode.AVAILABLE },
         immsBC: { statusCode: StatusCode.AVAILABLE },
+        pemcod: { statusCode: StatusCode.AVAILABLE },
       },
     };
   }
