@@ -14,12 +14,13 @@ import { AuthService } from '@app/features/auth/services/auth.service';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 import { PortalService } from '@app/features/portal/portal.service';
 
-import { ImmsbcPage } from './immsbc.page';
+import { PemcodPage } from './pemcod.page';
 
-describe('ImmsbcPage', () => {
-  let component: ImmsbcPage;
+describe('PemcodPage', () => {
+  let component: PemcodPage;
   let mockActivatedRoute: { snapshot: any };
-  beforeEach(() => {
+
+  beforeEach(async () => {
     mockActivatedRoute = {
       snapshot: {
         data: {
@@ -32,7 +33,7 @@ describe('ImmsbcPage', () => {
     };
     TestBed.configureTestingModule({
       providers: [
-        ImmsbcPage,
+        PemcodPage,
         { provide: APP_CONFIG, useValue: APP_DI_CONFIG },
         provideAutoSpy(HttpClient),
         {
@@ -54,7 +55,7 @@ describe('ImmsbcPage', () => {
         provideAutoSpy(BcProviderEditResource),
       ],
     });
-    component = TestBed.inject(ImmsbcPage);
+    component = TestBed.inject(PemcodPage);
   });
 
   it('should create', () => {

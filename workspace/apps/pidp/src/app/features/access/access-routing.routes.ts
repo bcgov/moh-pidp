@@ -79,4 +79,9 @@ export const routes: Routes = [
     loadChildren: (): Promise<Routes> =>
       import('./pages/immsbc/immsbc-routing.routes').then((m) => m.routes),
   },
+  {
+    path: AccessRoutes.PEMCOD,
+    loadChildren: (): Promise<Routes> =>
+      import('./pages/pemcod/pemcod-routing.routes').then((m) => m.routes),
+  },
 ];
