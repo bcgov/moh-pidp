@@ -28,7 +28,7 @@ or install from local directory
 
 in this deployment, the Clustering and Service Account are enabled in order to make it HA and the replica count is set to 3.
 
-### Create router for rabbitmq-management console
+### Create route for rabbitmq-management console
 
 After installing RabbitMQ helm chart, manually create a new route in OCP for rabbitmq service with following config:
 
@@ -38,10 +38,3 @@ Target port: 15672
 Security: Enabled
 TLS termination: Edge
 Insecure traffic: Redirect
-
-### Create vhost for dev/test/prod environment (Manually)
-In RabbitMQ management console, add a new vhost depending on environment you are working
-e.g. for the dev environment, add 'dev' vhost.  This value ('dev') reflects the Helm deployment name.
-
-### Set permission of pidp user (Manually)
-In RabbitMQ management console, for pidp user give full permission to the newly created vhsot (dev/test/prod).
