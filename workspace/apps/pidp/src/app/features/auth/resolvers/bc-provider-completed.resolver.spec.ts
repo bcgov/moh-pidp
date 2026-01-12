@@ -20,8 +20,8 @@ import { PortalResource } from '@app/features/portal/portal-resource.service';
 import { bcProviderCompletedResolver } from './bc-provider-completed.resolver';
 
 describe('bcProviderCompletedResolver', () => {
-  let activatedRouteSnapshotSpy: Spy<ActivatedRouteSnapshot>;
-  let routerStateSnapshotSpy: Spy<RouterStateSnapshot>;
+  let actRouteSnapshotSpy: Spy<ActivatedRouteSnapshot>;
+  let routerSnapshotSpy: Spy<RouterStateSnapshot>;
   let partyServiceSpy: Spy<PartyService>;
   let portalResource: Spy<PortalResource>;
   let router: Router;
@@ -39,9 +39,12 @@ describe('bcProviderCompletedResolver', () => {
         },
         provideAutoSpy(PortalResource),
         provideAutoSpy(Router),
+        provideAutoSpy(ActivatedRouteSnapshot),
+        provideAutoSpy(RouterStateSnapshot),
       ],
     });
-
+    actRouteSnapshotSpy = TestBed.inject<any>(ActivatedRouteSnapshot);
+    routerSnapshotSpy = TestBed.inject<any>(RouterStateSnapshot);
     partyServiceSpy = TestBed.inject(PartyService) as Spy<PartyService>;
     portalResource = TestBed.inject(PortalResource) as Spy<PortalResource>;
     router = TestBed.inject(Router);
@@ -56,10 +59,7 @@ describe('bcProviderCompletedResolver', () => {
 
       when('Resolver is called', () => {
         const result = TestBed.runInInjectionContext(() =>
-          bcProviderCompletedResolver(
-            activatedRouteSnapshotSpy,
-            routerStateSnapshotSpy,
-          ),
+          bcProviderCompletedResolver(actRouteSnapshotSpy, routerSnapshotSpy),
         );
 
         then('should return null', () => {
@@ -87,17 +87,16 @@ describe('bcProviderCompletedResolver', () => {
 
       when('Resolver is called', () => {
         const result = TestBed.runInInjectionContext(() =>
-          bcProviderCompletedResolver(
-            activatedRouteSnapshotSpy,
-            routerStateSnapshotSpy,
-          ),
+          bcProviderCompletedResolver(actRouteSnapshotSpy, routerSnapshotSpy),
         );
 
         then('should navigate to portal page', () => {
           if (result instanceof Observable) {
             result.subscribe(() => {
               try {
-                expect(router.navigateByUrl).toHaveBeenCalledWith('portal');
+                expect(router.navigateByUrl).toHaveBeenCalledWith(
+                  '/account/bc-provider-edit',
+                );
                 done();
               } catch (error: any) {
                 done(error);
@@ -118,10 +117,7 @@ describe('bcProviderCompletedResolver', () => {
 
       when('Resolver is called', () => {
         const result = TestBed.runInInjectionContext(() =>
-          bcProviderCompletedResolver(
-            activatedRouteSnapshotSpy,
-            routerStateSnapshotSpy,
-          ),
+          bcProviderCompletedResolver(actRouteSnapshotSpy, routerSnapshotSpy),
         );
 
         then('should return true and access to the route', () => {

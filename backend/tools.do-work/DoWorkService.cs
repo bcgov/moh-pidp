@@ -1,21 +1,13 @@
 namespace DoWork;
 
-using Microsoft.EntityFrameworkCore;
-
-using Pidp.Data;
-using Pidp.Infrastructure.HttpClients.Keycloak;
-
-public class DoWorkService(IKeycloakAdministrationClient keycloakClient, PidpDbContext context) : IDoWorkService
+/// <summary>
+/// Modify this file with custom scripts / helper services.
+/// Remember to check that any dependencies you need (like the Keycloak or BC Provider client) are registered in the Program.cs file and the nessisary environment variables have been added or modified in appsettings.json.
+/// </summary>
+public class DoWorkService() : IDoWorkService
 {
-    private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
-    private readonly PidpDbContext context = context;
-
     public async Task DoWorkAsync()
     {
-        var userId = await this.context.Parties
-            .Where(party => party.Id == 1001)
-            .Select(party => party.Credentials.First().UserId)
-            .SingleOrDefaultAsync();
-        await this.keycloakClient.GetUser(userId);
+        var placeholder = await Task.FromResult("This is a placeholder for custom work.");
     }
 }

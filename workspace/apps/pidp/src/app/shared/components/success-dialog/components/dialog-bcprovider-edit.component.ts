@@ -7,7 +7,7 @@ import { Component, Input } from '@angular/core';
     You will now have the option to sign in to our system with these
     credentials.
   </p>`,
-  styles: `p { text-align: center;}`,
+  styles: `p { text-align: center; padding:2rem}`,
   standalone: true,
 })
 export class DialogBcproviderEditComponent {

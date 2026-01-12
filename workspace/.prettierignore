@@ -4,5 +4,6 @@
 /coverage
 /apps/**/assets/unsupported.html
 
-/.nx/cache
+.nx/cache
+.nx/workspace-data
 .angular

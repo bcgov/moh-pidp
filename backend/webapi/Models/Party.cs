@@ -26,7 +26,7 @@ public class Party : BaseAuditable
 
     public LocalDate? Birthdate { get; set; }
 
-    public string FirstName { get; set; } = string.Empty;
+    public string? FirstName { get; set; }
 
     public string LastName { get; set; } = string.Empty;
 
@@ -48,6 +48,10 @@ public class Party : BaseAuditable
 
     public ICollection<Credential> Credentials { get; set; } = [];
 
+    public ICollection<InvitedEntraAccount> InvitedEntraAccounts { get; set; } = [];
+
+    public ICollection<VerifiedEmail> VerifiedEmails { get; set; } = [];
+
     /// <summary>
     /// The First Name + Last Name of the Party.
     /// </summary>
@@ -59,7 +63,7 @@ public class Party : BaseAuditable
     /// The preferred first name if provided otherwise the first name.
     /// </summary>
     [Projectable]
-    public string DisplayFirstName => this.PreferredFirstName ?? this.FirstName;
+    public string? DisplayFirstName => this.PreferredFirstName ?? this.FirstName;
 
     /// <summary>
     /// Last name to display.
@@ -75,6 +79,11 @@ public class Party : BaseAuditable
     [Projectable]
     public string DisplayFullName => $"{this.DisplayFirstName} {this.DisplayLastName}";
 
+    [Projectable]
+    public bool EmailIsVerified(string email) => this.VerifiedEmails
+        .Any(verifiedEmail => verifiedEmail.IsVerified
+            && verifiedEmail.Email.ToLower() == email.ToLower());
+
     /// <summary>
     /// The "primary" Credential of a Party is the a) BC Services Card Credential or b) the only non-BC Services Card Credential.
     /// </summary>
@@ -83,6 +92,13 @@ public class Party : BaseAuditable
         .OrderByDescending(credential => credential.IdentityProvider == IdentityProviders.BCServicesCard)
         .Select(credential => credential.UserId)
         .First();
+
+    [Projectable]
+    public IEnumerable<string> Upns => this.Credentials
+        .Where(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
+        .Select(credential => credential.IdpId!)
+        .Union(this.InvitedEntraAccounts
+            .Select(account => account.UserPrincipalName));
 
     /// <summary>
     /// Uses the Party's Licence Declaration to search PLR for records.

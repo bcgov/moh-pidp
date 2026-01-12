@@ -18,8 +18,8 @@ import { EndorsementEmailSearch } from './models/endorsement-email-search.model'
 })
 export class EndorsementsResource {
   public constructor(
-    private apiResource: ApiHttpClient,
-    private toastService: ToastService,
+    private readonly apiResource: ApiHttpClient,
+    private readonly toastService: ToastService,
   ) { }
 
   public getEndorsements(partyId: number): Observable<Endorsement[] | null> {

@@ -9,7 +9,7 @@ import { PortalResource } from '@app/features/portal/portal-resource.service';
   providedIn: 'root',
 })
 export class ProvincialAttachmentSystemResource {
-  public constructor(private portalResource: PortalResource) {}
+  public constructor(private readonly portalResource: PortalResource) {}
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
     return this.portalResource.getProfileStatus(partyId);

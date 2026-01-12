@@ -20,7 +20,7 @@ jobs:
       - name: "Checkout Code"
         uses: actions/checkout@master
 
-      - name: "Docker Build"
+      - name: "Docker Build GOLD"
         working-directory: "./backend"
         run: |
           docker build -f ./services.endorsement-reminder/Dockerfile -t image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/endorsement-reminder:develop .
@@ -36,3 +36,20 @@ jobs:
       - name: "Push image"
         run: |
           docker push image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/endorsement-reminder:develop
+
+      - name: "Docker Build GOLDDR"
+        working-directory: "./backend"
+        run: |
+          docker tag image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/endorsement-reminder:develop image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/endorsement-reminder:develop
+
+      # Uses the builder service account token
+      - name: "Docker Login to GOLDDR OCP"
+        uses: docker/login-action@v2
+        with:
+          registry: image-registry.apps.golddr.devops.gov.bc.ca
+          username: builder
+          password: ${{ secrets.GOLDDR_TOOLS_BUILDER_TOKEN }}
+
+      - name: "Push image"
+        run: |
+          docker push image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/endorsement-reminder:develop

@@ -16,6 +16,4 @@ export class BannerComponent {
     body: string;
     status: string;
   }> = [];
-
-  public constructor() {}
 }

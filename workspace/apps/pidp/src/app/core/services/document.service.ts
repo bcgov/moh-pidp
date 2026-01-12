@@ -6,7 +6,6 @@ import { UserAccessAgreementDocumentComponent } from '@app/features/profile/page
 export enum DocumentType {
   PIDP_COLLECTION_NOTICE = 'pidp-collection-notice',
   SA_EFORMS_COLLECTION_NOTICE = 'sa-eforms-collection-notice',
-  PRESCRIPTION_REFILL_EFORMS_COLLECTION_NOTICE = 'prescription-refill-eforms-collection-notice',
   USER_ACCESS_AGREEMENT = 'user-access-agreement',
   MS_TEAMS_DECLARATION_AGREEMENT = 'ms-teams-declaration-agreement',
   MS_TEAMS_DETAILS_AGREEMENT = 'ms-teams-details-agreement',
@@ -30,9 +29,9 @@ export interface IDocument extends IDocumentMetaData {
   providedIn: 'root',
 })
 export class DocumentService {
-  private documents: IDocumentMetaData[];
+  private readonly documents: IDocumentMetaData[];
 
-  public constructor(@Inject(APP_CONFIG) private config: AppConfig) {
+  public constructor(@Inject(APP_CONFIG) private readonly config: AppConfig) {
     this.documents = [
       {
         type: DocumentType.PIDP_COLLECTION_NOTICE,
@@ -43,12 +42,8 @@ export class DocumentService {
         title: 'SA eForms Collection Notice',
       },
       {
-        type: DocumentType.PRESCRIPTION_REFILL_EFORMS_COLLECTION_NOTICE,
-        title: 'Provincial Prescription Renewal Support Service eForm',
-      },
-      {
         type: DocumentType.USER_ACCESS_AGREEMENT,
-        title: 'Access Harmonization User Access Agreement',
+        title: 'OneHealthID Service Use Policy Agreement',
       },
       {
         type: DocumentType.MS_TEAMS_DECLARATION_AGREEMENT,
@@ -91,11 +86,6 @@ export class DocumentService {
         return {
           ...this.getDocumentMetaData(documentType),
           content: this.getSAeFormsCollectionNotice(),
-        };
-      case DocumentType.PRESCRIPTION_REFILL_EFORMS_COLLECTION_NOTICE:
-        return {
-          ...this.getDocumentMetaData(documentType),
-          content: this.getPrescriptionRefilleFormsCollectionNotice(),
         };
       case DocumentType.USER_ACCESS_AGREEMENT:
         return {
@@ -163,16 +153,6 @@ export class DocumentService {
       Services Act for the purpose of managing your access to, and use of, the Special Authority eForms
       application. If you have any questions about the collection or use of this information, contact
       <a href="mailto:${this.config.emails.specialAuthorityEformsSupport}">${this.config.emails.specialAuthorityEformsSupport}</a>.
-    `;
-  }
-
-  public getPrescriptionRefilleFormsCollectionNotice(): string {
-    return `
-      Personal information is protected under BC privacy laws and is collected under the authority of section
-      26(c) of the Freedom of Information Protection of Privacy Act. All data will be securely stored at PHSA
-      and will not be used for any other purpose other than the one stated above. If you have any questions
-      about the collection of this personal information please contact PHSA's Information Access & Privacy
-      Office at 1-855-229-9800 or at <a href="mailto:${this.config.emails.phsaInformationAccessAndPrivacyOffice}">${this.config.emails.phsaInformationAccessAndPrivacyOffice}</a>.
     `;
   }
 

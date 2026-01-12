@@ -1,0 +1,158 @@
+<div class="container-box container" uiPidpInjectViewportCss>
+  <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
+  <div class="content-box">
+    <header>
+      <h1>BCProvider Account Management</h1>
+      <h3>Set a new password or reset your MFA at your convenience</h3>
+    </header>
+    <ng-container *ngIf="showErrorCard">
+      <section class="error-card" [class.show-card]="showErrorCard">
+        <p>An error occurred.</p>
+      </section>
+    </ng-container>
+    <div class="content">
+      <section class="form-card">
+        <div class="password-form">
+          <div class="card-badge">
+            <ui-tooltip
+              icon="close"
+              tooltipText="Your password must be 8 to 256 characters long, with at least one letter
+      and one number or special character. Strong passwords include both upper-
+      and lower-case letters, as well as special characters (such as an
+      exclamation point, question mark or ampersand). Do not use a password that
+      you use anywhere else."
+              [showTooltip]="passwordShowTooltip"
+              (tooltipStatus)="setTooltipStatus($event, 'password')"></ui-tooltip>
+            <fa-icon
+              class="fa-1.5x"
+              [icon]="faCircleQuestion"
+              (click)="toggleTooltip('password')"></fa-icon>
+          </div>
+          <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
+            <h1><strong>Set new password</strong></h1>
+
+            <p class="username username-intro">Provided username:</p>
+            <p class="username username-overflow">{{ username() }}</p>
+            <div class="form-content">
+              <div class="field">
+                <label id="bc-provider-application-new-password"
+                  >Password</label
+                >
+                <mat-form-field>
+                  <input
+                    matInput
+                    formControlName="newPassword"
+                    type="password"
+                    aria-labelledby="bc-provider-application-new-password" />
+                  <mat-error>{{ formState.getErrorMessage() }}</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="field">
+                <label id="bc-provider-application-confirm-password"
+                  >Confirm password</label
+                >
+                <mat-form-field>
+                  <input
+                    matInput
+                    formControlName="confirmPassword"
+                    type="password"
+                    aria-labelledby="bc-provider-application-confirm-password"
+                    [errorStateMatcher]="errorMatcher" />
+                  <mat-error *ngIf="formState.form.hasError('nomatch')"
+                    >Must match the new password entered above</mat-error
+                  >
+                </mat-form-field>
+              </div>
+              <div class="form-button-box">
+                <button
+                  mat-flat-button
+                  type="submit"
+                  color="primary"
+                  [disabled]="!isResetButtonEnabled">
+                  Reset password
+                </button>
+              </div>
+              <app-need-help></app-need-help>
+            </div>
+          </form>
+        </div>
+      </section>
+      <section class="reset-mfa">
+        <div class="mfa-content">
+          <div class="card-badge">
+            <ui-tooltip
+              icon="close"
+              tooltipText="If you are unable to successfully authenticate with multi-factor authentication (MFA)
+              for some reason (for example, you have uninstalled the Microsoft Authenticator app, have a new mobile device
+              or changed your phone number), you need to reset the MFA."
+              buttonLabel="Learn more"
+              [showTooltip]="mfaShowTooltip"
+              (actionClicked)="onLearnMore()"
+              (tooltipStatus)="setTooltipStatus($event, 'mfa')"></ui-tooltip
+            ><fa-icon
+              class="fa-1.5x"
+              [icon]="faCircleQuestion"
+              (click)="toggleTooltip('mfa')"></fa-icon>
+          </div>
+          <h1>
+            <strong>Reset your multi-factor authentication (MFA)</strong>
+          </h1>
+          <p class="mfa-disclaimer">Only available if you login with BCSC</p>
+          <div class="mfa-content-boxes">
+            <div class="steps-box">
+              <div class="steps-box-content">
+                <img
+                  src="/assets/images/icons/history.svg"
+                  alt="reset-mfa-right" />
+                <strong>Reset process:</strong>
+                <ul>
+                  <li>Unpair my devices connected to my MFA</li>
+                  <li>Reconfigure my MFA by pairing my devices again</li>
+                </ul>
+              </div>
+            </div>
+            <div class="button-box">
+              <div class="button-box-img">
+                <img
+                  ngSrc="/assets/images/mfa-hands.jpg"
+                  alt="reset my MFA"
+                  priority
+                  fill />
+              </div>
+              <div class="button-box-btn">
+                <button
+                  class="reset-mfa-button"
+                  type="button"
+                  [ngClass]="{ 'disabled': (identityProvider$ | async) !== IdentityProvider.BCSC }"
+                  [disabled]="(identityProvider$ | async) !== IdentityProvider.BCSC"
+                  (click)="onResetMfa()">
+                  Reset my MFA<img
+                    src="/assets/images/icons/icon-right-circle.svg"
+                    alt="reset-mfa-right" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<ng-template #mfaDialog>
+  <ui-confirm-dialog
+    [progressBarValue]="progressBarValue"
+    [progressComplete]="progressComplete"></ui-confirm-dialog>
+</ng-template>
+
+<ng-template #successDialog>
+  <app-success-dialog
+    title="Password reset completed"
+    [username]="username()"
+    [componentType]="componentType">
+  </app-success-dialog>
+</ng-template>
+
+<ng-template #errorDialog>
+  <ui-confirm-dialog></ui-confirm-dialog>
+</ng-template>

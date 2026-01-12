@@ -507,6 +507,41 @@ namespace Pidp.Data.Migrations
                     b.ToTable("FeedbackLog");
                 });
 
+            modelBuilder.Entity("Pidp.Models.InvitedEntraAccount", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<Instant>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Instant>("InvitedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("InvitedUserPrincipalName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Instant>("Modified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("PartyId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserPrincipalName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PartyId");
+
+                    b.ToTable("InvitedEntraAccount");
+                });
+
             modelBuilder.Entity("Pidp.Models.Lookups.AccessType", b =>
                 {
                     b.Property<int>("Code")
@@ -564,7 +599,7 @@ namespace Pidp.Data.Migrations
                         new
                         {
                             Code = 9,
-                            Name = "Access Harmonization User Access Agreement"
+                            Name = "OneHealthID Service Use Policy Agreement"
                         },
                         new
                         {
@@ -1144,7 +1179,6 @@ namespace Pidp.Data.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("LastName")
@@ -1208,6 +1242,40 @@ namespace Pidp.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("PartyLicenceDeclaration");
+                });
+
+            modelBuilder.Entity("Pidp.Models.VerifiedEmail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<Instant>("Created")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Instant>("Modified")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("PartyId")
+                        .HasColumnType("integer");
+
+                    b.Property<Guid>("Token")
+                        .HasColumnType("uuid");
+
+                    b.Property<Instant?>("VerifiedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PartyId");
+
+                    b.ToTable("VerifiedEmail");
                 });
 
             modelBuilder.Entity("Pidp.Models.HcimAccountTransfer", b =>
@@ -1488,6 +1556,17 @@ namespace Pidp.Data.Migrations
                     b.Navigation("Party");
                 });
 
+            modelBuilder.Entity("Pidp.Models.InvitedEntraAccount", b =>
+                {
+                    b.HasOne("Pidp.Models.Party", "Party")
+                        .WithMany("InvitedEntraAccounts")
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Party");
+                });
+
             modelBuilder.Entity("Pidp.Models.MSTeamsClinic", b =>
                 {
                     b.HasOne("Pidp.Models.Party", "PrivacyOfficer")
@@ -1512,6 +1591,17 @@ namespace Pidp.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("College");
+
+                    b.Navigation("Party");
+                });
+
+            modelBuilder.Entity("Pidp.Models.VerifiedEmail", b =>
+                {
+                    b.HasOne("Pidp.Models.Party", "Party")
+                        .WithMany("VerifiedEmails")
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Party");
                 });
@@ -1647,7 +1737,11 @@ namespace Pidp.Data.Migrations
 
                     b.Navigation("Credentials");
 
+                    b.Navigation("InvitedEntraAccounts");
+
                     b.Navigation("LicenceDeclaration");
+
+                    b.Navigation("VerifiedEmails");
                 });
 #pragma warning restore 612, 618
         }

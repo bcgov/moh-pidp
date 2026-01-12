@@ -19,8 +19,8 @@ export class ComplianceTrainingPortalSection implements IPortalSection {
   public description: string;
 
   public constructor(
-    private profileStatus: ProfileStatus,
-    private router: Router,
+    private readonly profileStatus: ProfileStatus,
+    private readonly router: Router,
   ) {
     this.key = 'complianceTraining';
     this.heading = 'Compliance Training Video';

@@ -1,4 +1,4 @@
-import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -20,10 +20,9 @@ import {
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { AccessRoutes } from '@app/features/access/access.routes';
+import { AccountsRoutes } from '@app/features/accounts/accounts.routes';
 import { User } from '@app/features/auth/models/user.model';
-import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
-import { SuccessDialogComponent } from '@app/shared/components/success-dialog/success-dialog.component';
 
 import { IdentityProvider } from '../../enums/identity-provider.enum';
 import { BcProviderUser } from '../../models/bc-provider-user.model';
@@ -39,8 +38,6 @@ import { LinkAccountConfirmResource } from './link-account-confirm-resource.serv
     CommonModule,
     InjectViewportCssClassDirective,
     MatButtonModule,
-    NgOptimizedImage,
-    SuccessDialogComponent,
   ],
   templateUrl: './link-account-confirm.page.html',
   styleUrl: './link-account-confirm.page.scss',
@@ -56,16 +53,16 @@ export class LinkAccountConfirmPage implements OnInit {
     { title: 'Link Account', path: '' },
   ];
 
-  public showInstructions: boolean = false;
+  public showInstructions = false;
   public logoutRedirectUrl: string;
   public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
-    private dialog: MatDialog,
-    private authorizedUserService: AuthorizedUserService,
-    private linkAccountConfirmResource: LinkAccountConfirmResource,
-    private router: Router,
-    private loadingOverlayService: LoadingOverlayService,
-    private authService: AuthService,
+    @Inject(APP_CONFIG) private readonly config: AppConfig,
+    private readonly dialog: MatDialog,
+    private readonly authorizedUserService: AuthorizedUserService,
+    private readonly linkAccountConfirmResource: LinkAccountConfirmResource,
+    private readonly router: Router,
+    private readonly loadingOverlayService: LoadingOverlayService,
+    private readonly authService: AuthService,
   ) {
     this.user$ = this.authorizedUserService.user$;
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
@@ -121,7 +118,7 @@ export class LinkAccountConfirmPage implements OnInit {
       tap(() => {
         this.loadingOverlayService.close();
         this.router.navigate([
-          ProfileRoutes.routePath(ProfileRoutes.ACCOUNT_LINKING),
+          AccountsRoutes.routePath(AccountsRoutes.ACCOUNT_LINKING),
         ]);
       }),
     );

@@ -7,7 +7,7 @@ import { faLink, faUserCheck } from '@fortawesome/free-solid-svg-icons';
 
 import { AlertType } from '@bcgov/shared/ui';
 
-import { ProfileRoutes } from '@app/features/profile/profile.routes';
+import { AccountsRoutes } from '@app/features/accounts/accounts.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { StatusCode } from '../../enums/status-code.enum';
@@ -26,8 +26,8 @@ export class AccountLinkingPortalSection implements IPortalSection {
   public completedMessage: string;
 
   public constructor(
-    private profileStatus: ProfileStatus,
-    private router: Router,
+    private readonly profileStatus: ProfileStatus,
+    private readonly router: Router,
   ) {
     this.key = 'accountLinking';
     this.heading = 'Account Linking';
@@ -52,7 +52,7 @@ export class AccountLinkingPortalSection implements IPortalSection {
     const statusCode = this.getStatusCode();
     return {
       label: statusCode === StatusCode.COMPLETED ? 'View' : 'Update',
-      route: ProfileRoutes.routePath(ProfileRoutes.ACCOUNT_LINKING),
+      route: AccountsRoutes.routePath(AccountsRoutes.ACCOUNT_LINKING),
       disabled: statusCode === StatusCode.NOT_AVAILABLE,
     };
   }

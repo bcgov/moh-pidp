@@ -40,7 +40,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
   public responsiveMenuItems: boolean;
   public menuItems: DashboardMenuItem[];
   public providerIdentitySupport: string;
-  public collegeRoute: string = '';
+  public collegeRoute = '';
 
   public alerts$!: Observable<AlertCode[]>;
 

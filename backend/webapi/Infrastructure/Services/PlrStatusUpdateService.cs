@@ -39,6 +39,7 @@ public sealed class PlrStatusUpdateService(
 
         var party = await this.context.Parties
             .Include(party => party.Credentials)
+            .Include(party => party.InvitedEntraAccounts)
             .Where(party => party.Cpn == status.Cpn)
             .SingleOrDefaultAsync(stoppingToken);
 
@@ -64,12 +65,7 @@ public sealed class PlrStatusUpdateService(
             party.DomainEvents.Add(new EndorsementStandingUpdated(relation.PartyId));
         }
 
-        var upn = party.Credentials
-             .Where(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
-             .Select(credential => credential.IdpId)
-             .SingleOrDefault();
-
-        if (upn != null)
+        if (party.Upns.Any())
         {
             var bcProviderAttributes = new BCProviderAttributes(this.clientId);
 
@@ -97,7 +93,10 @@ public sealed class PlrStatusUpdateService(
                 bcProviderAttributes.SetIsPharm(status.IsGoodStanding);
             }
 
-            await this.bcProviderClient.UpdateAttributes(upn, bcProviderAttributes.AsAdditionalData());
+            foreach (var upn in party.Upns)
+            {
+                await this.bcProviderClient.UpdateAttributes(upn, bcProviderAttributes.AsAdditionalData());
+            }
         }
 
         await this.context.SaveChangesAsync(stoppingToken);

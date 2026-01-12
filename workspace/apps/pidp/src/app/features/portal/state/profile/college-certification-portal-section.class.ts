@@ -21,8 +21,8 @@ export class CollegeCertificationPortalSection implements IPortalSection {
   public description: string;
 
   public constructor(
-    private profileStatus: ProfileStatus,
-    private router: Router,
+    private readonly profileStatus: ProfileStatus,
+    private readonly router: Router,
   ) {
     this.key = 'collegeCertification';
     this.heading = 'College Licence Information';

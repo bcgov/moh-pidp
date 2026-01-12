@@ -14,7 +14,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-webapi-gold:
+  build-webapi:
     name: WebAPI Backend Build - Gold
     runs-on: ubuntu-latest
     defaults:

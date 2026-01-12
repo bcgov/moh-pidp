@@ -4,10 +4,10 @@ import { ResolveFn, Router } from '@angular/router';
 import { map } from 'rxjs';
 
 import { PartyService } from '@app/core/party/party.service';
+import { AccountsRoutes } from '@app/features/accounts/accounts.routes';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
-import { PortalRoutes } from '@app/features/portal/portal.routes';
 
 export const bcProviderCompletedResolver: ResolveFn<
   boolean | null | Promise<boolean>
@@ -23,7 +23,9 @@ export const bcProviderCompletedResolver: ResolveFn<
 
       return (
         profileStatus.status.bcProvider.statusCode === StatusCode.AVAILABLE ||
-        router.navigateByUrl(PortalRoutes.BASE_PATH)
+        router.navigateByUrl(
+          AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_EDIT),
+        )
       );
     }),
   );

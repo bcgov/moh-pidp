@@ -18,8 +18,8 @@ data:
   environment.json: |-
     {
       "environmentName": "{{ .Values.settings.environmentName }}",
-      "apiEndpoint": "https://{{ if $isProd }}{{else}}{{ $release }}.{{end}}{{ $domain }}/api/v1",
-      "applicationUrl": "https://{{ if $isProd }}{{else}}{{ $release }}.{{end}}{{ $domain }}",
+      "apiEndpoint": "https://{{ if $isProd }}{{ else }}{{ $release }}.{{ end }}{{ $domain }}/api/v1",
+      "applicationUrl": "https://{{ if $isProd }}{{ else }}{{ $release }}.{{ end }}{{ $domain }}",
       "keycloakConfig": {
         "config": {
           "url": "{{ .Values.settings.keycloak.url }}",

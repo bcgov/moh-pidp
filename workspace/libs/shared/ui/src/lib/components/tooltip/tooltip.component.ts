@@ -13,7 +13,7 @@ export class TooltipComponent {
   @Input() public icon?: string;
   @Input() public showTooltip!: boolean;
   @Input() public tooltipText!: string;
-  @Input() public buttonLabel: string = '';
+  @Input() public buttonLabel = '';
   @Output() public actionClicked = new EventEmitter<boolean>();
   @Output() public tooltipStatus = new EventEmitter<boolean>();
 

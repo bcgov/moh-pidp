@@ -1,12 +1,4 @@
-import {
-  HTTP_INTERCEPTORS,
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
-  HttpRequest,
-  HttpResponse,
-  HttpStatusCode,
-} from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable, Provider } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -14,7 +6,7 @@ import { Observable, catchError, of, throwError } from 'rxjs';
 
 @Injectable()
 export class UnavailableInterceptor implements HttpInterceptor {
-  public constructor(private router: Router) {}
+  public constructor(private readonly router: Router) {}
 
   public intercept(
     request: HttpRequest<unknown>,

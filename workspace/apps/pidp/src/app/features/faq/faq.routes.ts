@@ -1,7 +1,7 @@
 export class FaqRoutes {
-  public static BASE_PATH = 'help';
+  public static readonly BASE_PATH = 'help';
 
-  public static MFA_SETUP = 'mfa-setup';
+  public static readonly MFA_SETUP = 'mfa-setup';
 
   /**
    * @description

@@ -1,12 +1,6 @@
-import {
-  NgIf,
-  NgOptimizedImage,
-  NgTemplateOutlet,
-  UpperCasePipe,
-} from '@angular/common';
-
-import { AfterViewInit, Component, Inject, OnInit } from '@angular/core';
+import { NgIf, NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AfterViewInit, Component, Inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
@@ -15,6 +9,7 @@ import { EMPTY, Observable, exhaustMap, of, switchMap } from 'rxjs';
 
 import {
   AnchorDirective,
+  ConfirmDialogComponent,
   DialogOptions,
   ExpansionPanelComponent,
   HtmlComponent,
@@ -23,7 +18,6 @@ import {
   PidpViewport,
   ViewportService,
 } from '@bcgov/shared/ui';
-import { ConfirmDialogComponent } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import {
@@ -31,8 +25,8 @@ import {
   MicrosoftLogLevel,
 } from '@app/core/services/client-logs.service';
 import { DocumentService } from '@app/core/services/document.service';
-import { SnowplowService } from '@app/core/services/snowplow.service';
 import { LoggerService } from '@app/core/services/logger.service';
+import { SnowplowService } from '@app/core/services/snowplow.service';
 import { AdminRoutes } from '@app/features/admin/admin.routes';
 import { BannerComponent } from '@app/shared/components/banner/banner.component';
 import { NeedHelpComponent } from '@app/shared/components/need-help/need-help.component';
@@ -63,7 +57,6 @@ export interface LoginPageRouteData {
     NgIf,
     NgOptimizedImage,
     NgTemplateOutlet,
-    UpperCasePipe,
     BannerComponent,
   ],
 })
@@ -81,23 +74,24 @@ export class LoginPage implements OnInit, AfterViewInit {
   public isMobileTitleVisible = this.viewport === PidpViewport.xsmall;
 
   private endorsementToken: string | null = null;
+  private emailVerificationToken: string | null = null;
 
   public get otherLoginOptionsIcon(): string {
     return this.showOtherLoginOptions ? 'indeterminate_check_box' : 'add_box';
   }
 
   public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
-    private authService: AuthService,
-    private clientLogsService: ClientLogsService,
-    private route: ActivatedRoute,
-    private dialog: MatDialog,
-    private documentService: DocumentService,
-    private viewportService: ViewportService,
-    private linkAccountConfirmResource: LinkAccountConfirmResource,
-    private snowplowService: SnowplowService,
-    private loginResource: LoginResource,
-    private logger: LoggerService,
+    @Inject(APP_CONFIG) private readonly config: AppConfig,
+    private readonly authService: AuthService,
+    private readonly clientLogsService: ClientLogsService,
+    private readonly route: ActivatedRoute,
+    private readonly dialog: MatDialog,
+    private readonly documentService: DocumentService,
+    private readonly viewportService: ViewportService,
+    private readonly linkAccountConfirmResource: LinkAccountConfirmResource,
+    private readonly snowplowService: SnowplowService,
+    private readonly loginResource: LoginResource,
+    private readonly logger: LoggerService,
   ) {
     const routeSnapshot = this.route.snapshot;
 
@@ -116,6 +110,10 @@ export class LoginPage implements OnInit, AfterViewInit {
   public ngOnInit(): void {
     this.endorsementToken =
       this.route.snapshot.queryParamMap.get('endorsement-token');
+
+    this.emailVerificationToken = this.route.snapshot.queryParamMap.get(
+      'email-verification-token',
+    );
 
     if (this.endorsementToken) {
       this.clientLogsService
@@ -210,6 +208,9 @@ export class LoginPage implements OnInit, AfterViewInit {
               : '') +
             (this.endorsementToken
               ? `?endorsement-token=${this.endorsementToken}`
+              : '') +
+            (this.emailVerificationToken
+              ? `?email-verification-token=${this.emailVerificationToken}`
               : ''),
         }),
       ),

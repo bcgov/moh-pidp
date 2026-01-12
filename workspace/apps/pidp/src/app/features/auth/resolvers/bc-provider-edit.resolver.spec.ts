@@ -20,8 +20,8 @@ import { PortalResource } from '@app/features/portal/portal-resource.service';
 import { bcProviderEditResolver } from './bc-provider-edit.resolver';
 
 describe('bcProviderEditResolver', () => {
-  let activatedRouteSnapshotSpy: Spy<ActivatedRouteSnapshot>;
-  let routerStateSnapshotSpy: Spy<RouterStateSnapshot>;
+  let activatedRouteSnapshot: Spy<ActivatedRouteSnapshot>;
+  let routerStateSnapshot: Spy<RouterStateSnapshot>;
   let partyServiceSpy: Spy<PartyService>;
   let portalResource: Spy<PortalResource>;
   let router: Router;
@@ -39,9 +39,12 @@ describe('bcProviderEditResolver', () => {
         },
         provideAutoSpy(PortalResource),
         provideAutoSpy(Router),
+        provideAutoSpy(ActivatedRouteSnapshot),
+        provideAutoSpy(RouterStateSnapshot),
       ],
     });
-
+    activatedRouteSnapshot = TestBed.inject<any>(ActivatedRouteSnapshot);
+    routerStateSnapshot = TestBed.inject<any>(RouterStateSnapshot);
     partyServiceSpy = TestBed.inject(PartyService) as Spy<PartyService>;
     portalResource = TestBed.inject(PortalResource) as Spy<PortalResource>;
     router = TestBed.inject(Router);
@@ -57,8 +60,8 @@ describe('bcProviderEditResolver', () => {
       when('Resolver is called', () => {
         const result = TestBed.runInInjectionContext(() =>
           bcProviderEditResolver(
-            activatedRouteSnapshotSpy,
-            routerStateSnapshotSpy,
+            activatedRouteSnapshot,
+            routerStateSnapshot,
           ),
         );
 
@@ -88,8 +91,8 @@ describe('bcProviderEditResolver', () => {
       when('Resolver is called', () => {
         const result = TestBed.runInInjectionContext(() =>
           bcProviderEditResolver(
-            activatedRouteSnapshotSpy,
-            routerStateSnapshotSpy,
+            activatedRouteSnapshot,
+            routerStateSnapshot,
           ),
         );
 
@@ -119,8 +122,8 @@ describe('bcProviderEditResolver', () => {
       when('Resolver is called', () => {
         const result = TestBed.runInInjectionContext(() =>
           bcProviderEditResolver(
-            activatedRouteSnapshotSpy,
-            routerStateSnapshotSpy,
+            activatedRouteSnapshot,
+            routerStateSnapshot,
           ),
         );
 

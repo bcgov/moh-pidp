@@ -29,7 +29,7 @@ export interface HcimAccountTransferResponse {
 export class HcimAccountTransferResource {
   public constructor(
     protected apiResource: ApiHttpClient,
-    private portalResource: PortalResource,
+    private readonly portalResource: PortalResource,
   ) {}
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {

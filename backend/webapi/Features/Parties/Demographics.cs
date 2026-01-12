@@ -133,22 +133,25 @@ public class Demographics
 
         public async Task Consume(ConsumeContext<PartyEmailUpdated> context)
         {
-            var bcProviderId = await this.context.Credentials
-                .Where(credential => credential.PartyId == context.Message.PartyId
-                    && credential.IdentityProvider == IdentityProviders.BCProvider)
-                .Select(credential => credential.IdpId)
-                .SingleOrDefaultAsync();
+            var userPrincipalNames = await this.context.Parties
+                .Where(party => party.Id == context.Message.PartyId)
+                .Select(party => party.Upns)
+                .SingleAsync();
 
-            if (string.IsNullOrEmpty(bcProviderId))
+            if (!userPrincipalNames.Any())
             {
                 return;
             }
 
             var bcProviderAttributes = new BCProviderAttributes(this.bcProviderClientId).SetPidpEmail(context.Message.NewEmail);
-            if (!await this.client.UpdateAttributes(bcProviderId, bcProviderAttributes.AsAdditionalData()))
+
+            foreach (var upn in userPrincipalNames)
             {
-                this.logger.LogBCProviderEmailUpdateFailed(context.Message.UserId);
-                throw new InvalidOperationException("Error Comunicating with Azure AD");
+                if (!await this.client.UpdateAttributes(upn, bcProviderAttributes.AsAdditionalData()))
+                {
+                    this.logger.LogBCProviderEmailUpdateFailed(context.Message.UserId);
+                    throw new InvalidOperationException("Error Comunicating with Azure AD");
+                }
             }
         }
     }

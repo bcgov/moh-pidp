@@ -34,9 +34,12 @@ describe('userGuard', () => {
           useValue: APP_DI_CONFIG,
         },
         provideAutoSpy(Router),
+        provideAutoSpy(ActivatedRouteSnapshot),
+        provideAutoSpy(RouterStateSnapshot),
       ],
     });
-
+    activatedRouteSnapshotSpy = TestBed.inject<any>(ActivatedRouteSnapshot);
+    routerStateSnapshotSpy = TestBed.inject<any>(RouterStateSnapshot);
     authorizedUserServiceSpy = TestBed.inject<any>(AuthorizedUserService);
     router = TestBed.inject(Router);
   });

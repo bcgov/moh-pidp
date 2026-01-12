@@ -206,3 +206,11 @@ app-admin-dashboard .mat-sidenav {
 .mat-mdc-dialog-actions.mdc-dialog__actions {
   align-self: center !important;
 }
+
+/**
+ * Fixes the issue where the dialog is not scrollable when the content is too long.
+ * This is a workaround for a known issue with Angular Material dialogs.
+ */
+.cdk-global-scrollblock {
+  top: 0 !important;
+}

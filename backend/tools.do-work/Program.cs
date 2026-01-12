@@ -6,21 +6,23 @@ using NodaTime;
 using System.Reflection;
 
 using DoWork;
+using DoWork.Services.CredentialDeletionService;
 using Pidp;
 using Pidp.Data;
 // using Pidp.Infrastructure.HttpClients;
 
 await Host.CreateDefaultBuilder(args)
-    .UseContentRoot(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location))
+    .UseContentRoot(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!)
     .ConfigureServices((hostContext, services) =>
     {
         var config = InitializeConfiguration(services);
 
         services
             // .AddHttpClients(config)
-            .AddRateLimitedKeycloakClient(config)
+            // .AddRateLimitedKeycloakClient(config)
             .AddSingleton<IClock>(SystemClock.Instance)
             .AddMediatR(opt => opt.RegisterServicesFromAssemblyContaining<Startup>())
+            .AddTransient<ICredentialDeletionService, CredentialDeletionService>()
             .AddTransient<IDoWorkService, DoWorkService>()
             .AddHostedService<HostedServiceWrapper>()
             .AddDbContext<PidpDbContext>(options => options

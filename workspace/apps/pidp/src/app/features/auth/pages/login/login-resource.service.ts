@@ -10,7 +10,7 @@ import { BannerFindResponse } from './banner-find.response.model';
   providedIn: 'root',
 })
 export class LoginResource {
-  public constructor(private apiResource: ApiHttpClient) {}
+  public constructor(private readonly apiResource: ApiHttpClient) {}
 
   public findBanners(component: string): Observable<BannerFindResponse[]> {
     return this.apiResource.get<BannerFindResponse[]>(

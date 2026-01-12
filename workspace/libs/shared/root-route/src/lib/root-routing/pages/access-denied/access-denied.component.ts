@@ -32,8 +32,8 @@ import { RootRouteContainerComponent } from '../../shared/root-route-container/r
 })
 export class AccessDeniedComponent {
   public constructor(
-    private route: ActivatedRoute,
-    private router: Router,
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
   ) {}
 
   public routeToRoot(): void {

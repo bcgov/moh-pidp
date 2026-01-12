@@ -1,7 +1,4 @@
-import {
-  provideHttpClient,
-  withInterceptorsFromDi,
-} from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import {
   ENVIRONMENT_INITIALIZER,
   EnvironmentProviders,

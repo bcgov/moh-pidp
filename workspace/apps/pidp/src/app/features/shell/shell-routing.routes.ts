@@ -6,6 +6,7 @@ import { PermissionsGuard } from '@app/modules/permissions/permissions.guard';
 import { Role } from '@app/shared/enums/roles.enum';
 
 import { AccessRoutes } from '../access/access.routes';
+import { AccountsRoutes } from '../accounts/accounts.routes';
 import { AdminRoutes } from '../admin/admin.routes';
 import { AuthRoutes } from '../auth/auth.routes';
 import { AuthenticationGuard } from '../auth/guards/authentication.guard';
@@ -102,6 +103,14 @@ export const routes: Routes = [
         },
         loadChildren: (): Promise<Routes> =>
           import('../access/access-routing.routes').then((m) => m.routes),
+      },
+      {
+        path: AccountsRoutes.BASE_PATH,
+        resolve: {
+          hasCompletedWizard: wizardResolver,
+        },
+        loadChildren: (): Promise<Routes> =>
+          import('../accounts/accounts-routing.routes').then((m) => m.routes),
       },
       {
         path: FaqRoutes.BASE_PATH,

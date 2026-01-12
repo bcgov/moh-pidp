@@ -11,11 +11,14 @@ import { IAccessSection } from './access-section.model';
 import { AccountLinkingPortalSection } from './access/account-linking-portal-section.class';
 import { BcProviderPortalSection } from './access/bc-provider-portal-section.class';
 import { DriverFitnessPortalSection } from './access/driver-fitness-portal-section.class';
+import { HaloPortalSection } from './access/halo-portal-section.class';
 import { HcimAccountTransferPortalSection } from './access/hcim-account-transfer-portal-section.class';
 import { ImmsBCEformsPortalSection } from './access/immsbc-eforms-portal-section.class';
+import { ImmsbcPortalSection } from './access/immscbc-portal-section.class';
+import { IvfPortalSection } from './access/ivf-portal-section.class';
 import { MsTeamsClinicMemberPortalSection } from './access/ms-teams-clinic-member-portal-section.class';
 import { MsTeamsPrivacyOfficerPortalSection } from './access/ms-teams-privacy-officer-portal-section.class';
-import { PrescriptionRefillEformsPortalSection } from './access/prescription-refill-eforms-portal-section.class';
+import { PemcodPortalSection } from './access/pemcod-portal-section.class';
 import { ProviderReportingPortalSection } from './access/provider-reporting-portal-section.class';
 import { ProvincialAttachmentSystemPortalSection } from './access/provincial-attachment-system-portal-section.class';
 import { SaEformsPortalSection } from './access/sa-eforms-portal-section.class';
@@ -69,8 +72,8 @@ export type PortalState = Record<PortalStateGroupKey, IPortalSection[]> | null;
 
 export class AccessStateBuilder {
   public constructor(
-    private router: Router,
-    private permissionsService: PermissionsService,
+    private readonly router: Router,
+    private readonly permissionsService: PermissionsService,
   ) {}
 
   public createAccessState(
@@ -84,22 +87,8 @@ export class AccessStateBuilder {
   private createAccessGroup(profileStatus: ProfileStatus): IAccessSection[] {
     return [
       ...ArrayUtils.insertResultIf<IAccessSection>(
-        this.insertSection('accountLinking', profileStatus),
-        () => [new AccountLinkingPortalSection(profileStatus, this.router)],
-      ),
-      ...ArrayUtils.insertResultIf<IAccessSection>(
         this.insertSection('saEforms', profileStatus),
         () => [new SaEformsPortalSection(profileStatus, this.router)],
-      ),
-      ...ArrayUtils.insertResultIf<IAccessSection>(
-        this.insertSection('prescriptionRefillEforms', profileStatus),
-        () => [
-          new PrescriptionRefillEformsPortalSection(profileStatus, this.router),
-        ],
-      ),
-      ...ArrayUtils.insertResultIf<IAccessSection>(
-        this.insertSection('bcProvider', profileStatus),
-        () => [new BcProviderPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
         this.insertSection('hcimAccountTransfer', profileStatus),
@@ -141,6 +130,23 @@ export class AccessStateBuilder {
         this.insertSection('immsBCEforms', profileStatus),
         () => [new ImmsBCEformsPortalSection(profileStatus, this.router)],
       ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('halo', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        () => [new HaloPortalSection(profileStatus, this.router)],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('ivf', profileStatus),
+        () => [new IvfPortalSection(profileStatus, this.router)],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('immsBC', profileStatus),
+        () => [new ImmsbcPortalSection(profileStatus, this.router)],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('pemcod', profileStatus),
+        () => [new PemcodPortalSection(profileStatus, this.router)],
+      ),
     ];
   }
 
@@ -155,8 +161,8 @@ export class AccessStateBuilder {
 
 export class PortalStateBuilder {
   public constructor(
-    private router: Router,
-    private permissionsService: PermissionsService,
+    private readonly router: Router,
+    private readonly permissionsService: PermissionsService,
   ) {}
 
   public createState(
@@ -220,12 +226,6 @@ export class PortalStateBuilder {
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('saEforms', profileStatus),
         () => [new SaEformsPortalSection(profileStatus, this.router)],
-      ),
-      ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.insertSection('prescriptionRefillEforms', profileStatus),
-        () => [
-          new PrescriptionRefillEformsPortalSection(profileStatus, this.router),
-        ],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('bcProvider', profileStatus),

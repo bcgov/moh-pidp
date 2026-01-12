@@ -42,7 +42,7 @@ import { PortalResource } from './portal-resource.service';
 export class PortalPage implements OnInit, AfterViewInit {
   public faBookmark = faBookmark;
   public faArrowUp = faArrowUp;
-  public showBackToTopButton: boolean = false;
+  public showBackToTopButton = false;
   public ProfileRoutes = ProfileRoutes;
   public AccessRoutes = AccessRoutes;
   public OrganizationInfoRoutes = OrganizationInfoRoutes;

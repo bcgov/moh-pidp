@@ -1,0 +1,241 @@
+@use 'pidp-variables' as pidp;
+
+.viewport-all {
+  --gap: 1rem;
+  --font-size: 0.75rem;
+}
+
+.viewport-small,
+.viewport-medium,
+.viewport-large {
+  --gap: 1.25rem;
+  --font-size: 1rem;
+}
+
+.viewport-medium,
+.viewport-large {
+  --header-margin: var(--gap) 0 0;
+  --content-padding: var(--gap) 0;
+  --form-card-width: 25rem;
+}
+
+.viewport-all {
+  --header-margin: unset;
+  --card-border-radius: calc(var(--gap) * 0.375);
+  --content-padding: var(--gap);
+  --form-card-width: unset;
+  padding: 1.25rem 0.75rem;
+
+  & .content {
+    padding-bottom: var(--content-padding);
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+
+    .content-header h1 {
+      color: pidp.$bcgov-color-primary;
+      font-size: 50px;
+      font-weight: 700;
+      word-wrap: break-word;
+    }
+
+    .main {
+      display: flex;
+      gap: 20px;
+      min-height: 340px;
+      margin: calc(var(--gap)) 0;
+
+      & .card {
+        display: flex;
+        flex-direction: column;
+        padding-right: calc(var(--gap) * 0.9);
+        position: relative;
+        line-height: 1.5rem;
+        flex: 1.8;
+
+        .stepper-title {
+          color: pidp.$bcgov-color-text;
+          font-size: 1.5rem;
+          font-weight: 700;
+          margin-bottom: calc(var(--gap) / 2);
+          padding-left: 1.8rem;
+        }
+      }
+      .ivf-button-container {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        height: 25rem;
+
+        .ivf-button {
+          img {
+            object-fit: cover;
+            z-index: -2;
+            height: auto;
+            width: 629px;
+          }
+
+          div.auth-card {
+            padding: 2rem;
+          }
+
+          .card-container {
+            display: flex;
+            flex-direction: column;
+            height: 95%;
+            width: 100%;
+            align-items: flex-end;
+
+            .card-footer {
+              flex: 1;
+              display: flex;
+              justify-content: center;
+              align-items: flex-end;
+              button {
+                z-index: 1;
+                padding: 0;
+                width: 70px;
+                height: 70px;
+                border-radius: 50%;
+                background: pidp.$bcgov-color-primary;
+                color: #fff;
+                border: 1px solid #fff;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                top: calc(100% - 150px);
+                &:disabled {
+                  background: var(
+                    --surface-color-primary-button-disabled,
+                    #edebe9
+                  );
+                }
+                fa-icon {
+                  font-size: xx-large;
+                }
+              }
+            }
+          }
+        }
+        .main-image-text {
+          font-size: larger;
+          background-color: #cccccc;
+          padding: 1rem;
+
+          .main-image-text-title {
+            display: flex;
+            justify-content: start;
+            gap: 1rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+.viewport-small {
+  .main {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .ivf-button-container {
+    flex: 1 !important;
+  }
+  .card-footer {
+    button {
+      top: calc(100% - 1px) !important;
+    }
+  }
+}
+
+.viewport-xsmall {
+  .content-header {
+    margin: 0 20px 0 20px;
+  }
+
+  .content-header h1 {
+    font-size: 40px;
+    line-height: 1.1;
+  }
+
+  .main {
+    display: flex !important;
+    flex-direction: column !important;
+
+    & .card {
+      margin-left: 0 !important;
+    }
+
+    .ivf-step-label {
+      line-height: 1.1;
+    }
+
+    .ivf-button {
+      div.auth-card {
+        padding: 20px 0 0 20px !important;
+      }
+
+      .card-container {
+        height: 50% !important;
+
+        .auth-card-footer {
+          padding: 7.5px 0 7.5px 0;
+        }
+      }
+    }
+  }
+  .ivf-button-container {
+    flex: 1 !important;
+  }
+}
+
+.viewport-medium {
+  div.auth-card {
+    padding: 20px 0 10px 20px !important;
+  }
+  .card-footer {
+    button {
+      top: calc(100% - 220px) !important;
+    }
+  }
+  .ivf-button-container {
+    flex: 1 !important;
+  }
+}
+
+.smaller-text {
+  font-size: smaller;
+  margin: 0 10px;
+}
+
+.bcprovider-username {
+  font-size: smaller;
+}
+
+.stepper-buttons {
+  margin-top: 10px;
+  & button {
+    border: pidp.$bcgov-color-primary solid 2px;
+    color: pidp.$bcgov-color-primary;
+  }
+
+  & button:last-child {
+    margin-left: 10px;
+  }
+
+  & button.top-button {
+    margin-left: 0;
+  }
+}
+
+.guide-information {
+  font-size: smaller;
+  margin-bottom: 10px;
+}
+
+.ivf-step-label {
+  margin: unset;
+  line-height: 1.3;
+}

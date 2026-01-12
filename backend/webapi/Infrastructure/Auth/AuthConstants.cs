@@ -19,7 +19,7 @@ public static class IdentityProviders
 {
     public const string BCServicesCard = "bcsc";
     public const string BCProvider = "bcprovider_aad";
-    public const string Idir = "idir";
+    public const string Idir = "idir_aad";
     public const string Phsa = "phsa";
 }
 
@@ -39,6 +39,8 @@ public static class Clients
 
 public static class Roles
 {
+    public const string FeatureFlag = "feature_pidp_demo";
+
     // PIdP Role Placeholders
     public const string Admin = "ADMIN";
     public const string User = "USER";
