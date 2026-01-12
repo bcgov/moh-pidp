@@ -9,7 +9,7 @@ using DoWork;
 using DoWork.Services.CredentialDeletionService;
 using Pidp;
 using Pidp.Data;
-// using Pidp.Infrastructure.HttpClients;
+using Pidp.Infrastructure.HttpClients;
 
 await Host.CreateDefaultBuilder(args)
     .UseContentRoot(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!)
@@ -18,7 +18,7 @@ await Host.CreateDefaultBuilder(args)
         var config = InitializeConfiguration(services);
 
         services
-            // .AddHttpClients(config)
+            .AddHttpClients(config)
             // .AddRateLimitedKeycloakClient(config)
             .AddSingleton<IClock>(SystemClock.Instance)
             .AddMediatR(opt => opt.RegisterServicesFromAssemblyContaining<Startup>())
