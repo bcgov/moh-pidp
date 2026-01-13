@@ -6,13 +6,15 @@ public class NewUserRepresentation
 {
     public string? Cpn { get; set; }
     public IEnumerable<string> EndorserData { get; set; } = [];
-    public string FirstName { get; set; } = string.Empty;
+    public string? FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public string Hpdid { get; set; } = string.Empty;
     public bool IsMd { get; set; }
     public bool IsMoa { get; set; }
     public bool IsPharm { get; set; }
     public bool IsRnp { get; set; }
+    public string MspId { get; set; } = string.Empty;
+    public string OpId { get; set; } = string.Empty;
     public string PidpEmail { get; set; } = string.Empty;
     public DateTimeOffset UaaDate { get; set; }
 
@@ -43,7 +45,9 @@ public class BCProviderAttributes(string clientId)
             .SetIsMoa(representation.IsMoa)
             .SetIsPharm(representation.IsPharm)
             .SetIsRnp(representation.IsRnp)
+            .SetMspId(representation.MspId)
             .SetLoa(3)
+            .SetOpId(representation.OpId)
             .SetPidpEmail(representation.PidpEmail)
             .SetUaaDate(representation.UaaDate);
 
@@ -71,6 +75,8 @@ public class BCProviderAttributes(string clientId)
     /// Level Of Assurance. Is 3 for a BC Provider created from a BC Services Card.
     /// </summary>
     public BCProviderAttributes SetLoa(int loa) => this.SetProperty(nameof(loa), loa);
+    public BCProviderAttributes SetMspId(string mspId) => this.SetProperty(nameof(mspId), mspId);
+    public BCProviderAttributes SetOpId(string opId) => this.SetProperty(nameof(opId), opId);
     public BCProviderAttributes SetPidpEmail(string pidpEmail) => this.SetProperty(nameof(pidpEmail), pidpEmail);
     public BCProviderAttributes SetUaaDate(DateTimeOffset uaaDate) => this.SetProperty(nameof(uaaDate), uaaDate);
 

@@ -78,10 +78,11 @@ public partial class ProfileStatus
                     ProfileSection.Create<HaloSection>(data),
                     ProfileSection.Create<HcimAccountTransferSection>(data),
                     ProfileSection.Create<ImmsBCEformsSection>(data),
+                    ProfileSection.Create<ImmsBCSection>(data),
                     ProfileSection.Create<IvfSection>(data),
                     ProfileSection.Create<MSTeamsClinicMemberSection>(data),
                     ProfileSection.Create<MSTeamsPrivacyOfficerSection>(data),
-                    ProfileSection.Create<PrescriptionRefillEformsSection>(data),
+                    ProfileSection.Create<PemcodSection>(data),
                     ProfileSection.Create<ProviderReportingPortalSection>(data),
                     ProfileSection.Create<ProvincialAttachmentSystemSection>(data),
                     ProfileSection.Create<SAEformsSection>(data)

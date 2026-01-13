@@ -10,7 +10,6 @@ import { SaEformsSection } from './sa-eforms-section.model';
 export const accessSectionKeys = [
   'saEforms',
   'accountLinking',
-  'prescription-refill-eforms',
   'hcimAccountTransfer',
   'immsBCEforms',
   'driverFitness',
@@ -21,6 +20,8 @@ export const accessSectionKeys = [
   'externalAccounts',
   'halo',
   'ivf',
+  'immsBC',
+  'pemcod',
 ] as const;
 
 /**
@@ -39,7 +40,6 @@ export type IAccessGroup = {
 
 export interface AccessGroup extends IAccessGroup {
   saEforms: SaEformsSection;
-  prescriptionRefillEforms: Section;
   accountLinking: Section;
   bcProvider: Section;
   hcimAccountTransfer: Section;
@@ -52,4 +52,6 @@ export interface AccessGroup extends IAccessGroup {
   externalAccounts: Section;
   halo: Section;
   ivf: Section;
+  immsBC: Section;
+  pemcod: Section;
 }

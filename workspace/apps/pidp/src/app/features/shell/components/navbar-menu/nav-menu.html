@@ -58,12 +58,6 @@
               >Use Policy Agreement</a
             >
             <a
-              *ngIf="hasCredential(IdentityProvider.BC_PROVIDER)"
-              class="dropdown-links"
-              (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.BC_PROVIDER_EDIT))"
-              >Password and MFA reset</a
-            >
-            <a
               class="dropdown-links"
               (click)="navigateTo(HistoryRoutes.routePath(HistoryRoutes.TRANSACTIONS))"
               >History</a
@@ -71,14 +65,60 @@
           </div>
         </div>
       </a>
-      <a
-        *ngFor="let menuItem of menuItems"
-        class="main-menu-item"
-        routerLinkActive="main-menu-item-active"
-        [routerLink]="getRouterLink(menuItem)"
-        [routerLinkActiveOptions]="getRouterLinkActiveOptions(menuItem)"
-        (click)="onMenuItemClicked()"
-        >{{ menuItem.label }}
+      <a class="main-menu-item">
+        <div class="dropdown">
+          <span class="content-with-alert">
+            <a
+              class="dropdown-accounts"
+              (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))"
+              >Access</a
+            >
+          </span>
+        </div>
+      </a>
+      <a class="main-menu-item">
+        <div class="dropdown">
+          <span class="content-with-alert">
+            <a class="dropdown-accounts">Account</a></span
+          >
+          <div class="dropdown-content">
+            <a
+              class="dropdown-links"
+              (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.ACCOUNT_LINKING))"
+              >Account Linking</a
+            >
+            <a
+              *ngIf="featureFlag()"
+              class="dropdown-links"
+              (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.EXTERNAL_ACCOUNTS))"
+              >External Account</a
+            >
+            <a
+              *ngIf="hasCredential(IdentityProvider.BC_PROVIDER) else noBCProvider"
+              class="dropdown-links"
+              (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_EDIT))"
+              >Password and MFA Reset</a
+            >
+            <ng-template #noBCProvider>
+              <a
+                class="dropdown-links"
+                (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_APPLICATION))"
+                >BCProvider Account</a
+              ></ng-template
+            >
+          </div>
+        </div>
+      </a>
+      <a class="main-menu-item">
+        <div class="dropdown">
+          <span class="content-with-alert">
+            <a
+              class="dropdown-accounts"
+              (click)="navigateTo(FaqRoutes.BASE_PATH)"
+              >Help</a
+            >
+          </span>
+        </div>
       </a>
       <button
         *ngIf="isLogoutButtonVisible"
@@ -128,26 +168,42 @@
             >Use Policy Agreement</a
           >
           <a
-            *ngIf="hasCredential(IdentityProvider.BC_PROVIDER)"
-            class="sidenav-menu-item"
-            (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.BC_PROVIDER_EDIT))"
-            >Password and MFA reset</a
-          >
-          <a
             class="sidenav-menu-item"
             (click)="navigateTo(HistoryRoutes.routePath(HistoryRoutes.TRANSACTIONS))"
             >History</a
           >
           <a
-            *ngFor="let menuItem of menuItems"
             class="sidenav-menu-item"
-            routerLinkActive="sidenav-menu-item-active"
-            [routerLink]="getRouterLink(menuItem)"
-            [routerLinkActiveOptions]="getRouterLinkActiveOptions(menuItem)"
-            [fragment]="getRouterLinkFragment(menuItem)"
-            (click)="onMenuItemClicked()"
-            >{{ menuItem.label }}
-          </a>
+            (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))"
+            >Access</a
+          >
+          <a
+            class="sidenav-menu-item"
+            (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.ACCOUNT_LINKING))"
+            >Account Linking</a
+          >
+          <a
+            *ngIf="featureFlag()"
+            class="sidenav-menu-item"
+            (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.EXTERNAL_ACCOUNTS))"
+            >External Account</a
+          >
+          <a
+            *ngIf="hasCredential(IdentityProvider.BC_PROVIDER) else noBCProviderSidenav"
+            class="sidenav-menu-item"
+            (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_EDIT))"
+            >Password and MFA Reset</a
+          >
+          <ng-template #noBCProviderSidenav>
+            <a
+              class="sidenav-menu-item"
+              (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_APPLICATION))"
+              >BCProvider Account</a
+            ></ng-template
+          >
+          <a class="sidenav-menu-item" (click)="navigateTo(FaqRoutes.BASE_PATH)"
+            >Help</a
+          >
           <a
             *ngIf="isLogoutMenuItemVisible"
             class="sidenav-menu-item"

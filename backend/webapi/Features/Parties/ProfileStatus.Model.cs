@@ -232,6 +232,26 @@ public partial class ProfileStatus
             }
         }
 
+        public class ImmsBCSection : ProfileSection
+        {
+            internal override string SectionName => "immsBC";
+            public override string[] KeyWords => ["pharmacist"];
+
+            protected override StatusCode Compute(ProfileData profile)
+            {
+                return profile switch
+                {
+                    _ when profile.PartyPlrStanding
+                            .With(IdentifierType.Pharmacist)
+                            .HasGoodStanding
+                        && profile.HasBCProviderCredential => StatusCode.Complete,
+                    _ when profile.PartyPlrStanding
+                            .With(IdentifierType.Pharmacist).HasGoodStanding => StatusCode.Incomplete,
+                    _ => StatusCode.Locked
+                };
+            }
+        }
+
         public class IvfSection : ProfileSection
         {
             internal override string SectionName => "ivf";
@@ -288,20 +308,20 @@ public partial class ProfileStatus
             }
         }
 
-        public class PrescriptionRefillEformsSection : ProfileSection
+        public class PemcodSection : ProfileSection
         {
-            internal override string SectionName => "prescriptionRefillEforms";
-            public override string[] KeyWords => ["pharmacists", "rx"];
+            internal override string SectionName => "pemcod";
+            public override string[] KeyWords => ["doctors", "nursing"];
 
             protected override StatusCode Compute(ProfileData profile)
             {
                 return profile switch
                 {
-                    { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
-                    _ when profile.HasEnrolment(AccessTypeCode.PrescriptionRefillEforms) => StatusCode.Complete,
                     _ when profile.PartyPlrStanding
-                        .With(PrescriptionRefillEforms.AllowedIdentifierTypes)
-                        .HasGoodStanding => StatusCode.Incomplete,
+                            .With(ProviderRoleType.MedicalDoctor, ProviderRoleType.RegisteredNursePractitioner)
+                            .HasGoodStanding
+                        && profile.HasBCProviderCredential => StatusCode.Complete,
+                    { HasBCServicesCardCredential: true } => StatusCode.Incomplete,
                     _ => StatusCode.Locked
                 };
             }

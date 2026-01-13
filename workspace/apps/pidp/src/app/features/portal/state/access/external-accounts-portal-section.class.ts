@@ -7,7 +7,7 @@ import { faAddressBook, faUserCheck } from '@fortawesome/free-solid-svg-icons';
 
 import { AlertType } from '@bcgov/shared/ui';
 
-import { AccessRoutes } from '@app/features/access/access.routes';
+import { AccountsRoutes } from '@app/features/accounts/accounts.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
 import { StatusCode } from '../../enums/status-code.enum';
@@ -53,7 +53,7 @@ export class ExternalAccountsPortalSection implements IPortalSection {
     const statusCode = this.getStatusCode();
     return {
       label: statusCode === StatusCode.COMPLETED ? 'View' : 'Update',
-      route: AccessRoutes.routePath(AccessRoutes.EXTERNAL_ACCOUNTS),
+      route: AccountsRoutes.routePath(AccountsRoutes.EXTERNAL_ACCOUNTS),
       disabled: statusCode === StatusCode.NOT_AVAILABLE,
     };
   }

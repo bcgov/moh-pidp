@@ -82,6 +82,7 @@ public class BCProviderCreate
 
             if (party.Email == null
                 || party.Hpdid == null
+                || party.OpId == null
                 || party.UaaAgreementDate == default)
             {
                 this.logger.LogInvalidState(command.PartyId, party);
@@ -106,6 +107,7 @@ public class BCProviderCreate
                 Cpn = party.Cpn,
                 Password = command.Password,
                 PidpEmail = party.Email,
+                OpId = party.OpId,
                 UaaDate = party.UaaAgreementDate.ToDateTimeOffset(),
                 IsMoa = !plrStanding.HasGoodStanding && endorsingPlrDigest.HasGoodStanding,
                 EndorserData = endorsingPlrDigest
@@ -113,6 +115,15 @@ public class BCProviderCreate
                     .With(BCProviderAttributes.EndorserDataEligibleIdentifierTypes)
                     .Cpns
             };
+
+            if (party.Cpn != null)
+            {
+                var mspId = plrStanding.MspIdForOneCpn(party.Cpn);
+                if (!string.IsNullOrEmpty(mspId))
+                {
+                    newUserRep.MspId = mspId;
+                }
+            }
 
             var createdUser = await this.client.CreateBCProviderAccount(newUserRep);
 
@@ -150,7 +161,7 @@ public class BCProviderCreate
             return DomainResult.Success(createdUser.UserPrincipalName);
         }
 
-        private async Task<Guid?> CreateKeycloakUser(string firstName, string lastName, string userPrincipalName, string email, string phone)
+        private async Task<Guid?> CreateKeycloakUser(string? firstName, string lastName, string userPrincipalName, string email, string phone)
         {
             var newUser = new UserRepresentation
             {

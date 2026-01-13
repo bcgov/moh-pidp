@@ -17,11 +17,9 @@ export interface AppEnvironment extends EnvironmentConfig {
     providerIdentitySupport: string;
     specialAuthorityEformsSupport: string;
     hcimAccountTransferSupport: string;
-    prescriptionRefillRequestEformsSupport: string;
     driverFitnessSupport: string;
     msTeamsSupport: string;
     doctorsTechnologyOfficeSupport: string;
-    phsaInformationAccessAndPrivacyOffice: string;
     immsBCEformsSupport: string;
   };
   urls: {
@@ -30,7 +28,6 @@ export interface AppEnvironment extends EnvironmentConfig {
     bcscMobileSetup: string;
     specialAuthority: string;
     doctorsTechnologyOffice: string;
-    prescriptionRenewal: string;
   };
   phones: {
     additionalSupport: string;

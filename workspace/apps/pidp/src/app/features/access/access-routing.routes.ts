@@ -16,27 +16,6 @@ export const routes: Routes = [
       ),
   },
   {
-    path: AccessRoutes.PRESCRIPTION_REFILL_EFORMS,
-    loadChildren: (): Promise<Routes> =>
-      import(
-        './pages/prescription-refill-eforms/prescription-refill-eforms-routing.routes'
-      ).then((m) => m.routes),
-  },
-  {
-    path: AccessRoutes.BC_PROVIDER_APPLICATION,
-    loadChildren: (): Promise<Routes> =>
-      import(
-        './pages/bc-provider-application/bc-provider-application.route'
-      ).then((m) => m.routes),
-  },
-  {
-    path: AccessRoutes.BC_PROVIDER_EDIT,
-    loadChildren: (): Promise<Routes> =>
-      import('./pages/bc-provider-edit/bc-provider-edit.routes').then(
-        (m) => m.routes,
-      ),
-  },
-  {
     path: AccessRoutes.HCIM_ACCOUNT_TRANSFER,
     loadChildren: (): Promise<Routes> =>
       import(
@@ -86,13 +65,6 @@ export const routes: Routes = [
       ).then((m) => m.routes),
   },
   {
-    path: AccessRoutes.EXTERNAL_ACCOUNTS,
-    loadChildren: (): Promise<Routes> =>
-      import('./pages/external-accounts/external-accounts-routing.routes').then(
-        (m) => m.routes,
-      ),
-  },
-  {
     path: AccessRoutes.HALO,
     loadChildren: (): Promise<Routes> =>
       import('./pages/halo/halo-routing.routes').then((m) => m.routes),
@@ -101,5 +73,15 @@ export const routes: Routes = [
     path: AccessRoutes.IVF,
     loadChildren: (): Promise<Routes> =>
       import('./pages/ivf/ivf-routing.routes').then((m) => m.routes),
+  },
+  {
+    path: AccessRoutes.IMMSBC,
+    loadChildren: (): Promise<Routes> =>
+      import('./pages/immsbc/immsbc-routing.routes').then((m) => m.routes),
+  },
+  {
+    path: AccessRoutes.PEMCOD,
+    loadChildren: (): Promise<Routes> =>
+      import('./pages/pemcod/pemcod-routing.routes').then((m) => m.routes),
   },
 ];

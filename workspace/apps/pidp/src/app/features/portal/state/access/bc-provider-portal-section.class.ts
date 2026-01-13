@@ -7,7 +7,7 @@ import { faFileLines, faUserCheck } from '@fortawesome/free-solid-svg-icons';
 
 import { AlertType } from '@bcgov/shared/ui';
 
-import { AccessRoutes } from '@app/features/access/access.routes';
+import { AccountsRoutes } from '@app/features/accounts/accounts.routes';
 import { ProfileRoutes } from '@app/features/profile/profile.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
 
@@ -63,7 +63,8 @@ export class BcProviderPortalSection implements IPortalSection {
 
   public get status(): string {
     const statusCode = this.getStatusCode();
-    const statusMsg =  statusCode === StatusCode.COMPLETED ? 'Completed': 'Incomplete';
+    const statusMsg =
+      statusCode === StatusCode.COMPLETED ? 'Completed' : 'Incomplete';
     return statusCode === StatusCode.AVAILABLE ? '' : statusMsg;
   }
 
@@ -103,9 +104,9 @@ export class BcProviderPortalSection implements IPortalSection {
     const statusCode = this.getStatusCode();
     switch (statusCode) {
       case StatusCode.COMPLETED:
-        return AccessRoutes.routePath(AccessRoutes.BC_PROVIDER_EDIT);
+        return AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_EDIT);
       case StatusCode.AVAILABLE:
-        return AccessRoutes.routePath(AccessRoutes.BC_PROVIDER_APPLICATION);
+        return AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_APPLICATION);
       default:
         return '';
     }

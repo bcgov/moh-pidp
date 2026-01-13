@@ -110,7 +110,8 @@ public class BCProviderInvite
                     UaaAgreementDate = party.AccessRequests
                         .Where(request => request.AccessTypeCode == AccessTypeCode.UserAccessAgreement)
                         .Select(request => request.RequestedOn)
-                        .SingleOrDefault()
+                        .SingleOrDefault(),
+                    party.OpId
                 })
                 .SingleAsync();
 
@@ -123,6 +124,7 @@ public class BCProviderInvite
             var attributes = new BCProviderAttributes(this.clientId)
                 .SetHpdid(party.Hpdid!)
                 .SetLoa(3)
+                .SetOpId(party.OpId!)
                 .SetPidpEmail(party.Email!)
                 .SetIsRnp(plrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding)
                 .SetIsMd(plrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding)
