@@ -5,7 +5,6 @@ using Pidp;
 using Pidp.Data;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
-using Pidp.Infrastructure.HttpClients.Plr;
 
 public class PartyDto
 {
@@ -13,24 +12,21 @@ public class PartyDto
     public string? OpId { get; set; }
 }
 
-public class DoWorkService(
+public class BCProviderAttributeService(
     IBCProviderClient bcProviderClient,
     PidpDbContext context,
-    IPlrClient plrClient,
-    PidpConfiguration config) : IDoWorkService
+    PidpConfiguration config) : IBCProviderAttributeService
 {
     private readonly IBCProviderClient bcProviderClient = bcProviderClient;
     private readonly PidpDbContext context = context;
-    private readonly IPlrClient plrClient = plrClient;
     private readonly string clientId = config.BCProviderClient.ClientId;
 
 
-    public async Task DoWorkAsync()
+    public async Task UpdateBCProviderAttributesAsync()
     {
         // Still needs finishing touches and testing
         var parties = await this.context.Parties
-            .Where(party => party.Cpn != null
-                && party.Credentials.Any(credential => credential.IdentityProvider == IdentityProviders.BCProvider))
+            .Where(party => party.Credentials.Any(credential => credential.IdentityProvider == IdentityProviders.BCProvider))
             .Select(party => new PartyDto
             {
                 Upn = party.Credentials
