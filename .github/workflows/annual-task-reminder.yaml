@@ -1,0 +1,23 @@
+name: Annual Task Reminder
+on:
+  schedule:
+    # Runs at 9:00 AM on January 15th every year
+    - cron: '0 9 15 1 *'
+  workflow_dispatch: # Allows manual triggering for testing
+
+jobs:
+  create-reminder-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Annual Reminder Issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🔔 Annual Task Reminder: Renew SSL Certificate and secret rotation',
+              body: 'This is your annual reminder to swap out the SSL Certificate and rotate secrets.\n\n## Tasks\n- [ ] Generate new SSL Certificate\n- [ ] Rotate TLS secrets for PLR\n- \n@Paahn',
+              labels: ['reminder', 'annual-maintenance'],
+              assignees: ['Paahn']
+            })
