@@ -7,6 +7,8 @@ on:
 
 jobs:
   create-reminder-issue:
+    permissions:
+      issues: write
     runs-on: ubuntu-latest
     steps:
       - name: Create Annual Reminder Issue
