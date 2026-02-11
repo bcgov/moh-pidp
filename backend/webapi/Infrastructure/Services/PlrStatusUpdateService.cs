@@ -93,6 +93,12 @@ public sealed class PlrStatusUpdateService(
                 bcProviderAttributes.SetIsPharm(status.IsGoodStanding);
             }
 
+            if (status.MspId != null)
+            {
+                var plrStanding = await this.plrClient.GetStandingsDigestAsync(status.Cpn);
+                bcProviderAttributes.SetMspId(plrStanding.MspIds);
+            }
+
             foreach (var upn in party.Upns)
             {
                 await this.bcProviderClient.UpdateAttributes(upn, bcProviderAttributes.AsAdditionalData());
