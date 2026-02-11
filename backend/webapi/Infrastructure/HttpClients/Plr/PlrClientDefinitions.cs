@@ -119,18 +119,10 @@ public class PlrStandingsDigest
 
     public IEnumerable<string> Cpns => this.records.Select(record => record.Cpn);
 
-    /// <summary>
-    /// MVP TEST CODE: gets the MspId for a single record in the digest.
-    /// This will need to be rewritten when we want a production grade feature
-    /// because a Party may have more than one MspId associated to their CPN.
-    /// </summary>
-    public string? MspIdForOneCpn(string cpn)
-    {
-        return this.records
-            .Where(record => record.Cpn == cpn)
-            .Select(record => record.MspId)
-            .FirstOrDefault();
-    }
+    public IEnumerable<string> MspIds => this.records
+        .Select(record => record.MspId)
+        .Where(mspId => !string.IsNullOrWhiteSpace(mspId))
+        .Select(mspId => mspId!);
 
     private PlrStandingsDigest(bool error, IEnumerable<DigestRecord>? records = null)
     {
@@ -254,4 +246,6 @@ public class PlrStatusChangeLog
     public bool IsGoodStanding { get; set; }
     public string? IdentifierType { get; set; }
     public string? ProviderRoleType { get; set; }
+    public string MspId { get; set; } = string.Empty;
+
 }
