@@ -118,10 +118,10 @@ public class BCProviderCreate
 
             if (party.Cpn != null)
             {
-                var mspId = plrStanding.MspIdForOneCpn(party.Cpn);
-                if (!string.IsNullOrEmpty(mspId))
+                var mspIds = plrStanding.MspIds;
+                if (mspIds.Any())
                 {
-                    newUserRep.MspId = mspId;
+                    newUserRep.MspId = mspIds;
                 }
             }
 
