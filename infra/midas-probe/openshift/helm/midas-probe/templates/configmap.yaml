@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: midas-fluentbit-config
+  labels: 
+    app.kubernetes.io/part-of: {{ .Values.environment }}
+data:
+  fluent-bit.conf: |
+    [SERVICE]
+      Flush         5
+      Daemon        Off
+      # define the log format (see additional config map key/value)
+      Parsers_File  parsers.conf
+      Log_Level     info
+      HTTP_Server   On
+      HTTP_Listen   0.0.0.0
+      HTTP_Port     2020
+      Health_Check  On
+
+    [INPUT]
+      # Get logs from file written by webapi app
+      Name        tail
+      Path        /temp/*.log
+      Tag         app
+
+    [FILTER]
+      # Filter logs based on certain keyword(e.g. ERR)
+      name   grep
+      match  app
+      Logical_Op or
+      regex log 142.34.64.4
+      regex log 500
+
+    [FILTER]
+      name          parser
+      match         app
+      Key_Name      log
+      Parser        parser
+      Preserve_Key  On
+
+    [FILTER]
+      # Modify log entry to include namespace and container name
+      name    record_modifier
+      match   app
+      # Add namespace
+      Record namespace {{ .Values.licensePlate }}-{{ .Values.environment }}
+      # Add container name
+      Record container midas
+
+    [FILTER]
+      Name          rewrite_tag
+      Match         app
+      Rule          $level ([a-zA-Z]*)$ $TAG.$level true
+      Emitter_Name  re_emitted
+
+
+    [OUTPUT]
+      name                 slack
+      match                app
+      webhook              {{ .Values.fluentbit.slack_webhook }}
+
+    [OUTPUT]
+      Name    stdout
+      Match   app
+      Format  json_lines
+
+  parsers.conf: |
+    [PARSER]
+      Name   parser
+      Format regex
+      Regex  \[(?<timestamp>\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}:\d{2})(?<level>.*)]\ (?<message>.*)
+      Time_Key time

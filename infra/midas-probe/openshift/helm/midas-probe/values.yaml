@@ -13,3 +13,17 @@ resources:
   requests:
     cpu: 20m
     memory: 50Mi
+
+
+fluentbit:
+  enabled: true
+  imageRegistry: docker.io/fluent/fluent-bit:3.0.3-debug
+  imagePullPolicy: IfNotPresent
+  slack_webhook: ""
+  securityContext:
+    enabled: false
+    runAsUser: 1001
+  resources:
+    requests:
+      cpu: 10m
+      memory: 16Mi
