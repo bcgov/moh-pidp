@@ -1,3 +1,4 @@
+{{- if .Values.fluentbit.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -70,3 +71,4 @@ data:
       Format regex
       Regex  \[(?<timestamp>\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}:\d{2})(?<level>.*)]\ (?<message>.*)
       Time_Key time
+{{- end }}
