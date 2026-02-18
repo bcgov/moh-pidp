@@ -2,9 +2,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Values.appName }}-fluentbit-config
-  labels: 
-    app: {{ .Values.appName }}
+  name: {{ include "webapi.fullname" . }}-fluentbit-config
+  labels:
+    {{- include "webapi.labels" . | nindent 4 }}
 data:
   fluent-bit.conf: |
     [SERVICE]
@@ -21,7 +21,7 @@ data:
     [INPUT]
       # Get logs from file written by webapi app
       Name        tail
-      Path        /temp/*.log
+      Path        /app/logs/*.log
       Tag         app
 
     [FILTER]
@@ -29,8 +29,16 @@ data:
       name   grep
       match  app
       Logical_Op or
-      regex log 142.34.64.4
-      regex log 500
+      regex log ERR
+      regex log FTL
+    
+    [FILTER]
+      # Ignore "500 and 503" HTTP Status code errors, exclude from fluentbit output
+      name     grep
+      match    app
+      Exclude  log 500
+      Exclude  log 503
+      Exclude  log npgsql
 
     [FILTER]
       name          parser
@@ -40,13 +48,13 @@ data:
       Preserve_Key  On
 
     [FILTER]
-      # Modify log entry to include namespace and container name
+      # modify log entry to include namespace and container name
       name    record_modifier
       match   app
-      # Add namespace
+      # add namespace
       Record namespace {{ .Values.licensePlate }}-{{ .Values.environment }}
-      # Add container name
-      Record container {{ .Values.appName }}
+      # add container name
+      Record container {{ include "webapi.fullname" . }}
 
     [FILTER]
       Name          rewrite_tag
@@ -70,5 +78,4 @@ data:
       Name   parser
       Format regex
       Regex  \[(?<timestamp>\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}:\d{2})(?<level>.*)]\ (?<message>.*)
-      Time_Key time
 {{- end }}

@@ -143,7 +143,7 @@ spec:
           emptyDir: {}
         - name: fluentbit-config
           configMap:
-            name: midas-fluentbit-config
+            name: {{ .Values.appName }}-fluentbit-config
         {{- end }}
       schedulerName: default-scheduler
       terminationGracePeriodSeconds: 30
