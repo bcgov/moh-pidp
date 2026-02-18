@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: midas-fluentbit-config
+  name: {{ .Values.appName }}-fluentbit-config
   labels: 
-    app.kubernetes.io/part-of: {{ .Values.environment }}
+    app: {{ .Values.appName }}
 data:
   fluent-bit.conf: |
     [SERVICE]

@@ -1,4 +1,4 @@
-appName: midas-probe
+appName: midas
 licensePlate: f088b1
 imageStreamTag: latest
 replicas: 1
