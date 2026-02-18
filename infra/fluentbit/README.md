@@ -19,15 +19,3 @@ Fluent-bit has its own configuration file that we can create using an OpenShift 
 ### Fluent-bit for backend/webapi app
 
 Our webapi app outputs logs to a configurable directory (`/app/logs/`) and the Fluent-bit container will mount this directory to a log-storage path. A [Fluent-bit configmap](/charts/webapi/templates/cofigmap.yaml) with the same configuration is used to read the log files `*.log` from the mounted path, filter the log streams for the keywords `ERR` and `FTL`, and output the logs to the PIDP Team's Slack channel. 
-
-### create the configmaps for nginx and webapi apps using the [fluentbit-configmap template](./fluentbit-configmap.yaml)
-
-```
-oc process -n $NAMESPACE -f fluentbit-configmap.yaml \
-  -p NAMESPACE=$NAMESPACE \
-  -p OC_ENV=$OC_ENV \
-  -p SLACK_ERROR_NOTIFICATION_WEBHOOK=$SLACK_ERROR_NOTIFICATION_WEBHOOK \
-  -o yaml | oc -n $NAMESPACE apply -f -
-```
-  
-*Note: You can find the value of `SLACK_ERROR_NOTIFICATION_WEBHOOK` parameter under a secret called `slack-error-notification-webhook` in OpenShift.
