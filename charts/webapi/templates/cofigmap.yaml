@@ -39,6 +39,10 @@ data:
       Exclude  log 500
       Exclude  log 503
       Exclude  log npgsql
+      Exclude  log  An\sunhandled\sexception\swas\sthrown
+      Exclude   log Health\scheck\sPidpDbContext
+      Exclude   log deleting\sauth\smethod
+      Exclude   log reset\sBCProvider\sMFA
 
     [FILTER]
       name          parser
