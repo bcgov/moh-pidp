@@ -785,11 +785,6 @@ resourcesPreset: "micro"
 ## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
 ## Example:
 resources: 
-    ## Example:
-    limits:
-      cpu: 150m
-      memory: 500Mi
-
     ## Examples:
     requests:
       cpu: 100m
