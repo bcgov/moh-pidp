@@ -169,10 +169,10 @@ public class Create
             if (party.Cpn != null)
             {
                 attributes.SetCpn(party.Cpn);
-                var mspId = plrStanding.MspIdForOneCpn(party.Cpn);
-                if (!string.IsNullOrEmpty(mspId))
+                var mspIds = plrStanding.MspIds;
+                if (mspIds.Any())
                 {
-                    attributes.SetMspId(mspId);
+                    attributes.SetMspId(mspIds);
                 }
             }
 

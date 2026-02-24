@@ -213,5 +213,5 @@ spec:
           emptyDir: {}
         - name: fluentbit-config
           configMap:
-            name: webapi-fluentbit-config
+            name: {{ include "webapi.fullname" . }}-fluentbit-config
         {{- end }}

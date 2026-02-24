@@ -1,0 +1,85 @@
+{{- if .Values.fluentbit.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "webapi.fullname" . }}-fluentbit-config
+  labels:
+    {{- include "webapi.labels" . | nindent 4 }}
+data:
+  fluent-bit.conf: |
+    [SERVICE]
+      Flush         5
+      Daemon        Off
+      # define the log format (see additional config map key/value)
+      Parsers_File  parsers.conf
+      Log_Level     info
+      HTTP_Server   On
+      HTTP_Listen   0.0.0.0
+      HTTP_Port     2020
+      Health_Check  On
+
+    [INPUT]
+      # Get logs from file written by webapi app
+      Name        tail
+      Path        /app/logs/*.log
+      Tag         app
+
+    [FILTER]
+      # Filter logs based on certain keyword(e.g. ERR)
+      name   grep
+      match  app
+      Logical_Op or
+      regex log ERR
+      regex log FTL
+    
+    [FILTER]
+      # Ignore "500 and 503" HTTP Status code errors, exclude from fluentbit output
+      name     grep
+      match    app
+      Exclude  log 500
+      Exclude  log 503
+      Exclude  log npgsql
+      Exclude  log  An\sunhandled\sexception\swas\sthrown
+      Exclude   log Health\scheck\sPidpDbContext
+      Exclude   log deleting\sauth\smethod
+      Exclude   log reset\sBCProvider\sMFA
+
+    [FILTER]
+      name          parser
+      match         app
+      Key_Name      log
+      Parser        parser
+      Preserve_Key  On
+
+    [FILTER]
+      # modify log entry to include namespace and container name
+      name    record_modifier
+      match   app
+      # add namespace
+      Record namespace {{ .Values.licensePlate }}-{{ .Values.environment }}
+      # add container name
+      Record container {{ include "webapi.fullname" . }}
+
+    [FILTER]
+      Name          rewrite_tag
+      Match         app
+      Rule          $level ([a-zA-Z]*)$ $TAG.$level true
+      Emitter_Name  re_emitted
+
+
+    [OUTPUT]
+      name                 slack
+      match                app
+      webhook              {{ .Values.fluentbit.slack_webhook }}
+
+    [OUTPUT]
+      Name    stdout
+      Match   app
+      Format  json_lines
+
+  parsers.conf: |
+    [PARSER]
+      Name   parser
+      Format regex
+      Regex  \[(?<timestamp>\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}:\d{2})(?<level>.*)]\ (?<message>.*)
+{{- end }}
