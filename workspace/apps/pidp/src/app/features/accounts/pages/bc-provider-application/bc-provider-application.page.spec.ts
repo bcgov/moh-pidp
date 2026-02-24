@@ -13,6 +13,7 @@ import Keycloak from 'keycloak-js';
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
 import { FormUtilsService } from '@app/core/services/form-utils.service';
+import { AccessRoutes } from '@app/features/access/access.routes';
 
 import { BcProviderApplicationPage } from './bc-provider-application.page';
 
@@ -21,6 +22,7 @@ describe('BcProviderApplicationPage', () => {
   let partyServiceSpy: Spy<PartyService>;
   let formUtilsServiceSpy: Spy<FormUtilsService>;
   let navigationServiceSpy: Spy<NavigationService>;
+  let router: Router;
 
   let mockActivatedRoute: { snapshot: any };
   let mockBcProviderForm: { password: string; confirmPassword: string };
@@ -64,6 +66,7 @@ describe('BcProviderApplicationPage', () => {
     formUtilsServiceSpy = TestBed.inject<any>(FormUtilsService);
     navigationServiceSpy = TestBed.inject<any>(NavigationService);
     partyServiceSpy = TestBed.inject<any>(PartyService);
+    router = TestBed.inject(Router);
   });
 
   describe('FORM', () => {
@@ -111,6 +114,90 @@ describe('BcProviderApplicationPage', () => {
 
         then('router should navigate to root route', () => {
           expect(navigationServiceSpy.navigateToRoot).toHaveBeenCalled();
+        });
+      });
+    });
+  });
+
+  describe('METHOD: afterSubmitIsSuccessful', () => {
+    given('previousUrl does not contain any route segment', () => {
+      component.previousUrl = '';
+
+      when('afterSubmitIsSuccessful is invoked', () => {
+        component['afterSubmitIsSuccessful']();
+
+        then('should navigate to root', () => {
+          expect(navigationServiceSpy.navigateToRoot).toHaveBeenCalled();
+        });
+      });
+    });
+
+    given('User navigated from HALO', () => {
+      component.previousUrl = AccessRoutes.HALO;
+
+      when('afterSubmitIsSuccessful is invoked', () => {
+        component['afterSubmitIsSuccessful']();
+
+        then('should navigate back to HALO route', () => {
+          expect(router.navigateByUrl).toHaveBeenCalledWith(
+            AccessRoutes.routePath(AccessRoutes.HALO),
+          );
+        });
+      });
+    });
+
+    given('User navigated from IMMSBC', () => {
+      component.previousUrl = AccessRoutes.IMMSBC;
+
+      when('afterSubmitIsSuccessful is invoked', () => {
+        component['afterSubmitIsSuccessful']();
+
+        then('should navigate back to IMMSBC route', () => {
+          expect(router.navigateByUrl).toHaveBeenCalledWith(
+            AccessRoutes.routePath(AccessRoutes.IMMSBC),
+          );
+        });
+      });
+    });
+
+    given('User navigated from IVF', () => {
+      component.previousUrl = AccessRoutes.IVF;
+
+      when('afterSubmitIsSuccessful is invoked', () => {
+        component['afterSubmitIsSuccessful']();
+
+        then('should navigate back to IVF route', () => {
+          expect(router.navigateByUrl).toHaveBeenCalledWith(
+            AccessRoutes.routePath(AccessRoutes.IVF),
+          );
+        });
+      });
+    });
+
+    given('User navigated from PEMCOD', () => {
+      component.previousUrl = AccessRoutes.PEMCOD;
+
+      when('afterSubmitIsSuccessful is invoked', () => {
+        component['afterSubmitIsSuccessful']();
+
+        then('should navigate back to PEMCOD route', () => {
+          expect(router.navigateByUrl).toHaveBeenCalledWith(
+            AccessRoutes.routePath(AccessRoutes.PEMCOD),
+          );
+        });
+      });
+    });
+
+    given('User navigated from the Provincial Attachment System', () => {
+      component.previousUrl = AccessRoutes.PROVINCIAL_ATTACHMENT_SYSTEM;
+
+      when('afterSubmitIsSuccessful is invoked', () => {
+        component['afterSubmitIsSuccessful']();
+
+        then('should navigate back to the PAS route', () => {
+          expect(router.navigateByUrl).toHaveBeenCalledWith(
+            AccessRoutes.routePath(AccessRoutes.PROVINCIAL_ATTACHMENT_SYSTEM),
+          );
         });
       });
     });

@@ -10,11 +10,19 @@ from flask import Flask
 from flask_wtf import CSRFProtect
 from os import environ
 import logging
+import tempfile
 import socket
 
 app = Flask(__name__)
 csrf = CSRFProtect()
 csrf.init_app(app) # Compliant
+
+temp_log_file = tempfile.NamedTemporaryFile(mode='w+t', delete=False, suffix='.log', prefix='app_')
+log_filename = temp_log_file.name
+
+# It is important to close the file handle that was opened by NamedTemporaryFile 
+# before basicConfig tries to open it again for logging.
+temp_log_file.close()
 
 def get_ip_from_host(host):
     try:
@@ -25,7 +33,7 @@ def get_ip_from_host(host):
 
 
 def check_services(output_type):
-    logging.basicConfig(format='%(message)s', level=logging.INFO)
+    logging.basicConfig(format='%(message)s', level=logging.INFO, filename=log_filename, filemode='w')
 
     namespace = environ.get('namespace')
     cluster = environ.get('cluster')

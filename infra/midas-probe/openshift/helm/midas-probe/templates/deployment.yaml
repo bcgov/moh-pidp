@@ -45,6 +45,10 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: metadata.namespace
+            {{- if .Values.fluentbit.enabled }}
+            - name: SERVER_LOGFILE
+              value: /tmp/*.log
+            {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
@@ -54,8 +58,56 @@ spec:
             - name: who-is-active
               mountPath: /tmp/who_is_active.json
               subPath: who_is_active.json
+            {{- if .Values.fluentbit.enabled }}
+            - name: log-storage
+              mountPath: /tmp/
+            {{- end }}
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
+        {{- if .Values.fluentbit.enabled }}
+        - name: fluentbit
+          image: {{ .Values.fluentbit.imageRegistry }}
+          imagePullPolicy: {{ .Values.fluentbit.imagePullPolicy }}
+          {{- if .Values.fluentbit.securityContext.enabled }}
+          securityContext: {{- omit .Values.fluentbit.securityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          env:
+            - name: SERVER_LOGFILE
+              value: /tmp/*.log
+          ports:
+            - name: metrics
+              containerPort: 2020
+              protocol: TCP
+            - name: http-plugin
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: metrics
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+            periodSeconds: 60
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: metrics
+            initialDelaySeconds: 10
+            timeoutSeconds: 1
+            periodSeconds: 60
+            successThreshold: 1
+            failureThreshold: 3
+          {{- if .Values.fluentbit.resources }}
+          resources: {{- toYaml .Values.fluentbit.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: fluentbit-config
+              mountPath: /fluent-bit/etc
+            - name: log-storage
+              mountPath: /tmp/
+        {{- end }} 
       automountServiceAccountToken: false
       dnsPolicy: ClusterFirst
       restartPolicy: Always
@@ -86,5 +138,12 @@ spec:
             defaultMode: 420
         - name: who-is-active
           emptyDir: {}
+        {{- if .Values.fluentbit.enabled }}
+        - name: log-storage
+          emptyDir: {}
+        - name: fluentbit-config
+          configMap:
+            name: {{ .Values.appName }}-fluentbit-config
+        {{- end }}
       schedulerName: default-scheduler
       terminationGracePeriodSeconds: 30
