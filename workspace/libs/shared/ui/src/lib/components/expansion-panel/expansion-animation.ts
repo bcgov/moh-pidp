@@ -20,7 +20,7 @@ export const appExpansionAnimations: {
       'expanded',
       style({
         height: '*',
-        visibility: '',
+        visibility: 'visible',
         opacity: 1,
         transform: 'translateY(0)',
       }),
