@@ -11,7 +11,7 @@ $ helm install mailhog codecentric/mailhog
 
 ## Introduction
 
-This chart creates a [Mailhog](http://iankent.uk/project/mailhog/) deployment on a [Kubernetes](http://kubernetes.io)
+This chart creates a [Mailhog](http://iankent.uk/project/mailhog/) deployment on an OpenShift
 cluster using the [Helm](https://helm.sh) package manager.
 
 ## Installing the Chart
@@ -19,7 +19,7 @@ cluster using the [Helm](https://helm.sh) package manager.
 To install the chart with the release name `mailhog`:
 
 ```bash
-$ helm install mailhog codecentric/mailhog
+$ helm upgrade --install --values ./chart/values.yaml mailhog chart
 ```
 
 The command deploys Mailhog on the Kubernetes cluster in the default configuration. The [configuration](#configuration)
@@ -37,6 +37,10 @@ The command removes all the Kubernetes components associated with the chart and 
 ## Configuration
 
 The following table lists the configurable parameters of the Mailhog chart and their default values.
+
+ - the SMTP server starts on port 1025
+ - the HTTP server starts on port 8025
+ - in-memory message storage
 
 Parameter | Description | Default
 --- | --- | ---
