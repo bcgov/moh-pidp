@@ -1,12 +1,13 @@
 # Backup Deployments of Postgres
-From [bcgov/backup-container](https://github.com/BCDevOps/backup-container), copy `chart/templates`, `config` and `docker` folders. Together, the scripts and templates which will automatically deploy the backup app are provided in the chart/templates directory. 
+
+From [bcgov/backup-container](https://github.com/BCDevOps/backup-container), copy `openshift/templates`, `config` and `docker` folders. Together, the scripts and templates which will automatically deploy the backup app are provided in the`openshift/templates`directory.
 The following outlines the deployment of a simple backup of a PostgreSQL database to S3 Storage on OCP v4.x.
 
-### Build backup-container image
+### Build backup-container docker image
 
-First, in order to build an image and buildConfig in openshift, the [BuildConfig.yaml](./chart/templates/BuildConfig.yaml) file is customized. 
-1. The value of `git_repo_url`, `git_ref` and `source_context_dir` are set to `https://github.com/bcgov/moh-pidp.git`, `develop`, `/infra/backup-container/docker`, respectively. Start a new build once the buildConfig is deployed in openShift, it will create a new backup container image. 
+First, in order to build the image and buildConfig in openshift, the [BuildConfig.yaml](./chart/templates/BuildConfig.yaml) file is customized.
 
+1. The value of `git_repo_url`, `git_ref` and `source_context_dir` are set to `https://github.com/bcgov/moh-pidp.git`, `develop`, `/infra/backup-container/docker`, respectively. Start a new build once the buildConfig is deployed in openShift, it will create a new backup container image.
 2. Tag the backup container image. You can change the value of `global.image.tag` depending on the namespace you will deploy the backup-container app, which is `latest` by default.
 
 ### Configure your DBs and set the cron schedule
@@ -21,12 +22,13 @@ postgres=patroni-master:5432/pidp_prod
 ```
 
 ### Backup Strategies
+
 The backup app supports the rolling backup strategy. It allows you to keep a number of recent daily backups, a number of weekly backups, and a number of monthly backups. There are retention settings in [docker/backup.settings file](./docker/backup.settings). The defaults provide you with a week's worth of `daily` backups, a month's worth of `weekly` backups, and a single backup for the previous month. Backups are identified using a core name derived from the host/database specification and a timestamp. All backups are compressed using gzip.
 
 ### Deploy the app
 
 1. Configure references to your DB credentials in [deployment.yaml](./chart/templates/deployment.yaml), replacing the boilerplate `DATABASE_USER` and `DATABASE_PASSWORD` environment variables.
-When using the [configmap.yaml](./chart/templates/configmap.yaml) file the following environment variables are ignored, since you list all of your host/database pairs in the file; DATABASE_SERVICE_NAME, DATABASE_NAME. To provide the credentials needed for the listed databases you extend the deployment configuration to include hostname_USER and hostname_PASSWORD credential pairs which are wired to the appropriate secrets (where hostname matches the hostname/servicename, in all caps and underscores, of the database). For example, if you are backing up two database named prod-patroni/pidp_prod and metabase-database/metabase, you would have to extend the values configuration to include a PROD_PATRONI_USER and PROD_PATRONI_PASSWORD as well as METABASE_DATABASE_USER and METABASE_DATABASE_PASSWORD credential pairs, wired to the appropriate secrets, to access the database(s) on the prod-patroni server and metabase-dataset server.  Note that the key names within the database secret referencing database username and password are `app-db-username` and `app-db-password`, respectively. If this is not the case for your deployment, specify the correct key names as parameters `database_user_key_name` and `database_user_password_name` in [values.yaml](./chart/values.yaml).
+   When using the [configmap.yaml](./chart/templates/configmap.yaml) file the following environment variables are ignored, since you list all of your host/database pairs in the file; DATABASE_SERVICE_NAME, DATABASE_NAME. To provide the credentials needed for the listed databases you extend the deployment configuration to include hostname_USER and hostname_PASSWORD credential pairs which are wired to the appropriate secrets (where hostname matches the hostname/servicename, in all caps and underscores, of the database). For example, if you are backing up two database named prod-patroni/pidp_prod and metabase-database/metabase, you would have to extend the values configuration to include a PROD_PATRONI_USER and PROD_PATRONI_PASSWORD as well as METABASE_DATABASE_USER and METABASE_DATABASE_PASSWORD credential pairs, wired to the appropriate secrets, to access the database(s) on the prod-patroni server and metabase-dataset server.  Note that the key names within the database secret referencing database username and password are `app-db-username` and `app-db-password`, respectively. If this is not the case for your deployment, specify the correct key names as parameters `database_user_key_name` and `database_user_password_name` in [values.yaml](./chart/values.yaml).
 
 ```yaml
 - name: DATABASE_USER
@@ -44,18 +46,17 @@ When using the [configmap.yaml](./chart/templates/configmap.yaml) file the follo
 * Note that underscores should be used in the environment variable names.
 
 2. The backup container utilizes two volumes: one for storing the backups and another for restore/verification testing. The deployment template deliberately separates these volumes. The recommended storage class for the backup volume (backup_volume_class) for OCP4 is `netapp-file-backup`, backed up with the standard OCIO Backup infrastructure. Quota for this storage class is 2Gi by default. The default storage class for the restore/verification volume is `netapp-file-standard` (do not use netapp-file-backup as it is unsuitable for such transient workloads). The supplied deployment template will auto-provision this volume for you with it is published. Set the size of backup and verification PVCs by updating/overriding the value of `backup_volume_size` and `verification_volume_size` in [values.yaml](./chart/values.yaml).
-
 3. In this example, the namespace is `f088b1-prod` and the app name is `backup-container`. You can customize [values.yaml](./chart/values.yaml) and change the value of parameters before creting backup container deployment.
-
-
 
 ### Deploy backup-container helm chart
 
-Run the following command while you are in the infra/backup-container/chart directory:
+Log in to the internal registry using your OpenShift credentials using `oc login --token=<toke> --server=https://api.gold.devops.gov.bc.ca:6443` command.
+4. Run the following commands while you are in the [infra\backup-container\chart](.\chart) directory to build the app using its helm chart.
 
 ```bash
-helm upgrade --install --values ./values.yaml --namespace f088b1-prod backup-container .
+*helm upgrade --install --values ./values.yaml --namespace f088b1-* backup-container .
 ```
+Firstly, the backup-container BuildConfig is deployed to create an ImageStreamTag named `backup-container:latest` on the f088b1-tools namespace. Then it creates the backup-container application on the desired namespace which calls the newly created ImageStreamTag from the f088b1-tools namespace.
 
 ### Clean up the deployment and the image stream
 
