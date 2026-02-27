@@ -10,11 +10,13 @@ The main function of this service is main.py. This python script uses a kubernet
 Note: There's a environment variable that you can set "notouch" that will allow you to override the results. This is for testing purposes to allow you to manually control the toggle.  Accepted values for notouch are 200 or 500 depending on the return code you wish to force.
 
 ## Build midas docker image
-Run the following commands in the infra\midas-probe directory to build the midas docker image for release and push it into the OpenShift imagestream on the f088b1-tools namespace using your credential.
+Log in to the internal registry using your OpenShift credentials using `oc login --token=<toke> --server=https://api.gold.devops.gov.bc.ca:6443` command. Run the following commands in the infra\midas-probe directory to build the midas docker image for release and push it into the OpenShift imagestream on the f088b1-tools namespace using your credential.
 
   ``` 
       docker compose build
       docker tag midas-probe:latest image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/midas-probe:latest
+      TOKEN=$(oc whoami -t)
+      docker login -u $(oc whoami) -p TOKEN console.apps.gold.devops.gov.bc.ca
       docker push image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/midas-probe:latest
   ```
 
