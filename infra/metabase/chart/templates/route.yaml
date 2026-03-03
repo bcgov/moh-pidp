@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Route
+metadata:
+  name: {{ include "metabase.fullname" . }}
+  labels:
+    {{- include "metabase.labels" . | nindent 4 }}
+spec:
+  tls:
+    insecureEdgeTerminationPolicy: Redirect
+    termination: edge
+  to:
+    kind: Service
+    name: {{ include "metabase.fullname" . }}
+  port:
+    targetPort: {{ include "metabase.fullname" . }}
