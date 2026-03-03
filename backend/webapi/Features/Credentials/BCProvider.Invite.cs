@@ -116,9 +116,24 @@ public class BCProviderInvite
                 .SingleAsync();
 
             var plrStanding = await this.plrClient.GetStandingsDigestAsync(party.Cpn);
-            var endorsingCpns = await this.context.ActiveEndorsingParties(command.PartyId)
-                .Select(party => party.Cpn)
+            var endorsers = await this.context.ActiveEndorsingParties(command.PartyId)
+                .Select(party => new
+                {
+                    party.Cpn,
+                    party.Email
+                })
                 .ToListAsync();
+
+            var endorsingCpns = endorsers
+                .Select(x => x.Cpn)
+                .ToList();
+
+            var endorsingEmails = endorsers
+                .Select(x => x.Email)
+                .Where(email => !string.IsNullOrWhiteSpace(email))
+                .Select(email => email!)
+                .Distinct()
+                .ToList();
             var endorsementPlrDigest = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
 
             var attributes = new BCProviderAttributes(this.clientId)
@@ -133,7 +148,8 @@ public class BCProviderInvite
                 .SetEndorserData(endorsementPlrDigest
                     .WithGoodStanding()
                     .With(BCProviderAttributes.EndorserDataEligibleIdentifierTypes)
-                    .Cpns);
+                    .Cpns)
+                .SetEndorserPidpEmail(endorsingEmails);
 
             if (party.Cpn != null)
             {

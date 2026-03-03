@@ -6,6 +6,7 @@ public class NewUserRepresentation
 {
     public string? Cpn { get; set; }
     public IEnumerable<string> EndorserData { get; set; } = [];
+    public IEnumerable<string> EndorserPidpEmail { get; set; } = [];
     public string? FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public string Hpdid { get; set; } = string.Empty;
@@ -40,6 +41,7 @@ public class BCProviderAttributes(string clientId)
     {
         var newAttributes = new BCProviderAttributes(clientId)
             .SetEndorserData(representation.EndorserData)
+            .SetEndorserPidpEmail(representation.EndorserPidpEmail)
             .SetHpdid(representation.Hpdid)
             .SetIsMd(representation.IsMd)
             .SetIsMoa(representation.IsMoa)
@@ -66,6 +68,7 @@ public class BCProviderAttributes(string clientId)
     /// A comma-separated list containing the CPN(s) of Parties Endorsing the User, who have licences from the College of Physicians and Surgeons and the College of Nurses and Midwives.
     /// </summary>
     public BCProviderAttributes SetEndorserData(IEnumerable<string> endorserData) => this.SetProperty(nameof(endorserData), "[" + string.Join(",", endorserData.Select(s => $"\"{s}\"")) + "]");
+    public BCProviderAttributes SetEndorserPidpEmail(IEnumerable<string> endorserPidpEmail) => this.SetProperty(nameof(endorserPidpEmail), "[" + string.Join(",", endorserPidpEmail.Select(s => $"\"{s}\"")) + "]");
     public BCProviderAttributes SetHpdid(string hpdid) => this.SetProperty(nameof(hpdid), hpdid);
     public BCProviderAttributes SetIsMd(bool isMd) => this.SetProperty(nameof(isMd), isMd);
     public BCProviderAttributes SetIsMoa(bool isMoa) => this.SetProperty(nameof(isMoa), isMoa);

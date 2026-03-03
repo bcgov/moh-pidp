@@ -43,9 +43,24 @@ public class UpdateBCProviderAfterEndorsementStandingUpdated(
         }
 
         var plrStanding = await this.plrClient.GetStandingsDigestAsync(party.Cpn);
-        var endorsingCpns = await this.context.ActiveEndorsingParties(notification.PartyId)
-            .Select(party => party.Cpn)
+        var endorsers = await this.context.ActiveEndorsingParties(notification.PartyId)
+            .Select(party => new
+            {
+                party.Cpn,
+                party.Email
+            })
             .ToListAsync(cancellationToken);
+
+        var endorsingCpns = endorsers
+            .Select(x => x.Cpn)
+            .ToList();
+
+        var endorsingEmails = endorsers
+            .Select(x => x.Email)
+            .Where(email => !string.IsNullOrWhiteSpace(email))
+            .Select(email => email!)
+            .Distinct()
+            .ToList();
         var endorsingPlrDigest = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
 
         var attributes = new BCProviderAttributes(this.clientId)
@@ -53,7 +68,8 @@ public class UpdateBCProviderAfterEndorsementStandingUpdated(
             .SetEndorserData(endorsingPlrDigest
                 .WithGoodStanding()
                 .With(BCProviderAttributes.EndorserDataEligibleIdentifierTypes)
-                .Cpns);
+                .Cpns)
+            .SetEndorserPidpEmail(endorsingEmails);
 
         await this.bus.Publish(new UpdateBcProviderAttributes(party.Upn, attributes.AsAdditionalData()), cancellationToken);
     }
