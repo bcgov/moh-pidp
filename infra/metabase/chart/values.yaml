@@ -28,6 +28,7 @@ database:
   port: 5432
   postgresql_image: image-registry.openshift-image-registry.svc:5000/openshift/postgresql
   postgresql_version: 12-el7
+  pullPolicy: IfNotPresent
 
 
 service:

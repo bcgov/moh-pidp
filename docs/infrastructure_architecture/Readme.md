@@ -4,7 +4,7 @@ Infrastructure applications are deployed either as helm chart or openshift templ
 
 ## Backup Container
 
-[BCGov Backup Container](https://developer.gov.bc.ca/docs/default/component/platform-developer-docs/docs/database-and-api-management/database-backup-best-practices/) is a trusted backup utility tool, designed by BCGOV DevOps team build for developers working on the BCGov's OpenShift platform. It takes a full and complete backup of data into a single database dump file using pg_dump command every hour for the pidp_* databases. The backup files are stored on an nfs-file-backup PVC (persistent volume claim) on OpenShift platform. You can modify the backup cycle and schedule in the [backup-container-conf](infra\backup-container\chart\templates\configmap.yaml)
+[BCGov Backup Container](https://developer.gov.bc.ca/docs/default/component/platform-developer-docs/docs/database-and-api-management/database-backup-best-practices/) is a trusted backup utility tool, designed by BCGOV DevOps team build for developers working on the BCGov's OpenShift platform. It connects to your database to perform a full and complete backup of data  and/or to perform a test recovery of the most recent backup. For the backup process, it uses pg_dump command every single hour and dumps the pidp_* database into a single backup file. The backup files are stored on an nfs-file-backup PVC (persistent volume claim) on OpenShift platform. You can modify the backup cycle and schedule in the [backup-container-conf](infra\backup-container\chart\templates\configmap.yaml)
 
 ## Mailhog
 
@@ -34,7 +34,7 @@ Firstly and most importantly, you need to check the current IP address of OneHea
 
 # Patroni
 
-Please read [BCGOV database and API management](https://developer.gov.bc.ca/docs/default/component/platform-developer-docs/docs/database-and-api-management/postgres-how-to) documentation to become familiar with patroni tool. Patroni manages its high availability features by using a combination of OpenShift's built-in functionality and the Patroni management software built into the image used to run each database pod. Patroni is managed primarily using the [patronictl](https://patroni.readthedocs.io/en/latest/README.html) command line interface. You can use the terminal on the OpenShift web console or you can use oc ssh to access the command line of any pod in your Patroni cluster to run patronictl.
+Patroni is an open-source tool written in Python designed for high availability (HA) and automated management of PostgreSQL clusters. Please read [BCGOV database and API management](https://developer.gov.bc.ca/docs/default/component/platform-developer-docs/docs/database-and-api-management/postgres-how-to) documentation to become familiar with patroni tool. Patroni manages its high availability features by using a combination of OpenShift's built-in functionality and the Patroni management software built into the image used to run each database pod. Patroni is managed primarily using the [patronictl](https://patroni.readthedocs.io/en/latest/README.html) command line interface. You can use the terminal on the OpenShift web console or you can use oc ssh to access the command line of any pod in your Patroni cluster to run patronictl. Patroni has three pods: one pod is the master pod or leader, which recieves all communication from the application and two other pods are replica pods, which are in read-only mode and can only be updated by syncing with the master.
 
 # RabbitMQ
 
