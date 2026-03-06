@@ -7,6 +7,6 @@ spec:
   team:
     description: The Sysdig Team for the OpenShift Project Set f088b1 (PIDP)
     users:
-      - name: <>@gov.bc.ca
+      - name: ravibezawada@github
         role: ROLE_TEAM_EDIT
 
