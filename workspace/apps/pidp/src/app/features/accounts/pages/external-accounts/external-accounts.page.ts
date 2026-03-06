@@ -79,7 +79,7 @@ export class ExternalAccountsPage implements OnInit {
   public emailSupport: string;
   public emailValidationToken = signal<string | null>(null);
   private readonly refreshAccounts$ = new Subject<void>();
-  public invitedExternalAccounts$!: Observable<InvitedExternalAccount[] | null>;
+  public invitedExternalAccounts$!: Observable<InvitedExternalAccount[]>;
 
   public constructor(
     @Inject(APP_CONFIG) private config: AppConfig,
@@ -304,7 +304,7 @@ export class ExternalAccountsPage implements OnInit {
       catchError((err: any) => {
         this.toastService.openErrorToast('Failed to load external accounts.');
         console.error(err);
-        return of(null);
+        return of([]);
       }),
     );
 
