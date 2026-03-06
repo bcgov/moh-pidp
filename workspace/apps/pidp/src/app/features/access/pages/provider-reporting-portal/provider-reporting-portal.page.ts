@@ -15,8 +15,6 @@ import {
   PageFooterActionDirective,
   PageFooterComponent,
   PageSectionComponent,
-  PageSectionSubheaderComponent,
-  PageSectionSubheaderDescDirective,
   SafePipe,
 } from '@bcgov/shared/ui';
 
@@ -48,8 +46,6 @@ import { ProviderReportingPortalResource } from './provider-reporting-portal-res
     PageFooterActionDirective,
     PageFooterComponent,
     PageSectionComponent,
-    PageSectionSubheaderComponent,
-    PageSectionSubheaderDescDirective,
     SafePipe,
   ],
 })
