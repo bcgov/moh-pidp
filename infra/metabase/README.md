@@ -1,4 +1,4 @@
-# UPGRADE the version of Metabase if you’re running 45 or below
+# Push metabase docker image to OpenShift ImageStream
 
 ### 1. Download the latest version of Metabase image from docker hub
 
@@ -25,3 +25,10 @@
 `oc tag metabase:<image-version> metabase:latest`
 
 
+# Deploying metabase Helm chart
+
+### 1. Switch to the desired namespace (dev, test or prod)
+`oc project f088b1-*`
+
+### 1. Run oc command in infra\metabase directory
+`helm upgrade --install --values ./chart/values.yaml metabase chart`
