@@ -6,6 +6,12 @@ Infrastructure applications are deployed either as helm chart or openshift templ
 
 [BCGov Backup Container](https://developer.gov.bc.ca/docs/default/component/platform-developer-docs/docs/database-and-api-management/database-backup-best-practices/) is a trusted backup utility tool, designed by BCGOV DevOps team build for developers working on the BCGov's OpenShift platform. It connects to your database to perform a full and complete backup of data  and/or to perform a test recovery of the most recent backup. For the backup process, it uses pg_dump command every single hour and dumps the pidp_* database into a single backup file. The backup files are stored on an nfs-file-backup PVC (persistent volume claim) on OpenShift platform. You can modify the backup cycle and schedule in the [backup-container-conf](infra\backup-container\chart\templates\configmap.yaml)
 
+## Fluentbit
+
+[Fluent-bit](https://docs.fluentbit.io/manual/about/what-is-fluent-bit) is basically a `log forwarder` tool that can be run as a sidecar container (a docker image) in each pod containing our apps, although it can also be deployed as a stand-alone service (servicing multiple apps). Fluent-bit can forward logs to lots of different outputs for example, HTTP, Opensearch, Slack, AWS Lamda and a lot more (see: https://docs.fluentbit.io/manual/pipeline/outputs). 
+
+We added a Fluent-bit container in webapi, nginx and midas deplyments/applications to collect/process/monitor Logs inside the apps and alert the PIDP team in a slack channel if certain keywords, regular expressions, etc. are matched in the log stream.
+
 ## Mailhog
 
 MailHog is an email testing tool for developers:
@@ -29,8 +35,10 @@ It supports interactive dashboards, embeddable charts, and customizable reports,
 
 ## Midas-probe
 
-It checks if there's a failover incident from GOLD to GOLDDR. You need create a new slack channel to receive the notifications from midas and update the value of slack_webhook variable in midas-probe configmap if you
-Firstly and most importantly, you need to check the current IP address of OneHealthID application. If it returns 142.34.64.4, it means there's a failover and a manual failback from GOLD to GOLDDR is required.
+It checks if there's a failover incident from GOLD to GOLDDR. This service is used to monitor the readiness and health status of specified services on Openshift such as patroni. It has two primary purposes:
+1.	It will display the results of the services (if its running or not) based on the availability of pods for that service. In essence it depends on the OCP deployment readiness probes.
+2.	It acts as a keepalive for the Server Load Balancer (GSLB). It runs on the Gold cluster and if any of the services monitored by Midas does not have available pods, Midas will return a 500 code to the load balancer and load balancer switch the DNS from pointing to Gold to GoldDR  for a failover. You need create a new slack channel to receive the notifications from midas and update the value of slack_webhook variable in midas-probe configmap if you
+Basically, Midas checks the IP address of the active cluster or GSLB. If it returns 142.34.64.4 meaning there's a failover and a manual failback from GOLD to GOLDDR is required.
 
 # Patroni
 
