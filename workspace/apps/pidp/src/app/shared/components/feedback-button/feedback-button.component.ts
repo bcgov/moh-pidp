@@ -10,16 +10,15 @@ import { PidpViewport, ViewportService } from '@bcgov/shared/ui';
 import { FeedbackFormDialogComponent } from '../feedback-form/feedback-form.dialog';
 
 @Component({
-  selector: 'app-feedback-button',
-  templateUrl: './feedback-button.component.html',
-  styleUrl: './feedback-button.component.scss',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-  ],
+    selector: 'app-feedback-button',
+    templateUrl: './feedback-button.component.html',
+    styleUrl: './feedback-button.component.scss',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+    ]
 })
 export class FeedbackButtonComponent {
   public dialogWidth = '360px';

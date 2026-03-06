@@ -1,17 +1,15 @@
 import { TestBed } from '@angular/core/testing';
-import { CommonDataService } from './common-data.service';
+import { RouterModule } from '@angular/router';
 
-import { RouterTestingModule } from '@angular/router/testing';
+import { CommonDataService } from './common-data.service';
 
 describe('CommonDataService', () => {
   let service: CommonDataService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      providers: [
-        CommonDataService,
-      ],
+      imports: [RouterModule.forRoot([])],
+      providers: [CommonDataService],
     });
 
     service = TestBed.inject(CommonDataService);

@@ -21,20 +21,19 @@ import { bcProviderTutorialLink } from '../provincial-attachment-system/provinci
 import { haloUrl } from './halo.constants';
 
 @Component({
-  selector: 'app-halo',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatIconModule,
-    BreadcrumbComponent,
-    MatStepperModule,
-    InjectViewportCssClassDirective,
-    NgOptimizedImage,
-    RouterLink,
-  ],
-  templateUrl: './halo.page.html',
-  styleUrl: './halo.page.scss',
+    selector: 'app-halo',
+    imports: [
+        CommonModule,
+        MatButtonModule,
+        MatIconModule,
+        BreadcrumbComponent,
+        MatStepperModule,
+        InjectViewportCssClassDirective,
+        NgOptimizedImage,
+        RouterLink,
+    ],
+    templateUrl: './halo.page.html',
+    styleUrl: './halo.page.scss'
 })
 export class HaloPage {
   public bcProvider$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(

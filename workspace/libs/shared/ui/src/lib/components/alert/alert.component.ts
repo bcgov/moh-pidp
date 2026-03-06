@@ -17,12 +17,11 @@ import { AlertContentDirective } from './alert-content.directive';
 export type AlertType = 'success' | 'info' | 'warn' | 'danger' | 'muted';
 
 @Component({
-  selector: 'ui-alert',
-  templateUrl: './alert.component.html',
-  styleUrls: ['./alert.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [CardComponent, NgIf, CardContentDirective, CardActionsDirective],
+    selector: 'ui-alert',
+    templateUrl: './alert.component.html',
+    styleUrls: ['./alert.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [CardComponent, NgIf, CardContentDirective, CardActionsDirective]
 })
 export class AlertComponent {
   @Input() public type!: AlertType;

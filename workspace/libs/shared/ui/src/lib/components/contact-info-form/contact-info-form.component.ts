@@ -7,17 +7,16 @@ import { MatInputModule } from '@angular/material/input';
 import { NgxMaskDirective } from 'ngx-mask';
 
 @Component({
-  selector: 'ui-contact-info-form',
-  templateUrl: './contact-info-form.component.html',
-  styleUrls: ['./contact-info-form.component.scss'],
-  standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    NgIf,
-    NgxMaskDirective,
-  ],
+    selector: 'ui-contact-info-form',
+    templateUrl: './contact-info-form.component.html',
+    styleUrls: ['./contact-info-form.component.scss'],
+    imports: [
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        NgIf,
+        NgxMaskDirective,
+    ]
 })
 export class ContactFormComponent {
   /**
