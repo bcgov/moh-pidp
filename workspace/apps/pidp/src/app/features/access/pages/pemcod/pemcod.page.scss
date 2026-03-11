@@ -96,6 +96,7 @@
                 padding: 0;
                 width: 70px;
                 height: 70px;
+                position: relative;
                 border-radius: 50%;
                 background: pidp.$bcgov-color-primary;
                 color: #fff;
@@ -138,14 +139,41 @@
   .main {
     display: flex !important;
     flex-direction: column !important;
-  }
+    .main-image-text {
+      font-size: 1rem !important;
+      padding: 0.5rem 0.75rem !important;
 
-  .pemcod-button-container {
-    flex: 1 !important;
-  }
-  .card-footer {
-    button {
-      top: calc(100% - 1px) !important;
+      .main-image-text-title {
+        gap: 0.5rem !important;
+      }
+    }
+    .pemcod-button-container {
+      flex: 1 !important;
+      height: auto !important;
+      .pemcod-button {
+        min-height: 20rem;
+
+        img {
+          object-position: top center;
+          width: 100% !important;
+          height: 100% !important;
+        }
+
+        div.auth-card {
+          padding: 1rem 0.75rem 0.5rem 0.75rem !important;
+        }
+        .card-container {
+          height: 40% !important;
+          .card-footer {
+            button {
+              top: 280px !important;
+              width: 56px !important;
+              height: 56px !important;
+              min-width: 56px !important;
+            }
+          }
+        }
+      }
     }
   }
 }
@@ -173,21 +201,55 @@
     }
 
     .pemcod-button {
+      min-height: 17rem;
+
       div.auth-card {
-        padding: 20px 0 0 20px !important;
+        padding: 0.75rem 0.5rem 0.5rem 0.75rem !important;
+      }
+
+      img {
+        object-position: top center;
+        width: 100% !important;
+        height: 100% !important;
       }
 
       .card-container {
-        height: 50% !important;
+        height: 35% !important;
 
         .auth-card-footer {
           padding: 7.5px 0 7.5px 0;
+          button {
+            top: 225px !important;
+            width: 56px !important;
+            height: 56px !important;
+            min-width: 56px !important;
+          }
         }
       }
     }
   }
+
+  .main-image-text {
+    font-size: 0.9rem !important;
+    padding: 0.5rem !important;
+
+    .main-image-text-title {
+      gap: 0.4rem !important;
+    }
+  }
+
   .pemcod-button-container {
     flex: 1 !important;
+    height: auto !important;
+  }
+
+  .card-footer {
+    button {
+      top: calc(100% - 1px) !important;
+      width: 48px !important;
+      height: 48px !important;
+      min-width: 48px !important;
+    }
   }
 }
 
@@ -197,11 +259,19 @@
   }
   .card-footer {
     button {
-      top: calc(100% - 220px) !important;
+      top: 60px !important;
     }
   }
   .pemcod-button-container {
     flex: 1 !important;
+  }
+}
+
+.viewport-large {
+  .card-footer {
+    button {
+      top: 80px !important;
+    }
   }
 }
 
