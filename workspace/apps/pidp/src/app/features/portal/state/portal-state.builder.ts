@@ -140,7 +140,8 @@ export class AccessStateBuilder {
         () => [new IvfPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
-        this.insertSection('immsBC', profileStatus),
+        this.insertSection('immsBC', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new ImmsbcPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
