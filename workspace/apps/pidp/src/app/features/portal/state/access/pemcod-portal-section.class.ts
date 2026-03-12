@@ -28,9 +28,8 @@ export class PemcodPortalSection implements IPortalSection {
     private readonly router: Router,
   ) {
     this.key = 'pemcod';
-    this.heading = 'PEMCOD';
-    this.description =
-      'The Practitioners Electronic Medical Certification of Death (PEMCOD) application enables physicians and nurse practitioners  to complete and submit Medical Certifications of Death (MCODs) electronically to the Vital Statistics agency';
+    this.heading = `Practitioner's eMCOD`;
+    this.description = `The Practitioners Electronic Medical Certification of Death (Practitioner's eMCOD) application enables physicians and nurse practitioners  to complete and submit Medical Certifications of Death (MCODs) electronically to the Vital Statistics agency`;
 
     this.keyWords = profileStatus.status.pemcod.keyWords || [];
     this.completedMessage = 'Access Granted';
@@ -61,7 +60,7 @@ export class PemcodPortalSection implements IPortalSection {
   public get status(): string {
     switch (this.getStatusCode()) {
       case StatusCode.AVAILABLE:
-        return 'You are eligible to access PEMCOD services';
+        return `You are eligible to access Practitioner's eMCOD services`;
       case StatusCode.COMPLETED:
         return 'Completed';
       default:

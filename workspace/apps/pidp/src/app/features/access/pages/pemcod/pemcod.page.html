@@ -3,12 +3,12 @@
   <div class="content">
     <section class="intro">
       <div class="content-header">
-        <h1>PEMCOD</h1>
+        <h1>Practitioner's eMCOD</h1>
         <p>
-          The Practitioners Electronic Medical Certification of Death (PEMCOD)
-          application enables physicians and nurse practitioners to complete and
-          submit Medical Certifications of Death (MCODs) electronically to the
-          Vital Statistics agency.
+          The Practitioners Electronic Medical Certification of Death
+          (Practitioner's eMCOD) application enables physicians and nurse
+          practitioners to complete and submit Medical Certifications of Death
+          (MCODs) electronically to the Vital Statistics agency.
         </p>
       </div>
     </section>
@@ -70,11 +70,12 @@
 
           <mat-step [completed]="false">
             <ng-template matStepLabel>
-              Login to the PEMCOD portal with your BCProvider
+              Login to the Practitioner's eMCOD portal with your BCProvider
             </ng-template>
             <div>
               <p class="guide-information">
-                Use your newly created BCProvider to login to the PEMCOD portal
+                Use your newly created BCProvider to login to the Practitioner's
+                eMCOD portal
               </p>
               <p
                 *ngIf="bcProviderStatusCode === StatusCode.COMPLETED"
@@ -97,7 +98,7 @@
                 aria-labelledby="navigate-to-pemcod"
                 [disabled]="pemcod$ | async"
                 (click)="navigateToPath()">
-                Login to the PEMCOD portal with your BCProvider
+                Login to the Practitioner's eMCOD portal with your BCProvider
               </button>
             </div>
             <div class="stepper-buttons">
@@ -136,7 +137,7 @@
             <mat-icon
               class="assistance-content__icon"
               [svgIcon]="'pemcod-icon'"></mat-icon
-            ><strong>PEMCOD</strong>
+            ><strong>Practitioner's eMCOD</strong>
           </div>
           <div class="main-image-text-instructions">
             Login once the instructions are complete.
