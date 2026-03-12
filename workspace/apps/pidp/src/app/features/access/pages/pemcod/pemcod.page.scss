@@ -106,6 +106,7 @@
                 justify-content: center;
                 cursor: pointer;
                 top: calc(100% - 150px);
+                margin-right: -20px;
                 &:disabled {
                   background: var(
                     --surface-color-primary-button-disabled,
@@ -259,7 +260,8 @@
   }
   .card-footer {
     button {
-      top: 60px !important;
+      top: 40px !important;
+      margin-right: -5px !important;
     }
   }
   .pemcod-button-container {
@@ -270,7 +272,7 @@
 .viewport-large {
   .card-footer {
     button {
-      top: 80px !important;
+      top: 65px !important;
     }
   }
 }

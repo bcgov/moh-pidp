@@ -92,7 +92,7 @@ export class PemcodPage implements OnInit, OnDestroy {
       title: 'Access',
       path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
     },
-    { title: 'PEMCOD', path: '' },
+    { title: `Practitioner's eMCOD`, path: '' },
   ];
   public sanitizer = inject(DomSanitizer);
   public matIconRegistry = inject(MatIconRegistry);
