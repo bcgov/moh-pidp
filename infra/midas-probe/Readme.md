@@ -1,18 +1,31 @@
 # Midas Probe - Openshift GSLB Keepalive Service for Gold/GoldDR Failover
 
-This service is used to monitor several services running on Openshift (OCP). It has two primary purposes:
-1. It will display the results of the services (running or not) based on the availability of pods for that service. In essence it depends on the OCP deployment readyness probes.
-2. It acts as a keepalive for the BC Gov'ts Global Server Load Balancer (GSLB). It runs on the Gold cluster and if any of the services monitored by Midas does not have available pods, Midas will return a 500 code to the GSLB (when configured) resulting with the GSLB switching the DNS from pointing to Gold to GoldDR (pronounced Golder) for a failover.
+This service is used to monitor the health of several services running on Openshift (OCP) such as Patroni. It has two primary purposes:
+1. It will display the results of the services (running or not) based on the availability of pods for that service. In essence it depends on the OCP deployment readiness health check.
+2. It acts as a keepalive for the BC Gov'ts Global Server Load Balancer (GSLB). It runs on the Gold cluster and if any of the services monitored by Midas does not have available pods, Midas will return a 500 code to the GSLB (when configured) resulting with the GSLB switching the DNS from pointing to Gold to GoldDR (pronounced Golder) for a failover. If there's a cluster maintenance on GOLD cluster, Midas will return the GOLDDR IP address (142.34.64.4) as the active cluster and a 500 code to the GSLB. If Midas returns a 500 status code or GOLDDR IP address (142.34.64.4), you will receive a notification in [#fluentbit-pidp slack channel](https://join.slack.com/share/enQtMTA1MzAwMDgwNDY0NTEtOTdmOGEzMTQzNmVmMjdkNTNmYTUxNWNjYTllYzJjYjFjMzJmMjFhMjE1MDlmNTNiNjNkOGJmNjQ5MjM2NTJkOA), meaning there's a failover and it needsan immediate action to manually failbacl from GOLDDR to GOLD.
 
 ## How does it work
-The main function of this service is main.py. This python script uses a kubernetes library to look for any services with the tag: "midas=touch". For each of those services it determines if there's active pods for that service. If there are not, it will fail with a 500 code and display the list of service showing which one(s) failed. Midas on Gold, which is self aware of 'cluster' and is also aware of who the GSLB is currently pointing to: "who_is_active", force a non-200 return code when it sees that these two values are not the same.
+The main function of this service is main.py. This python script uses a kubernetes library to look for any services with the tag: "midas=touch". For each of those services it determines if there's any active and healthy pods for that service. If there is not, it will fail with a 500 code and display the list of service showing which one(s) failed. Midas on Gold, which is self aware of 'cluster' and is also aware of who the GSLB is currently pointing to: "who_is_active", returns a 500 code when it sees that these two values are not the same.
 
 Note: There's a environment variable that you can set "notouch" that will allow you to override the results. This is for testing purposes to allow you to manually control the toggle.  Accepted values for notouch are 200 or 500 depending on the return code you wish to force.
 
-## Pipeline
-There are two pipelines:
-1. Build Midas Probe: this uses the docker-compose to build the docker image for release into the OCP imagestream on the -tools namespace.
-2. Helm Upgrade Midas Probe: This does a helm upgrade (helm install needs to have previously been done manually). There's an integration into the Vault that Platform services runs. The private key, public key and certs are all stored in the vault. When your Personal Access Token (PAT) obtained from the user config within Vault is stored as a secret in Github Actions (GHA) this workflow will call to Vault, obtain the secrets and store them as files on the container, then helm will consume those files for deploying the route needed by the GSLB to communicate with Midas.  It should be noted that this PAT expires every 32 days so needs to be updated regularly.
+## Build midas docker image
+Log in to the internal registry using your OpenShift credentials using `oc login --token=<toke> --server=https://api.gold.devops.gov.bc.ca:6443` command. Run the following commands in the infra\midas-probe directory to build the midas docker image for release and push it into the OpenShift imagestream on the f088b1-tools namespace using your credential.
+
+  ``` 
+      docker compose build
+      docker tag midas-probe:latest image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/midas-probe:latest
+      TOKEN=$(oc whoami -t)
+      docker login -u $(oc whoami) -p TOKEN console.apps.gold.devops.gov.bc.ca
+      docker push image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/midas-probe:latest
+  ```
+
+## Deploy midas-probe helm chart
+This does a helm upgrade (helm install needs to have previously been done manually). There's an integration into the Vault that Platform services runs. When your Personal Access Token (PAT) obtained from the user config within Vault is stored as a secret in Github Actions (GHA) this workflow will call to Vault, obtain the secrets and store them as files on the container, then helm will consume those files for deploying the route needed by the GSLB to communicate with Midas.
+
+  ```
+  helm upgrade --install --values ./charts/midas-probe/values.yaml midas-probe ./chart/midas-probe
+  ```
 
 ## GSLB Setup Notes:
 The config of the GSLB in the case of Midas-Probe is:

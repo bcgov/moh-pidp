@@ -8,13 +8,6 @@ import { Observable } from 'rxjs';
 import {
   FormatDatePipe,
   InjectViewportCssClassDirective,
-  PageComponent,
-  PageFooterActionDirective,
-  PageFooterComponent,
-  PageHeaderComponent,
-  PageSectionComponent,
-  PageSectionSubheaderComponent,
-  PageSectionSubheaderDescDirective,
 } from '@bcgov/shared/ui';
 
 import { PartyService } from '@app/core/party/party.service';
@@ -38,13 +31,6 @@ import { TransactionsResource } from './transactions-resource.service';
     MatButtonModule,
     NgIf,
     NgFor,
-    PageComponent,
-    PageFooterActionDirective,
-    PageFooterComponent,
-    PageHeaderComponent,
-    PageSectionComponent,
-    PageSectionSubheaderComponent,
-    PageSectionSubheaderDescDirective,
     InjectViewportCssClassDirective,
   ],
 })

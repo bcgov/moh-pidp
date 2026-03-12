@@ -101,18 +101,17 @@ affinity: {}
 rabbitmq:
   host: ""
 
-
+# fluentbit must be enabled for prod environment
 fluentbit:
   enabled: false
   imageRegistry: docker.io/fluent/fluent-bit:3.0.3-debug
   imagePullPolicy: IfNotPresent
+  # The value of slack_webhook parameter is stored in a secret called `slack-error-notification-webhook` in OpenShift.
+  slack_webhook: ""
   securityContext:
     enabled: false
     runAsUser: 1001
   resources:
-    limits:
-      cpu: 50m
-      memory: 64Mi
     requests:
       cpu: 10m
       memory: 16Mi

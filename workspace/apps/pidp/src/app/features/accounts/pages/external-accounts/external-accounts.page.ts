@@ -1,4 +1,3 @@
-import { CdkNoDataRow } from '@angular/cdk/table';
 import { CommonModule } from '@angular/common';
 import {
   Component,
@@ -67,7 +66,6 @@ import {
     SuccessDialogComponent,
     AnchorDirective,
     InvitedAccountCardComponent,
-    CdkNoDataRow,
   ],
   templateUrl: './external-accounts.page.html',
   styleUrl: './external-accounts.page.scss',

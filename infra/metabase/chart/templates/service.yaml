@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    template.openshift.io/expose-uri: http://{.spec.clusterIP}:{.spec.ports[?(.name=="{{ .Values.service_name }}")].port}
+  name: {{ include "metabase.fullname" . }}
+  labels:
+    {{- include "metabase.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+  - name: {{ include "metabase.fullname" . }}
+    port: {{ .Values.service.port }}
+    protocol: TCP
+    targetPort: {{ .Values.service.port }}
+  selector:
+    {{- include "metabase.selectorLabels" . | nindent 4 }}
+  sessionAffinity: None

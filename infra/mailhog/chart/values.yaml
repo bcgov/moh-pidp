@@ -1,6 +1,6 @@
 image:
-  repository: docker.io/mailhog/mailhog
-  tag: ""
+  repository: image-registry.openshift-image-registry.svc:5000/f088b1-tools/mailhog
+  tag: "latest"
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
@@ -105,9 +105,6 @@ resources:
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  limits:
-    cpu: 100m
-    memory: 256Mi
   requests:
     cpu: 50m
     memory: 128Mi
