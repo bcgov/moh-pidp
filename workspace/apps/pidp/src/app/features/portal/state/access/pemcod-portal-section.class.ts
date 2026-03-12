@@ -29,7 +29,7 @@ export class PemcodPortalSection implements IPortalSection {
   ) {
     this.key = 'pemcod';
     this.heading = `Practitioner's eMCOD`;
-    this.description = `The Practitioners Electronic Medical Certification of Death (Practitioner's eMCOD) application enables physicians and nurse practitioners  to complete and submit Medical Certifications of Death (MCODs) electronically to the Vital Statistics agency`;
+    this.description = `This application enables physicians and nurse practitioners to complete and submit Medical Certifications of Death (MCOD) or MCOD Amendments electronically to the Vital Statistics agency and designated funeral homes.`;
 
     this.keyWords = profileStatus.status.pemcod.keyWords || [];
     this.completedMessage = 'Access Granted';
