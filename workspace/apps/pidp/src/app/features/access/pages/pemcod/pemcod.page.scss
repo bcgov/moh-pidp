@@ -24,6 +24,7 @@
   --card-border-radius: calc(var(--gap) * 0.375);
   --content-padding: var(--gap);
   --form-card-width: unset;
+  --pemcod-button-top: 80px;
   padding: 1.25rem 0.75rem;
 
   & .content {
@@ -105,7 +106,7 @@
                 align-items: center;
                 justify-content: center;
                 cursor: pointer;
-                top: calc(100% - 150px);
+                top: var(--pemcod-button-top);
                 margin-right: -20px;
                 &:disabled {
                   background: var(
@@ -137,6 +138,8 @@
 }
 
 .viewport-small {
+  --pemcod-button-top: 280px;
+
   .main {
     display: flex !important;
     flex-direction: column !important;
@@ -167,7 +170,6 @@
           height: 40% !important;
           .card-footer {
             button {
-              top: 280px !important;
               width: 56px !important;
               height: 56px !important;
               min-width: 56px !important;
@@ -180,6 +182,8 @@
 }
 
 .viewport-xsmall {
+  --pemcod-button-top: 225px;
+
   .content-header {
     margin: 0 20px 0 20px;
   }
@@ -220,7 +224,6 @@
         .auth-card-footer {
           padding: 7.5px 0 7.5px 0;
           button {
-            top: 225px !important;
             width: 56px !important;
             height: 56px !important;
             min-width: 56px !important;
@@ -246,7 +249,6 @@
 
   .card-footer {
     button {
-      top: calc(100% - 1px) !important;
       width: 48px !important;
       height: 48px !important;
       min-width: 48px !important;
@@ -255,12 +257,16 @@
 }
 
 .viewport-medium {
+  --pemcod-button-top: 60px;
+  .main-image-text-title {
+    width: 80%;
+  }
+
   div.auth-card {
     padding: 20px 0 10px 20px !important;
   }
   .card-footer {
     button {
-      top: 40px !important;
       margin-right: -5px !important;
     }
   }
@@ -270,10 +276,8 @@
 }
 
 .viewport-large {
-  .card-footer {
-    button {
-      top: 65px !important;
-    }
+  .main-image-text-title {
+    width: 80%;
   }
 }
 
