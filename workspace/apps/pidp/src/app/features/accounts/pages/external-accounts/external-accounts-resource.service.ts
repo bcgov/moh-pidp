@@ -69,7 +69,7 @@ export class ExternalAccountsResource {
 
   public getInvitedExternalAccounts(
     partyId: number,
-  ): Observable<InvitedExternalAccount[] | null> {
+  ): Observable<InvitedExternalAccount[]> {
     return this.apiResource
       .get<InvitedExternalAccount[]>(
         `${this.getResourcePath(
@@ -79,7 +79,7 @@ export class ExternalAccountsResource {
       .pipe(
         catchError((error: HttpErrorResponse) => {
           if (error.status === HttpStatusCode.NotFound) {
-            return of(null);
+            return of([]);
           }
 
           throw error;
