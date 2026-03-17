@@ -24,6 +24,7 @@
   --card-border-radius: calc(var(--gap) * 0.375);
   --content-padding: var(--gap);
   --form-card-width: unset;
+  --pemcod-button-top: 80px;
   padding: 1.25rem 0.75rem;
 
   & .content {
@@ -96,6 +97,7 @@
                 padding: 0;
                 width: 70px;
                 height: 70px;
+                position: relative;
                 border-radius: 50%;
                 background: pidp.$bcgov-color-primary;
                 color: #fff;
@@ -104,7 +106,8 @@
                 align-items: center;
                 justify-content: center;
                 cursor: pointer;
-                top: calc(100% - 150px);
+                top: var(--pemcod-button-top);
+                margin-right: -20px;
                 &:disabled {
                   background: var(
                     --surface-color-primary-button-disabled,
@@ -135,22 +138,52 @@
 }
 
 .viewport-small {
+  --pemcod-button-top: 280px;
+
   .main {
     display: flex !important;
     flex-direction: column !important;
-  }
+    .main-image-text {
+      font-size: 1rem !important;
+      padding: 0.5rem 0.75rem !important;
 
-  .pemcod-button-container {
-    flex: 1 !important;
-  }
-  .card-footer {
-    button {
-      top: calc(100% - 1px) !important;
+      .main-image-text-title {
+        gap: 0.5rem !important;
+      }
+    }
+    .pemcod-button-container {
+      flex: 1 !important;
+      height: auto !important;
+      .pemcod-button {
+        min-height: 20rem;
+
+        img {
+          object-position: top center;
+          width: 100% !important;
+          height: 100% !important;
+        }
+
+        div.auth-card {
+          padding: 1rem 0.75rem 0.5rem 0.75rem !important;
+        }
+        .card-container {
+          height: 40% !important;
+          .card-footer {
+            button {
+              width: 56px !important;
+              height: 56px !important;
+              min-width: 56px !important;
+            }
+          }
+        }
+      }
     }
   }
 }
 
 .viewport-xsmall {
+  --pemcod-button-top: 225px;
+
   .content-header {
     margin: 0 20px 0 20px;
   }
@@ -173,17 +206,68 @@
     }
 
     .pemcod-button {
+      min-height: 17rem;
+
       div.auth-card {
-        padding: 20px 0 0 20px !important;
+        padding: 0.75rem 0.5rem 0.5rem 0.75rem !important;
+      }
+
+      img {
+        object-position: top center;
+        width: 100% !important;
+        height: 100% !important;
       }
 
       .card-container {
-        height: 50% !important;
+        height: 35% !important;
 
         .auth-card-footer {
           padding: 7.5px 0 7.5px 0;
+          button {
+            width: 56px !important;
+            height: 56px !important;
+            min-width: 56px !important;
+          }
         }
       }
+    }
+  }
+
+  .main-image-text {
+    font-size: 0.9rem !important;
+    padding: 0.5rem !important;
+
+    .main-image-text-title {
+      gap: 0.4rem !important;
+    }
+  }
+
+  .pemcod-button-container {
+    flex: 1 !important;
+    height: auto !important;
+  }
+
+  .card-footer {
+    button {
+      width: 48px !important;
+      height: 48px !important;
+      min-width: 48px !important;
+    }
+  }
+}
+
+.viewport-medium {
+  --pemcod-button-top: 60px;
+  .main-image-text-title {
+    width: 80%;
+  }
+
+  div.auth-card {
+    padding: 20px 0 10px 20px !important;
+  }
+  .card-footer {
+    button {
+      margin-right: -5px !important;
     }
   }
   .pemcod-button-container {
@@ -191,17 +275,9 @@
   }
 }
 
-.viewport-medium {
-  div.auth-card {
-    padding: 20px 0 10px 20px !important;
-  }
-  .card-footer {
-    button {
-      top: calc(100% - 220px) !important;
-    }
-  }
-  .pemcod-button-container {
-    flex: 1 !important;
+.viewport-large {
+  .main-image-text-title {
+    width: 80%;
   }
 }
 
