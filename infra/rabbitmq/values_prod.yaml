@@ -792,16 +792,7 @@ containerSecurityContext:
 resourcesPreset: "micro"
 ## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
 ## Example:
-<<<<<<<< HEAD:infra/rabbitmq/values.yaml
-resources: 
-========
 resources:
-    ## Example:
-    limits:
-      cpu: 150m
-      memory: 500Mi
-
->>>>>>>> 615b688c (updated rabbitmq to pull image from legacy bitnami and added vhost and user permissions to config (obsoleting manual steps) (#715)):infra/rabbitmq/values_prod.yaml
     ## Examples:
     requests:
       cpu: 100m

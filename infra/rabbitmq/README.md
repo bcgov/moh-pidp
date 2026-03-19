@@ -26,7 +26,7 @@ To install rabbitmq chart from remote repository:
 
 in this deployment, the Clustering and Service Account are enabled in order to make it HA and the replica count is set to three. The value of auth.password in the values.yaml file need to be updated.
 
-### Create router for rabbitmq-management console
+### Create route for rabbitmq-management console
 
 After installing RabbitMQ helm chart, manually create a new route in OCP for rabbitmq service with following config:
 
@@ -37,12 +37,3 @@ Target port: http-stats (15672)
 Security: Enabled
 TLS termination: Edge
 Insecure traffic: Redirect
-
-### Create vhost for dev/test/prod environment (Manually)
-
-After creating **rabbitmq-management** route, open the RabbitMQ management console via the route and in the Admin tab, select the virtual hosts and add a new vhost depending on environment you are working
-e.g. for the dev environment, add 'dev' vhost.  This value ('dev') reflects the Helm deployment name.
-
-### Set permission of pidp user (Manually)
-
-In RabbitMQ management console, in the users tab select the pidp user and give full permission to the newly created vhsot (dev/test/prod).
