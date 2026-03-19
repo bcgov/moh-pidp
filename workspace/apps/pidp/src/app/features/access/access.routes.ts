@@ -14,6 +14,8 @@ export class AccessRoutes {
     'provincial-attachment-system';
   public static readonly HALO = 'halo';
   public static readonly IVF = 'ivf';
+  public static readonly IMMSBC = 'immsbc';
+  public static readonly PEMCOD = 'pemcod';
 
   /**
    * @description

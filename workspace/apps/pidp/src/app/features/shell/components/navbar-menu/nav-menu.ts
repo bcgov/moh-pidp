@@ -1,5 +1,4 @@
-import { CdkNoDataRow } from '@angular/cdk/table';
-import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
+import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common';
 import {
   Component,
   EventEmitter,
@@ -19,12 +18,7 @@ import {
   MatSidenavModule,
 } from '@angular/material/sidenav';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import {
-  Router,
-  RouterLink,
-  RouterLinkActive,
-  RouterOutlet,
-} from '@angular/router';
+import { Router, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 import { Observable, Subject, takeUntil } from 'rxjs';
 
@@ -65,16 +59,13 @@ import { NavMenuResource } from './nav-menu.resource.service';
     MatIconModule,
     MatSidenavModule,
     MatTooltipModule,
-    NgFor,
     NgIf,
     NgTemplateOutlet,
-    RouterLink,
     RouterLinkActive,
     RouterOutlet,
     FaIconComponent,
     NgClass,
     FeedbackButtonComponent,
-    CdkNoDataRow,
   ],
 })
 export class NavMenuComponent implements OnChanges, OnInit, OnDestroy {

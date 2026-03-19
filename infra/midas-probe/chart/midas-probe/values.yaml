@@ -1,0 +1,28 @@
+appName: midas-probe
+licensePlate: f088b1
+imageStreamTag: latest
+replicas: 1
+dockerhost: image-registry.openshift-image-registry.svc:5000
+environment: "prod"
+cluster: "GOLD"
+gslb_host: "healthprovideridentityportal.gov.bc.ca.glb.gov.bc.ca"
+resources:
+  requests:
+    cpu: 20m
+    memory: 50Mi
+
+
+# fluentbit must be enabled for prod environment
+fluentbit:
+  enabled: false
+  imageRegistry: docker.io/fluent/fluent-bit:3.0.3-debug
+  imagePullPolicy: IfNotPresent
+  # The value of slack_webhook parameter is stored in a secret called `slack-error-notification-webhook` in OpenShift.
+  slack_webhook: ""
+  securityContext:
+    enabled: false
+    runAsUser: 1001
+  resources:
+    requests:
+      cpu: 10m
+      memory: 16Mi

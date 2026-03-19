@@ -141,6 +141,14 @@ export class BcProviderApplicationPage
     return this.formState.form.valid;
   }
 
+  private readonly autonavigateRoutes = [
+    AccessRoutes.HALO,
+    AccessRoutes.IMMSBC,
+    AccessRoutes.IVF,
+    AccessRoutes.PEMCOD,
+    AccessRoutes.PROVINCIAL_ATTACHMENT_SYSTEM,
+  ];
+
   public constructor(
     @Inject(APP_CONFIG) private readonly config: AppConfig,
     dependenciesService: AbstractFormDependenciesService,
@@ -232,9 +240,11 @@ export class BcProviderApplicationPage
         ),
       );
   }
+
   public navigateTo(path: string): void {
     this.router.navigateByUrl(path);
   }
+
   protected performSubmission(): Observable<string | void> {
     const partyId = this.partyService.partyId;
     this.password = this.formState.password.value;
@@ -256,18 +266,13 @@ export class BcProviderApplicationPage
   }
 
   protected afterSubmitIsSuccessful(): void {
-    if (
-      this.previousUrl
-        .split('/')
-        .includes(AccessRoutes.PROVINCIAL_ATTACHMENT_SYSTEM)
-    ) {
-      this.router.navigateByUrl(
-        AccessRoutes.routePath(AccessRoutes.PROVINCIAL_ATTACHMENT_SYSTEM),
-      );
-    } else if (this.previousUrl.split('/').includes(AccessRoutes.HALO)) {
-      this.router.navigateByUrl(AccessRoutes.routePath(AccessRoutes.HALO));
-    } else if (this.previousUrl.split('/').includes(AccessRoutes.IVF)) {
-      this.router.navigateByUrl(AccessRoutes.routePath(AccessRoutes.IVF));
+    const urlPartials = this.previousUrl.split('/');
+    const matchedRoute = this.autonavigateRoutes.find((route) =>
+      urlPartials.includes(route),
+    );
+
+    if (matchedRoute) {
+      this.router.navigateByUrl(AccessRoutes.routePath(matchedRoute));
     } else {
       this.navigationService.navigateToRoot();
     }

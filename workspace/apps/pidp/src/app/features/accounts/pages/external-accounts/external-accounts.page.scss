@@ -59,7 +59,6 @@
         padding-right: calc(var(--gap) * 0.9);
         position: relative;
         line-height: 1.5rem;
-        flex-grow: 1;
 
         &__card-title h2 {
           color: pidp.$bcgov-color-text;
@@ -73,32 +72,140 @@
         }
       }
 
+      > .card {
+        flex: 1;
+      }
+
+      > div.side {
+        // The wrapper containing invited-accounts-box and assistance-box
+        flex: 0.3;
+      }
+
+      .invited-accounts-box {
+        max-width: 700px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        height: 375px;
+
+        .invited-accounts-header h2 {
+          background-color: pidp.$btn-blue-color;
+          color: #fff;
+          padding: 0.5rem;
+          font-size: 1rem;
+          font-weight: 700;
+          text-align: center;
+          margin: 0;
+          border-top-left-radius: 8px;
+          border-top-right-radius: 8px;
+        }
+
+        .invited-accounts-content {
+          display: flex;
+          align-items: center;
+          padding: 20px;
+          gap: 1rem;
+          position: relative;
+
+          .carousel-button {
+            background: pidp.$btn-blue-color;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            flex-shrink: 0;
+            transition: background-color 0.2s;
+            align-self: center;
+
+            &:hover:not(:disabled) {
+              background: darken(pidp.$btn-blue-color, 10%);
+            }
+
+            &:disabled {
+              background: pidp.$grey-20;
+              cursor: not-allowed;
+              opacity: 0.5;
+            }
+
+            mat-icon {
+              font-size: 24px;
+              width: 24px;
+              height: 24px;
+            }
+          }
+
+          .invited-accounts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            flex: 1;
+            transition: transform 0.3s ease-in-out;
+
+            app-invited-account-card {
+              flex: 0 0 100%;
+              max-width: 100%;
+            }
+          }
+          .no-accounts-box {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+            & .icon-box {
+              border: 2px solid pidp.$bcgov-color-text;
+              border-radius: 50%;
+              padding: 10px;
+              img {
+                width: 60px;
+                height: 60px;
+              }
+            }
+            .no-accounts {
+              font-size: 0.825rem;
+              color: pidp.$bcgov-color-text;
+              text-align: center;
+              width: 100%;
+            }
+          }
+        }
+      }
+
       .assistance-box {
         max-width: 300px;
         border: 1px solid pidp.$grey-20;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        margin-top: 3.5rem;
+        margin-top: 0.7rem;
+        border-radius: 8px;
 
         .assistance-header h2 {
           background-color: pidp.$btn-blue-color;
           color: #fff;
-          padding: 1rem;
-          font-size: 1.5rem;
+          padding: 0.5rem;
+          font-size: 1rem;
           font-weight: 700;
           text-align: center;
           margin: 0;
+          border-top-left-radius: 8px;
+          border-top-right-radius: 8px;
         }
 
         .assistance-content {
           display: flex;
           justify-content: center;
-          padding: 20px;
+          padding: 10px;
           flex-direction: column;
           align-items: center;
+          font-size: 0.825rem;
 
           &__icon {
-            width: 3.1875rem;
-            height: 3.75rem;
+            width: 2.1875rem;
+            height: 2.75rem;
 
             display: flex;
             flex-shrink: 0;
@@ -123,6 +230,43 @@
             }
           }
         }
+      }
+    }
+  }
+}
+
+.viewport-small,
+.viewport-medium {
+  .main {
+    flex-direction: column;
+
+    > div.side {
+      flex: unset;
+      width: 100%;
+    }
+    .side {
+      display: flex;
+      flex-direction: column;
+      width: 50%;
+      align-items: center;
+    }
+  }
+}
+
+.viewport-xsmall {
+  .main {
+    > div.side {
+      flex: unset !important;
+    }
+    .side {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      align-items: center;
+
+      & .invited-accounts-box {
+        height: auto;
+        max-width: 300px;
       }
     }
   }

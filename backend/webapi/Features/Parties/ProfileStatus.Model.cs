@@ -232,6 +232,26 @@ public partial class ProfileStatus
             }
         }
 
+        public class ImmsBCSection : ProfileSection
+        {
+            internal override string SectionName => "immsBC";
+            public override string[] KeyWords => ["pharmacist"];
+
+            protected override StatusCode Compute(ProfileData profile)
+            {
+                return profile switch
+                {
+                    _ when profile.PartyPlrStanding
+                            .With(IdentifierType.Pharmacist)
+                            .HasGoodStanding
+                        && profile.HasBCProviderCredential => StatusCode.Complete,
+                    _ when profile.PartyPlrStanding
+                            .With(IdentifierType.Pharmacist).HasGoodStanding => StatusCode.Incomplete,
+                    _ => StatusCode.Locked
+                };
+            }
+        }
+
         public class IvfSection : ProfileSection
         {
             internal override string SectionName => "ivf";
@@ -283,6 +303,25 @@ public partial class ProfileStatus
                     _ when profile.PartyPlrStanding
                         .With(MSTeamsPrivacyOfficer.AllowedIdentifierTypes)
                         .HasGoodStanding => StatusCode.Incomplete,
+                    _ => StatusCode.Locked
+                };
+            }
+        }
+
+        public class PemcodSection : ProfileSection
+        {
+            internal override string SectionName => "pemcod";
+            public override string[] KeyWords => ["doctors", "nursing"];
+
+            protected override StatusCode Compute(ProfileData profile)
+            {
+                return profile switch
+                {
+                    _ when profile.PartyPlrStanding
+                            .With(ProviderRoleType.MedicalDoctor, ProviderRoleType.RegisteredNursePractitioner)
+                            .HasGoodStanding
+                        && profile.HasBCProviderCredential => StatusCode.Complete,
+                    { HasBCServicesCardCredential: true } => StatusCode.Incomplete,
                     _ => StatusCode.Locked
                 };
             }

@@ -14,9 +14,11 @@ import { DriverFitnessPortalSection } from './access/driver-fitness-portal-secti
 import { HaloPortalSection } from './access/halo-portal-section.class';
 import { HcimAccountTransferPortalSection } from './access/hcim-account-transfer-portal-section.class';
 import { ImmsBCEformsPortalSection } from './access/immsbc-eforms-portal-section.class';
+import { ImmsbcPortalSection } from './access/immscbc-portal-section.class';
 import { IvfPortalSection } from './access/ivf-portal-section.class';
 import { MsTeamsClinicMemberPortalSection } from './access/ms-teams-clinic-member-portal-section.class';
 import { MsTeamsPrivacyOfficerPortalSection } from './access/ms-teams-privacy-officer-portal-section.class';
+import { PemcodPortalSection } from './access/pemcod-portal-section.class';
 import { ProviderReportingPortalSection } from './access/provider-reporting-portal-section.class';
 import { ProvincialAttachmentSystemPortalSection } from './access/provincial-attachment-system-portal-section.class';
 import { SaEformsPortalSection } from './access/sa-eforms-portal-section.class';
@@ -136,6 +138,16 @@ export class AccessStateBuilder {
       ...ArrayUtils.insertResultIf<IAccessSection>(
         this.insertSection('ivf', profileStatus),
         () => [new IvfPortalSection(profileStatus, this.router)],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('immsBC', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        () => [new ImmsbcPortalSection(profileStatus, this.router)],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('pemcod', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        () => [new PemcodPortalSection(profileStatus, this.router)],
       ),
     ];
   }

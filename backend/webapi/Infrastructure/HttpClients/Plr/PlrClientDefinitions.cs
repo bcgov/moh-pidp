@@ -119,6 +119,11 @@ public class PlrStandingsDigest
 
     public IEnumerable<string> Cpns => this.records.Select(record => record.Cpn);
 
+    public IEnumerable<string> MspIds => this.records
+        .Select(record => record.MspId)
+        .Where(mspId => !string.IsNullOrWhiteSpace(mspId))
+        .Select(mspId => mspId!);
+
     private PlrStandingsDigest(bool error, IEnumerable<DigestRecord>? records = null)
     {
         this.Error = error;
@@ -212,6 +217,7 @@ public class PlrStandingsDigest
             Cpn = record.Cpn,
             IdentifierType = record.IdentifierType,
             LicenceNumber = record.CollegeId,
+            MspId = record.MspId,
             ProviderRoleType = record.ProviderRoleType,
             PlrStatusCode = record.StatusCode,
             PlrStatusReasonCode = record.StatusReasonCode,
@@ -224,6 +230,7 @@ public class PlrStandingsDigest
         public string Cpn { get; set; } = string.Empty;
         public string? IdentifierType { get; set; }
         public string? LicenceNumber { get; set; }
+        public string? MspId { get; set; }
         public string? ProviderRoleType { get; set; }
         public string? PlrStatusCode { get; set; }
         public string? PlrStatusReasonCode { get; set; }
@@ -239,4 +246,6 @@ public class PlrStatusChangeLog
     public bool IsGoodStanding { get; set; }
     public string? IdentifierType { get; set; }
     public string? ProviderRoleType { get; set; }
+    public string MspId { get; set; } = string.Empty;
+
 }

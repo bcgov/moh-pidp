@@ -169,7 +169,13 @@ public class Create
             if (party.Cpn != null)
             {
                 attributes.SetCpn(party.Cpn);
+                var mspIds = plrStanding.MspIds;
+                if (mspIds.Any())
+                {
+                    attributes.SetMspId(mspIds);
+                }
             }
+
             if (party.UaaAgreementDate != default)
             {
                 attributes.SetUaaDate(party.UaaAgreementDate.ToDateTimeOffset());
