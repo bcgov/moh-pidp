@@ -28,7 +28,7 @@ export class PemcodPortalSection implements IPortalSection {
     private readonly router: Router,
   ) {
     this.key = 'pemcod';
-    this.heading = `Practitioner's eMCOD`;
+    this.heading = `Medical Certification of Death (PEMCOD)`;
     this.description = `This application enables physicians and nurse practitioners to complete and submit Medical Certifications of Death (MCOD) or MCOD Amendments electronically to the Vital Statistics agency and designated funeral homes.`;
 
     this.keyWords = profileStatus.status.pemcod.keyWords || [];
