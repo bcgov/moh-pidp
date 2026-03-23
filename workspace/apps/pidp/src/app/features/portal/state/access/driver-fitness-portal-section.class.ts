@@ -34,7 +34,7 @@ export class DriverFitnessPortalSection implements IPortalSection {
     this.heading = 'Driver Fitness Practitioner Portal';
     this.description = `Register as a Medical Practitioner (or Designate) to the RoadSafetyBC Medical Practitioner Portal.`;
     this.keyWords = profileStatus.status.driverFitness.keyWords || [];
-    this.completedMessage = Constants.enrolledText;
+    this.completedMessage = Constants.accessGrantedText;
   }
 
   public get hint(): string {

@@ -9,10 +9,23 @@ The main function of this service is main.py. This python script uses a kubernet
 
 Note: There's a environment variable that you can set "notouch" that will allow you to override the results. This is for testing purposes to allow you to manually control the toggle.  Accepted values for notouch are 200 or 500 depending on the return code you wish to force.
 
-## Pipeline
-There are two pipelines:
-1. Build Midas Probe: this uses the docker-compose to build the docker image for release into the OCP imagestream on the -tools namespace.
-2. Helm Upgrade Midas Probe: This does a helm upgrade (helm install needs to have previously been done manually). There's an integration into the Vault that Platform services runs. The private key, public key and certs are all stored in the vault. When your Personal Access Token (PAT) obtained from the user config within Vault is stored as a secret in Github Actions (GHA) this workflow will call to Vault, obtain the secrets and store them as files on the container, then helm will consume those files for deploying the route needed by the GSLB to communicate with Midas.  It should be noted that this PAT expires every 32 days so needs to be updated regularly.
+## Build midas docker image
+Log in to the internal registry using your OpenShift credentials using `oc login --token=<toke> --server=https://api.gold.devops.gov.bc.ca:6443` command. Run the following commands in the infra\midas-probe directory to build the midas docker image for release and push it into the OpenShift imagestream on the f088b1-tools namespace using your credential.
+
+  ``` 
+      docker compose build
+      docker tag midas-probe:latest image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/midas-probe:latest
+      TOKEN=$(oc whoami -t)
+      docker login -u $(oc whoami) -p TOKEN console.apps.gold.devops.gov.bc.ca
+      docker push image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/midas-probe:latest
+  ```
+
+## Deploy midas-probe helm chart
+This does a helm upgrade (helm install needs to have previously been done manually). There's an integration into the Vault that Platform services runs. When your Personal Access Token (PAT) obtained from the user config within Vault is stored as a secret in Github Actions (GHA) this workflow will call to Vault, obtain the secrets and store them as files on the container, then helm will consume those files for deploying the route needed by the GSLB to communicate with Midas.
+
+  ```
+  helm upgrade --install --values ./charts/midas-probe/values.yaml midas-probe ./chart/midas-probe
+  ```
 
 ## GSLB Setup Notes:
 The config of the GSLB in the case of Midas-Probe is:

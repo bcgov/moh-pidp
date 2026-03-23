@@ -3,12 +3,10 @@
   <div class="content">
     <section class="intro">
       <div class="content-header">
-        <h1>PEMCOD</h1>
+        <h1>Medical Certification of Death (PEMCOD)</h1>
         <p>
-          The Practitioners Electronic Medical Certification of Death (PEMCOD)
-          application enables physicians and nurse practitioners to complete and
-          submit Medical Certifications of Death (MCODs) electronically to the
-          Vital Statistics agency.
+          This application enables physicians and nurse practitioners to complete and submit Medical Certifications of
+          Death (MCOD) or MCOD Amendments electronically to the Vital Statistics agency and designated funeral homes.
         </p>
       </div>
     </section>
@@ -70,11 +68,12 @@
 
           <mat-step [completed]="false">
             <ng-template matStepLabel>
-              Login to the PEMCOD portal with your BCProvider
+              Login to the Practitioner's eMCOD portal with your BCProvider
             </ng-template>
             <div>
               <p class="guide-information">
-                Use your newly created BCProvider to login to the PEMCOD portal
+                Use your newly created BCProvider to login to the Practitioner's
+                eMCOD portal
               </p>
               <p
                 *ngIf="bcProviderStatusCode === StatusCode.COMPLETED"
@@ -97,7 +96,7 @@
                 aria-labelledby="navigate-to-pemcod"
                 [disabled]="pemcod$ | async"
                 (click)="navigateToPath()">
-                Login to the PEMCOD portal with your BCProvider
+                Login to the Practitioner's eMCOD portal with your BCProvider
               </button>
             </div>
             <div class="stepper-buttons">
@@ -112,7 +111,7 @@
       <div class="pemcod-button-container">
         <div class="card pemcod-button">
           <img
-            ngSrc="/assets/images/portal-access-to-systems-320x320.jpg"
+            ngSrc="/assets/images/pemcod-physician-image.png"
             alt="pemcod-records"
             priority
             fill />
@@ -136,7 +135,7 @@
             <mat-icon
               class="assistance-content__icon"
               [svgIcon]="'pemcod-icon'"></mat-icon
-            ><strong>PEMCOD</strong>
+            ><strong>Medical Certification of Death (PEMCOD)</strong>
           </div>
           <div class="main-image-text-instructions">
             Login once the instructions are complete.

@@ -41,7 +41,7 @@ global:
 ##
 image:
   registry: docker.io
-  repository: bitnami/rabbitmq
+  repository: bitnamilegacy/rabbitmq
   tag: 3.13.4-debian-12-r0
   digest: ""
   ## set to true if you would like to see extra information on logs
@@ -147,7 +147,7 @@ auth:
   ## @param auth.password RabbitMQ application password
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
   ##
-  password: "rabbitmq"
+  password: ""
   ## @param auth.securePassword Whether to set the RabbitMQ password securely. This is incompatible with loading external RabbitMQ definitions and 'true' when not setting the auth.password parameter.
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq#environment-variables
   ##
@@ -290,12 +290,12 @@ loadDefinition:
   enabled: true
   ## @param loadDefinition.file Name of the definitions file
   ##
-  file: "/app/load_definition.json"
+  # file: "/app/load_definition.json"
   ## @param loadDefinition.existingSecret Existing secret with the load definitions file
   ## Can be templated if needed, e.g:
   ## existingSecret: "{{ .Release.Name }}-load-definition"
   ##
-  existingSecret: "rabbitmq-load-definition"
+  existingSecret: "load-definition-volume"
 ## @param command Override default container command (useful when using custom images)
 ##
 command: []
@@ -625,14 +625,22 @@ extraVolumes: []
 ## @param extraSecrets Optionally specify extra secrets to be created by the chart.
 ## This can be useful when combined with load_definitions to automatically create the secret containing the definitions to be loaded.
 ## Example:
-## extraSecrets:
-##   load-definition:
-##     load_definition.json: |
-##       {
-##         ...
-##       }
+extraSecrets:
+  load-definition-volume:
+    load_definition.json: |
+      {
+          "vhosts": [
+            {"name": "prod"}
+          ],
+          "users": [
+            {"name": "pidp", "password_hash": "7R4NIi/1BT3Zk0C6dLsaD3igb+0Q02ZGo4BmqPT1jcFABCn5", "tags": ""},
+            {"name": "rabbitmq", "password_hash": "YSXYxEvsK5Ko/5ckQHYHXneobDH4aeVPPXrwl9yi4WTqZ1f+", "tags": "administrator"}
+          ],
+          "permissions": [
+            {"user": "pidp", "vhost": "prod", "configure": ".*", "write": ".*", "read": ".*"}
+          ]
+      }
 ##
-extraSecrets: {}
 ## @param extraSecretsPrependReleaseName Set this flag to true if extraSecrets should be created with <release-name> prepended.
 ##
 extraSecretsPrependReleaseName: false
@@ -784,7 +792,7 @@ containerSecurityContext:
 resourcesPreset: "micro"
 ## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
 ## Example:
-resources: 
+resources:
     ## Examples:
     requests:
       cpu: 100m
@@ -953,7 +961,7 @@ persistence:
   ## @param persistence.size PVC Storage Request for RabbitMQ data volume
   ## If you change this value, you might have to adjust `rabbitmq.diskFreeLimit` as well
   ##
-  size: 1Gi
+  size: 100Mi
   ## @param persistence.annotations Persistence annotations. Evaluated as a template
   ## Example:
   ## annotations:

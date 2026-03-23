@@ -33,7 +33,7 @@ export type ExpansionPanelState = 'expanded' | 'collapsed';
   animations: [
     trigger('bodyExpansion', [
       state('collapsed, void', style({ height: '0', visibility: 'hidden' })),
-      state('expanded', style({ height: '*', visibility: '' })),
+      state('expanded', style({ height: '*', visibility: 'visible' })),
       transition(
         'expanded <=> collapsed, void => collapsed',
         animate(EXPANSION_PANEL_ANIMATION_TIMING),

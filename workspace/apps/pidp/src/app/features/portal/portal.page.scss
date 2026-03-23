@@ -98,7 +98,7 @@
 
 .card img {
   width: 100%;
-  height: 150px;
+  height: auto;
   object-fit: cover;
 }
 
@@ -203,7 +203,7 @@
 
   & .card img {
     width: 17.4375rem;
-    height: 11.8125rem;
+    height: auto;
     border-radius: 0.625rem;
   }
 
@@ -281,7 +281,7 @@
 
   & .card img {
     width: 13rem;
-    height: 12rem;
+    height: auto;
   }
 
   & .card-content {
@@ -338,8 +338,8 @@
   }
 
   & .card img {
-    height: 105px;
     width: 100%;
+    height: auto;
   }
 
   & .card-content {
@@ -423,8 +423,8 @@
   }
 
   & .card img {
-    height: 105px;
     width: 100%;
+    height: auto;
   }
 
   & .card-content {

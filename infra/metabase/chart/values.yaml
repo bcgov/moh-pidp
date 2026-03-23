@@ -1,0 +1,40 @@
+license_plate: f088b1
+nameOverride: ""
+fullnameOverride: ""
+app_name: utilities
+replicaCount: 1
+
+image:
+  repository: image-registry.openshift-image-registry.svc:5000/f088b1-tools/metabase
+  tag: "latest"
+  pullPolicy: IfNotPresent
+imagePullSecrets: []
+
+
+storage:
+  pvc_capacity: 1Gi
+
+resource:
+  requests:
+    cpu: 50m
+    memory: 768Mi
+
+database:
+  host: "metabase-database"
+  name: metabase
+  username: metabase-user
+  password: ""
+  memory_limit: 512Mi
+  port: 5432
+  postgresql_image: image-registry.openshift-image-registry.svc:5000/openshift/postgresql
+  postgresql_version: 12-el7
+  pullPolicy: IfNotPresent
+
+
+service:
+  type: ClusterIP
+  port: 3000
+
+
+metabase_cpu_request: 200m
+metabase_memory_request: 1536Mi

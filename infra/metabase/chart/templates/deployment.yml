@@ -1,0 +1,100 @@
+#   Metabase Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "metabase.fullname" . }}
+  labels:
+    {{- include "metabase.labels" . | nindent 4 }}
+  annotations:
+    app.openshift.io/connects-to: >-
+      [{"apiVersion":"apps.openshift.io/v1","kind":"Deployment","name":"{{ include "metabase.fullname" . }}-database"}]  
+    image.openshift.io/triggers: |-
+      [
+        {
+          "from": {
+            "kind": "ImageStreamTag",
+            "namespace": "{{ .Values.license_plate }}-tools",
+            "name": "metabase:{{ .Values.image.tag }}"
+          },
+          "fieldPath": "spec.template.spec.containers[0].image",
+          "paused": false
+        }
+      ]
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "metabase.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "metabase.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: MB_DB_TYPE
+              value: postgres
+            - name: MB_DB_PORT
+              value: '5432'
+            - name: MB_DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "metabase.fullname" . }}
+                  key: database-host
+            - name: MB_DB_DBNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "metabase.fullname" . }}
+                  key: database-name
+            - name: MB_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "metabase.fullname" . }}
+                  key: database-username
+            - name: MB_DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "metabase.fullname" . }}
+                  key: database-password
+          command:
+            - java
+          args:
+            - '-Xmx300m'
+            - '-Xss512k'
+            - '-Dfile.encoding=UTF-8'
+            - '-Dlogfile.path=target/log'
+            - '-XX:+CMSClassUnloadingEnabled'
+            - '-XX:+UseConcMarkSweepGC'
+            - '-server'
+            - '-jar'
+            - '/app/metabase.jar'
+          ports:
+            - containerPort: 3000
+              name: {{ include "metabase.fullname" . }}
+              protocol: TCP
+          terminationMessagePath: /dev/termination-log
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 240
+            timeoutSeconds: 3
+            failureThreshold: 30
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 3
+            timeoutSeconds: 3
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
