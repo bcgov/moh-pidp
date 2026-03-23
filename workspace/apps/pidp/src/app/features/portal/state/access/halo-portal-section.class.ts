@@ -34,7 +34,7 @@ export class HaloPortalSection implements IPortalSection {
     this.heading = 'Halo - PAS EMR';
     this.description = `Access the Halo - PAS EMR system using your own account or a BCProvider account.`;
     this.keyWords = profileStatus.status.halo.keyWords || [];
-    this.completedMessage = Constants.enrolledText;
+    this.completedMessage = Constants.accessGrantedText;
   }
 
   public get hint(): string {
