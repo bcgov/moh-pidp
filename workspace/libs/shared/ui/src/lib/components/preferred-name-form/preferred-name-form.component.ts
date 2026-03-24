@@ -7,16 +7,16 @@ import { MatInputModule } from '@angular/material/input';
 import { TrimDirective } from '../../directives/trim.directive';
 
 @Component({
-    selector: 'ui-preferred-name-form',
-    templateUrl: './preferred-name-form.component.html',
-    styleUrls: ['./preferred-name-form.component.scss'],
-    imports: [
-        ReactiveFormsModule,
-        NgFor,
-        MatFormFieldModule,
-        MatInputModule,
-        TrimDirective,
-    ]
+  selector: 'ui-preferred-name-form',
+  templateUrl: './preferred-name-form.component.html',
+  styleUrls: ['./preferred-name-form.component.scss'],
+  imports: [
+    ReactiveFormsModule,
+    NgFor,
+    MatFormFieldModule,
+    MatInputModule,
+    TrimDirective,
+  ],
 })
 export class PreferredNameFormComponent {
   /**

@@ -43,21 +43,21 @@ export interface LoginPageRouteData {
   isAdminLogin: boolean;
 }
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.page.html',
-    styleUrls: ['./login.page.scss'],
-    imports: [
-        AnchorDirective,
-        ExpansionPanelComponent,
-        InjectViewportCssClassDirective,
-        LayoutHeaderFooterComponent,
-        MatButtonModule,
-        NeedHelpComponent,
-        NgIf,
-        NgOptimizedImage,
-        NgTemplateOutlet,
-        BannerComponent,
-    ]
+  selector: 'app-login',
+  templateUrl: './login.page.html',
+  styleUrls: ['./login.page.scss'],
+  imports: [
+    AnchorDirective,
+    ExpansionPanelComponent,
+    InjectViewportCssClassDirective,
+    LayoutHeaderFooterComponent,
+    MatButtonModule,
+    NeedHelpComponent,
+    NgIf,
+    NgOptimizedImage,
+    NgTemplateOutlet,
+    BannerComponent,
+  ],
 })
 export class LoginPage implements OnInit, AfterViewInit {
   public viewportOptions = PidpViewport;
