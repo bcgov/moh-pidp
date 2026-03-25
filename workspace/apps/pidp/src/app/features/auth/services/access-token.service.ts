@@ -55,7 +55,9 @@ export class AccessTokenService implements IAccessTokenService {
   }
 
   public roles(): string[] {
-    return this.keycloak.realmAccess?.roles ?? [];
+    return (
+      this.keycloak.tokenParsed?.resource_access?.['PIDP-SERVICE']?.roles ?? []
+    );
   }
 
   public clearToken(): void {
