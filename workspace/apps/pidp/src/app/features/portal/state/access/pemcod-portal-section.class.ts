@@ -13,6 +13,7 @@ import { ProfileStatus } from '../../models/profile-status.model';
 import { PortalSectionAction } from '../portal-section-action.model';
 import { PortalSectionKey } from '../portal-section-key.type';
 import { IPortalSection } from '../portal-section.model';
+import { Constants } from '@app/shared/constants';
 
 export class PemcodPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
@@ -28,11 +29,11 @@ export class PemcodPortalSection implements IPortalSection {
     private readonly router: Router,
   ) {
     this.key = 'pemcod';
-    this.heading = `Practitioner's eMCOD`;
+    this.heading = `Medical Certification of Death (PEMCOD)`;
     this.description = `This application enables physicians and nurse practitioners to complete and submit Medical Certifications of Death (MCOD) or MCOD Amendments electronically to the Vital Statistics agency and designated funeral homes.`;
 
     this.keyWords = profileStatus.status.pemcod.keyWords || [];
-    this.completedMessage = 'Access Granted';
+    this.completedMessage = Constants.accessGrantedText;
   }
 
   /**
