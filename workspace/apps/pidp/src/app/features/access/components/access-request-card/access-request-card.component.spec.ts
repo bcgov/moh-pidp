@@ -8,10 +8,9 @@ describe('AccessRequestCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AccessRequestCardComponent]
-    })
-    .compileComponents();
-    
+      imports: [AccessRequestCardComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(AccessRequestCardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

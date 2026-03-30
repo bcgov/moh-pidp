@@ -6,13 +6,11 @@ export const routes: Routes = [
   {
     path: '',
     loadChildren: (): Promise<Routes> =>
-      import('./pages/help/help-routing.routes').then(
-        (m) => m.routes,
-      ),
+      import('./pages/help/help-routing.routes').then((m) => m.routes),
   },
   {
-    path:FaqRoutes.MFA_SETUP,
-    loadChildren:(): Promise<Routes> =>
+    path: FaqRoutes.MFA_SETUP,
+    loadChildren: (): Promise<Routes> =>
       import('./pages/mfa-setup/mfa-setup-routing.routes').then(
         (m) => m.routes,
       ),

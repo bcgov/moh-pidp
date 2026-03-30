@@ -7,6 +7,7 @@ import { faCopy, faUserCheck } from '@fortawesome/free-solid-svg-icons';
 
 import { AccessRoutes } from '@app/features/access/access.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
+import { Constants } from '@app/shared/constants';
 
 import { StatusCode } from '../../enums/status-code.enum';
 import { ProfileStatus } from '../../models/profile-status.model';
@@ -28,11 +29,11 @@ export class PemcodPortalSection implements IPortalSection {
     private readonly router: Router,
   ) {
     this.key = 'pemcod';
-    this.heading = `Practitioner's eMCOD`;
+    this.heading = `Medical Certification of Death (PEMCOD)`;
     this.description = `This application enables physicians and nurse practitioners to complete and submit Medical Certifications of Death (MCOD) or MCOD Amendments electronically to the Vital Statistics agency and designated funeral homes.`;
 
     this.keyWords = profileStatus.status.pemcod.keyWords || [];
-    this.completedMessage = 'Access Granted';
+    this.completedMessage = Constants.accessGrantedText;
   }
 
   /**

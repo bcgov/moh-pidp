@@ -14,7 +14,6 @@ import {
   templateUrl: './expansion-panel.component.html',
   styleUrls: ['./expansion-panel.component.scss'],
   animations: [appExpansionAnimations.bodyExpansion],
-  standalone: true,
   imports: [NgClass],
 })
 export class ExpansionPanelComponent {

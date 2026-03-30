@@ -2,17 +2,17 @@
   [inBc]="inBc"
   (autocompleteAddress)="onAutocomplete($event)">
   <div class="address-button-box">
-  <button
-    *ngIf="showManualButton"
-    mat-button
-    type="button"
-    color="primary"
-    [disabled]="showAddressLineFields"
-    (click)="showManualAddress()">
-    <mat-icon>add</mat-icon>
-    Add Address Manually
-  </button>
-</div>
+    <button
+      *ngIf="showManualButton"
+      mat-button
+      type="button"
+      color="primary"
+      [disabled]="showAddressLineFields"
+      (click)="showManualAddress()">
+      <mat-icon>add</mat-icon>
+      Add Address Manually
+    </button>
+  </div>
 </app-address-autocomplete>
 
 <ng-container *ngIf="showAddressLineFields" [formGroup]="form">

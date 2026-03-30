@@ -7,6 +7,7 @@ import { faChartSimple, faUserCheck } from '@fortawesome/free-solid-svg-icons';
 
 import { AccessRoutes } from '@app/features/access/access.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
+import { Constants } from '@app/shared/constants';
 
 import { StatusCode } from '../../enums/status-code.enum';
 import { ProfileStatus } from '../../models/profile-status.model';
@@ -33,7 +34,7 @@ export class IvfPortalSection implements IPortalSection {
       'The IVF portal serves a secure program application interface between participating B.C. fertility clinics and the Ministry of Health for the administration of the publicly funded IVF Program.';
 
     this.keyWords = profileStatus.status.ivf.keyWords || [];
-    this.completedMessage = 'Access Granted';
+    this.completedMessage = Constants.accessGrantedText;
   }
 
   /**

@@ -12,7 +12,6 @@ import { MatRadioChange, MatRadioModule } from '@angular/material/radio';
   templateUrl: './yes-no-content.component.html',
   styleUrls: ['./yes-no-content.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [MatRadioModule, NgFor, NgIf],
 })
 export class YesNoContentComponent {
