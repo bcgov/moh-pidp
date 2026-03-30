@@ -13,7 +13,6 @@ import { ProfileStatus } from '../../models/profile-status.model';
 import { PortalSectionAction } from '../portal-section-action.model';
 import { PortalSectionKey } from '../portal-section-key.type';
 import { IPortalSection } from '../portal-section.model';
-import { Constants } from '@app/shared/constants';
 
 export class ProvincialAttachmentSystemPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
@@ -37,7 +36,7 @@ export class ProvincialAttachmentSystemPortalSection implements IPortalSection {
     this.provincialAttachmentSystemWebsite = 'https://bchealthprovider.ca';
     this.keyWords =
       profileStatus.status.provincialAttachmentSystem.keyWords || [];
-    this.completedMessage = Constants.accessGrantedText;
+    this.completedMessage = 'Access Granted';
   }
 
   /**

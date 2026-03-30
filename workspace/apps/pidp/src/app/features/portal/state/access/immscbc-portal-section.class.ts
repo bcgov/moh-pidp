@@ -13,7 +13,6 @@ import { ProfileStatus } from '../../models/profile-status.model';
 import { PortalSectionAction } from '../portal-section-action.model';
 import { PortalSectionKey } from '../portal-section-key.type';
 import { IPortalSection } from '../portal-section.model';
-import { Constants } from '@app/shared/constants';
 
 export class ImmsbcPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
@@ -34,7 +33,7 @@ export class ImmsbcPortalSection implements IPortalSection {
       'ImmsBC lorum ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
 
     this.keyWords = profileStatus.status.immsBC.keyWords || [];
-    this.completedMessage = Constants.accessGrantedText;
+    this.completedMessage = 'Access Granted';
   }
 
   /**

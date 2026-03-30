@@ -13,7 +13,6 @@ import { ProfileStatus } from '../../models/profile-status.model';
 import { PortalSectionAction } from '../portal-section-action.model';
 import { PortalSectionKey } from '../portal-section-key.type';
 import { IPortalSection } from '../portal-section.model';
-import { Constants } from '@app/shared/constants';
 
 export class IvfPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
@@ -34,7 +33,7 @@ export class IvfPortalSection implements IPortalSection {
       'The IVF portal serves a secure program application interface between participating B.C. fertility clinics and the Ministry of Health for the administration of the publicly funded IVF Program.';
 
     this.keyWords = profileStatus.status.ivf.keyWords || [];
-    this.completedMessage = Constants.accessGrantedText;
+    this.completedMessage = 'Access Granted';
   }
 
   /**

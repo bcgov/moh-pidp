@@ -35,7 +35,7 @@ export class SaEformsPortalSection implements IPortalSection {
     this.heading = 'Special Authority eForms';
     this.description = `Enrol here for access to PharmaCare's Special Authority eForms application.`;
     this.keyWords = profileStatus.status.saEforms.keyWords || [];
-    this.completedMessage = Constants.accessGrantedText;
+    this.completedMessage = Constants.enrolledText;
   }
 
   public get hint(): string {

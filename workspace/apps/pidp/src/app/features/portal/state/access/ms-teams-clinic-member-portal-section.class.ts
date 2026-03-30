@@ -34,7 +34,7 @@ export class MsTeamsClinicMemberPortalSection implements IPortalSection {
     this.heading = 'MS Teams for Clinic Members';
     this.description = `Clinic Member enrol here for clinic access for MS Teams with Fraser Health.`;
     this.keyWords = profileStatus.status.msTeamsClinicMember.keyWords || [];
-    this.completedMessage = Constants.accessGrantedText;
+    this.completedMessage = Constants.enrolledText;
   }
 
   public get hint(): string {

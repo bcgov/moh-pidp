@@ -35,7 +35,7 @@ export class ProviderReportingPortalSection implements IPortalSection {
     this.heading = 'Provider Reporting Portal';
     this.description = `Enrol here for access to the Provider Reporting Portal`;
     this.keyWords = profileStatus.status.providerReportingPortal.keyWords || [];
-    this.completedMessage = Constants.accessGrantedText;
+    this.completedMessage = Constants.enrolledText;
   }
 
   public get hint(): string {
