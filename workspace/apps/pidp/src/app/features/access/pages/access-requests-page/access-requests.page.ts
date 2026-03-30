@@ -16,9 +16,7 @@ import {
   faMagnifyingGlass,
 } from '@fortawesome/free-solid-svg-icons';
 
-import {
-  InjectViewportCssClassDirective,
-} from '@bcgov/shared/ui';
+import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
@@ -35,7 +33,6 @@ import { AccessRequestCardComponent } from '../../components/access-request-card
   selector: 'app-access-request-page',
   templateUrl: './access-requests.page.html',
   styleUrls: ['./access-requests.page.scss'],
-  standalone: true,
   imports: [
     BreadcrumbComponent,
     FaIconComponent,
@@ -107,7 +104,7 @@ export class AccessRequestsPage implements OnInit, OnDestroy {
           (section) =>
             section.heading.toLowerCase().includes(text.toLowerCase()) ||
             section.description.toLowerCase().includes(text.toLowerCase()) ||
-            section.keyWords?.includes(text.toLocaleLowerCase())
+            section.keyWords?.includes(text.toLocaleLowerCase()),
         );
       });
   }

@@ -78,7 +78,6 @@ export interface BcProviderEditInitialStateModel {
   selector: 'app-bc-provider-edit',
   templateUrl: './bc-provider-edit.page.html',
   styleUrls: ['./bc-provider-edit.page.scss'],
-  standalone: true,
   imports: [
     BreadcrumbComponent,
     InjectViewportCssClassDirective,

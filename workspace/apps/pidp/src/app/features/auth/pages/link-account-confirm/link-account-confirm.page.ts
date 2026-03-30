@@ -32,7 +32,6 @@ import { LinkAccountConfirmResource } from './link-account-confirm-resource.serv
 
 @Component({
   selector: 'app-link-account-confirm',
-  standalone: true,
   imports: [
     BreadcrumbComponent,
     CommonModule,

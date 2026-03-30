@@ -32,7 +32,6 @@ import { ProviderReportingPortalResource } from './provider-reporting-portal-res
   selector: 'app-provider-reporting-portal',
   templateUrl: './provider-reporting-portal.page.html',
   styleUrls: ['./provider-reporting-portal.page.scss'],
-  standalone: true,
   imports: [
     AlertComponent,
     AlertContentDirective,

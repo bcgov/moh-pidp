@@ -9,7 +9,6 @@ import { IconType } from '../icon/icon.component';
   templateUrl: './page-header.component.html',
   styleUrls: ['./page-header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [NgIf, MatIconModule],
 })
 export class PageHeaderComponent {
