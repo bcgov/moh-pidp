@@ -21,12 +21,6 @@ public class AccessRequest : BaseAuditable
     public AccessTypeCode AccessTypeCode { get; set; }
 }
 
-[Table(nameof(HcimAccountTransfer))]
-public class HcimAccountTransfer : AccessRequest
-{
-    public string LdapUsername { get; set; } = string.Empty;
-}
-
 [Table(nameof(MSTeamsClinicMemberEnrolment))]
 public class MSTeamsClinicMemberEnrolment : AccessRequest
 {
