@@ -30,7 +30,6 @@ export class MockProfileStatus {
           incorrectLicenceType: false,
         },
         bcProvider: { statusCode: StatusCode.AVAILABLE },
-        hcimAccountTransfer: { statusCode: StatusCode.AVAILABLE },
         driverFitness: { statusCode: StatusCode.AVAILABLE },
         msTeamsPrivacyOfficer: { statusCode: StatusCode.AVAILABLE },
         msTeamsClinicMember: { statusCode: StatusCode.AVAILABLE },
