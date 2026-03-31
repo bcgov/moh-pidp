@@ -16,13 +16,6 @@ export const routes: Routes = [
       ),
   },
   {
-    path: AccessRoutes.HCIM_ACCOUNT_TRANSFER,
-    loadChildren: (): Promise<Routes> =>
-      import(
-        './pages/hcim-account-transfer/hcim-account-transfer-routing.routes'
-      ).then((m) => m.routes),
-  },
-  {
     path: AccessRoutes.DRIVER_FITNESS,
     loadChildren: (): Promise<Routes> =>
       import('./pages/driver-fitness/driver-fitness-routing.routes').then(
