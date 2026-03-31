@@ -25,6 +25,7 @@ import { ContextHelpTitleDirective } from '../context-help-title.directive';
   templateUrl: './context-help.component.html',
   styleUrls: ['./context-help.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [MatButtonModule, MatMenuModule, MatIconModule, NgIf],
 })
 export class ContextHelpComponent {

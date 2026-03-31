@@ -9,7 +9,6 @@ import { AlertType } from '@bcgov/shared/ui';
 
 import { AccessRoutes } from '@app/features/access/access.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
-import { Constants } from '@app/shared/constants';
 
 import { StatusCode } from '../../enums/status-code.enum';
 import { ProfileStatus } from '../../models/profile-status.model';
@@ -17,6 +16,7 @@ import { PortalSectionAction } from '../portal-section-action.model';
 import { PortalSectionKey } from '../portal-section-key.type';
 import { IPortalSection } from '../portal-section.model';
 import { SaEformsSection } from './sa-eforms-section.model';
+import { Constants } from '@app/shared/constants';
 
 export class SaEformsPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;

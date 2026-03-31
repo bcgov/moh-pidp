@@ -4,7 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { provideAutoSpy } from 'jest-auto-spies';
-import Keycloak from 'keycloak-js';
+import { KeycloakService } from 'keycloak-angular';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 
@@ -23,7 +23,7 @@ describe('PortalCardComponent', () => {
           useValue: APP_DI_CONFIG,
         },
         provideAutoSpy(HttpClient),
-        provideAutoSpy(Keycloak),
+        provideAutoSpy(KeycloakService),
       ],
     });
     component = TestBed.inject(AccessRequestsPage);

@@ -13,6 +13,7 @@ import { FeedbackFormDialogComponent } from '../feedback-form/feedback-form.dial
   selector: 'app-feedback-button',
   templateUrl: './feedback-button.component.html',
   styleUrl: './feedback-button.component.scss',
+  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,

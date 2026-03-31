@@ -1,15 +1,10 @@
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import {
-  provideHttpClient,
-  withInterceptors,
-  withInterceptorsFromDi,
-} from '@angular/common/http';
-import {
+  ENVIRONMENT_INITIALIZER,
   EnvironmentProviders,
   InjectionToken,
   Provider,
   inject,
-  provideEnvironmentInitializer,
-  provideZoneChangeDetection,
 } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import {
@@ -19,18 +14,12 @@ import {
   withRouterConfig,
 } from '@angular/router';
 
-import {
-  INCLUDE_BEARER_TOKEN_INTERCEPTOR_CONFIG,
-  IncludeBearerTokenCondition,
-  createInterceptorCondition,
-  includeBearerTokenInterceptor,
-} from 'keycloak-angular';
 import { provideEnvironmentNgxMask } from 'ngx-mask';
 
 import { provideHttpInterceptors } from '@bcgov/shared/data-access';
 import { provideMaterialConfig, provideNgxProgressBar } from '@bcgov/shared/ui';
 
-import { provideKeycloakAngular } from '@app/modules/keycloak/keycloak.config';
+import { provideKeycloak } from '@app/modules/keycloak/keycloak';
 
 export interface CoreOptions {
   routes: Routes;
@@ -39,22 +28,11 @@ export interface CoreOptions {
 // create unique injection token for the guard
 export const CORE_GUARD = new InjectionToken<string>('CORE_GUARD');
 
-const bearerTokenCondition =
-  createInterceptorCondition<IncludeBearerTokenCondition>({
-    urlPattern: /^(.+)?$/i,
-  });
-
 export function provideCore(
   options: CoreOptions,
 ): (Provider | EnvironmentProviders)[] {
   return [
-    provideKeycloakAngular(),
-    provideZoneChangeDetection({ eventCoalescing: true }),
     { provide: CORE_GUARD, useValue: 'CORE_GUARD' },
-    {
-      provide: INCLUDE_BEARER_TOKEN_INTERCEPTOR_CONFIG,
-      useValue: [bearerTokenCondition],
-    },
     provideAnimations(),
     provideNgxProgressBar(),
     provideMaterialConfig(),
@@ -62,7 +40,6 @@ export function provideCore(
     provideHttpClient(
       // DI-based interceptors must be explicitly enabled.
       withInterceptorsFromDi(),
-      withInterceptors([includeBearerTokenInterceptor]),
     ),
     provideHttpInterceptors(),
     provideRouter(
@@ -79,11 +56,12 @@ export function provideCore(
       // disabled debug tracing
       // withDebugTracing()
     ),
+    provideKeycloak(),
     // order matters
     // (especially when accessing some of the above defined providers)
     // init has to be last
     {
-      provide: provideEnvironmentInitializer,
+      provide: ENVIRONMENT_INITIALIZER,
       multi: true,
       useValue(): void {
         const coreGuard = inject(CORE_GUARD, {

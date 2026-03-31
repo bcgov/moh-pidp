@@ -1,10 +1,11 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { randTextRange } from '@ngneat/falso';
 import { provideAutoSpy } from 'jest-auto-spies';
-import Keycloak from 'keycloak-js';
+import { KeycloakService } from 'keycloak-angular';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 import { DocumentService } from '@app/core/services/document.service';
@@ -29,7 +30,7 @@ describe('SignedOrAcceptedDocumentsPage', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterModule.forRoot([])],
+      imports: [HttpClientTestingModule, RouterTestingModule],
       providers: [
         SignedOrAcceptedDocumentsPage,
         {
@@ -40,7 +41,7 @@ describe('SignedOrAcceptedDocumentsPage', () => {
           provide: ActivatedRoute,
           useValue: mockActivatedRoute,
         },
-        provideAutoSpy(Keycloak),
+        provideAutoSpy(KeycloakService),
         provideAutoSpy(DocumentService),
       ],
     });

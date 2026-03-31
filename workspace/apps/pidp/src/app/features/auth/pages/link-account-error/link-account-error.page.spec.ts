@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
 
 import { randTextRange } from '@ngneat/falso';
 import { provideAutoSpy } from 'jest-auto-spies';
-import Keycloak from 'keycloak-js';
+import { KeycloakService } from 'keycloak-angular';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
@@ -32,7 +33,7 @@ describe('LinkAccountErrorPage', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [RouterModule.forRoot([])],
+      imports: [RouterTestingModule],
       providers: [
         LinkAccountErrorPage,
         {
@@ -45,7 +46,7 @@ describe('LinkAccountErrorPage', () => {
         },
 
         provideAutoSpy(Router),
-        provideAutoSpy(Keycloak),
+        provideAutoSpy(KeycloakService),
       ],
     });
     component = TestBed.inject(LinkAccountErrorPage);

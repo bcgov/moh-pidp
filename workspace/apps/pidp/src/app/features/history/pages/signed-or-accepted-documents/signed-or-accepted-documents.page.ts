@@ -39,6 +39,7 @@ export interface DocumentSection extends IDocumentMetaData {
   selector: 'app-signed-or-accepted-documents',
   templateUrl: './signed-or-accepted-documents.page.html',
   styleUrls: ['./signed-or-accepted-documents.page.scss'],
+  standalone: true,
   imports: [
     CardSummaryComponent,
     MatButtonModule,

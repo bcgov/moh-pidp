@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { randNumber, randTextRange } from '@ngneat/falso';
 import { NavigationService } from '@pidp/presentation';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
-import Keycloak from 'keycloak-js';
+import { KeycloakService } from 'keycloak-angular';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
@@ -57,7 +57,7 @@ describe('BcProviderApplicationPage', () => {
         },
         provideAutoSpy(HttpClient),
         provideAutoSpy(FormUtilsService),
-        provideAutoSpy(Keycloak),
+        provideAutoSpy(KeycloakService),
         provideAutoSpy(NavigationService),
         provideAutoSpy(Router),
       ],

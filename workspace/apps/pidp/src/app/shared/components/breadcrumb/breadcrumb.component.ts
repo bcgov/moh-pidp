@@ -17,6 +17,7 @@ import { AccessRoutes } from '@app/features/access/access.routes';
   selector: 'app-breadcrumb',
   templateUrl: './breadcrumb.component.html',
   styleUrl: './breadcrumb.component.scss',
+  standalone: true,
   imports: [
     CommonModule,
     InjectViewportCssClassDirective,

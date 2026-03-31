@@ -10,6 +10,7 @@ import { TrimDirective } from '../../directives/trim.directive';
   selector: 'ui-preferred-name-form',
   templateUrl: './preferred-name-form.component.html',
   styleUrls: ['./preferred-name-form.component.scss'],
+  standalone: true,
   imports: [
     ReactiveFormsModule,
     NgFor,

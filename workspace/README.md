@@ -62,8 +62,7 @@ To build, run, and open a local in memory development server which will run at `
 nx serve APP_NAME
 ```
 
-other way of running using yarn is
-
+other way of running using yarn is 
 ```bash
 yarn nx serve pidp
 ```
@@ -76,12 +75,10 @@ To build the project and have the build artifacts stored in the `dist/` director
 nx build APP_NAME
 ```
 
-other way of building using yarn is
-
+other way of building using yarn is 
 ```bash
 yarn nx build pidp
 ```
-
 ### Running Unit Tests
 
 Execute the unit tests via [Jest](https://jestjs.io) by typing:
@@ -137,8 +134,8 @@ nx g @nx/angular:lib LIB_NAME
 ### Components Structure
 
 In the workspace folder the app folder contains the applications. Every application has it's own folder.
-pidp is the folder for the pidp application. The folder for components is pidp->src->app->features.
-features folder has nested folders like access, admin, auth, faq ... which determine the side menu options in the home page of the application.
+pidp is the folder for the pidp application. The folder for components is pidp->src->app->features. 
+features folder has nested folders like access, admin, auth, faq ... which determine the side menu options in the home page of the application. 
 main.ts is the application entry file. in this file the keycloak configuration is fetched.
 app.routing.ts has top level routing. which internally uses the shell routing.
 shell-routing.ts has routing for different sections like profile, training, faq and history...

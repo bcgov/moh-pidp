@@ -22,6 +22,7 @@ import { haloUrl } from './halo.constants';
 
 @Component({
   selector: 'app-halo',
+  standalone: true,
   imports: [
     CommonModule,
     MatButtonModule,

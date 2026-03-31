@@ -7,7 +7,7 @@ import { of } from 'rxjs';
 
 import { randTextRange } from '@ngneat/falso';
 import { provideAutoSpy } from 'jest-auto-spies';
-import Keycloak from 'keycloak-js';
+import { KeycloakService } from 'keycloak-angular';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 
@@ -45,7 +45,7 @@ describe('LinkAccountConfirmPage', () => {
           useValue: mockActivatedRoute,
         },
         provideAutoSpy(AuthorizedUserService),
-        provideAutoSpy(Keycloak),
+        provideAutoSpy(KeycloakService),
       ],
     });
 

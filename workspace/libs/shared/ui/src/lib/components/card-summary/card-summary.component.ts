@@ -19,6 +19,7 @@ import { CardComponent } from '../card/card.component';
   templateUrl: './card-summary.component.html',
   styleUrls: ['./card-summary.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [
     CardActionsDirective,
     CardComponent,

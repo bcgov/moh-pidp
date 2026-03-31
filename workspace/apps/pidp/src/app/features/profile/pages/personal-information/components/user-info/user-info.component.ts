@@ -10,6 +10,7 @@ import { User } from '@app/features/auth/models/user.model';
   templateUrl: './user-info.component.html',
   styleUrls: ['./user-info.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [
     ui.DefaultPipe,
     ui.FormatDatePipe,

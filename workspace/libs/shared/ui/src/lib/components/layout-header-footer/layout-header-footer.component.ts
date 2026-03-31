@@ -10,6 +10,7 @@ import { AnchorDirective } from '../anchor/anchor.directive';
   selector: 'ui-layout-header-footer',
   templateUrl: './layout-header-footer.component.html',
   styleUrls: ['./layout-header-footer.component.scss'],
+  standalone: true,
   imports: [AnchorDirective, InjectViewportCssClassDirective, NgIf],
 })
 export class LayoutHeaderFooterComponent {

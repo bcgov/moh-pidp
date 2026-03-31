@@ -9,13 +9,13 @@ import { AlertType } from '@bcgov/shared/ui';
 
 import { AccessRoutes } from '@app/features/access/access.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
-import { Constants } from '@app/shared/constants';
 
 import { StatusCode } from '../../enums/status-code.enum';
 import { ProfileStatus } from '../../models/profile-status.model';
 import { PortalSectionAction } from '../portal-section-action.model';
 import { PortalSectionKey } from '../portal-section-key.type';
 import { IPortalSection } from '../portal-section.model';
+import { Constants } from '@app/shared/constants';
 
 export class HcimAccountTransferPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
@@ -60,11 +60,8 @@ export class HcimAccountTransferPortalSection implements IPortalSection {
 
   public get status(): string {
     const statusCode = this.getStatusCode();
-    const statusMsg =
-      statusCode === StatusCode.COMPLETED ? 'Completed' : 'Incomplete';
-    return statusCode === StatusCode.AVAILABLE
-      ? 'For existing users of HCIMWeb only'
-      : statusMsg;
+    const statusMsg = statusCode === StatusCode.COMPLETED ? 'Completed': 'Incomplete';
+    return statusCode === StatusCode.AVAILABLE ? 'For existing users of HCIMWeb only': statusMsg;
   }
 
   public get icon(): IconProp {

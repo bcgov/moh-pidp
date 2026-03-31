@@ -10,6 +10,7 @@ import { NgxMaskDirective } from 'ngx-mask';
   selector: 'ui-contact-info-form',
   templateUrl: './contact-info-form.component.html',
   styleUrls: ['./contact-info-form.component.scss'],
+  standalone: true,
   imports: [
     ReactiveFormsModule,
     MatFormFieldModule,

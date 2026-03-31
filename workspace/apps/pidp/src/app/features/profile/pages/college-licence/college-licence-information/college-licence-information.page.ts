@@ -35,6 +35,7 @@ import { CollegeLicenceInformationDetailComponent } from './components/college-l
   selector: 'app-college-licence-information',
   templateUrl: './college-licence-information.page.html',
   styleUrls: ['./college-licence-information.page.scss'],
+  standalone: true,
   imports: [
     AsyncPipe,
     BreadcrumbComponent,

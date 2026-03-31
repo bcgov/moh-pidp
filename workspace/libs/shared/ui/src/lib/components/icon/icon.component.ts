@@ -15,6 +15,7 @@ export type IconType = 'filled' | 'outlined' | 'round' | 'sharp';
   templateUrl: './icon.component.html',
   styleUrls: ['./icon.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [MatIconModule],
 })
 export class IconComponent {

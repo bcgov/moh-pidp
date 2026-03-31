@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { provideAutoSpy } from 'jest-auto-spies';
-import Keycloak from 'keycloak-js';
+import { KeycloakService } from 'keycloak-angular';
 
 import { AccessTokenService } from './access-token.service';
 
@@ -10,7 +10,7 @@ describe('AccessTokenService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [AccessTokenService, provideAutoSpy(Keycloak)],
+      providers: [AccessTokenService, provideAutoSpy(KeycloakService)],
     });
     service = TestBed.inject(AccessTokenService);
   });

@@ -1,15 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialogRef } from '@angular/material/dialog';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { provideAutoSpy } from 'jest-auto-spies';
-
-import { PartyService } from '@app/core/party/party.service';
-import { FormUtilsService } from '@app/core/services/form-utils.service';
-import { LoggerService } from '@app/core/services/logger.service';
-
-import { FeedbackFormDialogResource } from './feedback-form-dialog-resource.service';
 import { FeedbackFormDialogComponent } from './feedback-form.dialog';
+import { FormUtilsService } from '@app/core/services/form-utils.service';
+import { MatDialogRef } from '@angular/material/dialog';
+import { provideAutoSpy } from 'jest-auto-spies';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FeedbackFormDialogResource } from './feedback-form-dialog-resource.service';
+import { LoggerService } from '@app/core/services/logger.service';
+import { PartyService } from '@app/core/party/party.service';
 
 describe('FeedbackFormDialogComponent', () => {
   let component: FeedbackFormDialogComponent;
@@ -23,8 +21,8 @@ describe('FeedbackFormDialogComponent', () => {
         provideAutoSpy(MatDialogRef),
         provideAutoSpy(FeedbackFormDialogResource),
         provideAutoSpy(LoggerService),
-        provideAutoSpy(PartyService),
-      ],
+        provideAutoSpy(PartyService)
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(FeedbackFormDialogComponent);
