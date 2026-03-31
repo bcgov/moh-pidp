@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { RouterModule } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { RouteStateService } from './route-state.service';
 
 describe('RouteStateService', () => {
   beforeEach(() =>
     TestBed.configureTestingModule({
-      imports: [RouterModule.forRoot([])],
+      imports: [RouterTestingModule],
     }),
   );
 

@@ -1,4 +1,8 @@
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  Validators,
+} from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 
 import { AbstractFormState } from '@bcgov/shared/ui';
@@ -11,7 +15,7 @@ export interface FeedbackFormData {
 export class FeedbackFormState extends AbstractFormState<FeedbackFormData> {
   public constructor(
     private readonly fb: FormBuilder,
-    public dialog: MatDialog,
+    public dialog: MatDialog
   ) {
     super();
 
@@ -45,10 +49,12 @@ export class FeedbackFormState extends AbstractFormState<FeedbackFormData> {
   }
 
   public buildForm(): void {
-    this.formInstance = this.fb.group({
-      feedback: ['', [Validators.required]],
-      attachment: [''],
-    });
+    this.formInstance = this.fb.group(
+      {
+        feedback: ['', [Validators.required]],
+        attachment: [''],
+      }
+    );
   }
 
   public getErrorMessage(): string {
@@ -60,4 +66,5 @@ export class FeedbackFormState extends AbstractFormState<FeedbackFormData> {
     }
     return '';
   }
+
 }

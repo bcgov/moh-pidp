@@ -2,7 +2,8 @@
 import { TestBed } from '@angular/core/testing';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { randTextRange } from '@ngneat/falso';
 import { provideAutoSpy } from 'jest-auto-spies';
@@ -33,7 +34,7 @@ describe('UserAccessAgreementPage', () => {
       },
     };
     TestBed.configureTestingModule({
-      imports: [MatDialogModule, RouterModule.forRoot([])],
+      imports: [MatDialogModule, RouterTestingModule],
       providers: [
         UserAccessAgreementPage,
         {

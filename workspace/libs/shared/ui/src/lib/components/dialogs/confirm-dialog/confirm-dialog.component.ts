@@ -38,6 +38,7 @@ import { DIALOG_DEFAULT_OPTION } from '../dialogs-properties.provider';
   templateUrl: './confirm-dialog.component.html',
   styleUrls: ['./confirm-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [
     AnchorDirective,
     MatDialogTitle,

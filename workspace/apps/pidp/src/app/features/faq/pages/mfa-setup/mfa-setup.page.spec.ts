@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { randTextRange } from '@ngneat/falso';
 
@@ -21,7 +22,7 @@ describe('MfaSetupPage', () => {
       },
     };
     TestBed.configureTestingModule({
-      imports: [RouterModule.forRoot([])],
+      imports: [RouterTestingModule],
       providers: [
         MfaSetupPage,
         {

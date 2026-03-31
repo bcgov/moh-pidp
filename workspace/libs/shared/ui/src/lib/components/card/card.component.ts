@@ -19,6 +19,7 @@ import { CardHintDirective } from './card-hint.directive';
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [MatCardModule, NgIf, MatIconModule],
 })
 export class CardComponent {

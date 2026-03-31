@@ -26,6 +26,7 @@ import { AddressAutocompleteComponent } from '../address-autocomplete/address-au
   selector: 'app-address-form',
   templateUrl: './address-form.component.html',
   styleUrls: ['./address-form.component.scss'],
+  standalone: true,
   imports: [
     AddressAutocompleteComponent,
     InjectViewportCssClassDirective,

@@ -20,6 +20,7 @@ import { AuthService } from '@app/features/auth/services/auth.service';
   templateUrl: './admin-dashboard.component.html',
   styleUrls: ['./admin-dashboard.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [AsyncPipe, DashboardComponent, DashboardImageComponent],
 })
 export class AdminDashboardComponent implements IDashboard {

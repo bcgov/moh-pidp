@@ -1,6 +1,7 @@
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { randTextRange } from '@ngneat/falso';
 import { provideAutoSpy } from 'jest-auto-spies';
@@ -29,7 +30,7 @@ describe('TransactionsPage', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterModule.forRoot([])],
+      imports: [HttpClientTestingModule, RouterTestingModule],
       providers: [
         TransactionsPage,
         {

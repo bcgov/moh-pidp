@@ -41,6 +41,7 @@ import { PartyLicenceDeclarationInformation } from './party-licence-declaration-
   templateUrl: './college-licence-declaration.page.html',
   styleUrls: ['./college-licence-declaration.page.scss'],
   viewProviders: [CollegeLicenceDeclarationResource],
+  standalone: true,
   imports: [
     AlertComponent,
     AlertContentDirective,

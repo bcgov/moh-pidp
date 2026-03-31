@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { RouterModule } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { provideAutoSpy } from 'jest-auto-spies';
 
@@ -13,7 +13,7 @@ describe('PortalService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterModule.forRoot([])],
+      imports: [RouterTestingModule],
       providers: [
         PortalService,
         provideAutoSpy(AuthorizedUserService),

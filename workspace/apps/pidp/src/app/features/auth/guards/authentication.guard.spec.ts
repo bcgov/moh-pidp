@@ -20,8 +20,7 @@ describe('AuthenticationGuard', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [
-        provideAutoSpy(AuthenticationGuardService),
+      providers: [provideAutoSpy(AuthenticationGuardService),
         provideAutoSpy(ActivatedRouteSnapshot),
         provideAutoSpy(RouterStateSnapshot),
       ],

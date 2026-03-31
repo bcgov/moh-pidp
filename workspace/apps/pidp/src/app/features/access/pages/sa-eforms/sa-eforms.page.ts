@@ -39,6 +39,7 @@ import {
   selector: 'app-sa-eforms',
   templateUrl: './sa-eforms.page.html',
   styleUrls: ['./sa-eforms.page.scss'],
+  standalone: true,
   imports: [
     AlertComponent,
     AlertContentDirective,

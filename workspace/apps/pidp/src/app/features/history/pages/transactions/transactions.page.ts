@@ -22,6 +22,7 @@ import { TransactionsResource } from './transactions-resource.service';
   selector: 'app-transactions',
   templateUrl: './transactions.page.html',
   styleUrls: ['./transactions.page.scss'],
+  standalone: true,
   imports: [
     AsyncPipe,
     BreadcrumbComponent,

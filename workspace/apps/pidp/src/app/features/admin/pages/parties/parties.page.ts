@@ -29,6 +29,7 @@ import {
   selector: 'app-parties',
   templateUrl: './parties.page.html',
   styleUrls: ['./parties.page.scss'],
+  standalone: true,
   imports: [
     LookupCodePipe,
     MatButtonModule,

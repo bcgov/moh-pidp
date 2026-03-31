@@ -30,6 +30,7 @@ import { PortalResource } from './portal-resource.service';
       useValue: { displayDefaultIndicatorType: false },
     },
   ],
+  standalone: true,
   imports: [
     FaIconComponent,
     InjectViewportCssClassDirective,

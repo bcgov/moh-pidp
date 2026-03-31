@@ -20,6 +20,7 @@ import { AuthService } from '../../services/auth.service';
   selector: 'app-bc-provider-uplift',
   templateUrl: './bc-provider-uplift.page.html',
   styleUrls: ['./bc-provider-uplift.page.scss'],
+  standalone: true,
   imports: [
     AnchorDirective,
     InjectViewportCssClassDirective,

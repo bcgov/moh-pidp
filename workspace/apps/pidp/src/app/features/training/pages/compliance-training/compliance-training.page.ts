@@ -18,6 +18,7 @@ import {
   selector: 'app-compliance-training',
   templateUrl: './compliance-training.page.html',
   styleUrls: ['./compliance-training.page.scss'],
+  standalone: true,
   imports: [
     AlertComponent,
     AlertContentDirective,

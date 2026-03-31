@@ -5,12 +5,8 @@ import {
   MatDialogModule,
   MatDialogRef,
 } from '@angular/material/dialog';
-import {
-  ActivatedRoute,
-  ParamMap,
-  RouterModule,
-  convertToParamMap,
-} from '@angular/router';
+import { ActivatedRoute, ParamMap, convertToParamMap } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { of } from 'rxjs';
 
@@ -63,7 +59,7 @@ describe('LoginPage', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [RouterModule.forRoot([]), MatDialogModule],
+      imports: [RouterTestingModule, MatDialogModule],
       providers: [
         LoginPage,
         {

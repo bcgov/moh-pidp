@@ -41,6 +41,7 @@ import { msTeamsSupportEmail } from './ms-teams.constants';
   selector: 'app-ms-teams',
   templateUrl: './ms-teams-privacy-officer.page.html',
   styleUrls: ['./ms-teams-privacy-officer.page.scss'],
+  standalone: true,
   imports: [
     AddressFormComponent,
     AnchorDirective,

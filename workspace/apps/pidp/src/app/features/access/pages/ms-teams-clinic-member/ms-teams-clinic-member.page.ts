@@ -43,6 +43,7 @@ import { PrivacyOfficer } from './ms-teams-clinic-member.model';
   selector: 'app-ms-teams-clinic-member',
   templateUrl: './ms-teams-clinic-member.page.html',
   styleUrls: ['./ms-teams-clinic-member.page.scss'],
+  standalone: true,
   imports: [
     AnchorDirective,
     BreadcrumbComponent,

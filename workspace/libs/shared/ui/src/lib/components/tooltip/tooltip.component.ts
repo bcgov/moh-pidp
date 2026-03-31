@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'ui-tooltip',
+  standalone: true,
   imports: [CommonModule, MatIconModule],
   templateUrl: './tooltip.component.html',
   styleUrl: './tooltip.component.scss',

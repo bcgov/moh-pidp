@@ -29,6 +29,7 @@ import { AuthService } from '../../services/auth.service';
   selector: 'app-link-account-error',
   templateUrl: './link-account-error.page.html',
   styleUrls: ['./link-account-error.page.scss'],
+  standalone: true,
   imports: [
     AnchorDirective,
     InjectViewportCssClassDirective,

@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import { randTextRange } from '@ngneat/falso';
 import { provideAutoSpy } from 'jest-auto-spies';
@@ -35,7 +36,7 @@ describe('ViewDocumentPage', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [RouterModule.forRoot([])],
+      imports: [RouterTestingModule],
       providers: [
         ViewDocumentPage,
         {

@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
 import {
   randFirstName,
@@ -11,9 +12,8 @@ import {
   randTextRange,
   randUserName,
 } from '@ngneat/falso';
-import { NavigationService } from '@pidp/presentation';
 import { Spy, createSpyFromClass, provideAutoSpy } from 'jest-auto-spies';
-import Keycloak from 'keycloak-js';
+import { KeycloakService } from 'keycloak-angular';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
@@ -25,6 +25,7 @@ import { AuthorizedUserService } from '@app/features/auth/services/authorized-us
 
 import { AccountLinkingResource } from './account-linking-resource.service';
 import { AccountLinkingPage } from './account-linking.page';
+import { NavigationService } from '@pidp/presentation';
 
 describe('AccountLinkingPage', () => {
   let component: AccountLinkingPage;
@@ -47,7 +48,7 @@ describe('AccountLinkingPage', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, RouterModule.forRoot([])],
+      imports: [HttpClientTestingModule, RouterTestingModule],
       providers: [
         AccountLinkingPage,
         {
@@ -75,8 +76,8 @@ describe('AccountLinkingPage', () => {
         provideAutoSpy(AccountLinkingResource),
         provideAutoSpy(ApiHttpClient),
         provideAutoSpy(Router),
-        provideAutoSpy(Keycloak),
-        provideAutoSpy(NavigationService),
+        provideAutoSpy(KeycloakService),
+        provideAutoSpy(NavigationService)
       ],
     });
 

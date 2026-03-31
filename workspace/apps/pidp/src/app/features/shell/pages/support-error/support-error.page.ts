@@ -16,6 +16,7 @@ import { ShellRoutes } from '../../shell.routes';
   selector: 'app-support-error',
   templateUrl: './support-error.page.html',
   styleUrls: ['./support-error.page.scss'],
+  standalone: true,
   imports: [AnchorDirective, DashboardHeaderComponent, MatButtonModule],
 })
 export class SupportErrorPage {

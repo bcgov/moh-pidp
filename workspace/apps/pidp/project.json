@@ -4,7 +4,6 @@
   "projectType": "application",
   "sourceRoot": "apps/pidp/src",
   "prefix": "app",
-  "tags": ["scope:pidp", "type:app"],
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
@@ -75,8 +74,7 @@
       "options": {
         "port": 4200,
         "proxyConfig": "apps/pidp/proxy.conf.json"
-      },
-      "continuous": true
+      }
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
@@ -94,5 +92,6 @@
         "jestConfig": "apps/pidp/jest.config.ts"
       }
     }
-  }
+  },
+  "tags": ["scope:pidp", "type:app"]
 }

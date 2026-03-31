@@ -21,6 +21,7 @@ export type AlertType = 'success' | 'info' | 'warn' | 'danger' | 'muted';
   templateUrl: './alert.component.html',
   styleUrls: ['./alert.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [CardComponent, NgIf, CardContentDirective, CardActionsDirective],
 })
 export class AlertComponent {

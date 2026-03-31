@@ -7,6 +7,7 @@ import { IDialogContent } from '../../dialog-content.model';
   selector: 'ui-html',
   template: `<p [innerHtml]="data.content | safe: 'html'"></p>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [SafePipe],
 })
 export class HtmlComponent implements IDialogContent {

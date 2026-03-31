@@ -14,7 +14,7 @@
       </div>
     </div>
     <div class="card-body">
-      <p *ngIf="completed" class="completed-text">{{ completedText }}</p>
+      <p class ="completed-text" *ngIf="completed">{{completedText}}</p>
       {{ description }}
       <div>
         <button class="learn-more" uiTextButton [disabled]="actionDisabled">

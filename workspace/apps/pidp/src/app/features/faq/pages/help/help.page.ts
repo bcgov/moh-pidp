@@ -31,6 +31,7 @@ import { FaqRoutes } from '../../faq.routes';
   selector: 'app-help',
   templateUrl: './help.page.html',
   styleUrls: ['./help.page.scss'],
+  standalone: true,
   imports: [
     AnchorDirective,
     BreadcrumbComponent,

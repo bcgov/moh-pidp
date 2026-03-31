@@ -9,6 +9,7 @@ import { IconType } from '../icon/icon.component';
   templateUrl: './page-subheader.component.html',
   styleUrls: ['./page-subheader.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [NgIf, MatIconModule],
 })
 export class PageSubheaderComponent {
