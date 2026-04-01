@@ -8,7 +8,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, Observable } from 'rxjs';
 
-
 import {
   AlertActionsDirective,
   AlertComponent,
@@ -56,7 +55,6 @@ import {
   templateUrl: './hcim-account-transfer.page.html',
   styleUrls: ['./hcim-account-transfer.page.scss'],
   viewProviders: [HcimAccountTransferResource],
-  standalone: true,
   imports: [
     AlertActionsDirective,
     AlertComponent,

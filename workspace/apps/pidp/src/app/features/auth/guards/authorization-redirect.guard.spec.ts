@@ -14,7 +14,8 @@ describe('authorizationRedirectGuard', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideAutoSpy(AuthorizationRedirectGuardService),
+      providers: [
+        provideAutoSpy(AuthorizationRedirectGuardService),
         provideAutoSpy(ActivatedRouteSnapshot),
         provideAutoSpy(RouterStateSnapshot),
       ],

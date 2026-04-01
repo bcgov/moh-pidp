@@ -49,7 +49,6 @@ import { Credential } from './account-linking.model';
 
 @Component({
   selector: 'app-account-linking',
-  standalone: true,
   imports: [
     BreadcrumbComponent,
     CommonModule,

@@ -39,7 +39,6 @@ import {
   selector: 'app-immsbc-eforms',
   templateUrl: './immsbc-eforms.page.html',
   styleUrls: ['./immsbc-eforms.page.scss'],
-  standalone: true,
   imports: [
     AlertComponent,
     AlertContentDirective,

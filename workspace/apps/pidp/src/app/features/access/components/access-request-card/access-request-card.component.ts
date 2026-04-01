@@ -12,7 +12,6 @@ import {
 
 @Component({
   selector: 'app-access-request-card',
-  standalone: true,
   imports: [
     CommonModule,
     FaIconComponent,

@@ -17,7 +17,6 @@ import { PageSectionSubheaderHintDirective } from './page-section-subheader-hint
   templateUrl: './page-section-subheader.component.html',
   styleUrls: ['./page-section-subheader.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [PageSubheaderComponent, NgIf],
 })
 export class PageSectionSubheaderComponent {

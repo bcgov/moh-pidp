@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 
-import { ShellRoutes } from './features/shell/shell.routes';
 import { AccessRoutes } from './features/access/access.routes';
+import { ShellRoutes } from './features/shell/shell.routes';
 
 export const routes: Routes = [
   {

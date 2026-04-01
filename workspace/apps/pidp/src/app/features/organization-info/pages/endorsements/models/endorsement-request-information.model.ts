@@ -5,4 +5,4 @@ export interface EndorsementRequestInformation
   extends Pick<
     EndorsementRequest,
     'recipientEmail' | 'additionalInformation' | 'preApproved'
-  > { }
+  > {}
