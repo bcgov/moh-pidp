@@ -34,7 +34,7 @@ export class ImmsBCEformsPortalSection implements IPortalSection {
     this.heading = 'Immunization Entry eForm';
     this.description = `Enrol here for access to the Immunization Entry eForm application.`;
     this.keyWords = profileStatus.status.immsBCEforms.keyWords || [];
-    this.completedMessage = Constants.enrolledText;
+    this.completedMessage = Constants.accessGrantedText;
   }
 
   public get hint(): string {
