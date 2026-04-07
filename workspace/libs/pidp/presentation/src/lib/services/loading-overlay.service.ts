@@ -67,7 +67,6 @@ interface PidpLoadingDialogData {
       }
     `,
   ],
-  standalone: true,
   imports: [MatProgressSpinnerModule, NgIf],
 })
 export class PidpLoadingDialogComponent {

@@ -32,7 +32,6 @@ import { DashboardMenuComponent } from '../dashboard-menu/dashboard-menu.compone
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     DashboardHeaderComponent,
     MatSidenavModule,

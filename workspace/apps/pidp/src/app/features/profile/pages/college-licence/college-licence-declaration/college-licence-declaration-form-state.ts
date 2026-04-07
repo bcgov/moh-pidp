@@ -50,7 +50,7 @@ export class CollegeLicenceDeclarationFormState extends AbstractFormState<PartyL
 
   public buildForm(): void {
     this.formInstance = this.fb.group({
-      collegeCode: [{ disabled: false, value:0 }, [Validators.required]],
+      collegeCode: [{ disabled: false, value: 0 }, [Validators.required]],
       licenceNumber: [{ disabled: false, value: '' }],
     });
 

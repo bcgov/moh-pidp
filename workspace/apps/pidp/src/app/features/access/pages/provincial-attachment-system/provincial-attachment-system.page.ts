@@ -38,7 +38,6 @@ import {
 
 @Component({
   selector: 'app-provincial-attachment-system',
-  standalone: true,
   imports: [
     AsyncPipe,
     BreadcrumbComponent,

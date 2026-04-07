@@ -16,7 +16,6 @@ import { AlertComponent, AlertContentDirective } from '@bcgov/shared/ui';
     </ui-alert>
   `,
   styles: [],
-  standalone: true,
   imports: [AlertComponent, AlertContentDirective],
 })
 export class EnrolmentErrorComponent {}

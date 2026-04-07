@@ -21,7 +21,6 @@ import { FeedbackSendComponent } from './components/feedback-send.component';
   selector: 'app-success-dialog',
   templateUrl: './success-dialog.component.html',
   styleUrl: './success-dialog.component.scss',
-  standalone: true,
   imports: [FaIconComponent, InjectViewportCssClassDirective, NgIf, NgClass],
 })
 export class SuccessDialogComponent implements OnInit {
