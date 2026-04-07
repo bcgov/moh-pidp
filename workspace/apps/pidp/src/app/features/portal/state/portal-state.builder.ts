@@ -145,8 +145,7 @@ export class AccessStateBuilder {
         () => [new ImmsbcPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
-        this.insertSection('pemcod', profileStatus) &&
-          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        this.insertSection('pemcod', profileStatus),
         () => [new PemcodPortalSection(profileStatus, this.router)],
       ),
     ];
