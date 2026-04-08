@@ -200,19 +200,6 @@ public partial class ProfileStatus
             protected override StatusCode Compute(ProfileData profile) => StatusCode.Incomplete;
         }
 
-        public class HcimAccountTransferSection : ProfileSection
-        {
-            internal override string SectionName => "hcimAccountTransfer";
-            public override string[] KeyWords => ["ha"];
-
-            protected override StatusCode Compute(ProfileData profile)
-            {
-                return profile.HasEnrolment(AccessTypeCode.HcimAccountTransfer)
-                    ? StatusCode.Complete
-                    : StatusCode.Incomplete;
-            }
-        }
-
         public class ImmsBCEformsSection : ProfileSection
         {
             internal override string SectionName => "immsBCEforms";

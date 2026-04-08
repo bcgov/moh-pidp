@@ -10,7 +10,6 @@ using System.Globalization;
 
 using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
-using static Pidp.Infrastructure.HttpClients.Ldap.HcimAuthorizationStatus;
 using Pidp.Infrastructure.Services;
 
 [Route("api/parties/{partyId}/[controller]")]
@@ -33,45 +32,6 @@ public class AccessRequestsController(IPidpAuthorizationService authorizationSer
                                                                   [FromRoute] DriverFitness.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
-
-    [HttpPost("hcim-account-transfer")]
-    [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-    [ProducesResponseType(StatusCodes.Status423Locked)]
-    public async Task<IActionResult> CreateHcimAccountTransfer([FromServices] ICommandHandler<HcimAccountTransfer.Command, IDomainResult<HcimAccountTransfer.Model>> handler,
-                                                               [FromHybrid][AutoValidateAlways] HcimAccountTransfer.Command command)
-    {
-        var access = await this.AuthorizationService.CheckPartyAccessibilityAsync(command.PartyId, this.User);
-        if (!access.IsSuccess)
-        {
-            return access.ToActionResult();
-        }
-
-        var result = await handler.HandleAsync(command);
-        if (!result.IsSuccess)
-        {
-            return result.ToActionResult();
-        }
-
-        this.Response.SafeAddHeader("No-Retry", "true");
-
-        switch (result.Value.AuthStatus)
-        {
-            case AuthorizationStatus.Authorized:
-                return this.NoContent();
-            case AuthorizationStatus.AccountLocked:
-                return this.StatusCode(StatusCodes.Status423Locked);
-            case AuthorizationStatus.AuthFailure:
-                this.Response.SafeAddHeader("Remaining-Attempts", result.Value.RemainingAttempts?.ToString(CultureInfo.InvariantCulture));
-                return this.UnprocessableEntity();
-            case AuthorizationStatus.Unauthorized:
-                return this.Forbid();
-            default:
-                throw new NotImplementedException();
-        }
-    }
 
     [HttpPost("immsbc-eforms")]
     [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
