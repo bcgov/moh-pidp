@@ -2,7 +2,6 @@ namespace Pidp.Infrastructure.HttpClients.Keycloak;
 
 using System.Text.Json;
 
-using Pidp.Infrastructure.HttpClients.Ldap;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models.Lookups;
 
@@ -97,8 +96,6 @@ public class UserRepresentation
     }
 
     public UserRepresentation SetCpn(string cpn) => this.SetAttribute("common_provider_number", cpn);
-
-    internal UserRepresentation SetLdapOrgDetails(LdapLoginResponse.OrgDetails orgDetails) => this.SetAttribute("org_details", JsonSerializer.Serialize(orgDetails, SerializationOptions));
 
     public UserRepresentation SetOpId(string opId) => this.SetAttribute("opId", opId);
 

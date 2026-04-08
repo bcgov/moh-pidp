@@ -76,7 +76,6 @@ public partial class ProfileStatus
                     ProfileSection.Create<DriverFitnessSection>(data),
                     ProfileSection.Create<ExternalAccountsSection>(data),
                     ProfileSection.Create<HaloSection>(data),
-                    ProfileSection.Create<HcimAccountTransferSection>(data),
                     ProfileSection.Create<ImmsBCEformsSection>(data),
                     ProfileSection.Create<ImmsBCSection>(data),
                     ProfileSection.Create<IvfSection>(data),
