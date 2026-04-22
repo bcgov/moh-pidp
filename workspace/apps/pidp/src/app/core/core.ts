@@ -22,6 +22,7 @@ import {
 import {
   INCLUDE_BEARER_TOKEN_INTERCEPTOR_CONFIG,
   IncludeBearerTokenCondition,
+  ProvideKeycloakOptions,
   createInterceptorCondition,
   includeBearerTokenInterceptor,
 } from 'keycloak-angular';
@@ -34,6 +35,7 @@ import { provideKeycloakAngular } from '@app/modules/keycloak/keycloak.config';
 
 export interface CoreOptions {
   routes: Routes;
+  keycloakConfig: ProvideKeycloakOptions;
 }
 
 // create unique injection token for the guard
@@ -48,7 +50,7 @@ export function provideCore(
   options: CoreOptions,
 ): (Provider | EnvironmentProviders)[] {
   return [
-    provideKeycloakAngular(),
+    provideKeycloakAngular(options.keycloakConfig),
     provideZoneChangeDetection({ eventCoalescing: true }),
     { provide: CORE_GUARD, useValue: 'CORE_GUARD' },
     {

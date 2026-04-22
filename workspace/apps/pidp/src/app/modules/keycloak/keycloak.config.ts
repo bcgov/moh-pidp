@@ -2,19 +2,21 @@ import { EnvironmentProviders, importProvidersFrom } from '@angular/core';
 
 import {
   AutoRefreshTokenService,
+  ProvideKeycloakOptions,
   UserActivityService,
   provideKeycloak,
   withAutoRefreshToken,
 } from 'keycloak-angular';
 
-import { environment } from '../../../environments/environment.prod';
 import { provideLookup } from '../lookup/lookup';
 import { PermissionsService } from '../permissions/permissions.service';
 
-export const provideKeycloakAngular = (): EnvironmentProviders =>
+export const provideKeycloakAngular = (
+  keycloakConfig: ProvideKeycloakOptions,
+): EnvironmentProviders =>
   provideKeycloak({
-    config: environment.keycloakConfig.config,
-    initOptions: environment.keycloakConfig.initOptions,
+    config: keycloakConfig.config,
+    initOptions: keycloakConfig.initOptions,
     features: [
       withAutoRefreshToken({
         onInactivityTimeout: 'login',

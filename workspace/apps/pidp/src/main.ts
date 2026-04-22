@@ -88,7 +88,7 @@ fetchConfig()
           provide: APP_CONFIG,
           useValue: appConfig,
         },
-        provideCore({ routes: routes }),
+        provideCore({ routes: routes, keycloakConfig: appConfig.keycloakConfig }),
       ],
     }).catch((err) => console.error(err));
   });
