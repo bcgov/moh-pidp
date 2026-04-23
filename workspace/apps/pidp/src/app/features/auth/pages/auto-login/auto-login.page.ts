@@ -18,7 +18,7 @@ export class AutoLoginPage implements OnInit {
     private readonly authService: AuthService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-  ) { }
+  ) {}
 
   public ngOnInit(): void {
     const idpHint = this.route.snapshot.queryParamMap.get('idp_hint') ?? '';
@@ -28,7 +28,7 @@ export class AutoLoginPage implements OnInit {
         .login({
           idpHint: idpHint,
           redirectUri: this.config.applicationUrl,
-          prompt: 'login'
+          prompt: 'login',
         })
         .subscribe();
     } else {

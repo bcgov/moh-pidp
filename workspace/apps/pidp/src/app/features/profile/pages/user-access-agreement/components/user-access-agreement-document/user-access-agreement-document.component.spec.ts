@@ -8,7 +8,6 @@ import { randTextRange } from '@ngneat/falso';
 
 import { UserAccessAgreementDocumentComponent } from './user-access-agreement-document.component';
 
-
 describe('UserAccessAgreementDocumentComponent', () => {
   let component: UserAccessAgreementDocumentComponent;
   let mockActivatedRoute: { snapshot: any; queryParams: any };

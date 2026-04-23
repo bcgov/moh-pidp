@@ -7,7 +7,6 @@ import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
   selector: 'app-banner',
   templateUrl: './banner.component.html',
   styleUrl: './banner.component.scss',
-  standalone: true,
   imports: [CommonModule, InjectViewportCssClassDirective],
 })
 export class BannerComponent {

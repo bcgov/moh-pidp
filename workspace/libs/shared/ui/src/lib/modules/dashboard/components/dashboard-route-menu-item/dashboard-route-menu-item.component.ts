@@ -20,7 +20,6 @@ import { DashboardRouteMenuItem } from '../../models/dashboard-menu-item.model';
   templateUrl: './dashboard-route-menu-item.component.html',
   styleUrls: ['./dashboard-route-menu-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     MatListModule,
     RouterLinkActive,

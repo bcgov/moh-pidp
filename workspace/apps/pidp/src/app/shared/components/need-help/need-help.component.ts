@@ -9,7 +9,6 @@ import { APP_CONFIG, AppConfig } from '@app/app.config';
   selector: 'app-need-help',
   templateUrl: './need-help.component.html',
   styleUrls: ['./need-help.component.scss'],
-  standalone: true,
   imports: [AnchorDirective, ExpansionPanelComponent, NgClass, NgIf],
 })
 export class NeedHelpComponent {

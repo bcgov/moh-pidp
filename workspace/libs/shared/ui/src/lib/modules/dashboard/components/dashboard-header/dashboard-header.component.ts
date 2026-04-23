@@ -24,7 +24,6 @@ import { DashboardHeaderTheme } from '../../models/dashboard-header-config.model
   templateUrl: './dashboard-header.component.html',
   styleUrls: ['./dashboard-header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     MatToolbarModule,
     NgIf,

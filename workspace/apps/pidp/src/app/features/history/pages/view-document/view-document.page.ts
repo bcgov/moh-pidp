@@ -24,7 +24,6 @@ import { ViewDocumentDirective } from './view-document.directive';
   selector: 'app-view-document',
   templateUrl: './view-document.page.html',
   styleUrls: ['./view-document.page.scss'],
-  standalone: true,
   imports: [
     MatButtonModule,
     NgIf,

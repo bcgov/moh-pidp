@@ -1,4 +1,8 @@
-import { APP_INITIALIZER, Provider } from '@angular/core';
+import {
+  EnvironmentProviders,
+  inject,
+  provideAppInitializer,
+} from '@angular/core';
 
 import { Observable } from 'rxjs';
 
@@ -13,11 +17,9 @@ function configFactory(
   return (): Observable<LookupConfig | null> => lookupService.load();
 }
 
-export function provideLookup(): Provider {
-  return {
-    provide: APP_INITIALIZER,
-    useFactory: configFactory,
-    multi: true,
-    deps: [LookupService],
-  };
+export function provideLookup(): EnvironmentProviders {
+  return provideAppInitializer(() => {
+    const initializerFn = configFactory(inject(LookupService));
+    return initializerFn();
+  });
 }

@@ -81,7 +81,6 @@ export enum EndorsementType {
   selector: 'app-endorsements',
   templateUrl: './endorsements.page.html',
   styleUrls: ['./endorsements.page.scss'],
-  standalone: true,
   imports: [
     AsyncPipe,
     BreadcrumbComponent,
