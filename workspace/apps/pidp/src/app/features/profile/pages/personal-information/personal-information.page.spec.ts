@@ -5,8 +5,7 @@ import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import {
   randCity,
@@ -59,7 +58,7 @@ describe('PersonalInformationPage', () => {
         MatDialogModule,
         MatSnackBarModule,
         ReactiveFormsModule,
-        RouterTestingModule,
+        RouterModule.forRoot([]),
       ],
       providers: [
         PersonalInformationPage,

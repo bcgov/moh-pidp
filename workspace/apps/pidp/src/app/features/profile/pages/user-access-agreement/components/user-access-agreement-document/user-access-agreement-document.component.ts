@@ -10,7 +10,6 @@ import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrum
   templateUrl: './user-access-agreement-document.component.html',
   styleUrls: ['./user-access-agreement-document.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [BreadcrumbComponent, InjectViewportCssClassDirective],
 })
 export class UserAccessAgreementDocumentComponent {

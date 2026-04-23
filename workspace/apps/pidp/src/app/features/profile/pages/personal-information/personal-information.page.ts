@@ -58,7 +58,6 @@ import { PersonalInformation } from './personal-information.model';
   templateUrl: './personal-information.page.html',
   styleUrls: ['./personal-information.page.scss'],
   viewProviders: [PersonalInformationResource],
-  standalone: true,
   imports: [
     AsyncPipe,
     BreadcrumbComponent,

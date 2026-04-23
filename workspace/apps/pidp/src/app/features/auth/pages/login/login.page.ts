@@ -46,7 +46,6 @@ export interface LoginPageRouteData {
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
-  standalone: true,
   imports: [
     AnchorDirective,
     ExpansionPanelComponent,

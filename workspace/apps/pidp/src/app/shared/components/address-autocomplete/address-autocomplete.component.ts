@@ -29,7 +29,6 @@ import { AddressAutocompleteRetrieveResponse } from './address-autocomplete-retr
   selector: 'app-address-autocomplete',
   templateUrl: './address-autocomplete.component.html',
   styleUrls: ['./address-autocomplete.component.scss'],
-  standalone: true,
   imports: [
     AnchorDirective,
     InjectViewportCssClassDirective,
