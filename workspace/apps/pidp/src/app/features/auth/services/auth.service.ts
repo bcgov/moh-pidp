@@ -1,13 +1,12 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable, from, of } from 'rxjs';
 
-import { KeycloakService } from 'keycloak-angular';
-import { KeycloakLoginOptions } from 'keycloak-js';
+import Keycloak, { KeycloakLoginOptions } from 'keycloak-js';
 
 export interface IAuthService {
   login(options?: KeycloakLoginOptions): Observable<void>;
-  isLoggedIn(): Observable<boolean>;
+  isLoggedIn(): Observable<boolean | undefined>;
   logout(redirectUri: string): Observable<void>;
 }
 
@@ -15,17 +14,17 @@ export interface IAuthService {
   providedIn: 'root',
 })
 export class AuthService implements IAuthService {
-  public constructor(private readonly keycloakService: KeycloakService) {}
+  private readonly keycloak = inject(Keycloak);
 
   public login(options?: KeycloakLoginOptions): Observable<void> {
-    return from(this.keycloakService.login(options));
+    return from(this.keycloak.login(options));
   }
 
   public isLoggedIn(): Observable<boolean> {
-    return of(this.keycloakService.isLoggedIn());
+    return of(this.keycloak?.authenticated ?? false);
   }
 
   public logout(redirectUri: string): Observable<void> {
-    return from(this.keycloakService.logout(redirectUri));
+    return from(this.keycloak.logout({ redirectUri }));
   }
 }

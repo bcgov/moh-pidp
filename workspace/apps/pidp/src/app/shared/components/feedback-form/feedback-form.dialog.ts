@@ -39,7 +39,6 @@ import { FeedbackFormState } from './feedback-form.component-form-state';
   selector: 'app-feedback-form-dialog',
   templateUrl: './feedback-form.dialog.html',
   styleUrl: './feedback-form.dialog.scss',
-  standalone: true,
   imports: [
     SuccessDialogComponent,
     MatFormFieldModule,

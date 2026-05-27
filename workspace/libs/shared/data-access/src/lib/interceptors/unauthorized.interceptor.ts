@@ -1,4 +1,12 @@
-import { HTTP_INTERCEPTORS, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse, HttpStatusCode } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+  HttpResponse,
+  HttpStatusCode,
+} from '@angular/common/http';
 import { Injectable, Provider } from '@angular/core';
 import { Router } from '@angular/router';
 

@@ -1,12 +1,11 @@
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 
 import { randTextRange } from '@ngneat/falso';
 
 import { APP_CONFIG, APP_DI_CONFIG } from '@app/app.config';
-import { HelpPage } from './help.page';
 
+import { HelpPage } from './help.page';
 
 describe('HelpPage', () => {
   let component: HelpPage;
@@ -22,7 +21,7 @@ describe('HelpPage', () => {
       },
     };
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
+      imports: [RouterModule.forRoot([])],
       providers: [
         HelpPage,
         {
