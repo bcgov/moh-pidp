@@ -50,9 +50,9 @@ commonAnnotations: {}
 ## @param image.debug Set to true if you would like to see extra information on logs
 ##
 image:
-  registry: docker.io
+  registry: public.ecr.aws
   repository: bitnami/nginx
-  tag: 1.21.5-debian-10-r3
+  tag: 1.31.0-debian-12-r1
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -194,14 +194,12 @@ containerPorts:
 ## @param resources.requests The requested resources for the NGINX container
 ##
 resources:
-  ## Example:
   limits:
     cpu: 100m
-    memory: 250Mi
-
+    memory: 256Mi
   requests:
     cpu: 50m
-    memory: 100Mi
+    memory: 128Mi
 ## NGINX containers' liveness probe.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param livenessProbe.enabled Enable livenessProbe
@@ -229,7 +227,7 @@ livenessProbe:
 ##
 readinessProbe:
   enabled: true
-  initialDelaySeconds: 5
+  initialDelaySeconds: 30
   timeoutSeconds: 3
   periodSeconds: 5
   failureThreshold: 3
@@ -328,9 +326,9 @@ cloneStaticSiteFromGit:
   ## @param cloneStaticSiteFromGit.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
-    registry: docker.io
+    registry: public.ecr.aws
     repository: bitnami/git
-    tag: 2.34.1-debian-10-r33
+    tag: 2.51.0-debian-12-r0
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -432,9 +430,9 @@ ldapDaemon:
   ## @param ldapDaemon.image.pullPolicy LDAP Auth Daemon Image pull policy
   ##
   image:
-    registry: docker.io
+    registry: public.ecr.aws
     repository: bitnami/nginx-ldap-auth-daemon
-    tag: 0.20200116.0-debian-10-r556
+    tag: 0.20200116.0-debian-10-r634
     pullPolicy: IfNotPresent
   ## @param ldapDaemon.port LDAP Auth Daemon port
   ##
@@ -544,7 +542,7 @@ ldapDaemon:
   ##
   readinessProbe:
     enabled: true
-    initialDelaySeconds: 5
+    initialDelaySeconds: 30
     timeoutSeconds: 3
     periodSeconds: 5
     failureThreshold: 3
@@ -769,9 +767,9 @@ metrics:
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
-    registry: docker.io
+    registry: public.ecr.aws
     repository: bitnami/nginx-exporter
-    tag: 0.10.0-debian-10-r8
+    tag: 1.4.2-debian-12-r9
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -817,10 +815,10 @@ metrics:
     ## Example:
     limits:
       cpu: 100m
-      memory: 250Mi
+      memory: 256Mi
     requests:
       cpu: 50m
-      memory: 100Mi
+      memory: 128Mi
   ## Prometheus Operator ServiceMonitor configuration
   ##
   serviceMonitor:
@@ -887,7 +885,7 @@ metrics:
 # fluentbit must be enabled for prod environment
 fluentbit:
   enabled: false
-  imageRegistry: docker.io/fluent/fluent-bit:3.0.3-debug
+  imageRegistry: public.ecr.aws/fluent/fluent-bit:3.2.10-debug
   imagePullPolicy: IfNotPresent
   # The value of slack_webhook parameter is stored in a secret called `slack-error-notification-webhook` in OpenShift.
   slack_webhook: ""
@@ -897,4 +895,4 @@ fluentbit:
   resources:
     requests:
       cpu: 10m
-      memory: 16Mi
+      memory: 32Mi
