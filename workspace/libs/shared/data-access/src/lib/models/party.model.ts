@@ -5,6 +5,7 @@ import { User } from './user.model';
 
 export enum AccessTypeCode {
   SAEforms = 1,
+  HcimAccountTransfer,
   DriverFitness,
   MSTeams,
 }
