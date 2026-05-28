@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -34,10 +34,9 @@ import {
     MatButtonModule,
     MatIconModule,
     MatTableModule,
-    NgIf,
     PageComponent,
-    PageHeaderComponent,
-  ],
+    PageHeaderComponent
+],
 })
 export class PartiesPage implements OnInit {
   public title: string;

@@ -1,4 +1,4 @@
-import { AsyncPipe, DatePipe, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe, DatePipe } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import {
@@ -92,11 +92,9 @@ export enum EndorsementType {
     MatFormFieldModule,
     MatInputModule,
     MatTabsModule,
-    NgFor,
-    NgIf,
     PageFooterActionDirective,
-    ReactiveFormsModule,
-  ],
+    ReactiveFormsModule
+],
 })
 export class EndorsementsPage
   extends AbstractFormPage<EndorsementsFormState>

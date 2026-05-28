@@ -1,4 +1,4 @@
-import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common';
+import { NgClass, NgTemplateOutlet } from '@angular/common';
 import {
   Component,
   EventEmitter,
@@ -59,14 +59,13 @@ import { NavMenuResource } from './nav-menu.resource.service';
     MatIconModule,
     MatSidenavModule,
     MatTooltipModule,
-    NgIf,
     NgTemplateOutlet,
     RouterLinkActive,
     RouterOutlet,
     FaIconComponent,
     NgClass,
-    FeedbackButtonComponent,
-  ],
+    FeedbackButtonComponent
+],
 })
 export class NavMenuComponent implements OnChanges, OnInit, OnDestroy {
   @Input() public alerts: AlertCode[] | null = [];

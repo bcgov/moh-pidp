@@ -1,4 +1,4 @@
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { IsActiveMatchOptions } from '@angular/router';
 
@@ -29,7 +29,7 @@ import { NavMenuComponent } from '../navbar-menu/nav-menu';
   selector: 'app-portal-dashboard',
   templateUrl: './portal-dashboard.component.html',
   styleUrls: ['./portal-dashboard.component.scss'],
-  imports: [AsyncPipe, NavMenuComponent, FeedbackButtonComponent, NgIf],
+  imports: [AsyncPipe, NavMenuComponent, FeedbackButtonComponent],
 })
 export class PortalDashboardComponent implements IDashboard, OnInit {
   public logoutRedirectUrl: string;

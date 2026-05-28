@@ -6,19 +6,23 @@
 
   <div class="content">
     <!-- TO DO: Extract this into a separate component or refactor ui-alert -->
-    <section *ngIf="accessRequestFailed" class="alert">
-      <h2>Error Requesting Access</h2>
-      <p>
-        Your request for access to Driver Medical Fitness could not be processed
-        at this time. If this issue persists, contact
-        <a uiAnchor scheme="mailto" [href]="driverFitnessSupportEmail"></a>
-        for assistance.
-      </p>
-    </section>
+    @if (accessRequestFailed) {
+      <section class="alert">
+        <h2>Error Requesting Access</h2>
+        <p>
+          Your request for access to Driver Medical Fitness could not be processed
+          at this time. If this issue persists, contact
+          <a uiAnchor scheme="mailto" [href]="driverFitnessSupportEmail"></a>
+          for assistance.
+        </p>
+      </section>
+    }
 
-    <app-enrolment-error *ngIf="enrolmentError"></app-enrolment-error>
+    @if (enrolmentError) {
+      <app-enrolment-error></app-enrolment-error>
+    }
 
-    <ng-container *ngIf="completed; else notCompleted">
+    @if (completed) {
       <p class="thank-you">
         Thank you for enrolling for your Driver Fitness Practitioner Portal.<br />
         To visit your application login
@@ -42,39 +46,39 @@
               id="driver-fitness-page-learn-more-label"
               class="learn-more-label"
               >Learn more</span
-            >
-            <button
-              class="learn-more-button"
-              routerLink="/organization-info/endorsements"
-              aria-labelledby="driver-fitness-page-learn-more-label">
-              +
-            </button>
+              >
+              <button
+                class="learn-more-button"
+                routerLink="/organization-info/endorsements"
+                aria-labelledby="driver-fitness-page-learn-more-label">
+                +
+              </button>
+            </div>
           </div>
-        </div>
-      </section>
-    </ng-container>
+        </section>
+      } @else {
+        <h2>Medical Practitioner Registration</h2>
+        <p class="confirmation">
+          Confirm enrolment to Driver Fitness Practitioner Portal
+        </p>
+        <p class="click-next">
+          You are about to enrol in “Driver Fitness Practitioner Portal.” Click
+          Next to continue or Cancel to go back to the overview page.
+        </p>
+      }
 
-    <ng-template #notCompleted>
-      <h2>Medical Practitioner Registration</h2>
-      <p class="confirmation">
-        Confirm enrolment to Driver Fitness Practitioner Portal
-      </p>
-      <p class="click-next">
-        You are about to enrol in “Driver Fitness Practitioner Portal.” Click
-        Next to continue or Cancel to go back to the overview page.
-      </p>
-    </ng-template>
 
-    <div class="actions">
-      <button
-        *ngIf="!completed"
-        mat-flat-button
-        uiPageFooterAction
-        type="button"
-        color="primary"
-        (click)="onRequestAccess()">
-        Enrol Now
-      </button>
+      <div class="actions">
+        @if (!completed) {
+          <button
+            mat-flat-button
+            uiPageFooterAction
+            type="button"
+            color="primary"
+            (click)="onRequestAccess()">
+            Enrol Now
+          </button>
+        }
+      </div>
     </div>
   </div>
-</div>

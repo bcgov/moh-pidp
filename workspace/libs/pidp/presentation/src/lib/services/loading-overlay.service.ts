@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+
 import { Component, Inject, Injectable } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
@@ -46,13 +46,15 @@ interface PidpLoadingDialogData {
 @Component({
   // Putting template and css inline for simplicity.
   template: `<div class="loader-container">
-    <div class="spinner">
-      <mat-spinner color="primary" mode="indeterminate"></mat-spinner>
-    </div>
-    <div *ngIf="data.message" class="message">
-      {{ data.message }}
-    </div>
-  </div>`,
+      <div class="spinner">
+        <mat-spinner color="primary" mode="indeterminate"></mat-spinner>
+      </div>
+      @if (data.message) {
+        <div class="message">
+          {{ data.message }}
+        </div>
+      }
+    </div>`,
   styles: [
     `
       .loader-container {
@@ -67,7 +69,7 @@ interface PidpLoadingDialogData {
       }
     `,
   ],
-  imports: [MatProgressSpinnerModule, NgIf],
+  imports: [MatProgressSpinnerModule],
 })
 export class PidpLoadingDialogComponent {
   public constructor(

@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -40,13 +40,12 @@ import { ProviderReportingPortalResource } from './provider-reporting-portal-res
     EnrolmentErrorComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
-    NgIf,
     PageComponent,
     PageFooterActionDirective,
     PageFooterComponent,
     PageSectionComponent,
-    SafePipe,
-  ],
+    SafePipe
+],
 })
 export class ProviderReportingPortalPage implements OnInit {
   public title: string;

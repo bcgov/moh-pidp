@@ -6,18 +6,20 @@
         title="Home"
         aria-label="Go home"
         (click)="navigateToRoot()">
-        <img
-          *ngIf="isMobile"
-          class="logo-mobile"
-          loading="lazy"
-          src="../assets/images/logo.svg"
-          aria-label="BC Government Logo" />
-        <img
-          *ngIf="!isMobile"
-          class="logo-desktop"
-          loading="lazy"
-          src="../assets/images/logo-banner.svg"
-          aria-label="BC Government Logo" />
+        @if (isMobile) {
+          <img
+            class="logo-mobile"
+            loading="lazy"
+            src="../assets/images/logo.svg"
+            aria-label="BC Government Logo" />
+        }
+        @if (!isMobile) {
+          <img
+            class="logo-desktop"
+            loading="lazy"
+            src="../assets/images/logo-banner.svg"
+            aria-label="BC Government Logo" />
+        }
       </a>
     </div>
     <div class="title">
@@ -39,25 +41,25 @@
         <li>
           <a href="https://www2.gov.bc.ca/gov/content/home/disclaimer"
             >Disclaimer</a
-          >
-        </li>
-        <li>
-          <a href="https://www2.gov.bc.ca/gov/content/home/privacy">Privacy</a>
-        </li>
-        <li>
-          <a href="https://www2.gov.bc.ca/gov/content/home/accessibility"
-            >Accessibility</a
-          >
-        </li>
-        <li>
-          <a href="https://www2.gov.bc.ca/gov/content/home/copyright"
-            >Copyright</a
-          >
-        </li>
-        <li>
-          <a uiAnchor scheme="mailto" [href]="emailSupport">Contact Us</a>
-        </li>
-      </ul>
-    </div>
-  </footer>
-</div>
+            >
+          </li>
+          <li>
+            <a href="https://www2.gov.bc.ca/gov/content/home/privacy">Privacy</a>
+          </li>
+          <li>
+            <a href="https://www2.gov.bc.ca/gov/content/home/accessibility"
+              >Accessibility</a
+              >
+            </li>
+            <li>
+              <a href="https://www2.gov.bc.ca/gov/content/home/copyright"
+                >Copyright</a
+                >
+              </li>
+              <li>
+                <a uiAnchor scheme="mailto" [href]="emailSupport">Contact Us</a>
+              </li>
+            </ul>
+          </div>
+        </footer>
+      </div>

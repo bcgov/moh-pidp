@@ -6,7 +6,9 @@
     {{ label }}
   </mat-slide-toggle>
 
-  <div *ngIf="checked" class="toggle-content">
-    <ng-content></ng-content>
-  </div>
+  @if (checked) {
+    <div class="toggle-content">
+      <ng-content></ng-content>
+    </div>
+  }
 </div>

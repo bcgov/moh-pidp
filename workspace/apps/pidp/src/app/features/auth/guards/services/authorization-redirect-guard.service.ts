@@ -24,7 +24,7 @@ export class AuthorizationRedirectGuardService extends AuthGuardService {
       authenticated
         ? this.router.createUrlTree([routeRedirect ?? '/'], {
             queryParams:
-              this.router.getCurrentNavigation()?.extractedUrl.queryParams,
+              this.router.currentNavigation()?.extractedUrl.queryParams,
             queryParamsHandling: 'merge',
           })
         : true;

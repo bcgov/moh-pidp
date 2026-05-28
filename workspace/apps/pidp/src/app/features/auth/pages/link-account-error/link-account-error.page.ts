@@ -1,11 +1,4 @@
-import {
-  NgIf,
-  NgOptimizedImage,
-  NgSwitch,
-  NgSwitchCase,
-  NgSwitchDefault,
-  NgTemplateOutlet,
-} from '@angular/common';
+import { NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -37,13 +30,9 @@ import { AuthService } from '../../services/auth.service';
     MatIconModule,
     MatTooltipModule,
     NgOptimizedImage,
-    NgIf,
-    NgSwitch,
-    NgSwitchCase,
-    NgSwitchDefault,
     NgTemplateOutlet,
-    NeedHelpComponent,
-  ],
+    NeedHelpComponent
+],
 })
 export class LinkAccountErrorPage implements OnInit {
   public logoutRedirectUrl: string;

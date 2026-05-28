@@ -1,6 +1,6 @@
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { AsyncPipe, NgIf, NgOptimizedImage } from '@angular/common';
+import { AsyncPipe, NgOptimizedImage } from '@angular/common';
 import { Component, Inject, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
@@ -49,10 +49,9 @@ import { ivfWebsite } from './ivf-constants';
     ClipboardModule,
     InjectViewportCssClassDirective,
     RouterLink,
-    NgIf,
     FontAwesomeModule,
-    NgOptimizedImage,
-  ],
+    NgOptimizedImage
+],
   templateUrl: './ivf.page.html',
   styleUrl: './ivf.page.scss',
   providers: [

@@ -1,4 +1,4 @@
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import {
   Component,
   Input,
@@ -21,7 +21,7 @@ import { FeedbackSendComponent } from './components/feedback-send.component';
   selector: 'app-success-dialog',
   templateUrl: './success-dialog.component.html',
   styleUrl: './success-dialog.component.scss',
-  imports: [FaIconComponent, InjectViewportCssClassDirective, NgIf, NgClass],
+  imports: [FaIconComponent, InjectViewportCssClassDirective, NgClass],
 })
 export class SuccessDialogComponent implements OnInit {
   public faCircleCheck = faCircleCheck;

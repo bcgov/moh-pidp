@@ -1,6 +1,6 @@
 <ui-overlay>
   <div [class]="mode">
-    <ng-container *ngIf="form; else pageContent">
+    @if (form) {
       <form
         novalidate
         [autocomplete]="autocomplete"
@@ -8,7 +8,9 @@
         (ngSubmit)="onSubmit()">
         <ng-container *ngTemplateOutlet="pageContent"></ng-container>
       </form>
-    </ng-container>
+    } @else {
+      <ng-content></ng-content>
+    }
   </div>
 </ui-overlay>
 

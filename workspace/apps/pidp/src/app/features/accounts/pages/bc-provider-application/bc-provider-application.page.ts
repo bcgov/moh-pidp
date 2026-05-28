@@ -1,12 +1,4 @@
-import {
-  AsyncPipe,
-  NgIf,
-  NgOptimizedImage,
-  NgSwitch,
-  NgSwitchCase,
-  NgSwitchDefault,
-  NgTemplateOutlet,
-} from '@angular/common';
+import { AsyncPipe, NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
 import { Element } from '@angular/compiler';
 import {
   Component,
@@ -90,15 +82,11 @@ import { BcProviderApplicationResource } from './bc-provider-application-resourc
     MatInputModule,
     MatTooltipModule,
     NeedHelpComponent,
-    NgIf,
     NgOptimizedImage,
-    NgSwitch,
-    NgSwitchCase,
-    NgSwitchDefault,
     NgTemplateOutlet,
     ReactiveFormsModule,
-    SuccessDialogComponent,
-  ],
+    SuccessDialogComponent
+],
 })
 export class BcProviderApplicationPage
   extends AbstractFormPage<BcProviderApplicationFormState>

@@ -101,15 +101,15 @@
         <div class="main-image">
           <img ngSrc="/assets/images/halo.png" alt="halo there" priority fill />
         </div>
-        <ng-container *ngIf="(halo$ | async)">
+        @if ((halo$ | async)) {
           <div class="pas-button-text">
             <i
               >You will need a BCProvider or your own credential before logging
               in.</i
-            >
-          </div>
-        </ng-container>
-      </div>
-    </section>
+              >
+            </div>
+          }
+        </div>
+      </section>
+    </div>
   </div>
-</div>

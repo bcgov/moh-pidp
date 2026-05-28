@@ -1,6 +1,6 @@
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { AsyncPipe, NgIf, NgOptimizedImage } from '@angular/common';
+import { AsyncPipe, NgOptimizedImage } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
@@ -55,10 +55,9 @@ import { pemcodUATWebsite } from './pemcod.constants';
     ClipboardModule,
     InjectViewportCssClassDirective,
     RouterLink,
-    NgIf,
     FontAwesomeModule,
-    NgOptimizedImage,
-  ],
+    NgOptimizedImage
+],
   templateUrl: './pemcod.page.html',
   styleUrl: './pemcod.page.scss',
   providers: [

@@ -1,5 +1,5 @@
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { AsyncPipe, NgIf, NgOptimizedImage } from '@angular/common';
+import { AsyncPipe, NgOptimizedImage } from '@angular/common';
 import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -33,10 +33,9 @@ import { PortalResource } from './portal-resource.service';
   imports: [
     FaIconComponent,
     InjectViewportCssClassDirective,
-    NgIf,
     NgOptimizedImage,
-    AsyncPipe,
-  ],
+    AsyncPipe
+],
 })
 export class PortalPage implements OnInit, AfterViewInit {
   public faBookmark = faBookmark;

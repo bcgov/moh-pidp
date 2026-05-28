@@ -1,4 +1,4 @@
-import { NgFor, NgIf } from '@angular/common';
+
 import {
   Component,
   HostListener,
@@ -38,10 +38,8 @@ import { AccessRequestCardComponent } from '../../components/access-request-card
     FaIconComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
-    NgIf,
-    AccessRequestCardComponent,
-    NgFor,
-  ],
+    AccessRequestCardComponent
+],
 })
 export class AccessRequestsPage implements OnInit, OnDestroy {
   /**

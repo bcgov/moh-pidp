@@ -1,4 +1,4 @@
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit, forwardRef } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -36,10 +36,9 @@ import { UserAccessAgreementResource } from './user-access-agreement-resource.se
     InjectViewportCssClassDirective,
     forwardRef(() => UserAccessAgreementDocumentComponent),
     MatButtonModule,
-    NgIf,
     PageComponent,
-    PageFooterActionDirective,
-  ],
+    PageFooterActionDirective
+],
 })
 export class UserAccessAgreementPage implements OnInit {
   public title: string;

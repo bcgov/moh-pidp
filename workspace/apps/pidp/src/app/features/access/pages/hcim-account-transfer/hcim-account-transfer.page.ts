@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -65,7 +65,6 @@ import {
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    NgIf,
     PageComponent,
     PageFooterActionDirective,
     PageFooterComponent,
@@ -74,8 +73,8 @@ import {
     PageSectionSubheaderDescDirective,
     PageSectionSubheaderHintDirective,
     PageSubheaderComponent,
-    ReactiveFormsModule,
-  ],
+    ReactiveFormsModule
+],
 })
 export class HcimAccountTransferPage
   extends AbstractFormPage<HcimAccountTransferFormState>

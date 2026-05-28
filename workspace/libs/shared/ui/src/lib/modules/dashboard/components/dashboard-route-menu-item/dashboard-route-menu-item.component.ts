@@ -1,4 +1,4 @@
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -24,10 +24,9 @@ import { DashboardRouteMenuItem } from '../../models/dashboard-menu-item.model';
     MatListModule,
     RouterLinkActive,
     RouterLink,
-    NgIf,
     MatIconModule,
-    AsyncPipe,
-  ],
+    AsyncPipe
+],
 })
 export class DashboardRouteMenuItemComponent {
   /**

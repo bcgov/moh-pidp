@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import * as ui from '@bcgov/shared/ui';
@@ -14,9 +14,8 @@ import { User } from '@app/features/auth/models/user.model';
     ui.DefaultPipe,
     ui.FormatDatePipe,
     ui.KeyValueInfoComponent,
-    NgIf,
-    ui.UserInfoComponent,
-  ],
+    ui.UserInfoComponent
+],
 })
 export class UserInfoComponent {
   @Input() public user: User | null | undefined;

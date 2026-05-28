@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -19,7 +19,7 @@ import { CardHintDirective } from './card-hint.directive';
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatCardModule, NgIf, MatIconModule],
+  imports: [MatCardModule, MatIconModule],
 })
 export class CardComponent {
   @Input() public icon?: string;

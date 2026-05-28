@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+
 import { Component, OnInit, Type, ViewChild } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -26,15 +26,14 @@ import { ViewDocumentDirective } from './view-document.directive';
   styleUrls: ['./view-document.page.scss'],
   imports: [
     MatButtonModule,
-    NgIf,
     PageComponent,
     PageFooterActionDirective,
     PageFooterComponent,
     PageHeaderComponent,
     PageSectionComponent,
     SafePipe,
-    ViewDocumentDirective,
-  ],
+    ViewDocumentDirective
+],
 })
 export class ViewDocumentPage implements OnInit {
   public title: string;

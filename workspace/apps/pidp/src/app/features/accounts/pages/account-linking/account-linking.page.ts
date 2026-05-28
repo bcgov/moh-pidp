@@ -1,4 +1,4 @@
-import { CommonModule, NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -54,9 +54,8 @@ import { Credential } from './account-linking.model';
     CommonModule,
     InjectViewportCssClassDirective,
     MatButtonModule,
-    MatTooltipModule,
-    NgIf,
-  ],
+    MatTooltipModule
+],
   templateUrl: './account-linking.page.html',
   styleUrl: './account-linking.page.scss',
 })

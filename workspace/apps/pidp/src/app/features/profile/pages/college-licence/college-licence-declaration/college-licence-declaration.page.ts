@@ -1,4 +1,4 @@
-import { NgFor, NgIf } from '@angular/common';
+
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
@@ -51,11 +51,9 @@ import { PartyLicenceDeclarationInformation } from './party-licence-declaration-
     MatInputModule,
     MatOptionModule,
     MatSelectModule,
-    NgFor,
-    NgIf,
     PageFooterActionDirective,
-    ReactiveFormsModule,
-  ],
+    ReactiveFormsModule
+],
 })
 export class CollegeLicenceDeclarationPage
   extends AbstractFormPage<CollegeLicenceDeclarationFormState>

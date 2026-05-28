@@ -1,4 +1,4 @@
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
@@ -68,7 +68,6 @@ import { PersonalInformation } from './personal-information.model';
     MatButtonModule,
     MatExpansionModule,
     MatIconModule,
-    NgIf,
     PageComponent,
     PageFooterActionDirective,
     PageFooterComponent,
@@ -76,8 +75,8 @@ import { PersonalInformation } from './personal-information.model';
     PageSectionSubheaderComponent,
     PageSectionSubheaderDescDirective,
     PreferredNameFormComponent,
-    UserInfoComponent,
-  ],
+    UserInfoComponent
+],
 })
 export class PersonalInformationPage
   extends AbstractFormPage<PersonalInformationFormState>

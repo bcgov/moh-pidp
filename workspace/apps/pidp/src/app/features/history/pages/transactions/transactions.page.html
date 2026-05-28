@@ -7,21 +7,23 @@
     Identity Portal.
   </div>
 
-  <ng-container *ngIf="transactions$ | async as transactions">
-    <ng-container *ngIf="transactions.length; else noTransactions">
-      <div
-        *ngFor="let transaction of transactions; let i = index; trackBy: trackByTransactionId"
-        class="transaction">
-        <div class="transaction-text">
-          {{ transaction.accessTypeCode | lookupCode: 'accessTypes' }}
-          submission
+  @if (transactions$ | async; as transactions) {
+    @if (transactions.length) {
+      @for (transaction of transactions; track trackByTransactionId(i, transaction); let i = $index) {
+        <div
+          class="transaction">
+          <div class="transaction-text">
+            {{ transaction.accessTypeCode | lookupCode: 'accessTypes' }}
+            submission
+          </div>
+          <div class="transaction-date">
+            <small>{{ transaction.requestedOn | formatDate }}</small>
+            <small>{{ transaction.requestedOn | formatDate: 'h:mm a' }}</small>
+          </div>
         </div>
-        <div class="transaction-date">
-          <small>{{ transaction.requestedOn | formatDate }}</small>
-          <small>{{ transaction.requestedOn | formatDate: 'h:mm a' }}</small>
-        </div>
-      </div>
-    </ng-container>
-  </ng-container>
-  <ng-template #noTransactions>No transactions found</ng-template>
+      }
+    } @else {
+      No transactions found
+    }
+  }
 </div>

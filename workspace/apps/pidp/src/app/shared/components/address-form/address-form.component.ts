@@ -1,4 +1,4 @@
-import { NgFor, NgIf } from '@angular/common';
+
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -35,11 +35,9 @@ import { AddressAutocompleteComponent } from '../address-autocomplete/address-au
     MatInputModule,
     MatOptionModule,
     MatSelectModule,
-    NgFor,
-    NgIf,
     NgxMaskDirective,
-    ReactiveFormsModule,
-  ],
+    ReactiveFormsModule
+],
 })
 export class AddressFormComponent implements OnInit {
   /**

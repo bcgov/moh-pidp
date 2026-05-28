@@ -1,4 +1,4 @@
-import { NgFor } from '@angular/common';
+
 import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -42,15 +42,14 @@ export interface DocumentSection extends IDocumentMetaData {
   imports: [
     CardSummaryComponent,
     MatButtonModule,
-    NgFor,
     PageComponent,
     PageFooterActionDirective,
     PageFooterComponent,
     PageHeaderComponent,
     PageSectionComponent,
     PageSectionSubheaderComponent,
-    PageSectionSubheaderDescDirective,
-  ],
+    PageSectionSubheaderDescDirective
+],
 })
 export class SignedOrAcceptedDocumentsPage implements OnInit {
   public title: string;

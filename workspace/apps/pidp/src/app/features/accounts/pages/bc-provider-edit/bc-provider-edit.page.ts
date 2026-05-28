@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AsyncPipe, NgClass, NgIf, NgOptimizedImage } from '@angular/common';
+import { AsyncPipe, NgClass, NgOptimizedImage } from '@angular/common';
 import {
   Component,
   Inject,
@@ -85,7 +85,6 @@ export interface BcProviderEditInitialStateModel {
     MatFormFieldModule,
     MatInputModule,
     NeedHelpComponent,
-    NgIf,
     ReactiveFormsModule,
     SuccessDialogComponent,
     NgOptimizedImage,
@@ -94,8 +93,8 @@ export interface BcProviderEditInitialStateModel {
     ConfirmDialogComponent,
     NgClass,
     FaIconComponent,
-    TooltipComponent,
-  ],
+    TooltipComponent
+],
 })
 export class BcProviderEditPage
   extends AbstractFormPage<BcProviderEditFormState>

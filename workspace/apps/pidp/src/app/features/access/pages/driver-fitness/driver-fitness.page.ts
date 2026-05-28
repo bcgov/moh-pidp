@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -41,10 +41,9 @@ import {
     EnrolmentErrorComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
-    NgIf,
     PageFooterActionDirective,
-    RouterLink,
-  ],
+    RouterLink
+],
 })
 export class DriverFitnessPage implements OnInit, AfterViewInit {
   public completed: boolean | null;

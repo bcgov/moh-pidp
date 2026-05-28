@@ -1,4 +1,4 @@
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
@@ -11,7 +11,7 @@ import { LoadingOptions, LoadingService } from '@bcgov/shared/data-access';
   templateUrl: './overlay.component.html',
   styleUrls: ['./overlay.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgIf, MatProgressSpinnerModule, AsyncPipe],
+  imports: [MatProgressSpinnerModule, AsyncPipe],
 })
 export class OverlayComponent {
   public readonly message: string;

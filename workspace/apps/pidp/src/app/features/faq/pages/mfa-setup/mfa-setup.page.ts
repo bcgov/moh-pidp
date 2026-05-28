@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+
 import { Component, HostListener, Inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
@@ -31,12 +31,11 @@ import { FaqRoutes } from '../../faq.routes';
     BreadcrumbComponent,
     FaIconComponent,
     MatButtonModule,
-    NgIf,
     PageComponent,
     PageSectionComponent,
     PageSectionSubheaderComponent,
-    InjectViewportCssClassDirective,
-  ],
+    InjectViewportCssClassDirective
+],
 })
 export class MfaSetupPage implements OnInit {
   public providerIdentitySupport: string;

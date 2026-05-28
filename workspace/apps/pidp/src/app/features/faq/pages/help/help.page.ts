@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+
 import {
   AfterViewInit,
   Component,
@@ -37,9 +37,8 @@ import { FaqRoutes } from '../../faq.routes';
     FaIconComponent,
     MatButtonModule,
     MatExpansionModule,
-    NgIf,
-    InjectViewportCssClassDirective,
-  ],
+    InjectViewportCssClassDirective
+],
 })
 export class HelpPage implements OnInit, AfterViewInit {
   public providerIdentitySupport: string;

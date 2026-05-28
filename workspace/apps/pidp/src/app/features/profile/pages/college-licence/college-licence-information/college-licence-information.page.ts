@@ -1,11 +1,4 @@
-import {
-  AsyncPipe,
-  NgFor,
-  NgIf,
-  NgSwitch,
-  NgSwitchCase,
-  NgSwitchDefault,
-} from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -41,14 +34,9 @@ import { CollegeLicenceInformationDetailComponent } from './components/college-l
     CollegeLicenceInformationDetailComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
-    NgFor,
     CollegeLicenceDeclarationPage,
-    NgIf,
-    PortalAlertComponent,
-    NgSwitch,
-    NgSwitchCase,
-    NgSwitchDefault,
-  ],
+    PortalAlertComponent
+],
 })
 export class CollegeLicenceInformationPage implements OnInit {
   public faStethoscope = faStethoscope;

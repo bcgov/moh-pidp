@@ -1,4 +1,4 @@
-import { NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
+
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, ReactiveFormsModule } from '@angular/forms';
@@ -50,15 +50,11 @@ import { msTeamsSupportEmail } from './ms-teams.constants';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    NgIf,
-    NgSwitch,
-    NgSwitchCase,
-    NgSwitchDefault,
     PageFooterActionDirective,
     SafePipe,
     ReactiveFormsModule,
-    RouterLink,
-  ],
+    RouterLink
+],
 })
 export class MsTeamsPrivacyOfficerPage
   extends AbstractFormPage<MsTeamsPrivacyOfficerFormState>

@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -34,10 +34,9 @@ import { LinkAccountConfirmResource } from './link-account-confirm-resource.serv
   selector: 'app-link-account-confirm',
   imports: [
     BreadcrumbComponent,
-    CommonModule,
     InjectViewportCssClassDirective,
-    MatButtonModule,
-  ],
+    MatButtonModule
+],
   templateUrl: './link-account-confirm.page.html',
   styleUrl: './link-account-confirm.page.scss',
 })

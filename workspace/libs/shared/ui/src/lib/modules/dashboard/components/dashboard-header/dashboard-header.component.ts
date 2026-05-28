@@ -1,4 +1,4 @@
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -26,14 +26,13 @@ import { DashboardHeaderTheme } from '../../models/dashboard-header-config.model
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatToolbarModule,
-    NgIf,
     MatButtonModule,
     MatIconModule,
     BcGovLogoComponent,
     MatTooltipModule,
     NgProgressComponent,
-    AsyncPipe,
-  ],
+    AsyncPipe
+],
 })
 export class DashboardHeaderComponent {
   /**

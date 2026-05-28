@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -47,15 +47,14 @@ import {
     EnrolmentErrorComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
-    NgIf,
     PageComponent,
     PageFooterActionDirective,
     PageFooterComponent,
     PageSectionComponent,
     PageSectionSubheaderComponent,
     PageSectionSubheaderDescDirective,
-    SafePipe,
-  ],
+    SafePipe
+],
 })
 export class ImmsBCEformsPage implements OnInit, AfterViewInit {
   public title: string;

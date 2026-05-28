@@ -11,17 +11,23 @@
   <ng-template matMenuContent>
     <div class="context-help-menu">
       <!-- Use directive for projection to use provided markup -->
-      <div *ngIf="contextHelpTitleChildren?.length" class="header">
-        <mat-icon *ngIf="titleIcon" class="title-icon" color="primary">
-          {{ titleIcon }}
-        </mat-icon>
-        <h2>
-          <ng-content select="[uiContextHelpTitle]"></ng-content>
-        </h2>
-      </div>
-      <p *ngIf="contextHelpContentChildren?.length" class="content">
-        <ng-content select="[uiContextHelpContent]"></ng-content>
-      </p>
+      @if (contextHelpTitleChildren?.length) {
+        <div class="header">
+          @if (titleIcon) {
+            <mat-icon class="title-icon" color="primary">
+              {{ titleIcon }}
+            </mat-icon>
+          }
+          <h2>
+            <ng-content select="[uiContextHelpTitle]"></ng-content>
+          </h2>
+        </div>
+      }
+      @if (contextHelpContentChildren?.length) {
+        <p class="content">
+          <ng-content select="[uiContextHelpContent]"></ng-content>
+        </p>
+      }
       <!-- Customize with own markup by not using directives for projection -->
       <ng-content></ng-content>
     </div>

@@ -3,10 +3,14 @@
     <mat-form-field class="w-100 email">
       <mat-label>Email</mat-label>
       <input matInput formControlName="email" (keyup)="onKeyUp()" />
-      <mat-error *ngIf="email.hasError('required')">Required</mat-error>
-      <mat-error *ngIf="email.hasError('email')">
-        Must be a valid email address
-      </mat-error>
+      @if (email.hasError('required')) {
+        <mat-error>Required</mat-error>
+      }
+      @if (email.hasError('email')) {
+        <mat-error>
+          Must be a valid email address
+        </mat-error>
+      }
     </mat-form-field>
   </div>
   <div class="col-sm-3">
@@ -17,10 +21,14 @@
         formControlName="phone"
         mask="(000) 000-0000"
         [showMaskTyped]="false" />
-      <mat-error *ngIf="phone.hasError('required')">Required</mat-error>
-      <mat-error *ngIf="phone.hasError('phone')">
-        Must be a valid phone number
-      </mat-error>
-    </mat-form-field>
+        @if (phone.hasError('required')) {
+          <mat-error>Required</mat-error>
+        }
+        @if (phone.hasError('phone')) {
+          <mat-error>
+            Must be a valid phone number
+          </mat-error>
+        }
+      </mat-form-field>
+    </div>
   </div>
-</div>

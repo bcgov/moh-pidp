@@ -1,4 +1,4 @@
-import { AsyncPipe, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -28,10 +28,8 @@ import { TransactionsResource } from './transactions-resource.service';
     FormatDatePipe,
     LookupCodePipe,
     MatButtonModule,
-    NgIf,
-    NgFor,
-    InjectViewportCssClassDirective,
-  ],
+    InjectViewportCssClassDirective
+],
 })
 export class TransactionsPage implements OnInit {
   public title: string;

@@ -1,4 +1,4 @@
-import { NgFor } from '@angular/common';
+
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
   FormBuilder,
@@ -36,9 +36,8 @@ import { AddressAutocompleteRetrieveResponse } from './address-autocomplete-retr
     MatFormFieldModule,
     MatInputModule,
     MatOptionModule,
-    NgFor,
-    ReactiveFormsModule,
-  ],
+    ReactiveFormsModule
+],
 })
 export class AddressAutocompleteComponent implements OnInit {
   /**

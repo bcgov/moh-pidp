@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
@@ -43,11 +43,10 @@ import { FeedbackFormState } from './feedback-form.component-form-state';
     SuccessDialogComponent,
     MatFormFieldModule,
     MatInputModule,
-    NgIf,
     ReactiveFormsModule,
     MatIconModule,
-    MatButtonModule,
-  ],
+    MatButtonModule
+],
 })
 export class FeedbackFormDialogComponent
   extends AbstractFormPage<FeedbackFormState>

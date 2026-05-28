@@ -1,4 +1,4 @@
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -41,7 +41,6 @@ import { DIALOG_DEFAULT_OPTION } from '../dialogs-properties.provider';
   imports: [
     AnchorDirective,
     MatDialogTitle,
-    NgIf,
     MatIconModule,
     MatDialogContent,
     MatDialogActions,
@@ -49,8 +48,8 @@ import { DIALOG_DEFAULT_OPTION } from '../dialogs-properties.provider';
     MatDialogClose,
     AnchorDirective,
     MatProgressBarModule,
-    AsyncPipe,
-  ],
+    AsyncPipe
+],
 })
 export class ConfirmDialogComponent implements OnInit, AfterViewInit {
   public options: DialogOptions;

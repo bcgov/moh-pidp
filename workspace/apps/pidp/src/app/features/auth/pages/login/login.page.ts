@@ -1,4 +1,4 @@
-import { NgIf, NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
+import { NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AfterViewInit, Component, Inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -53,11 +53,10 @@ export interface LoginPageRouteData {
     LayoutHeaderFooterComponent,
     MatButtonModule,
     NeedHelpComponent,
-    NgIf,
     NgOptimizedImage,
     NgTemplateOutlet,
-    BannerComponent,
-  ],
+    BannerComponent
+],
 })
 export class LoginPage implements OnInit, AfterViewInit {
   public viewportOptions = PidpViewport;
