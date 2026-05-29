@@ -47,7 +47,7 @@
     "keycloak-js": "^25.0.0",
     "less": "^4.0.0",
     "luxon": "~3.4.4",
-    "ngx-mask": "~17.0.4",
+    "ngx-mask": "~21.0.0",
     "ngx-progressbar": "~11.1.0",
     "react": ">=16.9.0",
     "react-dom": ">=16.9.0",
