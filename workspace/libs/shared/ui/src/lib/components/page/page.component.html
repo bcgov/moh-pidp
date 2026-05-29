@@ -1,15 +1,11 @@
 <ui-overlay>
   <div [class]="mode">
     @if (form) {
-      <form
-        novalidate
-        [autocomplete]="autocomplete"
-        [formGroup]="form"
-        (ngSubmit)="onSubmit()">
-        <ng-container *ngTemplateOutlet="pageContent"></ng-container>
-      </form>
+    <form novalidate [autocomplete]="autocomplete" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <ng-container *ngTemplateOutlet="pageContent"></ng-container>
+    </form>
     } @else {
-      <ng-content></ng-content>
+    <ng-container *ngTemplateOutlet="pageContent"></ng-container>
     }
   </div>
 </ui-overlay>
