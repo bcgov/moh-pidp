@@ -12,8 +12,11 @@
     "analyze": "nx build pidp --stats-json && webpack-bundle-analyzer dist/apps/pidp/stats.json"
   },
   "resolutions": {
-    "sass": "1.77.6",
-    "caniuse-lite": "^1.0.30001792"
+    "sass": "1.97.3",
+    "caniuse-lite": "^1.0.30001792",
+    "cross-spawn": "^7.0.6",
+    "braces": "^3.0.3",
+    "ws": "^8.18.0"
   },
   "private": true,
   "dependencies": {
