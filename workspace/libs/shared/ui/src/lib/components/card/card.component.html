@@ -1,43 +1,50 @@
+<ng-template #hintSlot>
+  <ng-content select="[uiCardHint]"></ng-content>
+</ng-template>
+<ng-template #contentSlot>
+  <ng-content select="[uiCardContent]"></ng-content>
+</ng-template>
+<ng-template #actionsSlot>
+  <ng-content select="[uiCardActions]"></ng-content>
+</ng-template>
 <mat-card class="ui-card" appearance="outlined" [class]="class">
   @if (icon || heading) {
-    <mat-card-header
-    [class]="{
+  <mat-card-header [class]="{
       'icon-only': icon && !heading,
       'title-only': !icon && heading
     }">
-      @if (icon) {
-        <div mat-card-avatar>
-          <!-- Using <mat-icon> to maintain specificity and allow mixins to override -->
-          <mat-icon
-        [class]="{
+    @if (icon) {
+    <div mat-card-avatar>
+      <!-- Using <mat-icon> to maintain specificity and allow mixins to override -->
+      <mat-icon [class]="{
           'material-icons-outlined': iconType === 'outlined',
           'material-icons-round': iconType === 'round',
           'material-icons-sharp': iconType === 'sharp'
         }">
-            {{ icon }}
-          </mat-icon>
-        </div>
-      }
-      @if (heading) {
-        <mat-card-title>
-          {{ heading }}
-        </mat-card-title>
-      }
-      @if (cardHint.length) {
-        <span class="hint">
-          <ng-content select="[uiCardHint]"></ng-content>
-        </span>
-      }
-    </mat-card-header>
+        {{ icon }}
+      </mat-icon>
+    </div>
+    }
+    @if (heading) {
+    <mat-card-title>
+      {{ heading }}
+    </mat-card-title>
+    }
+    @if (cardHint.length) {
+    <span class="hint">
+      <ng-container *ngTemplateOutlet="hintSlot"></ng-container>
+    </span>
+    }
+  </mat-card-header>
   }
   @if (cardContent.length) {
-    <mat-card-content>
-      <ng-content select="[uiCardContent]"></ng-content>
-    </mat-card-content>
+  <mat-card-content>
+    <ng-container *ngTemplateOutlet="contentSlot"></ng-container>
+  </mat-card-content>
   }
   @if (cardActions.length) {
-    <mat-card-actions>
-      <ng-content select="[uiCardActions]"></ng-content>
-    </mat-card-actions>
+  <mat-card-actions>
+    <ng-container *ngTemplateOutlet="actionsSlot"></ng-container>
+  </mat-card-actions>
   }
 </mat-card>

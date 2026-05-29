@@ -1,8 +1,10 @@
-<ui-card
-  [icon]="icon"
-  [iconType]="iconType"
-  [heading]="heading"
-  [class]="{
+<ng-template #contentSlot>
+  <ng-content select="[uiAlertContent]"></ng-content>
+</ng-template>
+<ng-template #actionsSlot>
+  <ng-content select="[uiAlertActions]"></ng-content>
+</ng-template>
+<ui-card [icon]="icon" [iconType]="iconType" [heading]="heading" [class]="{
     'ui-card-alert': true,
     indent: true,
     success: type === 'success',
@@ -11,16 +13,14 @@
     danger: type === 'danger',
     muted: type === 'muted'
   }">
-  <!-- Work around for ngProjectAs not passing directive reference when applied to ng-content -->
   @if (alertContent.length) {
-    <ng-container uiCardContent>
-      <ng-content select="[uiAlertContent]"></ng-content>
-    </ng-container>
+  <ng-container uiCardContent>
+    <ng-container *ngTemplateOutlet="contentSlot"></ng-container>
+  </ng-container>
   }
-  <!-- Work around for ngProjectAs not passing directive reference when applied to ng-content -->
   @if (alertActions.length) {
-    <ng-container uiCardActions>
-      <ng-content select="[uiAlertActions]"></ng-content>
-    </ng-container>
+  <ng-container uiCardActions>
+    <ng-container *ngTemplateOutlet="actionsSlot"></ng-container>
+  </ng-container>
   }
 </ui-card>

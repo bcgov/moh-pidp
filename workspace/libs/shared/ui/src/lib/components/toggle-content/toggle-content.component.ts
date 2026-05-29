@@ -1,4 +1,4 @@
-
+import { NgTemplateOutlet  } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -19,7 +19,7 @@ import { ToggleContentChange } from './toggle-content-change.model';
   templateUrl: './toggle-content.component.html',
   styleUrls: ['./toggle-content.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatSlideToggleModule],
+  imports: [MatSlideToggleModule, NgTemplateOutlet],
 })
 export class ToggleContentComponent {
   @Input() public color: ThemePalette;
