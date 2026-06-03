@@ -1,13 +1,12 @@
 <div class="page-container" uiPidpInjectViewportCss>
   <header>
     <div class="banner">
-      <a class="logo-link" title="BC Government Logo Home" aria-label="BC Government Logo Home"
-        (click)="navigateToRoot()">
+      <a class="logo-link" href="/" (click)="navigateToRoot(); $event.preventDefault()">
         @if (isMobile) {
-        <img class="logo-mobile" loading="lazy" src="../assets/images/logo.svg" alt="BC Government Logo Home" />
+        <img class="logo-mobile" loading="lazy" src="../assets/images/logo.svg" alt="BC Government Home" />
         }
         @if (!isMobile) {
-        <img class="logo-desktop" loading="lazy" src="../assets/images/logo-banner.svg" alt="BC Government Logo Home" />
+        <img class="logo-desktop" loading="lazy" src="../assets/images/logo-banner.svg" alt="BC Government Home" />
         }
       </a>
     </div>

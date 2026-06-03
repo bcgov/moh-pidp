@@ -144,9 +144,11 @@ export class FormUtilsService {
     control: FormControl | FormGroup,
     blacklist?: string[],
   ): void {
-    setOrReset
-      ? this.setValidators(control, [Validators.required], blacklist)
-      : this.resetAndClearValidators(control, blacklist);
+    if (setOrReset) {
+      this.setValidators(control, [Validators.required], blacklist);
+    } else {
+      this.resetAndClearValidators(control, blacklist);
+    }
   }
 
   /**

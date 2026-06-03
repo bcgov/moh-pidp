@@ -27,7 +27,7 @@ describe('PortalCardComponent', () => {
   let fixture: ComponentFixture<PortalCardComponent>;
   let router: Router;
   let mockProfileStatus: ProfileStatus;
-  let windowSpy: Spy<any>;
+  let windowOpenSpy: jest.SpyInstance;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -60,7 +60,7 @@ describe('PortalCardComponent', () => {
     mockProfileStatus.status.provincialAttachmentSystem.statusCode =
       StatusCode.NOT_AVAILABLE;
 
-    windowSpy = jest.spyOn(window, 'window', 'get');
+    windowOpenSpy = jest.spyOn(window, 'open').mockImplementation(() => null);
   });
 
   describe('METHOD: onClickVisit', () => {
@@ -91,11 +91,6 @@ describe('PortalCardComponent', () => {
       } as IPortalSection;
 
       when('the onClickVisit method is invoked', () => {
-        windowSpy.mockImplementation(() => ({
-          open: (): void => {
-            return;
-          },
-        }));
         component.onClickVisit(section);
 
         then('the router should navigate', () => {
