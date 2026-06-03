@@ -1,5 +1,5 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -52,17 +52,19 @@ export interface DocumentSection extends IDocumentMetaData {
 ],
 })
 export class SignedOrAcceptedDocumentsPage implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly partyService = inject(PartyService);
+  private readonly resource = inject(SignedOrAcceptedDocumentsResource);
+  private readonly documentService = inject(DocumentService);
+  private readonly permissionsService = inject(PermissionsService);
+
   public title: string;
   public documents: DocumentSection[];
 
-  public constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly partyService: PartyService,
-    private readonly resource: SignedOrAcceptedDocumentsResource,
-    private readonly documentService: DocumentService,
-    private readonly permissionsService: PermissionsService,
-  ) {
+  public constructor() {
+    const route = this.route;
+
     this.title = route.snapshot.data.title;
     this.documents = [];
   }

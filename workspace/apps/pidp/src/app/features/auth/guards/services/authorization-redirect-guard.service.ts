@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Router, UrlTree } from '@angular/router';
 
 import { AuthService } from '../../services/auth.service';
@@ -8,11 +8,15 @@ import { AuthGuardService } from './abstract-auth-guard.service';
   providedIn: 'root',
 })
 export class AuthorizationRedirectGuardService extends AuthGuardService {
-  public constructor(
-    protected authService: AuthService,
-    private readonly router: Router,
-  ) {
+  protected authService: AuthService;
+  private readonly router = inject(Router);
+
+  public constructor() {
+    const authService = inject(AuthService);
+
     super(authService);
+  
+    this.authService = authService;
   }
 
   protected handleAccessCheck(

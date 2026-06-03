@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -21,14 +21,15 @@ import { FeedbackFormDialogComponent } from '../feedback-form/feedback-form.dial
   ],
 })
 export class FeedbackButtonComponent {
+  dialog = inject(MatDialog);
+
   public dialogWidth = '360px';
   public isMobileView = false;
   public buttonClass = 'feedback-button-box';
 
-  public constructor(
-    public dialog: MatDialog,
-    viewportService: ViewportService,
-  ) {
+  public constructor() {
+    const viewportService = inject(ViewportService);
+
     viewportService.viewportBroadcast$.subscribe((viewport) =>
       this.onViewportChange(viewport),
     );

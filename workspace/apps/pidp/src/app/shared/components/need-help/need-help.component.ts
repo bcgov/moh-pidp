@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, Inject, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 
 import { AnchorDirective, ExpansionPanelComponent } from '@bcgov/shared/ui';
 
@@ -12,6 +12,8 @@ import { APP_CONFIG, AppConfig } from '@app/app.config';
   imports: [AnchorDirective, ExpansionPanelComponent, NgClass],
 })
 export class NeedHelpComponent {
+  private config = inject<AppConfig>(APP_CONFIG);
+
   @Input() public showIcon: boolean;
   public showNeedHelp: boolean;
   public providerIdentitySupport: string;
@@ -29,7 +31,7 @@ export class NeedHelpComponent {
     }
   }
 
-  public constructor(@Inject(APP_CONFIG) private config: AppConfig) {
+  public constructor() {
     this.showIcon = false;
     this.showNeedHelp = false;
 

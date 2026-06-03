@@ -1,5 +1,5 @@
 
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
@@ -41,6 +41,14 @@ import { LinkAccountConfirmResource } from './link-account-confirm-resource.serv
   styleUrl: './link-account-confirm.page.scss',
 })
 export class LinkAccountConfirmPage implements OnInit {
+  private readonly config = inject<AppConfig>(APP_CONFIG);
+  private readonly dialog = inject(MatDialog);
+  private readonly authorizedUserService = inject(AuthorizedUserService);
+  private readonly linkAccountConfirmResource = inject(LinkAccountConfirmResource);
+  private readonly router = inject(Router);
+  private readonly loadingOverlayService = inject(LoadingOverlayService);
+  private readonly authService = inject(AuthService);
+
   public user$: Observable<User>;
   public breadcrumbsData: Array<{ title: string; path: string }> = [
     { title: 'Home', path: '' },
@@ -53,15 +61,7 @@ export class LinkAccountConfirmPage implements OnInit {
 
   public showInstructions = false;
   public logoutRedirectUrl: string;
-  public constructor(
-    @Inject(APP_CONFIG) private readonly config: AppConfig,
-    private readonly dialog: MatDialog,
-    private readonly authorizedUserService: AuthorizedUserService,
-    private readonly linkAccountConfirmResource: LinkAccountConfirmResource,
-    private readonly router: Router,
-    private readonly loadingOverlayService: LoadingOverlayService,
-    private readonly authService: AuthService,
-  ) {
+  public constructor() {
     this.user$ = this.authorizedUserService.user$;
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
   }

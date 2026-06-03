@@ -1,6 +1,6 @@
 
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import {
@@ -52,6 +52,13 @@ export class FeedbackFormDialogComponent
   extends AbstractFormPage<FeedbackFormState>
   implements OnInit
 {
+  dialogRef = inject<MatDialogRef<FeedbackFormDialogComponent>>(MatDialogRef);
+  private readonly feedbackFormDialogResource = inject(FeedbackFormDialogResource);
+  private readonly loadingOverlayService = inject(LoadingOverlayService);
+  private readonly logger = inject(LoggerService);
+  private readonly partyService = inject(PartyService);
+  private readonly toastService = inject(ToastService);
+
   public formState: FeedbackFormState;
   public showOverlayOnSubmit = false;
   public showErrorCard = false;
@@ -76,17 +83,11 @@ export class FeedbackFormDialogComponent
       textarea.style.height = `${Math.min(textarea.scrollHeight, 200)}px`;
     });
   }
-  public constructor(
-    dependenciesService: AbstractFormDependenciesService,
-    fb: FormBuilder,
-    dialog: MatDialog,
-    public dialogRef: MatDialogRef<FeedbackFormDialogComponent>,
-    private readonly feedbackFormDialogResource: FeedbackFormDialogResource,
-    private readonly loadingOverlayService: LoadingOverlayService,
-    private readonly logger: LoggerService,
-    private readonly partyService: PartyService,
-    private readonly toastService: ToastService,
-  ) {
+  public constructor() {
+    const dependenciesService = inject(AbstractFormDependenciesService);
+    const fb = inject(FormBuilder);
+    const dialog = inject(MatDialog);
+
     super(dependenciesService);
     this.formState = new FeedbackFormState(fb, dialog);
   }

@@ -1,5 +1,5 @@
 
-import { Component, OnInit, Type, ViewChild } from '@angular/core';
+import { Component, OnInit, Type, ViewChild, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -36,17 +36,19 @@ import { ViewDocumentDirective } from './view-document.directive';
 ],
 })
 export class ViewDocumentPage implements OnInit {
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly documentService = inject(DocumentService);
+
   public title: string;
   public document?: IDocument;
 
   @ViewChild(ViewDocumentDirective, { static: true })
   public loadedDocument!: ViewDocumentDirective;
 
-  public constructor(
-    private readonly router: Router,
-    private readonly route: ActivatedRoute,
-    private readonly documentService: DocumentService,
-  ) {
+  public constructor() {
+    const route = this.route;
+
     this.title = route.snapshot.data.title;
   }
 

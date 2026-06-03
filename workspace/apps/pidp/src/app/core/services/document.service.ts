@@ -1,4 +1,4 @@
-import { Inject, Injectable, Type } from '@angular/core';
+import { Injectable, Type, inject } from '@angular/core';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { UserAccessAgreementDocumentComponent } from '@app/features/profile/pages/user-access-agreement/components/user-access-agreement-document/user-access-agreement-document.component';
@@ -29,9 +29,11 @@ export interface IDocument extends IDocumentMetaData {
   providedIn: 'root',
 })
 export class DocumentService {
+  private readonly config = inject<AppConfig>(APP_CONFIG);
+
   private readonly documents: IDocumentMetaData[];
 
-  public constructor(@Inject(APP_CONFIG) private readonly config: AppConfig) {
+  public constructor() {
     this.documents = [
       {
         type: DocumentType.PIDP_COLLECTION_NOTICE,

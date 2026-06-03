@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { IsActiveMatchOptions } from '@angular/router';
 
 import { Observable, map, tap } from 'rxjs';
@@ -32,6 +32,13 @@ import { NavMenuComponent } from '../navbar-menu/nav-menu';
   imports: [AsyncPipe, NavMenuComponent, FeedbackButtonComponent],
 })
 export class PortalDashboardComponent implements IDashboard, OnInit {
+  private config = inject<AppConfig>(APP_CONFIG);
+  private authService = inject(AuthService);
+  private partyService = inject(PartyService);
+  private resource = inject(PortalResource);
+  private dataService = inject(CommonDataService);
+  private readonly permissionsService = inject(PermissionsService);
+
   public logoutRedirectUrl: string;
   public headerConfig: DashboardHeaderConfig;
   public brandConfig: { imgSrc: string; imgAlt: string };
@@ -43,14 +50,7 @@ export class PortalDashboardComponent implements IDashboard, OnInit {
 
   public alerts$!: Observable<AlertCode[]>;
 
-  public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
-    private authService: AuthService,
-    private partyService: PartyService,
-    private resource: PortalResource,
-    private dataService: CommonDataService,
-    private readonly permissionsService: PermissionsService,
-  ) {
+  public constructor() {
     this.logoutRedirectUrl = `${this.config.applicationUrl}/${this.config.routes.auth}`;
     this.headerConfig = { theme: 'light', allowMobileToggle: true };
     this.brandConfig = {

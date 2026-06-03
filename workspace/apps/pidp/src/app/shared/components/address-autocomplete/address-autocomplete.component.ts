@@ -1,5 +1,5 @@
 
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -40,6 +40,10 @@ import { AddressAutocompleteRetrieveResponse } from './address-autocomplete-retr
 ],
 })
 export class AddressAutocompleteComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  private toastService = inject(ToastService);
+  private addressAutocompleteResource = inject(AddressAutocompleteResource);
+
   /**
    * @description
    * Whether BC addresses can only be selected using
@@ -56,11 +60,7 @@ export class AddressAutocompleteComponent implements OnInit {
   public addressAutocompleteFields: AddressAutocompleteFindResponse[];
   public canadaPostUrl: string;
 
-  public constructor(
-    private fb: FormBuilder,
-    private toastService: ToastService,
-    private addressAutocompleteResource: AddressAutocompleteResource,
-  ) {
+  public constructor() {
     this.inBc = false;
     this.autocompleteAddress = new EventEmitter<Address>();
     this.addressAutocompleteFields = [];

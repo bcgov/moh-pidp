@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -24,6 +24,9 @@ import { profileSectionKeys } from './state/profile/profile-group.model';
   providedIn: 'root',
 })
 export class PortalService {
+  private readonly router = inject(Router);
+  private readonly permissionsService = inject(PermissionsService);
+
   public state$: Observable<PortalState>;
   public accessState$: Observable<AccessState>;
   /**
@@ -63,10 +66,7 @@ export class PortalService {
    */
   private _completedProfile: boolean;
 
-  public constructor(
-    private readonly router: Router,
-    private readonly permissionsService: PermissionsService,
-  ) {
+  public constructor() {
     this._profileStatus = null;
     this._state$ = new BehaviorSubject<PortalState>(null);
     this._accessState$ = new BehaviorSubject<AccessState>(null);

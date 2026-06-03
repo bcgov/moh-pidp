@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable, catchError } from 'rxjs';
 
@@ -16,11 +16,15 @@ import { CollegeCertification } from '../college-licence-declaration/college-cer
 export class CollegeLicenceInformationResource extends CrudResource<
   CollegeCertification[]
 > {
-  public constructor(
-    protected apiResource: ApiHttpClient,
-    private toastService: ToastService,
-  ) {
+  protected apiResource: ApiHttpClient;
+  private toastService = inject(ToastService);
+
+  public constructor() {
+    const apiResource = inject(ApiHttpClient);
+
     super(apiResource);
+  
+    this.apiResource = apiResource;
   }
 
   public get(partyId: number): Observable<CollegeCertification[] | null> {

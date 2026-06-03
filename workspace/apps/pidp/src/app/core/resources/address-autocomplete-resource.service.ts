@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable, catchError, map, of } from 'rxjs';
 
@@ -16,11 +16,11 @@ import { ApiHttpClient } from './api-http-client.service';
   providedIn: 'root',
 })
 export class AddressAutocompleteResource extends AbstractResource {
-  public constructor(
-    private apiResource: ApiHttpClient,
-    private toastService: ToastService,
-    private logger: LoggerService,
-  ) {
+  private apiResource = inject(ApiHttpClient);
+  private toastService = inject(ToastService);
+  private logger = inject(LoggerService);
+
+  public constructor() {
     super('address-autocomplete');
   }
 

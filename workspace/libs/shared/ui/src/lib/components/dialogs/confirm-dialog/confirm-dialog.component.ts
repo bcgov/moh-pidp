@@ -1,15 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  Inject,
-  Input,
-  OnInit,
-  Type,
-  ViewChild,
-  ViewContainerRef,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, Input, OnInit, Type, ViewChild, ViewContainerRef, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import {
   MAT_DIALOG_DATA,
@@ -52,6 +42,10 @@ import { DIALOG_DEFAULT_OPTION } from '../dialogs-properties.provider';
 ],
 })
 export class ConfirmDialogComponent implements OnInit, AfterViewInit {
+  dialogRef = inject<MatDialogRef<ConfirmDialogComponent>>(MatDialogRef);
+  customOptions = inject<DialogOptions>(MAT_DIALOG_DATA);
+  defaultOptions = inject<DialogDefaultOptions>(DIALOG_DEFAULT_OPTION);
+
   public options: DialogOptions;
   public dialogContentOutput: DialogContentOutput<unknown> | null;
   public readonly loading$: Observable<LoadingOptions | null>;
@@ -62,12 +56,11 @@ export class ConfirmDialogComponent implements OnInit, AfterViewInit {
   @ViewChild('dialogContentHost', { static: true, read: ViewContainerRef })
   public dialogContentHost!: ViewContainerRef;
 
-  public constructor(
-    public dialogRef: MatDialogRef<ConfirmDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public customOptions: DialogOptions,
-    @Inject(DIALOG_DEFAULT_OPTION) public defaultOptions: DialogDefaultOptions,
-    loadingService: LoadingService,
-  ) {
+  public constructor() {
+    const customOptions = this.customOptions;
+    const defaultOptions = this.defaultOptions;
+    const loadingService = inject(LoadingService);
+
     this.options =
       typeof customOptions === 'string'
         ? this.getOptions(defaultOptions[customOptions]())

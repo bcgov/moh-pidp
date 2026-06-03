@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable, catchError, throwError } from 'rxjs';
 
@@ -16,10 +16,9 @@ import { Credential } from './account-linking.model';
   providedIn: 'root',
 })
 export class AccountLinkingResource {
-  public constructor(
-    protected apiResource: ApiHttpClient,
-    private portalResource: PortalResource,
-  ) {}
+  protected apiResource = inject(ApiHttpClient);
+  private portalResource = inject(PortalResource);
+
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
     return this.portalResource.getProfileStatus(partyId);

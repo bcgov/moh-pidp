@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { UrlTree } from '@angular/router';
@@ -20,12 +20,10 @@ import { FormUtilsService } from '@core/services/form-utils.service';
  * without having to update every derived class.
  */
 @Injectable({ providedIn: 'root' })
-export class AbstractFormDependenciesService {
-  public constructor(
-    public dialog: MatDialog,
-    public formUtilsService: FormUtilsService,
-    public loadingOverlayService: LoadingOverlayService,
-  ) {}
+export class AbstractFormDependenciesService {  dialog = inject(MatDialog);
+  formUtilsService = inject(FormUtilsService);
+  loadingOverlayService = inject(LoadingOverlayService);
+
 }
 export interface IFormPage {
   /**

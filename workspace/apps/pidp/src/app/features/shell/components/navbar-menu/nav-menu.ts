@@ -1,15 +1,5 @@
 import { NgClass, NgTemplateOutlet } from '@angular/common';
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Output,
-  SimpleChanges,
-  ViewChild,
-} from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import {
@@ -68,6 +58,12 @@ import { NavMenuResource } from './nav-menu.resource.service';
 ],
 })
 export class NavMenuComponent implements OnChanges, OnInit, OnDestroy {
+  private readonly viewportService = inject(ViewportService);
+  private readonly router = inject(Router);
+  private readonly resource = inject(NavMenuResource);
+  private readonly partyService = inject(PartyService);
+  private readonly permissionsService = inject(PermissionsService);
+
   @Input() public alerts: AlertCode[] | null = [];
   @Input() public emailSupport!: string;
   @Input() public collegeRoute!: string;
@@ -95,13 +91,7 @@ export class NavMenuComponent implements OnChanges, OnInit, OnDestroy {
   private readonly unsubscribe$ = new Subject<void>();
   public IdentityProvider = IdentityProvider;
 
-  public constructor(
-    private readonly viewportService: ViewportService,
-    private readonly router: Router,
-    private readonly resource: NavMenuResource,
-    private readonly partyService: PartyService,
-    private readonly permissionsService: PermissionsService,
-  ) {
+  public constructor() {
     this.viewportService.viewportBroadcast$.subscribe((viewport) =>
       this.onViewportChange(viewport),
     );

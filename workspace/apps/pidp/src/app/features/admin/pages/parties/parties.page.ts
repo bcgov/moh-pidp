@@ -1,5 +1,5 @@
 
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -39,6 +39,10 @@ import {
 ],
 })
 export class PartiesPage implements OnInit {
+  private readonly config = inject<AppConfig>(APP_CONFIG);
+  private readonly adminResource = inject(AdminResource);
+  private readonly dialog = inject(MatDialog);
+
   public title: string;
   public dataSource: MatTableDataSource<PartyList>;
   public displayedColumns: string[] = [
@@ -51,12 +55,9 @@ export class PartiesPage implements OnInit {
   public environment: string;
   public production: string;
 
-  public constructor(
-    @Inject(APP_CONFIG) private readonly config: AppConfig,
-    private readonly adminResource: AdminResource,
-    private readonly dialog: MatDialog,
-    route: ActivatedRoute,
-  ) {
+  public constructor() {
+    const route = inject(ActivatedRoute);
+
     this.title = route.snapshot.data.title;
     this.dataSource = new MatTableDataSource();
     this.environment = this.config.environmentName;

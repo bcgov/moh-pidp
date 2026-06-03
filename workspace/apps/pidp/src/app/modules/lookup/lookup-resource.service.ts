@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable, catchError, map, of } from 'rxjs';
 
@@ -13,10 +13,9 @@ import { LookupConfig } from './lookup.types';
   providedIn: 'root',
 })
 export class LookupResource {
-  public constructor(
-    private apiResource: ApiHttpClient,
-    private resourceUtilsService: ResourceUtilsService,
-  ) {}
+  private apiResource = inject(ApiHttpClient);
+  private resourceUtilsService = inject(ResourceUtilsService);
+
 
   /**
    * @description

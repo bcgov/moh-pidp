@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 
@@ -13,12 +13,13 @@ import { EnvironmentName } from '../../../environments/environment.model';
   providedIn: 'root',
 })
 export class SnowplowService {
+  private config = inject<AppConfig>(APP_CONFIG);
+
   private _window: ISnowplowWindow;
 
-  public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
-    window: WindowRefService,
-  ) {
+  public constructor() {
+    const window = inject(WindowRefService);
+
     this._window = window.nativeWindow;
     if (this._window.snowplow) {
       let collector: string;

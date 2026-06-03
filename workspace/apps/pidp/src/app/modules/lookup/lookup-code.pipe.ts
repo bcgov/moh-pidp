@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform, inject } from '@angular/core';
 
 import { LookupService } from './lookup.service';
 import { Lookup, LookupConfig } from './lookup.types';
@@ -8,7 +8,8 @@ import { Lookup, LookupConfig } from './lookup.types';
   standalone: true,
 })
 export class LookupCodePipe implements PipeTransform {
-  public constructor(private lookupService: LookupService) {}
+  private lookupService = inject(LookupService);
+
 
   public transform<T extends string | number>(
     lookupCode: T | null | undefined,

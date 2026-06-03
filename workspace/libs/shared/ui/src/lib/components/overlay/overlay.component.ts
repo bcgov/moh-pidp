@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { Observable } from 'rxjs';
@@ -17,7 +17,9 @@ export class OverlayComponent {
   public readonly message: string;
   public readonly loading$: Observable<LoadingOptions | null>;
 
-  public constructor(loadingService: LoadingService) {
+  public constructor() {
+    const loadingService = inject(LoadingService);
+
     this.message = 'Your request is being processed';
     this.loading$ = loadingService.loading$;
   }

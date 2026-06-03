@@ -1,5 +1,5 @@
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { InjectViewportCssClassDirective } from '../../directives/viewport-css.directive';
@@ -13,13 +13,14 @@ import { AnchorDirective } from '../anchor/anchor.directive';
   imports: [AnchorDirective, InjectViewportCssClassDirective],
 })
 export class LayoutHeaderFooterComponent {
+  private readonly router = inject(Router);
+
   @Input() public emailSupport!: string;
   public isMobile = true;
 
-  public constructor(
-    viewportService: ViewportService,
-    private readonly router: Router,
-  ) {
+  public constructor() {
+    const viewportService = inject(ViewportService);
+
     viewportService.viewportBroadcast$.subscribe((viewport) =>
       this.onViewportChange(viewport),
     );

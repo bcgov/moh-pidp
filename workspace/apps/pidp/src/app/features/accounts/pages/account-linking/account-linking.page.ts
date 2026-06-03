@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -60,6 +60,20 @@ import { Credential } from './account-linking.model';
   styleUrl: './account-linking.page.scss',
 })
 export class AccountLinkingPage implements OnInit, OnDestroy {
+  private readonly config = inject<AppConfig>(APP_CONFIG);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly partyService = inject(PartyService);
+  private readonly logger = inject(LoggerService);
+  private readonly utilsService = inject(UtilsService);
+  private readonly authorizedUserService = inject(AuthorizedUserService);
+  private readonly documentService = inject(DocumentService);
+  private readonly resource = inject(AccountLinkingResource);
+  private readonly authService = inject(AuthService);
+  private readonly dialog = inject(MatDialog);
+  private readonly loadingOverlayService = inject(LoadingOverlayService);
+  private readonly navigationService = inject(NavigationService);
+
   public title: string;
   public completed: boolean | null;
   public redirectUrl: string | null = null;
@@ -72,21 +86,7 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
   public AccountRoutes = AccountsRoutes;
   private readonly unsubscribe$ = new Subject<void>();
 
-  public constructor(
-    @Inject(APP_CONFIG) private readonly config: AppConfig,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly partyService: PartyService,
-    private readonly logger: LoggerService,
-    private readonly utilsService: UtilsService,
-    private readonly authorizedUserService: AuthorizedUserService,
-    private readonly documentService: DocumentService,
-    private readonly resource: AccountLinkingResource,
-    private readonly authService: AuthService,
-    private readonly dialog: MatDialog,
-    private readonly loadingOverlayService: LoadingOverlayService,
-    private readonly navigationService: NavigationService,
-  ) {
+  public constructor() {
     this.title = this.route.snapshot.data.title;
     const partyId = this.partyService.partyId;
 

@@ -1,5 +1,5 @@
 
-import { Component, Inject, Injectable } from '@angular/core';
+import { Component, Injectable, inject } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -16,7 +16,8 @@ export const LOADING_OVERLAY_DEFAULT_MESSAGE =
  */
 @Injectable({ providedIn: 'root' })
 export class LoadingOverlayService {
-  constructor(private dialog: MatDialog) {}
+  private dialog = inject(MatDialog);
+
 
   public open(message?: string): void {
     // Uses mat-dialog to display the overlay with minimal custom UI code and CSS.
@@ -71,9 +72,7 @@ interface PidpLoadingDialogData {
   ],
   imports: [MatProgressSpinnerModule],
 })
-export class PidpLoadingDialogComponent {
-  public constructor(
-    public dialogRef: MatDialogRef<PidpLoadingDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: PidpLoadingDialogData,
-  ) {}
+export class PidpLoadingDialogComponent {  dialogRef = inject<MatDialogRef<PidpLoadingDialogComponent>>(MatDialogRef);
+  data = inject<PidpLoadingDialogData>(MAT_DIALOG_DATA);
+
 }

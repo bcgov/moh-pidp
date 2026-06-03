@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable, map, of } from 'rxjs';
 
@@ -20,9 +20,11 @@ export interface ILookupService extends LookupConfig {
   providedIn: 'root',
 })
 export class LookupService implements ILookupService {
+  private lookupResource = inject(LookupResource);
+
   private lookupConfig: LookupConfig | null;
 
-  public constructor(private lookupResource: LookupResource) {
+  public constructor() {
     this.lookupConfig = null;
   }
 

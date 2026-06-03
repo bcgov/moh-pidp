@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
@@ -13,12 +13,11 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
 })
 export class AutoLoginPage implements OnInit {
-  public constructor(
-    @Inject(APP_CONFIG) private readonly config: AppConfig,
-    private readonly authService: AuthService,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-  ) {}
+  private readonly config = inject<AppConfig>(APP_CONFIG);
+  private readonly authService = inject(AuthService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+
 
   public ngOnInit(): void {
     const idpHint = this.route.snapshot.queryParamMap.get('idp_hint') ?? '';

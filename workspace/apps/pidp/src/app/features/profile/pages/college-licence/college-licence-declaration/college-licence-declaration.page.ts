@@ -1,6 +1,6 @@
 
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatOptionModule } from '@angular/material/core';
@@ -59,6 +59,14 @@ export class CollegeLicenceDeclarationPage
   extends AbstractFormPage<CollegeLicenceDeclarationFormState>
   implements OnInit
 {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly partyService = inject(PartyService);
+  private readonly resource = inject(CollegeLicenceDeclarationResource);
+  private readonly logger = inject(LoggerService);
+  private readonly lookupService = inject(LookupService);
+  private readonly dataService = inject(CommonDataService);
+
   @Input() public disableCollegeCode = false;
   @Input() public disableCollegeLicenceNumber = false;
 
@@ -79,17 +87,10 @@ export class CollegeLicenceDeclarationPage
     { title: 'College Licence', path: '' },
   ];
 
-  public constructor(
-    dependenciesService: AbstractFormDependenciesService,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly partyService: PartyService,
-    private readonly resource: CollegeLicenceDeclarationResource,
-    private readonly logger: LoggerService,
-    private readonly lookupService: LookupService,
-    private readonly dataService: CommonDataService,
-    fb: FormBuilder,
-  ) {
+  public constructor() {
+    const dependenciesService = inject(AbstractFormDependenciesService);
+    const fb = inject(FormBuilder);
+
     super(dependenciesService);
 
     this.title = this.route.snapshot.data.title;

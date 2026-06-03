@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable, catchError, tap, throwError } from 'rxjs';
 
@@ -10,10 +10,9 @@ import { ToastService } from '@app/core/services/toast.service';
   providedIn: 'root',
 })
 export class LinkAccountConfirmResource {
-  public constructor(
-    private readonly apiResource: ApiHttpClient,
-    private readonly toastService: ToastService,
-  ) {}
+  private readonly apiResource = inject(ApiHttpClient);
+  private readonly toastService = inject(ToastService);
+
 
   public linkAccount(): Observable<number> {
     return this.apiResource.post<number>('credentials', {}).pipe(

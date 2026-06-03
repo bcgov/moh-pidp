@@ -1,5 +1,5 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable, catchError, of } from 'rxjs';
 
@@ -11,7 +11,8 @@ import { ProfileStatus } from './models/profile-status.model';
   providedIn: 'root',
 })
 export class PortalResource {
-  public constructor(private apiResource: ApiHttpClient) {}
+  private apiResource = inject(ApiHttpClient);
+
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
     if (!partyId) {

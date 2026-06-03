@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -22,10 +22,9 @@ import { LoggerService } from './logger.service';
   providedIn: 'root',
 })
 export class FormUtilsService {
-  public constructor(
-    private fb: FormBuilder,
-    private logger: LoggerService,
-  ) {}
+  private fb = inject(FormBuilder);
+  private logger = inject(LoggerService);
+
 
   /**
    * @description

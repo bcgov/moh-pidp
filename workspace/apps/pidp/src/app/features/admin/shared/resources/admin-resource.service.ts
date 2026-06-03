@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable, catchError, of } from 'rxjs';
 
@@ -18,7 +18,8 @@ export interface PartyList {
   providedIn: 'root',
 })
 export class AdminResource {
-  public constructor(private apiResource: ApiHttpClient) {}
+  private apiResource = inject(ApiHttpClient);
+
 
   public getParties(): Observable<PartyList[]> {
     return this.apiResource.get<PartyList[]>('/admin/parties').pipe(

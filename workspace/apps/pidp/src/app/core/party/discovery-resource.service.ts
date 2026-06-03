@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable, map } from 'rxjs';
 
@@ -32,7 +32,8 @@ export enum DiscoveryStatus {
   providedIn: 'root',
 })
 export class DiscoveryResource {
-  public constructor(private apiResource: ApiHttpClient) {}
+  private apiResource = inject(ApiHttpClient);
+
 
   /**
    * @description

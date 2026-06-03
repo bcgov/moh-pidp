@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import {
   AbstractLoggerService,
@@ -14,9 +14,8 @@ import { EnvironmentName } from '../../../environments/environment.model';
   providedIn: 'root',
 })
 export class LoggerService extends AbstractLoggerService {
-  public constructor(@Inject(APP_CONFIG) private config: AppConfig) {
-    super();
-  }
+  private config = inject<AppConfig>(APP_CONFIG);
+
 
   /**
    * @description

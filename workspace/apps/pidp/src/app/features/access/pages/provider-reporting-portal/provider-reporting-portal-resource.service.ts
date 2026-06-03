@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable, catchError, throwError } from 'rxjs';
 
@@ -13,10 +13,9 @@ import { PortalResource } from '@app/features/portal/portal-resource.service';
   providedIn: 'root',
 })
 export class ProviderReportingPortalResource {
-  public constructor(
-    private readonly apiResource: ApiHttpClient,
-    private readonly portalResource: PortalResource,
-  ) {}
+  private readonly apiResource = inject(ApiHttpClient);
+  private readonly portalResource = inject(PortalResource);
+
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
     return this.portalResource.getProfileStatus(partyId);

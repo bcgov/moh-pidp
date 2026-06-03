@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostListener, Optional } from '@angular/core';
+import { Directive, ElementRef, HostListener, inject } from '@angular/core';
 import { NgControl } from '@angular/forms';
 
 @Directive({
@@ -7,10 +7,9 @@ import { NgControl } from '@angular/forms';
   standalone: true,
 })
 export class TrimDirective {
-  public constructor(
-    private readonly el: ElementRef<HTMLInputElement>,
-    @Optional() private readonly ngControl: NgControl,
-  ) {}
+  private readonly el = inject<ElementRef<HTMLInputElement>>(ElementRef);
+  private readonly ngControl = inject(NgControl, { optional: true });
+
 
   @HostListener('blur') public onBlur(): void {
     let value: string | null = this.el.nativeElement.value.trim();

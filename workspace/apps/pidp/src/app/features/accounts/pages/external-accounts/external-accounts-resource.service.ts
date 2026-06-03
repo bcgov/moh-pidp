@@ -1,5 +1,5 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 
 import { Observable, catchError, map, of, throwError } from 'rxjs';
 
@@ -15,12 +15,10 @@ import { InvitedExternalAccount } from './external-accounts.model';
   providedIn: 'root',
 })
 export class ExternalAccountsResource {
-  public currentStep = signal(1);
+  private apiResource = inject(ApiHttpClient);
+  private portalResource = inject(PortalResource);
 
-  public constructor(
-    private apiResource: ApiHttpClient,
-    private portalResource: PortalResource,
-  ) {}
+  public currentStep = signal(1);
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
     return this.portalResource.getProfileStatus(partyId);

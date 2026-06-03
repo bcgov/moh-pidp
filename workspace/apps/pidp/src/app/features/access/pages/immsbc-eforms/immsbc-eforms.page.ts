@@ -1,6 +1,6 @@
 
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -57,6 +57,13 @@ import {
 ],
 })
 export class ImmsBCEformsPage implements OnInit, AfterViewInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly partyService = inject(PartyService);
+  private readonly resource = inject(ImmsBCEformsResource);
+  private readonly logger = inject(LoggerService);
+  private readonly snowplowService = inject(SnowplowService);
+
   public title: string;
   public collectionNotice: string;
   public completed: boolean | null;
@@ -74,15 +81,9 @@ export class ImmsBCEformsPage implements OnInit, AfterViewInit {
     { title: 'Immunization Entry eForm', path: '' },
   ];
 
-  public constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly partyService: PartyService,
-    private readonly resource: ImmsBCEformsResource,
-    private readonly logger: LoggerService,
-    documentService: DocumentService,
-    private readonly snowplowService: SnowplowService,
-  ) {
+  public constructor() {
+    const documentService = inject(DocumentService);
+
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
     this.collectionNotice = documentService.getImmsBCEformsCollectionNotice();
