@@ -87,9 +87,11 @@ export class AddressAutocompleteComponent implements OnInit {
             addressRetrieved.postalCode,
           );
 
-          !this.inBc || address.provinceCode === Province.BRITISH_COLUMBIA
-            ? this.autocompleteAddress.emit(address)
-            : this.toastService.openErrorToast('Address must be located in BC');
+          if(!this.inBc || address.provinceCode === Province.BRITISH_COLUMBIA){
+            this.autocompleteAddress.emit(address);
+          } else {
+            this.toastService.openErrorToast('Address must be located in BC');
+          }
         } else {
           this.toastService.openErrorToast('Address could not be retrieved');
         }

@@ -17,7 +17,7 @@ import { FeedbackSendComponent } from './components/feedback-send.component';
   imports: [FaIconComponent, InjectViewportCssClassDirective, NgClass],
 })
 export class SuccessDialogComponent implements OnInit {
-  dialog = inject(MatDialog);
+  private dialog = inject(MatDialog);
 
   public faCircleCheck = faCircleCheck;
   public faXmark = faXmark;

@@ -20,9 +20,10 @@ import { FormUtilsService } from '@core/services/form-utils.service';
  * without having to update every derived class.
  */
 @Injectable({ providedIn: 'root' })
-export class AbstractFormDependenciesService {  dialog = inject(MatDialog);
-  formUtilsService = inject(FormUtilsService);
-  loadingOverlayService = inject(LoadingOverlayService);
+export class AbstractFormDependenciesService {
+  public dialog = inject(MatDialog);
+  public formUtilsService = inject(FormUtilsService);
+  public loadingOverlayService = inject(LoadingOverlayService);
 
 }
 export interface IFormPage {

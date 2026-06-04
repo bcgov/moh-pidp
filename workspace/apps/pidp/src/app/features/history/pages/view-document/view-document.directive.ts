@@ -4,6 +4,7 @@ import { Directive, ViewContainerRef, inject } from '@angular/core';
   selector: '[appViewDocument]',
   standalone: true,
 })
-export class ViewDocumentDirective {  viewContainerRef = inject(ViewContainerRef);
+export class ViewDocumentDirective {
+  private viewContainerRef = inject(ViewContainerRef);
 
 }

@@ -27,7 +27,6 @@ describe('PortalCardComponent', () => {
   let fixture: ComponentFixture<PortalCardComponent>;
   let router: Router;
   let mockProfileStatus: ProfileStatus;
-  let windowOpenSpy: jest.SpyInstance;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -60,19 +59,16 @@ describe('PortalCardComponent', () => {
     mockProfileStatus.status.provincialAttachmentSystem.statusCode =
       StatusCode.NOT_AVAILABLE;
 
-    windowOpenSpy = jest.spyOn(window, 'open').mockImplementation(() => null);
+    jest.spyOn(window, 'open').mockImplementation(() => null);
   });
 
   describe('METHOD: onClickVisit', () => {
     given('the component has been initialized', () => {
       const partyId = randNumber({ min: 1 });
       partyServiceSpy.accessorSpies.getters.partyId.mockReturnValue(partyId);
-      const performAction = (): void => {
-        return;
-      };
-
+      type PerformAction = IPortalSection['performAction'];
       const performActionSpy =
-        createFunctionSpy<typeof performAction>('performAction');
+        createFunctionSpy<PerformAction>('performAction');
 
       const section = {
         key: 'demographics',

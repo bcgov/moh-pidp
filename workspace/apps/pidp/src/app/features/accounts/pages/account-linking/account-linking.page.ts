@@ -202,13 +202,15 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
   }
 
   public navigateTo(): void {
-    this.hasCredential(IdentityProvider.BC_PROVIDER)
-      ? this.onPageNavigate([
-          AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_EDIT),
-        ])
-      : this.onPageNavigate([
-          AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_APPLICATION),
+    if(this.hasCredential(IdentityProvider.BC_PROVIDER)) {
+      this.onPageNavigate([
+        AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_EDIT),
+      ]);
+    } else {
+      this.onPageNavigate([
+        AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_APPLICATION),
         ]);
+    }
   }
 
   public onPageNavigate(url: string[]): void {

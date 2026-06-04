@@ -52,7 +52,7 @@ export class FeedbackFormDialogComponent
   extends AbstractFormPage<FeedbackFormState>
   implements OnInit
 {
-  dialogRef = inject<MatDialogRef<FeedbackFormDialogComponent>>(MatDialogRef);
+  private dialogRef = inject<MatDialogRef<FeedbackFormDialogComponent>>(MatDialogRef);
   private readonly feedbackFormDialogResource = inject(FeedbackFormDialogResource);
   private readonly loadingOverlayService = inject(LoadingOverlayService);
   private readonly logger = inject(LoggerService);
