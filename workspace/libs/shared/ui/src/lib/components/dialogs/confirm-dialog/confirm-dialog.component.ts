@@ -42,9 +42,9 @@ import { DIALOG_DEFAULT_OPTION } from '../dialogs-properties.provider';
 ],
 })
 export class ConfirmDialogComponent implements OnInit, AfterViewInit {
-  dialogRef = inject<MatDialogRef<ConfirmDialogComponent>>(MatDialogRef);
-  customOptions = inject<DialogOptions>(MAT_DIALOG_DATA);
-  defaultOptions = inject<DialogDefaultOptions>(DIALOG_DEFAULT_OPTION);
+  private dialogRef = inject<MatDialogRef<ConfirmDialogComponent>>(MatDialogRef);
+  private customOptions = inject<DialogOptions>(MAT_DIALOG_DATA);
+  private defaultOptions = inject<DialogDefaultOptions>(DIALOG_DEFAULT_OPTION);
 
   public options: DialogOptions;
   public dialogContentOutput: DialogContentOutput<unknown> | null;
@@ -87,7 +87,9 @@ export class ConfirmDialogComponent implements OnInit, AfterViewInit {
     }
 
     this.dialogRef.updateSize(this.options.width, this.options.height);
-    this.options.class && this.dialogRef.addPanelClass(this.options.class);
+    if (this.options.class) {
+      this.dialogRef.addPanelClass(this.options.class);
+    }
   }
 
   public ngAfterViewInit(): void {

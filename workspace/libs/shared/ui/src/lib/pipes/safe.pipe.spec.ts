@@ -40,7 +40,7 @@ describe('SafePipe', () => {
         (finalResult, type) => finalResult && !!pipe.transform(value, type),
         result,
       );
-    } catch (e) {
+    } catch {
       result = false;
     }
     expect(result).toBe(true);
@@ -53,7 +53,7 @@ describe('SafePipe', () => {
     let result = null;
     try {
       pipe.transform(value, domSanitizerType);
-    } catch (e) {
+    } catch {
       result = message;
     }
     expect(result).toBe(message);

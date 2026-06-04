@@ -15,7 +15,7 @@ export class ResourceUtilsService {
     return queryParams
       ? Object.keys(queryParams).reduce(
           (httpParams: HttpParams, key: string) =>
-            !queryParams[key] !== null && !queryParams[key] !== undefined
+            queryParams[key] !== null && queryParams[key] !== undefined
               ? this.createHttpParam(httpParams, key, queryParams[key])
               : httpParams,
           new HttpParams(),

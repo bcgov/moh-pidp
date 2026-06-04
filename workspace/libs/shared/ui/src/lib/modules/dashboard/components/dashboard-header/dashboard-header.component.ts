@@ -29,7 +29,7 @@ import { DashboardHeaderTheme } from '../../models/dashboard-header-config.model
 ],
 })
 export class DashboardHeaderComponent {
-  viewportService = inject(ViewportService);
+  protected viewportService = inject(ViewportService);
 
   /**
    * @description

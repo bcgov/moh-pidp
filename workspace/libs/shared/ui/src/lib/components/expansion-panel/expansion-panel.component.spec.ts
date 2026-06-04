@@ -26,7 +26,7 @@ describe('ExpansionPanelComponent', () => {
             By.css('.expansion-panel-content'),
           );
           expect(expansionPanelContent.styles.visibility).toBe('hidden');
-          expect(component.expanded).toBeFalsy;
+          expect(component.expanded).toBeFalsy();
         });
       });
     });
@@ -44,7 +44,7 @@ describe('ExpansionPanelComponent', () => {
             By.css('.expansion-panel-content'),
           );
           expect(expansionPanelContent.styles.visibility).toBe('');
-          expect(component.expanded).toBeTruthy;
+          expect(component.expanded).toBeTruthy();
         });
       });
     });
@@ -61,7 +61,7 @@ describe('ExpansionPanelComponent', () => {
             By.css('.expansion-panel-content'),
           );
           expect(expansionPanelContent.styles.visibility).toBe('');
-          expect(component.expanded).toBeTruthy;
+          expect(component.expanded).toBeTruthy();
         });
       });
     });
@@ -77,7 +77,7 @@ describe('ExpansionPanelComponent', () => {
             By.css('.expansion-panel-content'),
           );
           expect(expansionPanelContent.styles.visibility).toBe('hidden');
-          expect(component.expanded).toBeFalsy;
+          expect(component.expanded).toBeFalsy();
         });
       });
     });

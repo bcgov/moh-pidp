@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -23,7 +22,6 @@ import { AlertComponent } from '../alert/alert.component';
     AlertComponent,
     AlertContentDirective,
     MatButtonModule,
-    NgIf,
   ],
 })
 export class CollectionNoticeComponent {
