@@ -1,4 +1,4 @@
-import { TestBed, inject, waitForAsync } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { DomSanitizerType, SafePipe } from './safe.pipe';
@@ -6,16 +6,12 @@ import { DomSanitizerType, SafePipe } from './safe.pipe';
 describe('SafePipe', () => {
   let pipe: SafePipe;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [],
+      providers: [SafePipe],
     });
-  }));
-
-  beforeEach(inject(
-    [DomSanitizer],
-    (sanitizer: DomSanitizer) => (pipe = new SafePipe(sanitizer)),
-  ));
+    pipe = TestBed.inject(SafePipe);
+  });
 
   it('create an instance', () => expect(pipe).toBeTruthy());
 
