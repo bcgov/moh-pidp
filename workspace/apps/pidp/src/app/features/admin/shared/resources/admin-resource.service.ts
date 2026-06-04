@@ -18,7 +18,7 @@ export interface PartyList {
   providedIn: 'root',
 })
 export class AdminResource {
-  private apiResource = inject(ApiHttpClient);
+  private readonly apiResource = inject(ApiHttpClient);
 
 
   public getParties(): Observable<PartyList[]> {

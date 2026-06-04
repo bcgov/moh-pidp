@@ -40,8 +40,8 @@ import { AddressAutocompleteComponent } from '../address-autocomplete/address-au
 ],
 })
 export class AddressFormComponent implements OnInit {
-  private lookupService = inject(LookupService);
-  private formUtilsService = inject(FormUtilsService);
+  private readonly lookupService = inject(LookupService);
+  private readonly formUtilsService = inject(FormUtilsService);
 
   /**
    * @description

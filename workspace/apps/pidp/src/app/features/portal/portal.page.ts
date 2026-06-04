@@ -38,10 +38,10 @@ import { PortalResource } from './portal-resource.service';
 ],
 })
 export class PortalPage implements OnInit, AfterViewInit {
-  private partyService = inject(PartyService);
-  private resource = inject(PortalResource);
-  private router = inject(Router);
-  private snowplowService = inject(SnowplowService);
+  private readonly partyService = inject(PartyService);
+  private readonly resource = inject(PortalResource);
+  private readonly router = inject(Router);
+  private readonly snowplowService = inject(SnowplowService);
 
   public faBookmark = faBookmark;
   public faArrowUp = faArrowUp;

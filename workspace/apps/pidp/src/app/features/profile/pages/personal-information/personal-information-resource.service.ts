@@ -16,7 +16,7 @@ import { PersonalInformation } from './personal-information.model';
 })
 export class PersonalInformationResource extends CrudResource<PersonalInformation> {
   protected apiResource: ApiHttpClient;
-  private toastService = inject(ToastService);
+  private readonly toastService = inject(ToastService);
 
   public constructor() {
     const apiResource = inject(ApiHttpClient);

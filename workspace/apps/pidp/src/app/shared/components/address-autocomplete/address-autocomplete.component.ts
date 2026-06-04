@@ -40,9 +40,9 @@ import { AddressAutocompleteRetrieveResponse } from './address-autocomplete-retr
 ],
 })
 export class AddressAutocompleteComponent implements OnInit {
-  private fb = inject(FormBuilder);
-  private toastService = inject(ToastService);
-  private addressAutocompleteResource = inject(AddressAutocompleteResource);
+  private readonly fb = inject(FormBuilder);
+  private readonly toastService = inject(ToastService);
+  private readonly addressAutocompleteResource = inject(AddressAutocompleteResource);
 
   /**
    * @description

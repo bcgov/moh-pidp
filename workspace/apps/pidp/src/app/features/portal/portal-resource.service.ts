@@ -11,7 +11,7 @@ import { ProfileStatus } from './models/profile-status.model';
   providedIn: 'root',
 })
 export class PortalResource {
-  private apiResource = inject(ApiHttpClient);
+  private readonly apiResource = inject(ApiHttpClient);
 
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {

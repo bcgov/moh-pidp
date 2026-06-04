@@ -21,7 +21,7 @@ export const SHOW_LOADING_MESSAGE = new HttpContextToken(() => false);
 
 @Injectable()
 export class LoadingInterceptor implements HttpInterceptor {
-  private loadingService = inject(LoadingService);
+  private readonly loadingService = inject(LoadingService);
 
   private totalRequests: number;
 

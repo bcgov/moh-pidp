@@ -16,9 +16,9 @@ import { ApiHttpClient } from './api-http-client.service';
   providedIn: 'root',
 })
 export class AddressAutocompleteResource extends AbstractResource {
-  private apiResource = inject(ApiHttpClient);
-  private toastService = inject(ToastService);
-  private logger = inject(LoggerService);
+  private readonly apiResource = inject(ApiHttpClient);
+  private readonly toastService = inject(ToastService);
+  private readonly logger = inject(LoggerService);
 
   public constructor() {
     super('address-autocomplete');

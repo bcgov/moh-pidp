@@ -8,7 +8,7 @@ import { Lookup, LookupConfig } from './lookup.types';
   standalone: true,
 })
 export class LookupCodePipe implements PipeTransform {
-  private lookupService = inject(LookupService);
+  private readonly lookupService = inject(LookupService);
 
 
   public transform<T extends string | number>(

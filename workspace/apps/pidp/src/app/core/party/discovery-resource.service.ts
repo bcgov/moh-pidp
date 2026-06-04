@@ -32,7 +32,7 @@ export enum DiscoveryStatus {
   providedIn: 'root',
 })
 export class DiscoveryResource {
-  private apiResource = inject(ApiHttpClient);
+  private readonly apiResource = inject(ApiHttpClient);
 
 
   /**

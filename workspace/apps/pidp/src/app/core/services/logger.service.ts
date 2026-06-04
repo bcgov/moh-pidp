@@ -14,7 +14,7 @@ import { EnvironmentName } from '../../../environments/environment.model';
   providedIn: 'root',
 })
 export class LoggerService extends AbstractLoggerService {
-  private config = inject<AppConfig>(APP_CONFIG);
+  private readonly config = inject<AppConfig>(APP_CONFIG);
 
 
   /**

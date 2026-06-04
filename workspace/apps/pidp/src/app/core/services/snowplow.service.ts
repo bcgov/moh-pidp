@@ -13,7 +13,7 @@ import { EnvironmentName } from '../../../environments/environment.model';
   providedIn: 'root',
 })
 export class SnowplowService {
-  private config = inject<AppConfig>(APP_CONFIG);
+  private readonly config = inject<AppConfig>(APP_CONFIG);
 
   private _window: ISnowplowWindow;
 

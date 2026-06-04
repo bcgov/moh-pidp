@@ -17,7 +17,7 @@ import { Credential } from './account-linking.model';
 })
 export class AccountLinkingResource {
   protected apiResource = inject(ApiHttpClient);
-  private portalResource = inject(PortalResource);
+  private readonly portalResource = inject(PortalResource);
 
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {

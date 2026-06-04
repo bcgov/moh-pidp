@@ -15,8 +15,8 @@ import { InvitedExternalAccount } from './external-accounts.model';
   providedIn: 'root',
 })
 export class ExternalAccountsResource {
-  private apiResource = inject(ApiHttpClient);
-  private portalResource = inject(PortalResource);
+  private readonly apiResource = inject(ApiHttpClient);
+  private readonly portalResource = inject(PortalResource);
 
   public currentStep = signal(1);
 

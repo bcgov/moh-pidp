@@ -21,7 +21,7 @@ import { FeedbackFormDialogComponent } from '../feedback-form/feedback-form.dial
   ],
 })
 export class FeedbackButtonComponent {
-  dialog = inject(MatDialog);
+  private readonly dialog = inject(MatDialog);
 
   public dialogWidth = '360px';
   public isMobileView = false;

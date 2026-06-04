@@ -14,7 +14,7 @@ import { PartyLicenceDeclarationInformation } from './party-licence-declaration-
 @Injectable()
 export class CollegeLicenceDeclarationResource extends CrudResource<PartyLicenceDeclarationInformation> {
   protected apiResource: ApiHttpClient;
-  private toastService = inject(ToastService);
+  private readonly toastService = inject(ToastService);
 
   public constructor() {
     const apiResource = inject(ApiHttpClient);

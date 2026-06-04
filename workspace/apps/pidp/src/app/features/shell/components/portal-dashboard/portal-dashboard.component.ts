@@ -32,11 +32,11 @@ import { NavMenuComponent } from '../navbar-menu/nav-menu';
   imports: [AsyncPipe, NavMenuComponent, FeedbackButtonComponent],
 })
 export class PortalDashboardComponent implements IDashboard, OnInit {
-  private config = inject<AppConfig>(APP_CONFIG);
-  private authService = inject(AuthService);
-  private partyService = inject(PartyService);
-  private resource = inject(PortalResource);
-  private dataService = inject(CommonDataService);
+  private readonly config = inject<AppConfig>(APP_CONFIG);
+  private readonly authService = inject(AuthService);
+  private readonly partyService = inject(PartyService);
+  private readonly resource = inject(PortalResource);
+  private readonly dataService = inject(CommonDataService);
   private readonly permissionsService = inject(PermissionsService);
 
   public logoutRedirectUrl: string;

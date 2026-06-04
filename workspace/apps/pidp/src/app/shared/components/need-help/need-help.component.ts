@@ -12,7 +12,7 @@ import { APP_CONFIG, AppConfig } from '@app/app.config';
   imports: [AnchorDirective, ExpansionPanelComponent, NgClass],
 })
 export class NeedHelpComponent {
-  private config = inject<AppConfig>(APP_CONFIG);
+  private readonly config = inject<AppConfig>(APP_CONFIG);
 
   @Input() public showIcon: boolean;
   public showNeedHelp: boolean;

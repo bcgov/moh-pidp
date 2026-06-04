@@ -9,7 +9,7 @@ import { PortalResource } from '@app/features/portal/portal-resource.service';
   providedIn: 'root',
 })
 export class SignedOrAcceptedDocumentsResource {
-  private portalResource = inject(PortalResource);
+  private readonly portalResource = inject(PortalResource);
 
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {

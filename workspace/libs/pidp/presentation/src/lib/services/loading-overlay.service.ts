@@ -16,7 +16,7 @@ export const LOADING_OVERLAY_DEFAULT_MESSAGE =
  */
 @Injectable({ providedIn: 'root' })
 export class LoadingOverlayService {
-  private dialog = inject(MatDialog);
+  private readonly dialog = inject(MatDialog);
 
 
   public open(message?: string): void {
@@ -72,7 +72,8 @@ interface PidpLoadingDialogData {
   ],
   imports: [MatProgressSpinnerModule],
 })
-export class PidpLoadingDialogComponent {  dialogRef = inject<MatDialogRef<PidpLoadingDialogComponent>>(MatDialogRef);
-  data = inject<PidpLoadingDialogData>(MAT_DIALOG_DATA);
+export class PidpLoadingDialogComponent {
+  public readonly dialogRef = inject<MatDialogRef<PidpLoadingDialogComponent>>(MatDialogRef);
+  public readonly data = inject<PidpLoadingDialogData>(MAT_DIALOG_DATA);
 
 }

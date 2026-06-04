@@ -10,7 +10,7 @@ import {
   providedIn: 'root',
 })
 export class ToastService {
-  private snackBar = inject(MatSnackBar);
+  private readonly snackBar = inject(MatSnackBar);
 
   private readonly defaultConfig: MatSnackBarConfig;
   private readonly durationInMilliSecs: number;

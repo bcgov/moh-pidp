@@ -8,8 +8,8 @@ import { PhonePipe } from '../../pipes';
   standalone: true,
 })
 export class AnchorDirective implements OnInit {
-  private el = inject<ElementRef<HTMLAnchorElement>>(ElementRef);
-  private phonePipe = inject(PhonePipe);
+  private readonly el = inject<ElementRef<HTMLAnchorElement>>(ElementRef);
+  private readonly phonePipe = inject(PhonePipe);
 
   /**
    * @description

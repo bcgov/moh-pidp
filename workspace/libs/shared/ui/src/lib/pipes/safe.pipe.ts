@@ -20,7 +20,7 @@ export type DomSanitizerType =
   standalone: true,
 })
 export class SafePipe implements PipeTransform {
-  private sanitizer = inject(DomSanitizer);
+  private readonly sanitizer = inject(DomSanitizer);
 
 
   public transform(

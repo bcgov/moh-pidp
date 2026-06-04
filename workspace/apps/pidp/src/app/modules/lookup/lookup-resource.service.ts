@@ -13,8 +13,8 @@ import { LookupConfig } from './lookup.types';
   providedIn: 'root',
 })
 export class LookupResource {
-  private apiResource = inject(ApiHttpClient);
-  private resourceUtilsService = inject(ResourceUtilsService);
+  private readonly apiResource = inject(ApiHttpClient);
+  private readonly resourceUtilsService = inject(ResourceUtilsService);
 
 
   /**

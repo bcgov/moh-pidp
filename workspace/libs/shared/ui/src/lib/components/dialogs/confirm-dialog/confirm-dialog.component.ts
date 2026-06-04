@@ -42,9 +42,9 @@ import { DIALOG_DEFAULT_OPTION } from '../dialogs-properties.provider';
 ],
 })
 export class ConfirmDialogComponent implements OnInit, AfterViewInit {
-  private dialogRef = inject<MatDialogRef<ConfirmDialogComponent>>(MatDialogRef);
-  private customOptions = inject<DialogOptions>(MAT_DIALOG_DATA);
-  private defaultOptions = inject<DialogDefaultOptions>(DIALOG_DEFAULT_OPTION);
+  private readonly dialogRef = inject<MatDialogRef<ConfirmDialogComponent>>(MatDialogRef);
+  private readonly customOptions = inject<DialogOptions>(MAT_DIALOG_DATA);
+  private readonly defaultOptions = inject<DialogDefaultOptions>(DIALOG_DEFAULT_OPTION);
 
   public options: DialogOptions;
   public dialogContentOutput: DialogContentOutput<unknown> | null;

@@ -63,14 +63,14 @@ import {
   styleUrl: './external-accounts.page.scss',
 })
 export class ExternalAccountsPage implements OnInit {
-  private config = inject<AppConfig>(APP_CONFIG);
-  private dialog = inject(MatDialog);
-  private loadingOverlay = inject(LoadingOverlayService);
-  private partyService = inject(PartyService);
-  private resource = inject(ExternalAccountsResource);
-  private router = inject(Router);
-  private route = inject(ActivatedRoute);
-  private toastService = inject(ToastService);
+  private readonly config = inject<AppConfig>(APP_CONFIG);
+  private readonly dialog = inject(MatDialog);
+  private readonly loadingOverlay = inject(LoadingOverlayService);
+  private readonly partyService = inject(PartyService);
+  private readonly resource = inject(ExternalAccountsResource);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly toastService = inject(ToastService);
 
   public sanitizer = inject(DomSanitizer);
   public matIconRegistry = inject(MatIconRegistry);

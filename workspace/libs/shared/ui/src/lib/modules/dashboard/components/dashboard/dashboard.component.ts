@@ -32,7 +32,7 @@ import { DashboardMenuComponent } from '../dashboard-menu/dashboard-menu.compone
   ],
 })
 export class DashboardComponent implements OnInit {
-  private viewportService = inject(ViewportService);
+  private readonly viewportService = inject(ViewportService);
 
   /**
    * @description

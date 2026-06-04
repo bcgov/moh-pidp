@@ -14,7 +14,7 @@ import { PortalResource } from '@app/features/portal/portal-resource.service';
 })
 export class UserAccessAgreementResource {
   protected apiResource = inject(ApiHttpClient);
-  private portalResource = inject(PortalResource);
+  private readonly portalResource = inject(PortalResource);
 
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {

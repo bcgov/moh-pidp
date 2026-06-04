@@ -6,7 +6,7 @@ import { AccessTokenService } from '@app/features/auth/services/access-token.ser
   providedIn: 'root',
 })
 export class PermissionsService {
-  private accessTokenService = inject(AccessTokenService);
+  private readonly accessTokenService = inject(AccessTokenService);
 
 
   public hasRole(allowedRoles: string | string[]): boolean {

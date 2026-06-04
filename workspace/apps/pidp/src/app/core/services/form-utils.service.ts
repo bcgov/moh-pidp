@@ -22,8 +22,8 @@ import { LoggerService } from './logger.service';
   providedIn: 'root',
 })
 export class FormUtilsService {
-  private fb = inject(FormBuilder);
-  private logger = inject(LoggerService);
+  private readonly fb = inject(FormBuilder);
+  private readonly logger = inject(LoggerService);
 
 
   /**

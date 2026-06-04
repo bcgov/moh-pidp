@@ -36,8 +36,8 @@ import { haloUrl } from './halo.constants';
   styleUrl: './halo.page.scss',
 })
 export class HaloPage {
-  private discoveryResource = inject(DiscoveryResource);
-  private partyService = inject(PartyService);
+  private readonly discoveryResource = inject(DiscoveryResource);
+  private readonly partyService = inject(PartyService);
 
   public bcProvider$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     false,

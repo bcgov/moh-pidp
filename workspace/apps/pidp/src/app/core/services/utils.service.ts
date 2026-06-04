@@ -11,8 +11,8 @@ export type SortWeight = -1 | 0 | 1;
   providedIn: 'root',
 })
 export class UtilsService {
-  private window = inject<Window>(WINDOW);
-  private document = inject<Document>(DOCUMENT);
+  private readonly window = inject<Window>(WINDOW);
+  private readonly document = inject<Document>(DOCUMENT);
 
 
   /**

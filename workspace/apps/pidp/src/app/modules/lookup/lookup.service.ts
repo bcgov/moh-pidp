@@ -20,7 +20,7 @@ export interface ILookupService extends LookupConfig {
   providedIn: 'root',
 })
 export class LookupService implements ILookupService {
-  private lookupResource = inject(LookupResource);
+  private readonly lookupResource = inject(LookupResource);
 
   private lookupConfig: LookupConfig | null;
 
