@@ -228,7 +228,11 @@ export class PersonalInformationPage
       this.formState.preferredFirstName,
       this.formState.preferredLastName,
     ].forEach((field: FormControl) => {
-      this.formUtilsService.setOrResetValidators(checked, field);
+      if (checked) {
+        this.formUtilsService.setValidators(field);
+      } else {
+        this.formUtilsService.resetAndClearValidators(field);
+      }
     });
     if (!checked) {
       this.formState.preferredMiddleName.reset();

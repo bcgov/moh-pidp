@@ -29,7 +29,8 @@ describe('SuccessDialogComponent', () => {
   });
 
   it('should close all dialogs when onSuccessDialogClose is called', () => {
-    const dialogSpy = jest.spyOn(component.dialog, 'closeAll');
+    const dialog = TestBed.inject(MatDialog);
+    const dialogSpy = jest.spyOn(dialog, 'closeAll');
 
     component.onSuccessDialogClose();
 

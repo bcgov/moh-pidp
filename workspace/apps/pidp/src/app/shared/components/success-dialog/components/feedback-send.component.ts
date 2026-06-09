@@ -34,7 +34,7 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
   standalone: true,
 })
 export class FeedbackSendComponent {
-  private dialog = inject(MatDialog);
+  private readonly dialog = inject(MatDialog);
 
   public faXmark = faXmark;
 

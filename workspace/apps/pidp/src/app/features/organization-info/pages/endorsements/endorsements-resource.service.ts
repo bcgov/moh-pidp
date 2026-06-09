@@ -79,7 +79,7 @@ export class EndorsementsResource {
         { recipientEmail },
       )
       .pipe(
-        catchError(() => of({ recipientName: null } as EndorsementEmailSearch)),
+        catchError(() => of({ recipientName: null })),
       );
   }
 

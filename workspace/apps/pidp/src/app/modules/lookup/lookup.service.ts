@@ -93,7 +93,7 @@ export class LookupService implements ILookupService {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private copyAndSortByKey<T extends { [key: string]: any } = Lookup>(
     lookup: T[] | undefined,
-    sortBy: keyof T = 'code' as keyof T,
+    sortBy: keyof T = 'code',
   ): T[] {
     return lookup?.length
       ? [...lookup].sort(SortUtils.sortByKey<T>(sortBy))

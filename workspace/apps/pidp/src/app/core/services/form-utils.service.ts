@@ -136,22 +136,6 @@ export class FormUtilsService {
 
   /**
    * @description
-   * Set or reset control(s) validator
-   */
-  public setOrResetValidators(
-    setOrReset: boolean,
-    control: FormControl | FormGroup,
-    blacklist?: string[],
-  ): void {
-    if (setOrReset) {
-      this.setValidators(control, [Validators.required], blacklist);
-    } else {
-      this.resetAndClearValidators(control, blacklist);
-    }
-  }
-
-  /**
-   * @description
    * Check for the required validator applied to a FormControl,
    * FormGroup, or FormArray within a FormGroup.
    *
