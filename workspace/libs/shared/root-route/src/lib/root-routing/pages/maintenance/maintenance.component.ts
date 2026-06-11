@@ -24,7 +24,6 @@ import { RootRouteContainerComponent } from '../../shared/root-route-container/r
     </ui-root-route-container>
   `,
   styleUrls: ['../../shared/root-route-page-styles.scss'],
-  standalone: true,
   imports: [RootRouteContainerComponent],
 })
 export class MaintenanceComponent {}

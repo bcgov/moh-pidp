@@ -11,7 +11,6 @@ import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
   selector: 'app-endorsement-card',
   templateUrl: './endorsement-card.component.html',
   styleUrls: ['./endorsement-card.component.scss'],
-  standalone: true,
   imports: [
     InjectViewportCssClassDirective,
     MatButtonModule,

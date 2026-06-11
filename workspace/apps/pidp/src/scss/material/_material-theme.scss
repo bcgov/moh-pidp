@@ -7,7 +7,8 @@
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
-@include mat.core();
+@include mat.elevation-classes();
+@include mat.app-background();
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
@@ -24,7 +25,11 @@ $pidp-typography: mat.m2-define-typography-config(
   $font-family: pidp.$bcgov-font-family,
   // Native element: <h1>
   $headline-5:
-    mat.m2-define-typography-level(var.$mat-theme-headline-font-size, 2.5rem, 500),
+    mat.m2-define-typography-level(
+      var.$mat-theme-headline-font-size,
+      2.5rem,
+      500
+    ),
   // Native element: <h2>
   $headline-6:
     mat.m2-define-typography-level(var.$mat-theme-title-font-size, 2rem, 500),
@@ -44,13 +49,25 @@ $pidp-typography: mat.m2-define-typography-config(
     ),
   // Native element: <body>
   $body-1:
-    mat.m2-define-typography-level(var.$mat-theme-body-1-font-size, 1.75rem, 400),
+    mat.m2-define-typography-level(
+      var.$mat-theme-body-1-font-size,
+      1.75rem,
+      400
+    ),
   // Native element: None
   $body-2:
-    mat.m2-define-typography-level(var.$mat-theme-body-2-font-size, 1.75rem, 400),
+    mat.m2-define-typography-level(
+      var.$mat-theme-body-2-font-size,
+      1.75rem,
+      400
+    ),
   // Native element: <button>
   $button:
-    mat.m2-define-typography-level(var.$mat-theme-button-font-size, 0.875rem, 400),
+    mat.m2-define-typography-level(
+      var.$mat-theme-button-font-size,
+      0.875rem,
+      400
+    ),
 );
 
 // The warn palette is optional (defaults to red).

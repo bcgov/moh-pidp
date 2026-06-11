@@ -30,7 +30,6 @@ import { UtilsService } from '@core/services/utils.service';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  standalone: true,
   imports: [RouterOutlet],
 })
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {

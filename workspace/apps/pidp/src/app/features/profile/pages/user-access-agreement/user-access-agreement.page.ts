@@ -28,7 +28,6 @@ import { UserAccessAgreementResource } from './user-access-agreement-resource.se
   selector: 'app-user-access-agreement',
   templateUrl: './user-access-agreement.page.html',
   styleUrls: ['./user-access-agreement.page.scss'],
-  standalone: true,
   imports: [
     AlertComponent,
     AlertContentDirective,

@@ -35,7 +35,6 @@ import {
   selector: 'app-driver-fitness',
   templateUrl: './driver-fitness.page.html',
   styleUrls: ['./driver-fitness.page.scss'],
-  standalone: true,
   imports: [
     AnchorDirective,
     BreadcrumbComponent,
