@@ -3,7 +3,6 @@ namespace Pidp.Infrastructure.HttpClients.Keycloak;
 using System.Text.Json;
 
 using Pidp.Infrastructure.HttpClients.Ldap;
-using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models.Lookups;
 
 public class MohKeycloakEnrolment
@@ -81,20 +80,6 @@ public class UserRepresentation
     public string? Id { get; set; }
     public string? LastName { get; set; }
     public string? Username { get; set; }
-
-    public UserRepresentation SetCollegeLicenceInformation(IEnumerable<PlrRecord> plrRecords)
-    {
-        var data = plrRecords.Select(record => new
-        {
-            record.CollegeId,
-            record.MspId,
-            record.ProviderRoleType,
-            record.StatusCode,
-            record.StatusReasonCode
-        });
-
-        return this.SetAttribute("college_licence_info", JsonSerializer.Serialize(data, SerializationOptions));
-    }
 
     public UserRepresentation SetCpn(string cpn) => this.SetAttribute("common_provider_number", cpn);
 
