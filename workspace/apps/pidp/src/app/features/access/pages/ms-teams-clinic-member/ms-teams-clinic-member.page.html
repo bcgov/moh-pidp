@@ -80,6 +80,7 @@
                               <mat-form-field>
                                 <input
                                   matInput
+                                  aria-label="Clinic Name"
                                   type="text"
                                   readonly
                                   [value]="selectedPrivacyOfficer.clinicName" />
@@ -91,6 +92,7 @@
                                   <input
                                     matInput
                                     type="text"
+                                    aria-label="Clinic Address"
                                     readonly
                         [value]="selectedPrivacyOfficer.clinicAddress.street +
                           ', ' + selectedPrivacyOfficer.clinicAddress.provinceCode +

@@ -2,7 +2,7 @@
   <div class="col-sm-7">
     <mat-form-field class="w-100 email">
       <mat-label>Email</mat-label>
-      <input matInput formControlName="email" (keyup)="onKeyUp()" />
+      <input matInput aria-label="Email" formControlName="email" (keyup)="onKeyUp()" />
       @if (email.hasError('required')) {
         <mat-error>Required</mat-error>
       }
@@ -18,6 +18,7 @@
       <mat-label>Phone Number</mat-label>
       <input
         matInput
+        aria-label="Phone Number"
         formControlName="phone"
         mask="(000) 000-0000"
         [showMaskTyped]="false" />

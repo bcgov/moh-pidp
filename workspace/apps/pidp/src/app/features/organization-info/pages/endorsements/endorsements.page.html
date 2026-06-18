@@ -175,6 +175,7 @@
           <mat-label>Email</mat-label>
           <input
             matInput
+            aria-label="Recipient Email"
             formControlName="recipientEmail"
             (keydown.enter)="onEnter($event)" />
             @if (recipientEmail.hasError('required')) {

@@ -25,7 +25,7 @@
                   type="text"
                   placeholder="Enter here"
                   maxlength="1000"
-                  aria-labelledby="feedback"
+                  aria-label="Feedback"
                   (input)="onFeedbackChange($event)">
                 </textarea>
                 <mat-error>{{ formState.getErrorMessage() }}</mat-error>
@@ -60,11 +60,12 @@
                         hidden
                         type="file"
                         formControlName="attachment"
+                        aria-label="File Attachment"
                         accept="image/*"
                         (change)="onFileSelected()" />
                       </div>
                     </div>
-                    <input matInput />
+                    <input matInput aria-hidden="true" />
                   </mat-form-field>
                   @if (selectedFile) {
                     <div>
