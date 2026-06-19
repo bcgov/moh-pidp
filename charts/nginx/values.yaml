@@ -50,7 +50,7 @@ commonAnnotations: {}
 ## @param image.debug Set to true if you would like to see extra information on logs
 ##
 image:
-  registry: public.ecr.aws
+  registry: docker.io
   repository: bitnami/nginx
   tag: 1.31.0-debian-12-r1
   ## Specify a imagePullPolicy
@@ -326,7 +326,7 @@ cloneStaticSiteFromGit:
   ## @param cloneStaticSiteFromGit.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
-    registry: public.ecr.aws
+    registry: docker.io
     repository: bitnami/git
     tag: 2.51.0-debian-12-r0
     ## Specify a imagePullPolicy
@@ -430,7 +430,7 @@ ldapDaemon:
   ## @param ldapDaemon.image.pullPolicy LDAP Auth Daemon Image pull policy
   ##
   image:
-    registry: public.ecr.aws
+    registry: docker.io
     repository: bitnami/nginx-ldap-auth-daemon
     tag: 0.20200116.0-debian-10-r634
     pullPolicy: IfNotPresent
@@ -767,7 +767,7 @@ metrics:
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
-    registry: public.ecr.aws
+    registry: docker.io
     repository: bitnami/nginx-exporter
     tag: 1.4.2-debian-12-r9
     pullPolicy: IfNotPresent
@@ -885,7 +885,7 @@ metrics:
 # fluentbit must be enabled for prod environment
 fluentbit:
   enabled: false
-  imageRegistry: public.ecr.aws/fluent/fluent-bit:3.2.10-debug
+  imageRegistry: docker.io/fluent/fluent-bit:3.2.10-debug
   imagePullPolicy: IfNotPresent
   # The value of slack_webhook parameter is stored in a secret called `slack-error-notification-webhook` in OpenShift.
   slack_webhook: ""
