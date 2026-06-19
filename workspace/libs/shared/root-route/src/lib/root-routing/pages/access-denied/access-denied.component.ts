@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -30,10 +30,9 @@ import { RootRouteContainerComponent } from '../../shared/root-route-container/r
   imports: [RootRouteContainerComponent, MatButtonModule],
 })
 export class AccessDeniedComponent {
-  public constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-  ) {}
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+
 
   public routeToRoot(): void {
     this.router.navigateByUrl(RouteUtils.currentModulePath(this.route));

@@ -1,13 +1,6 @@
-import {
-  AsyncPipe,
-  NgFor,
-  NgIf,
-  NgSwitch,
-  NgSwitchCase,
-  NgSwitchDefault,
-} from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -41,16 +34,19 @@ import { CollegeLicenceInformationDetailComponent } from './components/college-l
     CollegeLicenceInformationDetailComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
-    NgFor,
     CollegeLicenceDeclarationPage,
-    NgIf,
-    PortalAlertComponent,
-    NgSwitch,
-    NgSwitchCase,
-    NgSwitchDefault,
-  ],
+    PortalAlertComponent
+],
 })
 export class CollegeLicenceInformationPage implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly partyService = inject(PartyService);
+  private readonly resource = inject(CollegeLicenceInformationResource);
+  private readonly logger = inject(LoggerService);
+  private readonly portalResource = inject(PortalResource);
+  private readonly portalService = inject(PortalService);
+
   public faStethoscope = faStethoscope;
   public breadcrumbsData: Array<{ title: string; path: string }> = [
     { title: 'Home', path: '' },
@@ -63,15 +59,7 @@ export class CollegeLicenceInformationPage implements OnInit {
   public faAngleRight = faAngleRight;
   public showCollegeLicenceDeclarationPage = false;
 
-  public constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly partyService: PartyService,
-    private readonly resource: CollegeLicenceInformationResource,
-    private readonly logger: LoggerService,
-    private readonly portalResource: PortalResource,
-    private readonly portalService: PortalService,
-  ) {
+  public constructor() {
     this.title = this.route.snapshot.data.title;
   }
 

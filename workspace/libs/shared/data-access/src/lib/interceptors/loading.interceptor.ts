@@ -6,7 +6,7 @@ import {
   HttpInterceptor,
   HttpRequest,
 } from '@angular/common/http';
-import { Injectable, Provider } from '@angular/core';
+import { Injectable, Provider, inject } from '@angular/core';
 
 import { Observable, finalize } from 'rxjs';
 
@@ -21,9 +21,11 @@ export const SHOW_LOADING_MESSAGE = new HttpContextToken(() => false);
 
 @Injectable()
 export class LoadingInterceptor implements HttpInterceptor {
+  private readonly loadingService = inject(LoadingService);
+
   private totalRequests: number;
 
-  public constructor(private loadingService: LoadingService) {
+  public constructor() {
     this.totalRequests = 0;
   }
 

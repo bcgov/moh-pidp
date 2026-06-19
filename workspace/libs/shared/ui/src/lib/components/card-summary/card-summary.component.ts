@@ -1,4 +1,4 @@
-import { NgIf, NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -25,9 +25,8 @@ import { CardComponent } from '../card/card.component';
     CardContentDirective,
     CardHintDirective,
     MatButtonModule,
-    NgIf,
-    NgTemplateOutlet,
-  ],
+    NgTemplateOutlet
+],
 })
 export class CardSummaryComponent {
   @Input() public icon?: string;

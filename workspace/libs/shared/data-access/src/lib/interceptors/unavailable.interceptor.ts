@@ -7,14 +7,15 @@ import {
   HttpResponse,
   HttpStatusCode,
 } from '@angular/common/http';
-import { Injectable, Provider } from '@angular/core';
+import { Injectable, Provider, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Observable, catchError, of, throwError } from 'rxjs';
 
 @Injectable()
 export class UnavailableInterceptor implements HttpInterceptor {
-  public constructor(private readonly router: Router) {}
+  private readonly router = inject(Router);
+
 
   public intercept(
     request: HttpRequest<unknown>,

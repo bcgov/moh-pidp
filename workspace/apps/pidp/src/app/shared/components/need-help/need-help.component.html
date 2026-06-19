@@ -2,7 +2,9 @@
   <div class="need-help-header">
     <button class="pidp-btn-link" (click)="onShowNeedHelp()">
       Need Help?
-      <i *ngIf="showIcon" class="material-icons-outlined">arrow_circle_right</i>
+      @if (showIcon) {
+        <i class="material-icons-outlined">arrow_circle_right</i>
+      }
     </button>
   </div>
   <div class="show-need-help">
@@ -14,7 +16,7 @@
             <a
               uiAnchor
               scheme="mailto"
-              [attr.href]="providerIdentitySupport"></a>
+            [attr.href]="providerIdentitySupport"></a>
           </li>
           <li>
             By phone at

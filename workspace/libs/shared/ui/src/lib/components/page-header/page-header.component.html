@@ -1,13 +1,14 @@
 <h1>
-  <mat-icon
-    *ngIf="icon"
-    color="primary"
+  @if (icon) {
+    <mat-icon
+      color="primary"
     [class]="{
       'material-icons-outlined': iconType === 'outlined',
       'material-icons-round': iconType === 'round',
       'material-icons-sharp': iconType === 'sharp'
     }">
-    {{ icon }}
-  </mat-icon>
+      {{ icon }}
+    </mat-icon>
+  }
   <span><ng-content></ng-content></span>
 </h1>

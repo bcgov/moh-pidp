@@ -1,14 +1,22 @@
+<ng-template #hintSlot>
+  <ng-content select="[uiCardHint]"></ng-content>
+</ng-template>
+<ng-template #contentSlot>
+  <ng-content select="[uiCardContent]"></ng-content>
+</ng-template>
+<ng-template #actionsSlot>
+  <ng-content select="[uiCardActions]"></ng-content>
+</ng-template>
 <mat-card class="ui-card" appearance="outlined" [class]="class">
-  <mat-card-header
-    *ngIf="icon || heading"
-    [class]="{
+  @if (icon || heading) {
+  <mat-card-header [class]="{
       'icon-only': icon && !heading,
       'title-only': !icon && heading
     }">
-    <div *ngIf="icon" mat-card-avatar>
+    @if (icon) {
+    <div mat-card-avatar>
       <!-- Using <mat-icon> to maintain specificity and allow mixins to override -->
-      <mat-icon
-        [class]="{
+      <mat-icon [class]="{
           'material-icons-outlined': iconType === 'outlined',
           'material-icons-round': iconType === 'round',
           'material-icons-sharp': iconType === 'sharp'
@@ -16,17 +24,27 @@
         {{ icon }}
       </mat-icon>
     </div>
-    <mat-card-title *ngIf="heading">
+    }
+    @if (heading) {
+    <mat-card-title>
       {{ heading }}
     </mat-card-title>
-    <span *ngIf="cardHint.length" class="hint">
-      <ng-content select="[uiCardHint]"></ng-content>
+    }
+    @if (cardHint.length) {
+    <span class="hint">
+      <ng-container *ngTemplateOutlet="hintSlot"></ng-container>
     </span>
+    }
   </mat-card-header>
-  <mat-card-content *ngIf="cardContent.length">
-    <ng-content select="[uiCardContent]"></ng-content>
+  }
+  @if (cardContent.length) {
+  <mat-card-content>
+    <ng-container *ngTemplateOutlet="contentSlot"></ng-container>
   </mat-card-content>
-  <mat-card-actions *ngIf="cardActions.length">
-    <ng-content select="[uiCardActions]"></ng-content>
+  }
+  @if (cardActions.length) {
+  <mat-card-actions>
+    <ng-container *ngTemplateOutlet="actionsSlot"></ng-container>
   </mat-card-actions>
+  }
 </mat-card>

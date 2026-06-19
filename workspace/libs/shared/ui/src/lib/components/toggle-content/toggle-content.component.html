@@ -1,12 +1,15 @@
 <div class="toggle-container">
-  <mat-slide-toggle
-    [color]="color"
-    [checked]="checked"
-    (change)="onToggleContent($event)">
+  <mat-slide-toggle [color]="color" [checked]="checked" (change)="onToggleContent($event)">
     {{ label }}
   </mat-slide-toggle>
 
-  <div *ngIf="checked" class="toggle-content">
+  <ng-template #content>
     <ng-content></ng-content>
+  </ng-template>
+
+  @if (checked) {
+  <div class="toggle-content">
+    <ng-container *ngTemplateOutlet="content"></ng-container>
   </div>
+  }
 </div>

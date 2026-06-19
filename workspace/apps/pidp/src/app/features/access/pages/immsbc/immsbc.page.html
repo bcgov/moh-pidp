@@ -79,20 +79,21 @@
               <p class="guide-information">
                 Use your newly created BCProvider to login to the ImmsBC portal
               </p>
-              <p
-                *ngIf="bcProviderStatusCode === StatusCode.COMPLETED"
-                class="bcprovider-username">
-                <strong>{{ bcProviderUsername }}</strong>
-                <button
-                  mat-icon-button
-                  type="button"
-                  matTooltip="Copy your BCProvider to clipboard"
-                  aria-label="Copy your BCProvider to clipboard"
-                  [cdkCopyToClipboard]="bcProviderUsername"
-                  (cdkCopyToClipboardCopied)="onCopy()">
-                  <mat-icon>content_paste</mat-icon>
-                </button>
-              </p>
+              @if (bcProviderStatusCode === StatusCode.COMPLETED) {
+                <p
+                  class="bcprovider-username">
+                  <strong>{{ bcProviderUsername }}</strong>
+                  <button
+                    mat-icon-button
+                    type="button"
+                    matTooltip="Copy your BCProvider to clipboard"
+                    aria-label="Copy your BCProvider to clipboard"
+                    [cdkCopyToClipboard]="bcProviderUsername"
+                    (cdkCopyToClipboardCopied)="onCopy()">
+                    <mat-icon>content_paste</mat-icon>
+                  </button>
+                </p>
+              }
               <button
                 mat-flat-button
                 type="button"
@@ -135,13 +136,13 @@
             <mat-icon
               class="assistance-content__icon"
               [svgIcon]="'imms-icon'"></mat-icon
-            ><strong>ImmsBC</strong>
-          </div>
-          <div class="main-image-text-instructions">
-            Login once the instructions are complete.
+              ><strong>ImmsBC</strong>
+            </div>
+            <div class="main-image-text-instructions">
+              Login once the instructions are complete.
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   </div>
-</div>

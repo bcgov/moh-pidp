@@ -1,5 +1,5 @@
-import { NgIf } from '@angular/common';
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+
+import { AfterViewInit, Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -65,7 +65,6 @@ import {
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    NgIf,
     PageComponent,
     PageFooterActionDirective,
     PageFooterComponent,
@@ -74,13 +73,20 @@ import {
     PageSectionSubheaderDescDirective,
     PageSectionSubheaderHintDirective,
     PageSubheaderComponent,
-    ReactiveFormsModule,
-  ],
+    ReactiveFormsModule
+],
 })
 export class HcimAccountTransferPage
   extends AbstractFormPage<HcimAccountTransferFormState>
   implements OnInit, AfterViewInit
 {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly partyService = inject(PartyService);
+  private readonly resource = inject(HcimAccountTransferResource);
+  private readonly logger = inject(LoggerService);
+  private readonly snowplowService = inject(SnowplowService);
+
   public title: string;
   public formState: HcimAccountTransferFormState;
   public completed: boolean | null;
@@ -108,16 +114,10 @@ export class HcimAccountTransferPage
   // ui-page is handling this.
   public showOverlayOnSubmit = false;
 
-  public constructor(
-    dependenciesService: AbstractFormDependenciesService,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly partyService: PartyService,
-    private readonly resource: HcimAccountTransferResource,
-    private readonly logger: LoggerService,
-    fb: FormBuilder,
-    private readonly snowplowService: SnowplowService,
-  ) {
+  public constructor() {
+    const dependenciesService = inject(AbstractFormDependenciesService);
+    const fb = inject(FormBuilder);
+
     super(dependenciesService);
 
     const routeData = this.route.snapshot.data;

@@ -1,4 +1,4 @@
-import { enableProdMode } from '@angular/core';
+import { enableProdMode, provideZoneChangeDetection } from '@angular/core';
 import { bootstrapApplication } from '@angular/platform-browser';
 
 // import function to register Swiper custom elements
@@ -84,7 +84,7 @@ fetchConfig()
     }
     bootstrapApplication(AppComponent, {
       providers: [
-        {
+        provideZoneChangeDetection(),{
           provide: APP_CONFIG,
           useValue: appConfig,
         },

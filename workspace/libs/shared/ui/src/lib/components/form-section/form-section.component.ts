@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -32,7 +31,6 @@ import { ContextHelpComponent } from '../../modules/context-help/context-help/co
     MatButtonModule,
     MatIconModule,
     MatTooltipModule,
-    NgIf,
   ],
 })
 export class FormSectionComponent {

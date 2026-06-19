@@ -1,6 +1,6 @@
-import { NgIf } from '@angular/common';
+
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
@@ -41,12 +41,19 @@ import {
     EnrolmentErrorComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
-    NgIf,
     PageFooterActionDirective,
-    RouterLink,
-  ],
+    RouterLink
+],
 })
 export class DriverFitnessPage implements OnInit, AfterViewInit {
+  private readonly loadingOverlayService = inject(LoadingOverlayService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly partyService = inject(PartyService);
+  private readonly resource = inject(DriverFitnessResource);
+  private readonly logger = inject(LoggerService);
+  private readonly snowplowService = inject(SnowplowService);
+
   public completed: boolean | null;
   public accessRequestFailed: boolean;
   public driverFitnessSupportEmail: string;
@@ -62,15 +69,7 @@ export class DriverFitnessPage implements OnInit, AfterViewInit {
     { title: 'DMFT', path: '' },
   ];
 
-  public constructor(
-    private readonly loadingOverlayService: LoadingOverlayService,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly partyService: PartyService,
-    private readonly resource: DriverFitnessResource,
-    private readonly logger: LoggerService,
-    private readonly snowplowService: SnowplowService,
-  ) {
+  public constructor() {
     const routeData = this.route.snapshot.data;
     this.completed = routeData.driverFitnessStatusCode === StatusCode.COMPLETED;
     this.accessRequestFailed = false;

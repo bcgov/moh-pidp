@@ -29,33 +29,37 @@
         <div
           class="card instructions-card-layout"
           [class.instructions-card]="!showInstructions">
-          <div *ngIf="!showInstructions">
-            <h2>Procedure for linking an account</h2>
-            <p>
-              Choose the available account displayed to the right to start the
-              quick process
-            </p>
-          </div>
-          <div *ngIf="showInstructions" class="instructions-container">
-            <h2>How to link an account</h2>
-            <ol type="1">
-              <li class="list-item">Click the Link button.</li>
-              <li class="list-item"><b>For PHSA accounts</b></li>
-              <ul class="sublist">
-                <li class="list-item">
-                  {{"Select login with PHSA account (username@phsa.ca)"}}
-                </li>
-              </ul>
-              <li class="list-item"><b>For BC Services Card accounts</b></li>
-              <ul class="sublist">
-                <li class="list-item">
-                  Select login with BC Services Card app.
-                </li>
-              </ul>
-              <li class="list-item">Confirm login with your mobile device.</li>
-              <li class="list-item">Confirm account linking in OneHealthID.</li>
-            </ol>
-          </div>
+          @if (!showInstructions) {
+            <div>
+              <h2>Procedure for linking an account</h2>
+              <p>
+                Choose the available account displayed to the right to start the
+                quick process
+              </p>
+            </div>
+          }
+          @if (showInstructions) {
+            <div class="instructions-container">
+              <h2>How to link an account</h2>
+              <ol type="1">
+                <li class="list-item">Click the Link button.</li>
+                <li class="list-item"><b>For PHSA accounts</b></li>
+                <ul class="sublist">
+                  <li class="list-item">
+                    {{"Select login with PHSA account (username@phsa.ca)"}}
+                  </li>
+                </ul>
+                <li class="list-item"><b>For BC Services Card accounts</b></li>
+                <ul class="sublist">
+                  <li class="list-item">
+                    Select login with BC Services Card app.
+                  </li>
+                </ul>
+                <li class="list-item">Confirm login with your mobile device.</li>
+                <li class="list-item">Confirm account linking in OneHealthID.</li>
+              </ol>
+            </div>
+          }
           <button
             [class.instructions-text]="!showInstructions"
             (click)="toggleInstructions()">
@@ -80,42 +84,42 @@
                 <img
                   src="/assets/images/icons/perm-contact-calendar.svg"
                   alt="contact" />
+                </div>
               </div>
+              <h2>BCProvider</h2>
+              <p>Access a growing number of provincial health applications</p>
             </div>
-            <h2>BCProvider</h2>
-            <p>Access a growing number of provincial health applications</p>
           </div>
-        </div>
-        <div class="third-column-cards">
-          <div class="health-authority card-styles">
-            <div class="card-header-icon">
-              <div class="card-icon">
-                <img
-                  src="/assets/images/icons/health-safety.svg"
-                  alt="healthSafety" />
+          <div class="third-column-cards">
+            <div class="health-authority card-styles">
+              <div class="card-header-icon">
+                <div class="card-icon">
+                  <img
+                    src="/assets/images/icons/health-safety.svg"
+                    alt="healthSafety" />
+                  </div>
+                </div>
+                <h2>Health Authority</h2>
+                <p>
+                  Healthcare professional network account that is tied to the health
+                  authority
+                </p>
               </div>
-            </div>
-            <h2>Health Authority</h2>
-            <p>
-              Healthcare professional network account that is tied to the health
-              authority
-            </p>
-          </div>
 
-          <div class="idir-account card-styles">
-            <div class="card-header-icon">
-              <div class="card-icon">
-                <img
-                  src="/assets/images/icons/credit-card.svg"
-                  alt="creditcard" />
+              <div class="idir-account card-styles">
+                <div class="card-header-icon">
+                  <div class="card-icon">
+                    <img
+                      src="/assets/images/icons/credit-card.svg"
+                      alt="creditcard" />
+                    </div>
+                  </div>
+                  <h2>IDIR account</h2>
+                  <p>Used by people who work in the B.C. public sector</p>
+                  <p>Available soon!</p>
+                </div>
               </div>
-            </div>
-            <h2>IDIR account</h2>
-            <p>Used by people who work in the B.C. public sector</p>
-            <p>Available soon!</p>
+            </section>
           </div>
         </div>
-      </section>
-    </div>
-  </div>
-</div>
+      </div>

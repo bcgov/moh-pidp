@@ -1,7 +1,7 @@
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { AsyncPipe, NgIf, NgOptimizedImage } from '@angular/common';
-import { Component, Inject, OnInit } from '@angular/core';
+import { AsyncPipe, NgOptimizedImage } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatStepperModule } from '@angular/material/stepper';
@@ -48,10 +48,9 @@ import {
     ClipboardModule,
     InjectViewportCssClassDirective,
     RouterLink,
-    NgIf,
     FontAwesomeModule,
-    NgOptimizedImage,
-  ],
+    NgOptimizedImage
+],
   templateUrl: './provincial-attachment-system.page.html',
   styleUrl: './provincial-attachment-system.page.scss',
   providers: [
@@ -62,6 +61,16 @@ import {
   ],
 })
 export class ProvincialAttachmentSystemPage implements OnInit {
+  private readonly config = inject<AppConfig>(APP_CONFIG);
+  private readonly authService = inject(AuthService);
+  private readonly bcProviderResource = inject(BcProviderEditResource);
+  private readonly discoveryResource = inject(DiscoveryResource);
+  private readonly portalResource = inject(PortalResource);
+  private readonly partyService = inject(PartyService);
+  private readonly router = inject(Router);
+  private readonly toastService = inject(ToastService);
+  private readonly snowplowService = inject(SnowplowService);
+
   public bcProvider$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     false,
   );
@@ -88,17 +97,7 @@ export class ProvincialAttachmentSystemPage implements OnInit {
   ];
   private readonly provincialAttachmentSystemWebsite: string;
 
-  public constructor(
-    @Inject(APP_CONFIG) private readonly config: AppConfig,
-    private readonly authService: AuthService,
-    private readonly bcProviderResource: BcProviderEditResource,
-    private readonly discoveryResource: DiscoveryResource,
-    private readonly portalResource: PortalResource,
-    private readonly partyService: PartyService,
-    private readonly router: Router,
-    private readonly toastService: ToastService,
-    private readonly snowplowService: SnowplowService,
-  ) {
+  public constructor() {
     this.selectedIndex = -1;
     this.provincialAttachmentSystemWebsite = provincialAttachmentSystemWebsite;
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;

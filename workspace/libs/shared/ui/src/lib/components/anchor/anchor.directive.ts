@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Input, OnInit } from '@angular/core';
+import { Directive, ElementRef, Input, OnInit, inject } from '@angular/core';
 
 import { PhonePipe } from '../../pipes';
 
@@ -8,6 +8,9 @@ import { PhonePipe } from '../../pipes';
   standalone: true,
 })
 export class AnchorDirective implements OnInit {
+  private readonly el = inject<ElementRef<HTMLAnchorElement>>(ElementRef);
+  private readonly phonePipe = inject(PhonePipe);
+
   /**
    * @description
    * Type of URL scheme.
@@ -17,10 +20,7 @@ export class AnchorDirective implements OnInit {
 
   private readonly countryCode: number;
 
-  public constructor(
-    private el: ElementRef<HTMLAnchorElement>,
-    private phonePipe: PhonePipe,
-  ) {
+  public constructor() {
     this.scheme = 'url';
     this.countryCode = 1;
   }
