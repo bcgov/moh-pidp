@@ -85,7 +85,7 @@ export const routes: Routes = [
       import('./pages/pemcod/pemcod-routing.routes').then((m) => m.routes),
   },
   {
-    path: AccessRoutes.RSV_ELIGIBILITY_CHECKLIST_EFORM,
+    path: AccessRoutes.RSV_ELIGIBILITY_CHECKLIST,
     loadChildren: (): Promise<Routes> =>
       import(
         './pages/rsv-eligibility-checklist/rsv-eligibility-checklist-routing.routes'

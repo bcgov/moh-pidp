@@ -44,6 +44,8 @@ export class MockProfileStatus {
         ivf: { statusCode: StatusCode.AVAILABLE },
         immsBC: { statusCode: StatusCode.AVAILABLE },
         pemcod: { statusCode: StatusCode.AVAILABLE },
+        rsvEligibilityChecklist: { statusCode: StatusCode.AVAILABLE },
+        npdpExceptionalCoverage: { statusCode: StatusCode.AVAILABLE },
       },
     };
   }

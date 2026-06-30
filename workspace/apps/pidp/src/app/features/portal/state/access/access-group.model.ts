@@ -22,6 +22,8 @@ export const accessSectionKeys = [
   'ivf',
   'immsBC',
   'pemcod',
+  'rsvEligibilityChecklistEform',
+  'npdpExceptionalCoverage',
 ] as const;
 
 /**
@@ -54,4 +56,6 @@ export interface AccessGroup extends IAccessGroup {
   ivf: Section;
   immsBC: Section;
   pemcod: Section;
+  rsvEligibilityChecklist: Section;
+  npdpExceptionalCoverage: Section;
 }
