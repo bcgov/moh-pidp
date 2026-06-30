@@ -34,7 +34,7 @@ export class RsvEligibilityChecklistPortalSection implements IPortalSection {
     this.description =
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed doeiusmod tempor incididunt ut labore et dolore magna aliqua.';
     this.keyWords =
-      profileStatus.status.rsvEligibilityChecklist.keyWords || [];
+      profileStatus.status.rsvEligibilityChecklist?.keyWords || [];
     this.completedMessage = Constants.accessGrantedText;
   }
 
@@ -72,6 +72,6 @@ export class RsvEligibilityChecklistPortalSection implements IPortalSection {
   }
 
   private getStatusCode(): StatusCode {
-    return this.profileStatus.status.rsvEligibilityChecklist.statusCode;
+    return this.profileStatus.status.provincialAttachmentSystem.statusCode;
   }
 }

@@ -151,12 +151,12 @@ export class AccessStateBuilder {
         () => [new PemcodPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
-        this.insertSection('rsvEligibilityChecklist', profileStatus) &&
+        this.insertSection('provincialAttachmentSystem', profileStatus) &&
           this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new RsvEligibilityChecklistPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
-        this.insertSection('npdpExceptionalCoverage', profileStatus) &&
+        this.insertSection('provincialAttachmentSystem', profileStatus) &&
           this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
         () => [new NpdpExceptionalCoveragePortalSection(profileStatus, this.router)],
       ),
@@ -284,6 +284,26 @@ export class PortalStateBuilder {
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('immsBCEforms', profileStatus),
         () => [new ImmsBCEformsPortalSection(profileStatus, this.router)],
+      ),
+      ...ArrayUtils.insertResultIf<IPortalSection>(
+        this.insertSection('provincialAttachmentSystem', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        () => [
+          new RsvEligibilityChecklistPortalSection(
+            profileStatus,
+            this.router,
+          ),
+        ],
+      ),
+      ...ArrayUtils.insertResultIf<IPortalSection>(
+        this.insertSection('provincialAttachmentSystem', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        () => [
+          new NpdpExceptionalCoveragePortalSection(
+            profileStatus,
+            this.router,
+          ),
+        ],
       ),
     ];
   }

@@ -34,7 +34,7 @@ export class NpdpExceptionalCoveragePortalSection implements IPortalSection {
     this.description =
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed doeiusmod tempor incididunt ut labore et dolore magna aliqua.';
     this.keyWords =
-      profileStatus.status.npdpExceptionalCoverage.keyWords || [];
+      profileStatus.status.npdpExceptionalCoverage?.keyWords || [];
     this.completedMessage = Constants.accessGrantedText;
   }
 
@@ -72,6 +72,6 @@ export class NpdpExceptionalCoveragePortalSection implements IPortalSection {
   }
 
   private getStatusCode(): StatusCode {
-    return this.profileStatus.status.npdpExceptionalCoverage.statusCode;
+    return this.profileStatus.status.provincialAttachmentSystem.statusCode;
   }
 }
