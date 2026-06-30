@@ -84,4 +84,18 @@ export const routes: Routes = [
     loadChildren: (): Promise<Routes> =>
       import('./pages/pemcod/pemcod-routing.routes').then((m) => m.routes),
   },
+  {
+    path: AccessRoutes.RSV_ELIGIBILITY_CHECKLIST_EFORM,
+    loadChildren: (): Promise<Routes> =>
+      import(
+        './pages/rsv-eligibility-checklist/rsv-eligibility-checklist-routing.routes'
+      ).then((m) => m.routes),
+  },
+  {
+    path: AccessRoutes.NPDP_EXCEPTIONAL_COVERAGE,
+    loadChildren: (): Promise<Routes> =>
+      import(
+        './pages/npdp-exceptional-coverage/npdp-exceptional-coverage-routing.routes'
+      ).then((m) => m.routes),
+  },
 ];

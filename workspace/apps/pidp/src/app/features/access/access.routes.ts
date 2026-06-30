@@ -16,6 +16,8 @@ export class AccessRoutes {
   public static readonly IVF = 'ivf';
   public static readonly IMMSBC = 'immsbc';
   public static readonly PEMCOD = 'pemcod';
+  public static readonly RSV_ELIGIBILITY_CHECKLIST_EFORM = 'rsv-eligibility-checklist-eform';
+  public static readonly NPDP_EXCEPTIONAL_COVERAGE = 'npdp-exceptional-coverage';
 
   /**
    * @description
