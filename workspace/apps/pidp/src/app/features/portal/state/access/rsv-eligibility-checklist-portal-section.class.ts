@@ -29,12 +29,12 @@ export class RsvEligibilityChecklistPortalSection implements IPortalSection {
     private readonly profileStatus: ProfileStatus,
     private readonly router: Router,
   ) {
-    this.key = 'rsvEligibilityChecklist';
+    this.key = 'rsvEligibilityChecklistEform';
     this.heading = 'RSV Eligibility Checklist eForm';
     this.description =
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed doeiusmod tempor incididunt ut labore et dolore magna aliqua.';
     this.keyWords =
-      profileStatus.status.rsvEligibilityChecklist?.keyWords || [];
+      profileStatus.status.rsvEligibilityChecklistEform?.keyWords || [];
     this.completedMessage = Constants.accessGrantedText;
   }
 
