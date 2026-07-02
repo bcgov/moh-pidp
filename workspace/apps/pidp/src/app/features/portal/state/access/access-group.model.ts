@@ -56,6 +56,6 @@ export interface AccessGroup extends IAccessGroup {
   ivf: Section;
   immsBC: Section;
   pemcod: Section;
-  rsvEligibilityChecklist: Section;
+  rsvEligibilityChecklistEform: Section;
   npdpExceptionalCoverage: Section;
 }
