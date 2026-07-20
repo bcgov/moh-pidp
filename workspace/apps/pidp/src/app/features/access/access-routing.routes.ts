@@ -23,6 +23,13 @@ export const routes: Routes = [
       ).then((m) => m.routes),
   },
   {
+    path: AccessRoutes.HCIM_WEB_PCR,
+    loadChildren: (): Promise<Routes> =>
+      import('./pages/hcim-web-pcr/hcim-web-pcr-routing.routes').then(
+        (m) => m.routes,
+      ),
+  },
+  {
     path: AccessRoutes.DRIVER_FITNESS,
     loadChildren: (): Promise<Routes> =>
       import('./pages/driver-fitness/driver-fitness-routing.routes').then(

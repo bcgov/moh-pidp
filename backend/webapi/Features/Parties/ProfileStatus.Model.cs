@@ -213,6 +213,14 @@ public partial class ProfileStatus
             }
         }
 
+        public class HcimWebPcrSection : ProfileSection
+        {
+            internal override string SectionName => "hcimWebPcr";
+            public override string[] KeyWords => [];
+
+            protected override StatusCode Compute(ProfileData profile) => StatusCode.Incomplete;
+        }
+
         public class ImmsBCEformsSection : ProfileSection
         {
             internal override string SectionName => "immsBCEforms";
