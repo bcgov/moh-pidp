@@ -1,0 +1,101 @@
+<div class="box container" uiPidpInjectViewportCss>
+    <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
+    <div class="content">
+
+        <section class="page-intro">
+            <h1>ImmsBC - Account Access Change</h1>
+            <p class="intro-welcome">Welcome to the ImmsBC account access level change request form.</p>
+            <p>
+                Please note that this form can only be filled out by the pharmacy manager. If you are not the
+                pharmacy manager, please ask the pharmacy manager to fill out this form for you.
+            </p>
+            <p>
+                Please use this form if your staff member already has an ImmsBC account and require an access level
+                change. Please do not use this form to request accounts.
+            </p>
+            <p>
+                Requests may take 2-4 business days to process. After changes are made, it will take up to 40
+                minutes for the changes to be pushed onto ImmsBC.
+            </p>
+        </section>
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()" class="account-form" novalidate>
+
+            <!-- SECTION 1: About the Pharmacy -->
+            <div class="form-panel">
+                <h2 class="panel-title">About the Pharmacy</h2>
+
+                <div class="form-field">
+                    <label for="pharmacyManagerName">Pharmacy Manager Name</label>
+                    <input id="pharmacyManagerName" type="text" formControlName="pharmacyManagerName"
+                        placeholder="FirstName LastName" autocomplete="name" />
+                </div>
+
+                <div class="form-field">
+                    <label for="pharmacyManagerEmail">Pharmacy Manager Email Address</label>
+                    <input id="pharmacyManagerEmail" type="email" formControlName="pharmacyManagerEmail"
+                        placeholder="FirstName.LastName@gov.bc.ca" autocomplete="email" />
+                </div>
+
+                <div class="form-field">
+                    <label for="pharmacyName">Pharmacy Name</label>
+                    <input id="pharmacyName" type="text" formControlName="pharmacyName" autocomplete="organization" />
+                    <span class="helper-text">Please include store number if applicable</span>
+                </div>
+
+                <div class="form-field">
+                    <label for="pharmacareCode">PharmaCare Code (BC00000XXX)</label>
+                    <input id="pharmacareCode" type="text" formControlName="pharmacareCode" />
+                    <span class="helper-text">Enter the three digits for PharmaCare Code representing your
+                        pharmacy</span>
+                </div>
+            </div>
+
+            <!-- SECTION 2: About the Staff Member -->
+            <div class="form-panel">
+                <h2 class="panel-title">About the staff member</h2>
+
+                <div class="form-field">
+                    <label for="bcProviderUsername">&#64;bcprovider.ca username</label>
+                    <input id="bcProviderUsername" type="text" formControlName="bcProviderUsername"
+                        autocomplete="username" />
+                </div>
+
+                <div class="form-field">
+                    <label for="collegeId">College ID (if applicable)</label>
+                    <span class="helper-text above">For identity verification purposes</span>
+                    <input id="collegeId" type="text" formControlName="collegeId" />
+                </div>
+
+                <div class="form-field">
+                    <label for="mobilePhone">Mobile Phone #</label>
+                    <span class="helper-text above">For identity verification purposes</span>
+                    <input id="mobilePhone" type="tel" formControlName="mobilePhone" autocomplete="tel" />
+                </div>
+
+                <!-- Access Level -->
+                <div class="form-section">
+                    <h3 class="section-title">New Access Level to ImmsBC</h3>
+                    <p class="section-note">(*Note: Imms Admin access level currently unavailable to be added)</p>
+                    <div class="selection-cards-group" role="radiogroup" aria-label="New Access Level">
+                        @for (level of accessLevels; track level.value) {
+                        <div class="selection-card" [class.selected]="form.get('accessLevel')?.value === level.value"
+                            (click)="selectAccessLevel(level.value)" (keydown.enter)="selectAccessLevel(level.value)"
+                            (keydown.space)="$event.preventDefault(); selectAccessLevel(level.value)" tabindex="0"
+                            role="radio" [attr.aria-checked]="form.get('accessLevel')?.value === level.value">
+                            <div class="selection-card-title">{{ level.title }}</div>
+                            <div class="selection-card-description">{{ level.description }}</div>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit -->
+            <div class="submit-row">
+                <button mat-flat-button type="submit" class="submit-btn">Submit</button>
+            </div>
+
+        </form>
+    </div>
+</div>
