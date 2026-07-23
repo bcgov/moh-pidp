@@ -29,9 +29,9 @@ export class HcimWebPcrPortalSection implements IPortalSection {
     private readonly router: Router,
   ) {
     this.key = 'hcimWebPcr';
-    this.heading = 'HCIM Web (Provincial Client Registry-PCR)';
+    this.heading = 'Provincial Client Registry';
     this.description =
-      'Ensures you have the correct PHN and demographic information before providing a health care service';
+      'Repository of healthcare client demographic information, such as the Personal Health Numbers (PHN), name, date of birth, and contact details.';
     this.keyWords = profileStatus.status.hcimWebPcr?.keyWords || [];
     this.completedMessage = Constants.accessGrantedText;
   }
