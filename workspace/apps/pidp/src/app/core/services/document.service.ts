@@ -12,6 +12,7 @@ export enum DocumentType {
   MS_TEAMS_IT_SECURITY_AGREEMENT = 'ms-teams-it-security-agreement',
   PROVIDER_REPORTING_PORTAL_COLLECTION_NOTICE = 'provider-reporting-portal-collection-notice',
   IMMSBC_EFORMS_COLLECTION_NOTICE = 'immsbc-eforms-collection-notice',
+  PHARMACY_ADMIN_COLLECTION_NOTICE = 'pharmacy-admin-collection-notice',
 }
 
 export interface IDocumentMetaData {
@@ -68,6 +69,10 @@ export class DocumentService {
         type: DocumentType.IMMSBC_EFORMS_COLLECTION_NOTICE,
         title: 'Immunization Entry eForm Collection Notice',
       },
+      {
+        type: DocumentType.PHARMACY_ADMIN_COLLECTION_NOTICE,
+        title: 'Pharmacy Administration Collection Notice',
+      },
     ];
   }
 
@@ -116,6 +121,11 @@ export class DocumentService {
         return {
           ...this.getDocumentMetaData(documentType),
           content: this.getImmsBCEformsCollectionNotice(),
+        };
+      case DocumentType.PHARMACY_ADMIN_COLLECTION_NOTICE:
+        return {
+          ...this.getDocumentMetaData(documentType),
+          content: this.getPharmacyAdminCollectionNotice(),
         };
       default:
         throw new Error('Document type does not exist');
@@ -334,6 +344,16 @@ export class DocumentService {
       and will not be used for any other purpose other than the one stated above. If you have any questions
       about the collection of this personal information please contact PHSA's Information Access & Privacy
       Office at 1-855-229-9800 or at <a href="mailto:${this.config.emails.immsBCEformsSupport}">${this.config.emails.immsBCEformsSupport}</a>.
+    `;
+  }
+
+  public getPharmacyAdminCollectionNotice(): string {
+    return `
+      Personal information is collected for the purpose of administering
+      pharmacy access and linking your OneHealthID to your pharmacy organization.
+      This is collected by the Ministry of Health under sections 26(c) and
+      27(1)(b) of the Freedom of Information and Protection of Privacy Act.
+      Should you have any questions, please contact the OneHealthID Service desk.
     `;
   }
 

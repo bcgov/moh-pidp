@@ -1,0 +1,244 @@
+<div class="box container" uiPidpInjectViewportCss>
+  <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
+  <div class="content">
+
+    <!-- Page Intro -->
+    <section class="page-intro">
+      <h1>ImmsBC - Add Pharmacy</h1>
+      <p class="intro-welcome">Welcome to the ImmsBC account creation form.</p>
+      <p>
+        Please use this form if your staff member does not have access to ImmsBC. After your request has been
+        submitted, if the pharmacy has been on-boarded, the ImmsBC account will be created and the credentials as well
+        as additional information will be released directly to the staff member. It will take 2-3 business days for
+        processing.
+      </p>
+
+      <h2 class="prereq-heading">
+        Before you fill out this form, please ensure the following pre-requisites have been met:
+      </h2>
+      <ul class="prereq-list">
+        <li>Staff member has a smartphone capable of Microsoft Authenticator</li>
+        <li>Staff member College ID (if pharmacist)</li>
+        <li>Staff member has a valid BCPhA account</li>
+        <li>
+          Staff member has created a &#64;bcprovider.ca account through
+          <a href="https://healthprovideridentityportal.gov.bc.ca/auth/login" target="_blank">OneHealth ID</a>
+        </li>
+        <li>ImmsBC training completed on the BCPhA eTraining Portal</li>
+      </ul>
+
+      <p class="important-intro-note">
+        <strong>IMPORTANT:</strong> Please note that the user should have completed the ImmsBC course on the
+        eTraining portal. The eTraining portal is available at
+        <a href="https://www.bcpharmacy.ca/etraining/" target="_blank">https://www.bcpharmacy.ca/etraining/</a>.
+        If the staff member does not have a BCPhA account, please <a
+          href="https://bcpha.formstack.com/forms/etraining_signup" target="_blank">create an account here</a>.
+      </p>
+    </section>
+
+    <!-- Form -->
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="account-form" novalidate>
+
+      <!-- SECTION 1: About the Pharmacy -->
+      <div class="form-panel">
+        <h2 class="panel-title">About the Pharmacy</h2>
+
+        <div class="form-field">
+          <label for="pharmacyManagerName">Pharmacy Manager Name</label>
+          <input id="pharmacyManagerName" type="text" formControlName="pharmacyManagerName"
+            placeholder="FirstName LastName" autocomplete="name" />
+        </div>
+
+        <div class="form-field">
+          <label for="pharmacyManagerEmail">Pharmacy Manager Email Address</label>
+          <input id="pharmacyManagerEmail" type="email" formControlName="pharmacyManagerEmail"
+            placeholder="FirstName.LastName@gov.bc.ca" autocomplete="email" />
+        </div>
+
+        <div class="form-field">
+          <label for="pharmacyName">Pharmacy Name</label>
+          <input id="pharmacyName" type="text" formControlName="pharmacyName" autocomplete="organization" />
+          <span class="helper-text">Please include store number if applicable</span>
+        </div>
+
+        <div class="form-field">
+          <label for="pharmacareCode">PharmaCare Code (BC00000XXX)</label>
+          <input id="pharmacareCode" type="text" formControlName="pharmacareCode" />
+          <span class="helper-text">Enter the three digits for PharmaCare Code representing your pharmacy</span>
+        </div>
+
+        <div class="form-field">
+          <label for="streetAddress">Street Address</label>
+          <input id="streetAddress" type="text" formControlName="streetAddress" autocomplete="street-address" />
+        </div>
+
+        <div class="form-row two-col">
+          <div class="form-field">
+            <label for="postalCode">Postal Code</label>
+            <input id="postalCode" type="text" formControlName="postalCode" autocomplete="postal-code" />
+          </div>
+          <div class="form-field">
+            <label for="pharmacyPhone">Pharmacy Phone Number (Format: XXX-XXX-XXXX)</label>
+            <input id="pharmacyPhone" type="tel" formControlName="pharmacyPhone" autocomplete="tel" />
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: About the Staff Member -->
+      <div class="form-panel">
+        <h2 class="panel-title">About the staff member</h2>
+        <p class="panel-description">
+          Please enter information below regarding the individual whose account you are creating. Please ensure
+          that you enter only the legal name as claims with names and College ID that don't match may be rejected.
+        </p>
+
+        <!-- Staff Information sub-section -->
+        <div class="sub-section">
+          <h3 class="sub-section-title">Staff Information</h3>
+
+          <div class="form-row two-col">
+            <div class="form-field">
+              <label for="legalFirstName">Legal First Name</label>
+              <input id="legalFirstName" type="text" formControlName="legalFirstName" autocomplete="given-name" />
+            </div>
+            <div class="form-field">
+              <label for="legalLastName">Legal Last Name</label>
+              <input id="legalLastName" type="text" formControlName="legalLastName" autocomplete="family-name" />
+            </div>
+          </div>
+
+          <div class="form-row two-col">
+            <div class="form-field">
+              <label for="bcphaEmail">BCPHA eTraining Login Email</label>
+              <input id="bcphaEmail" type="email" formControlName="bcphaEmail" autocomplete="email" />
+              <span class="helper-text">
+                Please enter the email address that the staff member used to complete the BCPHA ImmsBC eTraining.
+              </span>
+            </div>
+            <div class="form-field">
+              <label for="mobilePhone">Mobile Phone (Format: XXX-XXX-XXXX)</label>
+              <input id="mobilePhone" type="tel" formControlName="mobilePhone" autocomplete="tel" />
+              <span class="helper-text">
+                A mobile phone for the staff member to be used for multi-factor authentication. Please note that
+                this phone number cannot already be in the system under another account.
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Important Notice -->
+        <div class="important-notice">
+          <p>
+            <strong>IMPORTANT:</strong>
+            <span class="notice-text">
+              Please enter the BCPHA account email address of the staff member working in your pharmacy. There
+              will be delays if this email address is not the same as their BCPHA account. If the staff member
+              does not have a BCPHA account, please
+              <a href="https://bcpha.formstack.com/forms/etraining_signup" target="_blank">create an account here</a>.
+              Please note, this is NOT a bcprovider.ca email address.
+            </span>
+          </p>
+        </div>
+
+        <!-- Occupation -->
+        <div class="form-section">
+          <h3 class="section-question">What is the occupation?</h3>
+          <div class="selectable-buttons-group" role="group" aria-label="Occupation">
+            @for (occupation of occupations; track occupation) {
+            <button type="button" class="selectable-btn" [class.selected]="form.get('occupation')?.value === occupation"
+              (click)="selectOccupation(occupation)" [attr.aria-pressed]="form.get('occupation')?.value === occupation">
+              {{ occupation }}
+            </button>
+            }
+          </div>
+        </div>
+
+        <!-- Access Level -->
+        <div class="form-section">
+          <h3 class="section-title">Access Level to ImmsBC</h3>
+          <p class="section-note">(*Note: Imms Admin access level currently unavailable to be added)</p>
+          <div class="selection-cards-group" role="radiogroup" aria-label="Access Level">
+            @for (level of accessLevels; track level.value) {
+            <div class="selection-card" [class.selected]="form.get('accessLevel')?.value === level.value"
+              (click)="selectAccessLevel(level.value)" (keydown.enter)="selectAccessLevel(level.value)"
+              (keydown.space)="$event.preventDefault(); selectAccessLevel(level.value)" tabindex="0" role="radio"
+              [attr.aria-checked]="form.get('accessLevel')?.value === level.value">
+              <div class="selection-card-title">{{ level.title }}</div>
+              <div class="selection-card-description">{{ level.description }}</div>
+            </div>
+            }
+          </div>
+        </div>
+
+        <!-- Training Confirmation -->
+        <div class="form-section">
+          <p class="training-text">
+            Please confirm you will complete the ImmsBC recommended training course on BCPHA eTraining portal
+            prior to using ImmsBC.
+          </p>
+          <button type="button" class="selectable-btn confirm-btn"
+            [class.selected]="form.get('trainingConfirmed')?.value === true" (click)="toggleTrainingConfirmed()"
+            [attr.aria-pressed]="form.get('trainingConfirmed')?.value === true">
+            Yes, I Confirm.
+          </button>
+        </div>
+      </div>
+
+      <!-- SECTION 3: Acknowledgements -->
+      <div class="form-panel">
+
+        <div class="acknowledgement-group">
+          <h3 class="ack-heading">Individual Accounts</h3>
+          <label class="checkbox-label">
+            <input type="checkbox" formControlName="ackIndividualAccounts" aria-describedby="ack-individual-desc" />
+            <span id="ack-individual-desc">
+              I acknowledge that each individual that needs access to the system will have their own login,
+              which cannot be shared with others.
+            </span>
+          </label>
+        </div>
+
+        <div class="acknowledgement-group">
+          <h3 class="ack-heading">Multi-Factor Authentication (MFA)</h3>
+          <label class="checkbox-label">
+            <input type="checkbox" formControlName="ackMfa" aria-describedby="ack-mfa-desc" />
+            <span id="ack-mfa-desc">
+              I acknowledge that multi-factor authentication (MFA) is required to access the system for all
+              staff members and staff members will be required to have a mobile device.
+            </span>
+          </label>
+        </div>
+
+        <div class="acknowledgement-group">
+          <h3 class="ack-heading">Privacy, Confidentiality and Security Acknowledgement</h3>
+          <label class="checkbox-label">
+            <input type="checkbox" formControlName="ackPrivacy" aria-describedby="ack-privacy-desc" />
+            <span id="ack-privacy-desc">
+              Each user will be required to accept a separate Privacy, Confidentiality and Security
+              Acknowledgement before gaining access to the system.
+            </span>
+          </label>
+        </div>
+
+        <div class="acknowledgement-group">
+          <h3 class="ack-heading">Removal of Access for Ex-Employees</h3>
+          <label class="checkbox-label">
+            <input type="checkbox" formControlName="ackRemovalAccess" aria-describedby="ack-removal-desc" />
+            <span id="ack-removal-desc">
+              If an employee is no longer employed at the pharmacy, the pharmacy manager or designate will
+              contact <a href="mailto:covidsupport&#64;bcpharmacy.ca">covidsupport&#64;bcpharmacy.ca</a> to remove
+              access immediately.
+            </span>
+          </label>
+        </div>
+
+      </div>
+
+      <!-- Submit -->
+      <div class="submit-row">
+        <button mat-flat-button type="submit" class="submit-btn">Submit</button>
+      </div>
+
+    </form>
+  </div>
+</div>

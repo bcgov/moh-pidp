@@ -1,0 +1,110 @@
+<div class="page-header-section">
+  <h2>Staff Enrolment</h2>
+</div>
+<div class="form-panel">
+  <h2 class="panel-title">Staff Enrolment</h2>
+  <p class="panel-description">
+    Share these links with new staff members to add them to this pharmacy. They
+    will need to log in with their BC Services Card. New staff will appear in
+    the list below as "Pending" until an administrator activates their role.
+  </p>
+  <div class="button-group">
+    <button mat-stroked-button (click)="generateLink(PharmacyRole.Clinician)">
+      <mat-icon>link</mat-icon>
+      Generate Clinician Link
+    </button>
+    <button mat-stroked-button (click)="generateLink(PharmacyRole.Clerk)">
+      <mat-icon>link</mat-icon>
+      Generate Clerk Link
+    </button>
+  </div>
+</div>
+
+<div class="page-header-section">
+  <h2>Staff Management</h2>
+</div>
+<div class="form-panel">
+  <h2 class="panel-title">Staff List</h2>
+  <ng-container *ngIf="staff$ | async as staff; else loading">
+    <div *ngIf="!staff.length" class="text-center">
+      <p>No staff members are associated with this pharmacy.</p>
+    </div>
+
+    <table
+      *ngIf="staff.length"
+      mat-table
+      [dataSource]="dataSource"
+      class="mat-elevation-z8"
+    >
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.fullName }}
+        </td>
+      </ng-container>
+
+      <!-- Role Column -->
+      <ng-container matColumnDef="role">
+        <th mat-header-cell *matHeaderCellDef>Role</th>
+        <td mat-cell *matCellDef="let element">{{ getRole(element.role) }}</td>
+      </ng-container>
+
+      <!-- Start Date Column -->
+      <ng-container matColumnDef="effectiveStartDate">
+        <th mat-header-cell *matHeaderCellDef>Effective Start</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.effectiveStartDate | date: 'mediumDate' }}
+        </td>
+      </ng-container>
+
+      <!-- End Date Column -->
+      <ng-container matColumnDef="effectiveEndDate">
+        <th mat-header-cell *matHeaderCellDef>Effective End</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.effectiveEndDate | date: 'mediumDate' }}
+        </td>
+      </ng-container>
+
+      <!-- Status Column -->
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let element">
+          <app-pill
+            [label]="getStatus(element)"
+            [class]="getStatus(element) | lowercase"
+          ></app-pill>
+        </td>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element" class="text-right">
+          <button
+            mat-icon-button
+            (click)="onEdit(element)"
+            aria-label="Edit staff member"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="onDelete(element)"
+            aria-label="Remove staff member"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </ng-container>
+
+  <ng-template #loading>
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </ng-template>
+</div>
