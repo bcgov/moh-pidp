@@ -218,7 +218,17 @@ public partial class ProfileStatus
             internal override string SectionName => "hcimWebPcr";
             public override string[] KeyWords => [];
 
-            protected override StatusCode Compute(ProfileData profile) => StatusCode.Incomplete;
+            protected override StatusCode Compute(ProfileData profile)
+            {
+                return profile switch
+                {
+                    _ when (profile.EndorsementPlrStanding.HasGoodStanding
+                        || profile.PartyPlrStanding.HasGoodStanding)
+                        && profile.HasBCProviderCredential => StatusCode.Complete,
+                    { HasBCServicesCardCredential: true } => StatusCode.Incomplete,
+                    _ => StatusCode.Locked
+                };
+            }
         }
 
         public class ImmsBCEformsSection : ProfileSection

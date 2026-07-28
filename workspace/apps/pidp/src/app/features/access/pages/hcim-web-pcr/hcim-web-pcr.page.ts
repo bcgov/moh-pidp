@@ -3,10 +3,9 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { AsyncPipe, NgOptimizedImage } from '@angular/common';
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { DomSanitizer } from '@angular/platform-browser';
 import { Router, RouterLink } from '@angular/router';
 
 import {
@@ -18,9 +17,6 @@ import {
   takeUntil,
   tap,
 } from 'rxjs';
-
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 
 import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
@@ -57,7 +53,6 @@ import { hcimWebPcrUrl } from './hcim-web-pcr-constants';
     ClipboardModule,
     InjectViewportCssClassDirective,
     RouterLink,
-    FontAwesomeModule,
     NgOptimizedImage,
   ],
   providers: [
@@ -100,27 +95,14 @@ export class HcimWebPcrPage implements OnInit, OnDestroy {
     },
     { title: 'HCIM Web (Provincial Client Registry-PCR)', path: '' },
   ];
-  public sanitizer = inject(DomSanitizer);
-  public matIconRegistry = inject(MatIconRegistry);
-  public faArrowRight = faArrowRight;
 
   public constructor() {
-    this.registerSvgIcons();
     this.selectedIndex = -1;
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
     this.bcProviderTutorial = bcProviderTutorialLink;
     this.lastSelectedIndex = 2;
     this.destination$ = this.discoveryResource.getDestination(
       this.partyService.partyId,
-    );
-  }
-
-  public registerSvgIcons(): void {
-    this.matIconRegistry.addSvgIcon(
-      'hcim-icon',
-      this.sanitizer.bypassSecurityTrustResourceUrl(
-        './assets/images/icons/perm-contact-calendar.svg',
-      ),
     );
   }
 

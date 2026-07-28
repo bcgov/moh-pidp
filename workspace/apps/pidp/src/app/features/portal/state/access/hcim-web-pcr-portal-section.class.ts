@@ -37,10 +37,11 @@ export class HcimWebPcrPortalSection implements IPortalSection {
   }
 
   public get action(): PortalSectionAction {
+    const statusCode = this.getStatusCode();
     return {
-      label: 'View',
+      label: statusCode === StatusCode.COMPLETED ? 'View' : 'Request',
       route: AccessRoutes.routePath(AccessRoutes.HCIM_WEB_PCR),
-      disabled: false,
+      disabled: statusCode === StatusCode.NOT_AVAILABLE,
     };
   }
 
@@ -61,6 +62,6 @@ export class HcimWebPcrPortalSection implements IPortalSection {
   }
 
   private getStatusCode(): StatusCode {
-    return this.profileStatus.status.hcimWebPcr?.statusCode ?? StatusCode.AVAILABLE;
+    return this.profileStatus.status.hcimWebPcr?.statusCode;
   }
 }
