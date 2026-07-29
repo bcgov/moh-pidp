@@ -1,12 +1,5 @@
-import {
-  NgIf,
-  NgOptimizedImage,
-  NgSwitch,
-  NgSwitchCase,
-  NgSwitchDefault,
-  NgTemplateOutlet,
-} from '@angular/common';
-import { Component, Inject, OnInit } from '@angular/core';
+import { NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -37,15 +30,16 @@ import { AuthService } from '../../services/auth.service';
     MatIconModule,
     MatTooltipModule,
     NgOptimizedImage,
-    NgIf,
-    NgSwitch,
-    NgSwitchCase,
-    NgSwitchDefault,
     NgTemplateOutlet,
-    NeedHelpComponent,
-  ],
+    NeedHelpComponent
+],
 })
 export class LinkAccountErrorPage implements OnInit {
+  private readonly config = inject<AppConfig>(APP_CONFIG);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
+
   public logoutRedirectUrl: string;
   public providerIdentitySupport: string;
   public additionalSupportPhone: string;
@@ -53,12 +47,7 @@ export class LinkAccountErrorPage implements OnInit {
   public status = '';
   public DiscoveryStatus = DiscoveryStatus;
 
-  public constructor(
-    @Inject(APP_CONFIG) private readonly config: AppConfig,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly authService: AuthService,
-  ) {
+  public constructor() {
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
     this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
     this.additionalSupportPhone = this.config.phones.additionalSupport;

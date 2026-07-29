@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   Event,
   NavigationCancel,
@@ -17,7 +17,8 @@ import { filter } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class RouteStateService {
-  public constructor(private readonly router: Router) {}
+  private readonly router = inject(Router);
+
 
   /**
    * @description

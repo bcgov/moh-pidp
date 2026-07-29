@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,9 +14,8 @@ import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
   imports: [
     InjectViewportCssClassDirective,
     MatButtonModule,
-    MatIconModule,
-    NgIf,
-  ],
+    MatIconModule
+],
 })
 export class EndorsementCardComponent {
   public faUserGroup = faUserGroup;

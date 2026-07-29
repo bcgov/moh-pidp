@@ -1,9 +1,17 @@
 <mat-radio-group (change)="onDecisionUpdate($event)">
-  <mat-radio-button *ngFor="let decision of decisions" [value]="decision.code">
+  @for (decision of decisions; track decision) {
+  <mat-radio-button [value]="decision.code">
     {{ decision.name }}
   </mat-radio-button>
+  }
 </mat-radio-group>
 
-<div *ngIf="chosenDecision">
+<ng-template #content>
   <ng-content></ng-content>
+</ng-template>
+
+@if (chosenDecision) {
+<div>
+  <ng-container *ngTemplateOutlet="content"></ng-container>
 </div>
+}

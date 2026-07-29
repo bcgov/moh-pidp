@@ -1,4 +1,4 @@
-import { NgFor, NgIf } from '@angular/common';
+import { NgTemplateOutlet  } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -12,7 +12,7 @@ import { MatRadioChange, MatRadioModule } from '@angular/material/radio';
   templateUrl: './yes-no-content.component.html',
   styleUrls: ['./yes-no-content.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatRadioModule, NgFor, NgIf],
+  imports: [MatRadioModule, NgTemplateOutlet],
 })
 export class YesNoContentComponent {
   @Output() public update: EventEmitter<string>;

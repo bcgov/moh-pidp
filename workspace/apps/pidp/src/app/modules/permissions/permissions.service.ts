@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { AccessTokenService } from '@app/features/auth/services/access-token.service';
 
@@ -6,7 +6,8 @@ import { AccessTokenService } from '@app/features/auth/services/access-token.ser
   providedIn: 'root',
 })
 export class PermissionsService {
-  public constructor(private accessTokenService: AccessTokenService) {}
+  private readonly accessTokenService = inject(AccessTokenService);
+
 
   public hasRole(allowedRoles: string | string[]): boolean {
     allowedRoles = Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles];

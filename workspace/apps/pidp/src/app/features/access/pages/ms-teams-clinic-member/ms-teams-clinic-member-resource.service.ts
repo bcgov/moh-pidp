@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable, catchError, throwError } from 'rxjs';
 
@@ -16,11 +16,10 @@ import { PrivacyOfficer } from './ms-teams-clinic-member.model';
   providedIn: 'root',
 })
 export class MsTeamsClinicMemberResource {
-  public constructor(
-    protected apiResource: ApiHttpClient,
-    private readonly portalResource: PortalResource,
-    private readonly toastService: ToastService,
-  ) {}
+  protected apiResource = inject(ApiHttpClient);
+  private readonly portalResource = inject(PortalResource);
+  private readonly toastService = inject(ToastService);
+
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
     return this.portalResource.getProfileStatus(partyId);

@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { delay, of } from 'rxjs';
 
@@ -11,10 +11,9 @@ export type SortWeight = -1 | 0 | 1;
   providedIn: 'root',
 })
 export class UtilsService {
-  public constructor(
-    @Inject(WINDOW) private window: Window,
-    @Inject(DOCUMENT) private document: Document,
-  ) {}
+  private readonly window = inject<Window>(WINDOW);
+  private readonly document = inject<Document>(DOCUMENT);
+
 
   /**
    * @description

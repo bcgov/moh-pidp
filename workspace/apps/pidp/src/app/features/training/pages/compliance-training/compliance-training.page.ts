@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -32,12 +32,12 @@ import {
   ],
 })
 export class ComplianceTrainingPage {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+
   public title: string;
 
-  public constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-  ) {
+  public constructor() {
     this.title = this.route.snapshot.data.title;
   }
 

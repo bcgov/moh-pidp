@@ -1,4 +1,4 @@
-import { NgIf, NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -15,7 +15,7 @@ import { OverlayComponent } from '../overlay/overlay.component';
   templateUrl: './page.component.html',
   styleUrls: ['./page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [OverlayComponent, NgIf, ReactiveFormsModule, NgTemplateOutlet],
+  imports: [OverlayComponent, ReactiveFormsModule, NgTemplateOutlet],
 })
 export class PageComponent {
   /**

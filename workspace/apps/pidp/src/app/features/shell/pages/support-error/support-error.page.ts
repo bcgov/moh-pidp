@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 
@@ -19,14 +19,14 @@ import { ShellRoutes } from '../../shell.routes';
   imports: [AnchorDirective, DashboardHeaderComponent, MatButtonModule],
 })
 export class SupportErrorPage {
+  private readonly router = inject(Router);
+  private readonly config = inject<AppConfig>(APP_CONFIG);
+
   public headerConfig: DashboardHeaderConfig;
   public providerIdentitySupport: string;
   public additionalSupportPhone: string;
 
-  public constructor(
-    private readonly router: Router,
-    @Inject(APP_CONFIG) private readonly config: AppConfig,
-  ) {
+  public constructor() {
     this.headerConfig = { theme: 'light', allowMobileToggle: false };
     this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
     this.additionalSupportPhone = this.config.phones.additionalSupport;

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable, combineLatest, map } from 'rxjs';
 
@@ -15,7 +15,8 @@ import { AccessTokenService } from './access-token.service';
   providedIn: 'root',
 })
 export class AuthorizedUserService {
-  public constructor(private readonly accessTokenService: AccessTokenService) {}
+  private readonly accessTokenService = inject(AccessTokenService);
+
 
   /**
    * @description

@@ -1,10 +1,10 @@
-import { NgIf } from '@angular/common';
+import { NgTemplateOutlet  } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   ContentChildren,
   Input,
-  QueryList,
+  QueryList
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,7 +19,7 @@ import { CardHintDirective } from './card-hint.directive';
   templateUrl: './card.component.html',
   styleUrls: ['./card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatCardModule, NgIf, MatIconModule],
+  imports: [MatCardModule, MatIconModule, NgTemplateOutlet],
 })
 export class CardComponent {
   @Input() public icon?: string;

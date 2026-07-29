@@ -1,5 +1,5 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable, catchError, of, tap, throwError } from 'rxjs';
 
@@ -17,10 +17,9 @@ import { Endorsement } from './models/endorsement.model';
   providedIn: 'root',
 })
 export class EndorsementsResource {
-  public constructor(
-    private readonly apiResource: ApiHttpClient,
-    private readonly toastService: ToastService,
-  ) {}
+  private readonly apiResource = inject(ApiHttpClient);
+  private readonly toastService = inject(ToastService);
+
 
   public getEndorsements(partyId: number): Observable<Endorsement[] | null> {
     return this.apiResource
@@ -80,7 +79,7 @@ export class EndorsementsResource {
         { recipientEmail },
       )
       .pipe(
-        catchError(() => of({ recipientName: null } as EndorsementEmailSearch)),
+        catchError(() => of({ recipientName: null })),
       );
   }
 

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable, map, of } from 'rxjs';
 
@@ -20,9 +20,11 @@ export interface ILookupService extends LookupConfig {
   providedIn: 'root',
 })
 export class LookupService implements ILookupService {
+  private readonly lookupResource = inject(LookupResource);
+
   private lookupConfig: LookupConfig | null;
 
-  public constructor(private lookupResource: LookupResource) {
+  public constructor() {
     this.lookupConfig = null;
   }
 
@@ -91,7 +93,7 @@ export class LookupService implements ILookupService {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private copyAndSortByKey<T extends { [key: string]: any } = Lookup>(
     lookup: T[] | undefined,
-    sortBy: keyof T = 'code' as keyof T,
+    sortBy: keyof T = 'code',
   ): T[] {
     return lookup?.length
       ? [...lookup].sort(SortUtils.sortByKey<T>(sortBy))

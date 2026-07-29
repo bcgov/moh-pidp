@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { UrlTree } from '@angular/router';
@@ -21,11 +21,10 @@ import { FormUtilsService } from '@core/services/form-utils.service';
  */
 @Injectable({ providedIn: 'root' })
 export class AbstractFormDependenciesService {
-  public constructor(
-    public dialog: MatDialog,
-    public formUtilsService: FormUtilsService,
-    public loadingOverlayService: LoadingOverlayService,
-  ) {}
+  public dialog = inject(MatDialog);
+  public formUtilsService = inject(FormUtilsService);
+  public loadingOverlayService = inject(LoadingOverlayService);
+
 }
 export interface IFormPage {
   /**

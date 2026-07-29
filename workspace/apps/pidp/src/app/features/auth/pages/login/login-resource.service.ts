@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
@@ -10,7 +10,8 @@ import { BannerFindResponse } from './banner-find.response.model';
   providedIn: 'root',
 })
 export class LoginResource {
-  public constructor(private readonly apiResource: ApiHttpClient) {}
+  private readonly apiResource = inject(ApiHttpClient);
+
 
   public findBanners(component: string): Observable<BannerFindResponse[]> {
     return this.apiResource.get<BannerFindResponse[]>(

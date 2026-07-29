@@ -60,87 +60,97 @@
           <mat-tab>
             <ng-template mat-tab-label>
               <div class="tab-label-box">
-                <ng-container *ngIf="showIconLabels; else textLabels">
+                @if (showIconLabels) {
                   <fa-icon [icon]="faUser"></fa-icon>
                   <fa-icon [icon]="faArrowUp"></fa-icon>
                   <div class="badge">
                     {{(actionableEndorsementRequests$ | async)?.length}}
                   </div>
-                </ng-container>
-                <ng-template #textLabels>
+                } @else {
                   <span>Incoming Requests</span>
                   <div class="badge">
                     {{(actionableEndorsementRequests$ | async)?.length}}
                   </div>
-                </ng-template>
+                }
               </div>
             </ng-template>
             <ng-template matTabContent>
               <div class="tab-content">
-                <app-endorsement-card
-                  *ngFor="let endorsementRequest of actionableEndorsementRequests$ | async"
-                  class="endorsement-card"
-                  [id]="endorsementRequest.id"
-                  [nameText]="endorsementRequest.partyName ?? ''"
-                  [collegeText]="getCollegeText(endorsementRequest)"
-                  [isApproveEnabled]="true"
-                  [isCancelEnabled]="true"
-                  (approveClick)="onApprove($event)"
+                @for (endorsementRequest of actionableEndorsementRequests$ | async; track endorsementRequest) {
+                  <app-endorsement-card
+                    class="endorsement-card"
+                    [id]="endorsementRequest.id"
+                    [nameText]="endorsementRequest.partyName ?? ''"
+                    [collegeText]="getCollegeText(endorsementRequest)"
+                    [isApproveEnabled]="true"
+                    [isCancelEnabled]="true"
+                    (approveClick)="onApprove($event)"
                   (cancelClick)="onCancel($event)"></app-endorsement-card>
+                }
               </div>
             </ng-template>
           </mat-tab>
           <mat-tab>
             <ng-template mat-tab-label>
-              <div *ngIf="showTextLabels" class="tab-label-box">
-                <span>Your Working Relationships</span>
-              </div>
-              <span *ngIf="showIconLabels" class="tab-label-box">
-                <fa-icon [icon]="faUserGroup"></fa-icon>
-              </span>
+              @if (showTextLabels) {
+                <div class="tab-label-box">
+                  <span>Your Working Relationships</span>
+                </div>
+              }
+              @if (showIconLabels) {
+                <span class="tab-label-box">
+                  <fa-icon [icon]="faUserGroup"></fa-icon>
+                </span>
+              }
             </ng-template>
             <ng-template matTabContent>
               <div class="tab-content">
-                <app-endorsement-card
-                  *ngFor="let endorsement of endorsements$ | async"
-                  class="endorsement-card"
-                  noticeText="Relationship"
-                  noticeColour="green"
-                  [id]="endorsement.id"
-                  [nameText]="endorsement.partyName"
-                  [collegeText]="getCollegeText(endorsement)"
-                  [createdOnText]="endorsement.createdOn | date"
-                  [isCancelEnabled]="true"
+                @for (endorsement of endorsements$ | async; track endorsement) {
+                  <app-endorsement-card
+                    class="endorsement-card"
+                    noticeText="Relationship"
+                    noticeColour="green"
+                    [id]="endorsement.id"
+                    [nameText]="endorsement.partyName"
+                    [collegeText]="getCollegeText(endorsement)"
+                    [createdOnText]="endorsement.createdOn | date"
+                    [isCancelEnabled]="true"
                   (cancelClick)="onCancelEndorsement($event)"></app-endorsement-card>
+                }
               </div>
             </ng-template>
           </mat-tab>
           <mat-tab>
             <ng-template mat-tab-label>
-              <div *ngIf="showTextLabels" class="tab-label-box">
-                <span>Outgoing Requests</span>
-                <div class="badge">
-                  {{(nonActionableEndorsementRequests$ | async)?.length}}
+              @if (showTextLabels) {
+                <div class="tab-label-box">
+                  <span>Outgoing Requests</span>
+                  <div class="badge">
+                    {{(nonActionableEndorsementRequests$ | async)?.length}}
+                  </div>
                 </div>
-              </div>
-              <span *ngIf="showIconLabels" class="tab-label-box">
-                <fa-icon [icon]="faUser"></fa-icon>
-                <fa-icon [icon]="faArrowDown"></fa-icon>
-                <div class="badge">
-                  {{(nonActionableEndorsementRequests$ | async)?.length}}
-                </div>
-              </span>
+              }
+              @if (showIconLabels) {
+                <span class="tab-label-box">
+                  <fa-icon [icon]="faUser"></fa-icon>
+                  <fa-icon [icon]="faArrowDown"></fa-icon>
+                  <div class="badge">
+                    {{(nonActionableEndorsementRequests$ | async)?.length}}
+                  </div>
+                </span>
+              }
             </ng-template>
             <ng-template matTabContent>
               <div class="tab-content">
-                <app-endorsement-card
-                  *ngFor="let endorsementRequest of nonActionableEndorsementRequests$ | async"
-                  class="endorsement-card"
-                  [noticeText]="getStatus(endorsementRequest.status)"
-                  [noticeColour]="isEndorsementRequested(endorsementRequest.status) ? 'yellow' : 'red'"
-                  [id]="endorsementRequest.id"
-                  [nameText]="endorsementRequest.partyName ?? endorsementRequest.recipientEmail"
+                @for (endorsementRequest of nonActionableEndorsementRequests$ | async; track endorsementRequest) {
+                  <app-endorsement-card
+                    class="endorsement-card"
+                    [noticeText]="getStatus(endorsementRequest.status)"
+                    [noticeColour]="isEndorsementRequested(endorsementRequest.status) ? 'yellow' : 'red'"
+                    [id]="endorsementRequest.id"
+                    [nameText]="endorsementRequest.partyName ?? endorsementRequest.recipientEmail"
                   [collegeText]="getCollegeText(endorsementRequest)"></app-endorsement-card>
+                }
               </div>
             </ng-template>
           </mat-tab>
@@ -165,25 +175,30 @@
           <mat-label>Email</mat-label>
           <input
             matInput
+            aria-label="Recipient Email"
             formControlName="recipientEmail"
             (keydown.enter)="onEnter($event)" />
-          <mat-error *ngIf="recipientEmail.hasError('required')"
-            >Required</mat-error
-          >
-          <mat-error *ngIf="recipientEmail.hasError('email')">
-            Must be a valid email address
-          </mat-error>
-        </mat-form-field>
-      </section>
-      <section class="actions">
-        <button
-          mat-flat-button
-          uiPageFooterAction
-          type="submit"
-          color="primary">
-          Send
-        </button>
-      </section>
-    </div>
-  </form>
-</div>
+            @if (recipientEmail.hasError('required')) {
+              <mat-error
+                >Required</mat-error
+                >
+            }
+            @if (recipientEmail.hasError('email')) {
+              <mat-error>
+                Must be a valid email address
+              </mat-error>
+            }
+          </mat-form-field>
+        </section>
+        <section class="actions">
+          <button
+            mat-flat-button
+            uiPageFooterAction
+            type="submit"
+            color="primary">
+            Send
+          </button>
+        </section>
+      </div>
+    </form>
+  </div>

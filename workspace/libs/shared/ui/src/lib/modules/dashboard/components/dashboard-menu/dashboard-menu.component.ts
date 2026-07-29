@@ -1,4 +1,4 @@
-import { NgFor, NgSwitch, NgSwitchCase } from '@angular/common';
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -21,11 +21,8 @@ import { DashboardRouteMenuItemComponent } from '../dashboard-route-menu-item/da
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MatListModule,
-    NgFor,
-    NgSwitch,
-    NgSwitchCase,
-    DashboardRouteMenuItemComponent,
-  ],
+    DashboardRouteMenuItemComponent
+],
 })
 export class DashboardMenuComponent {
   /**

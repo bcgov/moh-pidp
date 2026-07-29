@@ -1,6 +1,6 @@
-import { NgIf } from '@angular/common';
+
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -40,15 +40,21 @@ import { ProviderReportingPortalResource } from './provider-reporting-portal-res
     EnrolmentErrorComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
-    NgIf,
     PageComponent,
     PageFooterActionDirective,
     PageFooterComponent,
     PageSectionComponent,
-    SafePipe,
-  ],
+    SafePipe
+],
 })
 export class ProviderReportingPortalPage implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly partyService = inject(PartyService);
+  private readonly resource = inject(ProviderReportingPortalResource);
+  private readonly logger = inject(LoggerService);
+  private readonly documentService = inject(DocumentService);
+
   public title: string;
   public collectionNotice: string;
   public completed: boolean | null;
@@ -63,14 +69,7 @@ export class ProviderReportingPortalPage implements OnInit {
     { title: 'Provider Reporting Portal', path: '' },
   ];
 
-  public constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly partyService: PartyService,
-    private readonly resource: ProviderReportingPortalResource,
-    private readonly logger: LoggerService,
-    private readonly documentService: DocumentService,
-  ) {
+  public constructor() {
     const routeData = this.route.snapshot.data;
     this.title = routeData.title;
     this.collectionNotice =

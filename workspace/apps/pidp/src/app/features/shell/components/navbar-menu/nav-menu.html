@@ -1,27 +1,32 @@
 <ui-layout-header-footer [emailSupport]="emailSupport">
   <div class="header-right" page-header-right>
-    <button
-      *ngIf="showMiniMenuButton"
-      class="menu"
-      title="menu"
-      mat-icon-button
-      (click)="onMiniMenuButtonClick()">
-      <mat-icon>menu</mat-icon>
-      <span
+    @if (showMiniMenuButton) {
+      <button
+        class="menu"
+        title="menu"
+        mat-icon-button
+        (click)="onMiniMenuButtonClick()">
+        <mat-icon>menu</mat-icon>
+        <span
         [ngClass]="{'menu-notification-dot': alerts?.includes(AlertCode.TRANSIENT_ERROR) || alerts?.includes(AlertCode.PLR_BAD_STANDING)}"></span>
-    </button>
-    <app-feedback-button *ngIf="featureFlag()"></app-feedback-button>
+      </button>
+    }
+    @if (featureFlag()) {
+      <app-feedback-button></app-feedback-button>
+    }
   </div>
-  <div *ngIf="isTopMenuVisible" uiPidpInjectViewportCss>
-    <div class="content-menu">
-      <div class="container">
-        <ng-container *ngTemplateOutlet="menu"></ng-container>
+  @if (isTopMenuVisible) {
+    <div uiPidpInjectViewportCss>
+      <div class="content-menu">
+        <div class="container">
+          <ng-container *ngTemplateOutlet="menu"></ng-container>
+        </div>
+      </div>
+      <div class="content-body">
+        <router-outlet></router-outlet>
       </div>
     </div>
-    <div class="content-body">
-      <router-outlet></router-outlet>
-    </div>
-  </div>
+  }
   <ng-template #menu>
     <a
       class="logo-link"
@@ -29,190 +34,198 @@
       aria-label="Go home"
       (click)="navigateToRoot()">
       <span class="span-text">OneHealthID</span></a
-    >
-    <div class="main-menu">
-      <a class="main-menu-item">
-        <div class="dropdown">
-          <span class="content-with-alert"
-            ><fa-icon
-              *ngIf="alerts?.includes(AlertCode.TRANSIENT_ERROR) || alerts?.includes(AlertCode.PLR_BAD_STANDING)"
-              class="fa-duotone"
-              [icon]="faBell"></fa-icon
-            ><a class="dropdown-profile">Profile</a></span
-          >
-          <div class="dropdown-content">
-            <a
-              class="dropdown-links"
-              (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO))"
-              >Personal Information</a
-            >
-            <a class="dropdown-links" (click)="navigateTo(collegeRoute)"
-              >College License<fa-icon
-                *ngIf="alerts?.includes(AlertCode.TRANSIENT_ERROR) || alerts?.includes(AlertCode.PLR_BAD_STANDING)"
+      >
+      <div class="main-menu">
+        <a class="main-menu-item">
+          <div class="dropdown">
+            <span class="content-with-alert"
+              >@if (alerts?.includes(AlertCode.TRANSIENT_ERROR) || alerts?.includes(AlertCode.PLR_BAD_STANDING)) {
+              <fa-icon
                 class="fa-duotone"
                 [icon]="faBell"></fa-icon
-            ></a>
-            <a
-              class="dropdown-links"
-              (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT))"
-              >Use Policy Agreement</a
-            >
-            <a
-              class="dropdown-links"
-              (click)="navigateTo(HistoryRoutes.routePath(HistoryRoutes.TRANSACTIONS))"
-              >History</a
-            >
-          </div>
-        </div>
-      </a>
-      <a class="main-menu-item">
-        <div class="dropdown">
-          <span class="content-with-alert">
-            <a
-              class="dropdown-accounts"
-              (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))"
-              >Access</a
-            >
-          </span>
-        </div>
-      </a>
-      <a class="main-menu-item">
-        <div class="dropdown">
-          <span class="content-with-alert">
-            <a class="dropdown-accounts">Account</a></span
-          >
-          <div class="dropdown-content">
-            <a
-              class="dropdown-links"
-              (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.ACCOUNT_LINKING))"
-              >Account Linking</a
-            >
-            <a
-              *ngIf="featureFlag()"
-              class="dropdown-links"
-              (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.EXTERNAL_ACCOUNTS))"
-              >External Account</a
-            >
-            <a
-              *ngIf="hasCredential(IdentityProvider.BC_PROVIDER) else noBCProvider"
-              class="dropdown-links"
-              (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_EDIT))"
-              >Password and MFA Reset</a
-            >
-            <ng-template #noBCProvider>
-              <a
-                class="dropdown-links"
-                (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_APPLICATION))"
-                >BCProvider Account</a
-              ></ng-template
-            >
-          </div>
-        </div>
-      </a>
-      <a class="main-menu-item">
-        <div class="dropdown">
-          <span class="content-with-alert">
-            <a
-              class="dropdown-accounts"
-              (click)="navigateTo(FaqRoutes.BASE_PATH)"
-              >Help</a
-            >
-          </span>
-        </div>
-      </a>
-      <button
-        *ngIf="isLogoutButtonVisible"
-        class="btn-signout"
-        mat-stroked-button
-        aria-label="Sign Out"
-        (click)="onLogout()">
-        Sign Out
-      </button>
-    </div>
-  </ng-template>
-  <div *ngIf="!isTopMenuVisible" class="nav-menu" uiPidpInjectViewportCss>
-    <div class="header-bar-left"></div>
-    <div class="content">
-      <mat-sidenav-container class="sidenav-container">
-        <mat-sidenav #sidenav [mode]="sidenavMode" [(opened)]="isSidenavOpened">
-          <div class="sidenav-header-box"></div>
-          <div class="sidenav-body-box">
-            <ng-container *ngTemplateOutlet="sidenavmenu"></ng-container>
-          </div>
-        </mat-sidenav>
-        <mat-sidenav-content class="custom-mat-sidenav-content">
-          <router-outlet></router-outlet>
-        </mat-sidenav-content>
-      </mat-sidenav-container>
-    </div>
-    <div class="header-bar-right"></div>
-  </div>
-  <ng-template #sidenavmenu>
-    <div class="sidenav-panel-box">
-      <div class="sidenav-bar"></div>
-      <div class="sidenav-panel-content">
-        <div class="sidenav-menu">
-          <a
-            class="sidenav-menu-item"
-            (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO))"
-            >Personal Information</a
-          >
-          <a class="sidenav-menu-item" (click)="navigateTo(collegeRoute)"
-            >College License</a
-          >
-          <span
-            [ngClass]="{'menu-list-notification-dot': alerts?.includes(AlertCode.TRANSIENT_ERROR) || alerts?.includes(AlertCode.PLR_BAD_STANDING)}"></span>
-          <a
-            class="sidenav-menu-item"
-            (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT))"
-            >Use Policy Agreement</a
-          >
-          <a
-            class="sidenav-menu-item"
-            (click)="navigateTo(HistoryRoutes.routePath(HistoryRoutes.TRANSACTIONS))"
-            >History</a
-          >
-          <a
-            class="sidenav-menu-item"
-            (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))"
-            >Access</a
-          >
-          <a
-            class="sidenav-menu-item"
-            (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.ACCOUNT_LINKING))"
-            >Account Linking</a
-          >
-          <a
-            *ngIf="featureFlag()"
-            class="sidenav-menu-item"
-            (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.EXTERNAL_ACCOUNTS))"
-            >External Account</a
-          >
-          <a
-            *ngIf="hasCredential(IdentityProvider.BC_PROVIDER) else noBCProviderSidenav"
-            class="sidenav-menu-item"
-            (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_EDIT))"
-            >Password and MFA Reset</a
-          >
-          <ng-template #noBCProviderSidenav>
-            <a
-              class="sidenav-menu-item"
-              (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_APPLICATION))"
-              >BCProvider Account</a
-            ></ng-template
-          >
-          <a class="sidenav-menu-item" (click)="navigateTo(FaqRoutes.BASE_PATH)"
-            >Help</a
-          >
-          <a
-            *ngIf="isLogoutMenuItemVisible"
-            class="sidenav-menu-item"
-            routerLinkActive="sidenav-menu-item-active"
-            (click)="onLogout()">
-            Sign Out</a
-          >
-        </div>
-      </div>
-    </div>
-  </ng-template>
-</ui-layout-header-footer>
+                >
+                }<a class="dropdown-profile">Profile</a></span
+                >
+                <div class="dropdown-content">
+                  <a
+                    class="dropdown-links"
+                    (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO))"
+                    >Personal Information</a
+                    >
+                    <a class="dropdown-links" (click)="navigateTo(collegeRoute)"
+                      >College License@if (alerts?.includes(AlertCode.TRANSIENT_ERROR) || alerts?.includes(AlertCode.PLR_BAD_STANDING)) {
+                      <fa-icon
+                        class="fa-duotone"
+                        [icon]="faBell"></fa-icon
+                        >
+                      }</a>
+                      <a
+                        class="dropdown-links"
+                        (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT))"
+                        >Use Policy Agreement</a
+                        >
+                        <a
+                          class="dropdown-links"
+                          (click)="navigateTo(HistoryRoutes.routePath(HistoryRoutes.TRANSACTIONS))"
+                          >History</a
+                          >
+                        </div>
+                      </div>
+                    </a>
+                    <a class="main-menu-item">
+                      <div class="dropdown">
+                        <span class="content-with-alert">
+                          <a
+                            class="dropdown-accounts"
+                            (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))"
+                            >Access</a
+                            >
+                          </span>
+                        </div>
+                      </a>
+                      <a class="main-menu-item">
+                        <div class="dropdown">
+                          <span class="content-with-alert">
+                            <a class="dropdown-accounts">Account</a></span
+                            >
+                            <div class="dropdown-content">
+                              <a
+                                class="dropdown-links"
+                                (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.ACCOUNT_LINKING))"
+                                >Account Linking</a
+                                >
+                                @if (featureFlag()) {
+                                  <a
+                                    class="dropdown-links"
+                                    (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.EXTERNAL_ACCOUNTS))"
+                                    >External Account</a
+                                    >
+                                  }
+                                  @if (hasCredential(IdentityProvider.BC_PROVIDER)) {
+                                    <a
+                                      class="dropdown-links"
+                                      (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_EDIT))"
+                                      >Password and MFA Reset</a
+                                      >
+                                    } @else {
+                                      <a
+                                        class="dropdown-links"
+                                        (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_APPLICATION))"
+                                        >BCProvider Account</a
+                                        >
+                                      }
+                                    </div>
+                                  </div>
+                                </a>
+                                <a class="main-menu-item">
+                                  <div class="dropdown">
+                                    <span class="content-with-alert">
+                                      <a
+                                        class="dropdown-accounts"
+                                        (click)="navigateTo(FaqRoutes.BASE_PATH)"
+                                        >Help</a
+                                        >
+                                      </span>
+                                    </div>
+                                  </a>
+                                  @if (isLogoutButtonVisible) {
+                                    <button
+                                      class="btn-signout"
+                                      mat-stroked-button
+                                      aria-label="Sign Out"
+                                      (click)="onLogout()">
+                                      Sign Out
+                                    </button>
+                                  }
+                                </div>
+                              </ng-template>
+                              @if (!isTopMenuVisible) {
+                                <div class="nav-menu" uiPidpInjectViewportCss>
+                                  <div class="header-bar-left"></div>
+                                  <div class="content">
+                                    <mat-sidenav-container class="sidenav-container">
+                                      <mat-sidenav #sidenav [mode]="sidenavMode" [(opened)]="isSidenavOpened">
+                                        <div class="sidenav-header-box"></div>
+                                        <div class="sidenav-body-box">
+                                          <ng-container *ngTemplateOutlet="sidenavmenu"></ng-container>
+                                        </div>
+                                      </mat-sidenav>
+                                      <mat-sidenav-content class="custom-mat-sidenav-content">
+                                        <router-outlet></router-outlet>
+                                      </mat-sidenav-content>
+                                    </mat-sidenav-container>
+                                  </div>
+                                  <div class="header-bar-right"></div>
+                                </div>
+                              }
+                              <ng-template #sidenavmenu>
+                                <div class="sidenav-panel-box">
+                                  <div class="sidenav-bar"></div>
+                                  <div class="sidenav-panel-content">
+                                    <div class="sidenav-menu">
+                                      <a
+                                        class="sidenav-menu-item"
+                                        (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO))"
+                                        >Personal Information</a
+                                        >
+                                        <a class="sidenav-menu-item" (click)="navigateTo(collegeRoute)"
+                                          >College License</a
+                                          >
+                                          <span
+                                          [ngClass]="{'menu-list-notification-dot': alerts?.includes(AlertCode.TRANSIENT_ERROR) || alerts?.includes(AlertCode.PLR_BAD_STANDING)}"></span>
+                                          <a
+                                            class="sidenav-menu-item"
+                                            (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT))"
+                                            >Use Policy Agreement</a
+                                            >
+                                            <a
+                                              class="sidenav-menu-item"
+                                              (click)="navigateTo(HistoryRoutes.routePath(HistoryRoutes.TRANSACTIONS))"
+                                              >History</a
+                                              >
+                                              <a
+                                                class="sidenav-menu-item"
+                                                (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))"
+                                                >Access</a
+                                                >
+                                                <a
+                                                  class="sidenav-menu-item"
+                                                  (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.ACCOUNT_LINKING))"
+                                                  >Account Linking</a
+                                                  >
+                                                  @if (featureFlag()) {
+                                                    <a
+                                                      class="sidenav-menu-item"
+                                                      (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.EXTERNAL_ACCOUNTS))"
+                                                      >External Account</a
+                                                      >
+                                                    }
+                                                    @if (hasCredential(IdentityProvider.BC_PROVIDER)) {
+                                                      <a
+                                                        class="sidenav-menu-item"
+                                                        (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_EDIT))"
+                                                        >Password and MFA Reset</a
+                                                        >
+                                                      } @else {
+                                                        <a
+                                                          class="sidenav-menu-item"
+                                                          (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_APPLICATION))"
+                                                          >BCProvider Account</a
+                                                          >
+                                                        }
+                                                        <a class="sidenav-menu-item" (click)="navigateTo(FaqRoutes.BASE_PATH)"
+                                                          >Help</a
+                                                          >
+                                                          @if (isLogoutMenuItemVisible) {
+                                                            <a
+                                                              class="sidenav-menu-item"
+                                                              routerLinkActive="sidenav-menu-item-active"
+                                                              (click)="onLogout()">
+                                                              Sign Out</a
+                                                              >
+                                                            }
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </ng-template>
+                                                  </ui-layout-header-footer>

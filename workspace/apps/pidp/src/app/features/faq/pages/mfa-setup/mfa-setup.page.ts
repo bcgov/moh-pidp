@@ -1,5 +1,5 @@
-import { NgIf } from '@angular/common';
-import { Component, HostListener, Inject, OnInit } from '@angular/core';
+
+import { Component, HostListener, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 
@@ -31,14 +31,17 @@ import { FaqRoutes } from '../../faq.routes';
     BreadcrumbComponent,
     FaIconComponent,
     MatButtonModule,
-    NgIf,
     PageComponent,
     PageSectionComponent,
     PageSectionSubheaderComponent,
-    InjectViewportCssClassDirective,
-  ],
+    InjectViewportCssClassDirective
+],
 })
 export class MfaSetupPage implements OnInit {
+  private readonly config = inject<AppConfig>(APP_CONFIG);
+  private readonly router = inject(Router);
+  private readonly utilsService = inject(UtilsService);
+
   public providerIdentitySupport: string;
   public faArrowUp = faArrowUp;
   public showBackToTopButton = false;
@@ -53,11 +56,7 @@ export class MfaSetupPage implements OnInit {
     { title: 'MFA', path: '' },
   ];
 
-  public constructor(
-    @Inject(APP_CONFIG) private readonly config: AppConfig,
-    private readonly router: Router,
-    private readonly utilsService: UtilsService,
-  ) {
+  public constructor() {
     this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
   }
 

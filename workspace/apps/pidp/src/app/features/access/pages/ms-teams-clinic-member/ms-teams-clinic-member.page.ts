@@ -1,6 +1,6 @@
-import { NgFor, NgIf } from '@angular/common';
+
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatOptionModule } from '@angular/material/core';
@@ -54,16 +54,21 @@ import { PrivacyOfficer } from './ms-teams-clinic-member.model';
     MatInputModule,
     MatOptionModule,
     MatSelectModule,
-    NgFor,
-    NgIf,
     PageFooterActionDirective,
-    ReactiveFormsModule,
-  ],
+    ReactiveFormsModule
+],
 })
 export class MsTeamsClinicMemberPage
   extends AbstractFormPage<MsTeamsClinicMemberFormState>
   implements OnInit
 {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly partyService = inject(PartyService);
+  private readonly resource = inject(MsTeamsClinicMemberResource);
+  private readonly logger = inject(LoggerService);
+  private readonly loadingOverlayService = inject(LoadingOverlayService);
+
   public completed: boolean | null;
   public msTeamsSupportEmail: string;
   public selectedPrivacyOfficer: PrivacyOfficer | null;
@@ -84,16 +89,10 @@ export class MsTeamsClinicMemberPage
     { title: 'MS Teams for clinical use', path: '' },
   ];
 
-  public constructor(
-    dependenciesService: AbstractFormDependenciesService,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly partyService: PartyService,
-    private readonly resource: MsTeamsClinicMemberResource,
-    private readonly logger: LoggerService,
-    fb: FormBuilder,
-    private readonly loadingOverlayService: LoadingOverlayService,
-  ) {
+  public constructor() {
+    const dependenciesService = inject(AbstractFormDependenciesService);
+    const fb = inject(FormBuilder);
+
     super(dependenciesService);
     const routeData = this.route.snapshot.data;
     this.completed =

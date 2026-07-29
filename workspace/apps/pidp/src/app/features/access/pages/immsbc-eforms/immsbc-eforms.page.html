@@ -3,26 +3,29 @@
   <ui-page mode="full">
     <h1>{{ title }}</h1>
 
-    <ui-alert
-      *ngIf="accessRequestFailed"
-      type="danger"
-      icon="error_outline"
-      iconType="outlined"
-      heading="Error Requesting Access">
-      <ng-container uiAlertContent>
-        <p>
-          Your request for access to Immunization Entry eForm could not be
-          processed at this time. If this issue persists, contact
-          <a
-            uiAnchor
-            scheme="mailto"
+    @if (accessRequestFailed) {
+      <ui-alert
+        type="danger"
+        icon="error_outline"
+        iconType="outlined"
+        heading="Error Requesting Access">
+        <ng-container uiAlertContent>
+          <p>
+            Your request for access to Immunization Entry eForm could not be
+            processed at this time. If this issue persists, contact
+            <a
+              uiAnchor
+              scheme="mailto"
             [attr.href]="immsBCEformsSupportEmail"></a>
-          for assistance.
-        </p>
-      </ng-container>
-    </ui-alert>
+            for assistance.
+          </p>
+        </ng-container>
+      </ui-alert>
+    }
 
-    <app-enrolment-error *ngIf="enrolmentError"></app-enrolment-error>
+    @if (enrolmentError) {
+      <app-enrolment-error></app-enrolment-error>
+    }
 
     <ui-page-section>
       <ui-page-section-subheader
@@ -34,7 +37,7 @@
       </ui-page-section-subheader>
     </ui-page-section>
 
-    <ng-container *ngIf="completed; else notCompleted">
+    @if (completed) {
       <ui-alert
         type="success"
         icon="check_circle"
@@ -56,26 +59,26 @@
           </p>
         </ng-container>
       </ui-alert>
-    </ng-container>
-
-    <ng-template #notCompleted>
+    } @else {
       <ui-page-section>
         <p
           class="collection-notice"
-          [innerHtml]="collectionNotice | safe: 'html'"></p>
+        [innerHtml]="collectionNotice | safe: 'html'"></p>
       </ui-page-section>
-    </ng-template>
+    }
+
 
     <ui-page-footer [mode]="'reverse'">
-      <button
-        *ngIf="!completed"
-        mat-flat-button
-        uiPageFooterAction
-        type="button"
-        color="primary"
-        (click)="onRequestAccess()">
-        Next
-      </button>
+      @if (!completed) {
+        <button
+          mat-flat-button
+          uiPageFooterAction
+          type="button"
+          color="primary"
+          (click)="onRequestAccess()">
+          Next
+        </button>
+      }
     </ui-page-footer>
   </ui-page>
 </div>

@@ -1,4 +1,4 @@
-import { Directive, HostBinding } from '@angular/core';
+import { Directive, HostBinding, inject } from '@angular/core';
 
 import { PidpViewport, ViewportService } from '../services';
 
@@ -17,7 +17,9 @@ export class InjectViewportCssClassDirective {
   @HostBinding('class.viewport-large') public viewportLClass = false;
   @HostBinding('class.viewport-all') public viewportAllClass = true;
 
-  public constructor(viewportService: ViewportService) {
+  public constructor() {
+    const viewportService = inject(ViewportService);
+
     viewportService.viewportBroadcast$.subscribe((viewport) =>
       this.onViewportChange(viewport),
     );

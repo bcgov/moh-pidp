@@ -1,6 +1,6 @@
-import { AsyncPipe, DatePipe, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe, DatePipe } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -92,16 +92,23 @@ export enum EndorsementType {
     MatFormFieldModule,
     MatInputModule,
     MatTabsModule,
-    NgFor,
-    NgIf,
     PageFooterActionDirective,
-    ReactiveFormsModule,
-  ],
+    ReactiveFormsModule
+],
 })
 export class EndorsementsPage
   extends AbstractFormPage<EndorsementsFormState>
   implements OnInit
 {
+  private readonly route = inject(ActivatedRoute);
+  private readonly partyService = inject(PartyService);
+  private readonly resource = inject(EndorsementsResource);
+  private readonly logger = inject(LoggerService);
+  private readonly navigationService = inject(NavigationService);
+  private readonly lookupService = inject(LookupService);
+  private readonly utilsService = inject(UtilsService);
+  private readonly loadingOverlayService = inject(LoadingOverlayService);
+
   @ViewChild(FormGroupDirective) public formGroupDirective!: FormGroupDirective;
 
   public faUser = faUser;
@@ -118,19 +125,11 @@ export class EndorsementsPage
   public showOverlayOnSubmit = true;
   public isDialogOpen = false;
 
-  public constructor(
-    dependenciesService: AbstractFormDependenciesService,
-    private readonly route: ActivatedRoute,
-    private readonly partyService: PartyService,
-    private readonly resource: EndorsementsResource,
-    private readonly logger: LoggerService,
-    private readonly navigationService: NavigationService,
-    private readonly lookupService: LookupService,
-    viewportService: ViewportService,
-    private readonly utilsService: UtilsService,
-    fb: FormBuilder,
-    private readonly loadingOverlayService: LoadingOverlayService,
-  ) {
+  public constructor() {
+    const dependenciesService = inject(AbstractFormDependenciesService);
+    const viewportService = inject(ViewportService);
+    const fb = inject(FormBuilder);
+
     super(dependenciesService);
 
     const routeData = this.route.snapshot.data;
