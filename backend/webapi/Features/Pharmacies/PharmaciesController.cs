@@ -21,7 +21,6 @@ public class PharmaciesController(IMediator mediator, PidpDbContext context) : C
     public async Task<ActionResult<Profile.Model>> GetPharmacyAdminProfile()
     {
         var partyId = this.User.GetPartyId(this.context);
-        Console.WriteLine($"DEBUG: PharmaciesController.GetPharmacyAdminProfile - Retrieved PartyId: {partyId}");
         return await this.mediator.Send(new Profile.Query { PartyId = partyId });
     }
 

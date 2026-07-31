@@ -14,18 +14,13 @@
     <!-- Step 1: Pharmacy Selection -->
     <ng-container *ngIf="!selectedPharmacy; else pharmacyManagement">
       <section>
-        <h2>
-          <ng-container pageSubheaderTitle>Select a Pharmacy to Manage</ng-container>
-        </h2>
         <p>Select a pharmacy from the list below that you are an administrator for.</p>
       <div class="form-panel">
-        <h2 class="panel-title">Select a Pharmacy to Manage</h2>
         <ng-container *ngIf="pharmacyProfile$ | async as profile; else loading">
           <div *ngIf="!profile.isPharmacyAdmin || profile.associations.length === 0" class="text-center my-5">
             <p class="mb-3">You are not registered as an administrator for any pharmacies.</p>
             <button mat-flat-button color="primary" routerLink="/access/immsbc/create-pharmacy">Add a Pharmacy</button>
           </div>
-
           <mat-card *ngFor="let assoc of profile.associations" (click)="selectPharmacy(assoc)"
             class="clickable-card mb-3" [class.mat-elevation-z4]="true">
             <mat-card-header>

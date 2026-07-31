@@ -5,6 +5,11 @@
   --font-size: 0.75rem;
 }
 
+.mat-mdc-card {
+  --mdc-elevated-card-container-color: #D1D8E0;
+  --mdc-outlined-card-container-color: #D1D8E0;
+}
+
 .viewport-small,
 .viewport-medium,
 .viewport-large {

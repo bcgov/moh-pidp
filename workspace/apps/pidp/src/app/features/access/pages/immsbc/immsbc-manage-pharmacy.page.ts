@@ -18,7 +18,7 @@ import { PillComponent } from '@app/shared/components/pill/pill.component';
 
 import { PharmacyResource } from './pharmacy-resource.service';
 import { PharmacyStaffManagementComponent } from './pharmacy-staff-management.component';
-import { Pharmacy, PharmacyProfile } from './pharmacy-staff.model';
+import { Pharmacy, PharmacyRole, PharmacyProfile } from './pharmacy-staff.model';
 
 @Component({
   selector: 'app-immsbc-manage-pharmacy',
@@ -91,7 +91,7 @@ export class ImmsbcManagePharmacyPage implements OnInit {
     }
   }
 
-  public getRole(role: string): string {
-    return role;
+  public getRole(role: number): string {
+    return PharmacyRole[role];
   }
 }

@@ -19,7 +19,7 @@ public class CredentialDeletionService(IClock clock, PidpDbContext context) : IC
         var credentials = ReadCredentialsFromFileAsync();
         if (!credentials.Any())
         {
-            Console.WriteLine("No Credentials found in CredentialsToDelete file.");
+            Console.WriteLine("ERROR: No Credentials found in CredentialsToDelete file.");
             return;
         }
 
@@ -32,7 +32,8 @@ public class CredentialDeletionService(IClock clock, PidpDbContext context) : IC
         Console.WriteLine($"{foundCredentials.Count} Credentials found in database.");
         if (credentials.Count() != foundCredentials.Count)
         {
-            Console.WriteLine($">> Warning: number of credentials found in CredentialsToDelete does not match number of credentials found in Database.");
+            Console.WriteLine("ERROR: Number of credentials found in CredentialsToDelete does not match number of credentials found in Database.");
+            return;
         }
 
         this.WriteCredentialsToFileAsync(foundCredentials);
@@ -46,7 +47,7 @@ public class CredentialDeletionService(IClock clock, PidpDbContext context) : IC
         }
         else
         {
-            Console.WriteLine("No Credentials deleted.");
+            Console.WriteLine("Aborting. No Credentials deleted.");
         }
     }
 

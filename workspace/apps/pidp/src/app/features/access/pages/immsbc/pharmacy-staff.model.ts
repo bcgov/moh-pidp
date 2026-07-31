@@ -1,8 +1,8 @@
 export enum PharmacyRole {
-  Admin = 1,
-  Clinician = 2,
-  Clerk = 3,
-  None = 99, // As per backend logic for removal
+  Clinician = 1,
+  Clerk = 2,
+  Admin = 3,
+  Unknown = 99
 }
 
 export interface PharmacyProfile {
@@ -10,7 +10,7 @@ export interface PharmacyProfile {
   associations: {
     pharmacyId: number;
     pharmacyName: string;
-    role: string;
+    role: number;
   }[];
 }
 
