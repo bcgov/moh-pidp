@@ -1,11 +1,12 @@
-import { Directive, ElementRef, OnInit } from '@angular/core';
+import { Directive, ElementRef, OnInit, inject } from '@angular/core';
 
 @Directive({
   selector: '[uiTextButton]',
   standalone: true,
 })
 export class TextButtonDirective implements OnInit {
-  public constructor(private readonly el: ElementRef<HTMLButtonElement>) {}
+  private readonly el = inject<ElementRef<HTMLButtonElement>>(ElementRef);
+
 
   public ngOnInit(): void {
     const nativeElement = this.el.nativeElement;

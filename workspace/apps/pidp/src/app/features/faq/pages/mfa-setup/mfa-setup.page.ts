@@ -1,5 +1,5 @@
-import { NgIf } from '@angular/common';
-import { Component, HostListener, Inject, OnInit } from '@angular/core';
+
+import { Component, HostListener, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 
@@ -17,29 +17,31 @@ import {
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { UtilsService } from '@app/core/services/utils.service';
 import { AccessRoutes } from '@app/features/access/access.routes';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 import { Constants } from '@app/shared/constants';
 
 import { FaqRoutes } from '../../faq.routes';
-import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-mfa-setup',
   templateUrl: './mfa-setup.page.html',
   styleUrls: ['./mfa-setup.page.scss'],
-  standalone: true,
   imports: [
     AnchorDirective,
     BreadcrumbComponent,
     FaIconComponent,
     MatButtonModule,
-    NgIf,
     PageComponent,
     PageSectionComponent,
     PageSectionSubheaderComponent,
-    InjectViewportCssClassDirective,
-  ],
+    InjectViewportCssClassDirective
+],
 })
 export class MfaSetupPage implements OnInit {
+  private readonly config = inject<AppConfig>(APP_CONFIG);
+  private readonly router = inject(Router);
+  private readonly utilsService = inject(UtilsService);
+
   public providerIdentitySupport: string;
   public faArrowUp = faArrowUp;
   public showBackToTopButton = false;
@@ -54,11 +56,7 @@ export class MfaSetupPage implements OnInit {
     { title: 'MFA', path: '' },
   ];
 
-  public constructor(
-    @Inject(APP_CONFIG) private readonly config: AppConfig,
-    private readonly router: Router,
-    private readonly utilsService: UtilsService,
-  ) {
+  public constructor() {
     this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
   }
 

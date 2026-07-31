@@ -1,7 +1,4 @@
-<div
-  class="box"
-  uiPidpInjectViewportCss
-  [ngClass]="{
+<div class="box" uiPidpInjectViewportCss [ngClass]="{
     first: isFirst,
     'has-image': hasImageCssClass,
     'no-image': !hasImageCssClass,
@@ -12,59 +9,52 @@
   <h3>{{ section.heading }}</h3>
   <p class="description">{{ section.description }}</p>
   <p class="hint">{{ section.hint }}</p>
-  <div
-    class="actions"
-    [ngClass]="{ center: showCompleted, right: showLearnMore || showVisit }">
-    <ng-container *ngIf="showCompleted && this.hasImageCssClass">
+  <div class="actions" [ngClass]="{ center: showCompleted, right: showLearnMore || showVisit }">
+    @if (showCompleted && this.hasImageCssClass) {
+    <ng-container>
       <div class="completed-badge">
         <span class="completed-text">Completed</span>
         <fa-icon [icon]="faThumbsUp"></fa-icon>
       </div>
-      <button
-        *ngIf="!section.action.disabled"
-        mat-stroked-button
-        color="primary"
-        aria-label="Edit"
-        (click)="onClick(section)">
+      @if (!section.action.disabled) {
+      <button mat-stroked-button color="primary" aria-label="Edit" (click)="onClick(section)">
         <span>{{ section.action.label }}</span>
       </button>
+      }
     </ng-container>
-    <ng-container *ngIf="showCompleted && !this.hasImageCssClass">
+    }
+    @if (showCompleted && !this.hasImageCssClass) {
+    <ng-container>
       <span class="completed-text">Completed</span>
       <div class="completed-badge">
         <fa-icon [icon]="faThumbsUp"></fa-icon>
       </div>
-      <button
-        *ngIf="!section.action.disabled"
-        mat-stroked-button
-        color="primary"
-        aria-label="Edit"
-        (click)="onClick(section)">
+      @if (!section.action.disabled) {
+      <button mat-stroked-button color="primary" aria-label="Edit" (click)="onClick(section)">
         <span>{{ section.action.label }}</span>
       </button>
+      }
     </ng-container>
-    <ng-container *ngIf="showLearnMore">
+    }
+    @if (showLearnMore) {
+    <ng-container>
       <div class="learn-more">
         <span>Learn More</span>
       </div>
-      <button
-        class="learn-more-button"
-        aria-label="Go"
-        (click)="onClick(section)">
+      <button class="learn-more-button" aria-label="Go" (click)="onClick(section)">
         <fa-icon [icon]="faPlus"></fa-icon>
       </button>
     </ng-container>
-    <ng-container *ngIf="showVisit">
-      <button
-        *ngIf="!section.action.disabled"
-        mat-flat-button
-        color="primary"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Visit Provincial Attachment System website"
-        (click)="onClickVisit(section)">
+    }
+    @if (showVisit) {
+    <ng-container>
+      @if (!section.action.disabled) {
+      <button mat-flat-button color="primary" target="_blank" rel="noopener noreferrer"
+        aria-label="Visit Provincial Attachment System website" (click)="onClickVisit(section)">
         Visit
       </button>
+      }
     </ng-container>
+    }
   </div>
 </div>

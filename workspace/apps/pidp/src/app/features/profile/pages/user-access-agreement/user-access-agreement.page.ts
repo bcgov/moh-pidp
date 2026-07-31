@@ -1,6 +1,6 @@
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { Component, OnInit, forwardRef } from '@angular/core';
+import { Component, OnInit, forwardRef, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -28,7 +28,6 @@ import { UserAccessAgreementResource } from './user-access-agreement-resource.se
   selector: 'app-user-access-agreement',
   templateUrl: './user-access-agreement.page.html',
   styleUrls: ['./user-access-agreement.page.scss'],
-  standalone: true,
   imports: [
     AlertComponent,
     AlertContentDirective,
@@ -37,12 +36,18 @@ import { UserAccessAgreementResource } from './user-access-agreement-resource.se
     InjectViewportCssClassDirective,
     forwardRef(() => UserAccessAgreementDocumentComponent),
     MatButtonModule,
-    NgIf,
     PageComponent,
-    PageFooterActionDirective,
-  ],
+    PageFooterActionDirective
+],
 })
 export class UserAccessAgreementPage implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly partyService = inject(PartyService);
+  private readonly resource = inject(UserAccessAgreementResource);
+  private readonly logger = inject(LoggerService);
+  private readonly utilsService = inject(UtilsService);
+
   public title: string;
   public completed: boolean | null;
   public accessRequestFailed: boolean;
@@ -51,14 +56,7 @@ export class UserAccessAgreementPage implements OnInit {
 
   public fullName$!: Observable<string>;
 
-  public constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly partyService: PartyService,
-    private readonly resource: UserAccessAgreementResource,
-    private readonly logger: LoggerService,
-    private readonly utilsService: UtilsService,
-  ) {
+  public constructor() {
     this.title = this.route.snapshot.data.title;
 
     const routeData = this.route.snapshot.data;

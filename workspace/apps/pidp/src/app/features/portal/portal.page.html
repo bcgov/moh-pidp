@@ -18,51 +18,56 @@
           ngSrc="/assets/images/get-access.jpg"
           alt="Systems access for myself"
           priority />
-        <div class="card-content">
-          <p class="card-header">Get Access</p>
-          <p>Healthcare system access for myself</p>
-          <a> <fa-icon [icon]="faBookmark"></fa-icon> Read More </a>
-        </div>
-      </div>
-
-      <div
-        class="card"
-        (click)="navigateTo(OrganizationInfoRoutes.routePath(OrganizationInfoRoutes.ENDORSEMENTS))"
-        (keyup)="navigateTo(OrganizationInfoRoutes.routePath(OrganizationInfoRoutes.ENDORSEMENTS))">
-        <img
-          height="253"
-          width="279"
-          ngSrc="/assets/images/grant-access.jpg"
-          alt="Interested in systems for others"
-          priority />
-        <div class="card-content">
-          <p class="card-header">
-            Give Access
-            <ng-container *ngIf="alerts$ | async as alerts"
-              ><fa-icon
-                *ngIf="alerts.includes(AlertCode.PENDING_ENDORSEMENT_REQUEST)"
-                class="fa-duotone red-color"
-                [icon]="faBell"></fa-icon
-            ></ng-container>
-          </p>
-          <p>Healthcare system access for others</p>
-          <div class="card-footer">
-            <span class="content-with-alert"
-              ><a> <fa-icon [icon]="faBookmark"></fa-icon>Read More </a></span
-            >
+          <div class="card-content">
+            <p class="card-header">Get Access</p>
+            <p>Healthcare system access for myself</p>
+            <a> <fa-icon [icon]="faBookmark"></fa-icon> Read More </a>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <div class="back-to-top-container">
-    <button
-      *ngIf="showBackToTopButton"
-      class="back-to-top"
-      (click)="scrollToTop()">
-      <fa-icon [icon]="faArrowUp"></fa-icon>
-    </button>
-    <div *ngIf="showBackToTopButton" class="back-to-top-text">Back to top</div>
-  </div>
-</div>
+        <div
+          class="card"
+          (click)="navigateTo(OrganizationInfoRoutes.routePath(OrganizationInfoRoutes.ENDORSEMENTS))"
+          (keyup)="navigateTo(OrganizationInfoRoutes.routePath(OrganizationInfoRoutes.ENDORSEMENTS))">
+          <img
+            height="253"
+            width="279"
+            ngSrc="/assets/images/grant-access.jpg"
+            alt="Interested in systems for others"
+            priority />
+            <div class="card-content">
+              <p class="card-header">
+                Give Access
+                @if (alerts$ | async; as alerts) {
+                  @if (alerts.includes(AlertCode.PENDING_ENDORSEMENT_REQUEST)) {
+                    <fa-icon
+                      class="fa-duotone red-color"
+                      [icon]="faBell"></fa-icon
+                      >
+                  }
+                }
+              </p>
+              <p>Healthcare system access for others</p>
+              <div class="card-footer">
+                <span class="content-with-alert"
+                  ><a> <fa-icon [icon]="faBookmark"></fa-icon>Read More </a></span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="back-to-top-container">
+          @if (showBackToTopButton) {
+            <button
+              class="back-to-top"
+              (click)="scrollToTop()">
+              <fa-icon [icon]="faArrowUp"></fa-icon>
+            </button>
+          }
+          @if (showBackToTopButton) {
+            <div class="back-to-top-text">Back to top</div>
+          }
+        </div>
+      </div>

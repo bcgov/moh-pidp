@@ -1,92 +1,107 @@
 <div class="container breadcrumb-top" uiPidpInjectViewportCss>
   <div class="breadcrumb">
-    <app-breadcrumb
-      *ngIf="!showCollegeLicenceDeclarationPage"
+    @if (!showCollegeLicenceDeclarationPage) {
+      <app-breadcrumb
       [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
+    }
   </div>
 </div>
-<div *ngIf="showCollegeLicenceDeclarationPage">
-  <app-college-licence-declaration
-    [disableCollegeCode]="true"
-    [disableCollegeLicenceNumber]="true">
-  </app-college-licence-declaration>
-</div>
+@if (showCollegeLicenceDeclarationPage) {
+  <div>
+    <app-college-licence-declaration
+      [disableCollegeCode]="true"
+      [disableCollegeLicenceNumber]="true">
+    </app-college-licence-declaration>
+  </div>
+}
 <section
   class="component-container container section-top"
   uiPidpInjectViewportCss>
-  <div *ngIf="!showCollegeLicenceDeclarationPage">
-    <h3 class="college-licence">College licence information</h3>
-    <p class="college-licence-text">
-      Here you can view your licence information and status.
-      <span>
-        <p>
-          If any of this information is incorrect, please contact your
-          regulatory college.
-        </p>
-      </span>
-    </p>
-  </div>
-  <section *ngFor="let alert of alerts" class="alert-box section-box">
-    <app-portal-alert
-      [heading]="alert.heading"
+  @if (!showCollegeLicenceDeclarationPage) {
+    <div>
+      <h3 class="college-licence">College licence information</h3>
+      <p class="college-licence-text">
+        Here you can view your licence information and status.
+        <span>
+          <p>
+            If any of this information is incorrect, please contact your
+            regulatory college.
+          </p>
+        </span>
+      </p>
+    </div>
+  }
+  @for (alert of alerts; track alert) {
+    <section class="alert-box section-box">
+      <app-portal-alert
+        [heading]="alert.heading"
       [content]="alert.content"></app-portal-alert>
-  </section>
+    </section>
+  }
   <div class="licences-box">
-    <div *ngFor="let certification of collegeCertifications$ | async">
-      <div class="card-styles">
-        <div class="card-header-icon">
-          <div class="card-icon">
-            <img
-              src="/assets/images/college-licence-logo.svg"
-              alt="college-licence-logo" />
-          </div>
-        </div>
-        <div class="licence-detail-box">
-          <h2>College information</h2>
-          <div class="licence-detail-content">
-            <app-college-licence-information-detail
-              class="licence-detail"
-              labelText="Identifier Type:"
-              [valueText]="certification.identifierType"></app-college-licence-information-detail>
-            <div [ngSwitch]="certification.statusCode">
-              <div *ngSwitchCase="'ACTIVE'" class="status-active">
-                <label>Status Code:</label>
-                <span>Active</span>
-                <img
-                  src="/assets/images/icons/icon-check-circle.svg"
-                  alt="check circle" />
-              </div>
-              <div *ngSwitchDefault class="status-non-active">
-                <label>Status Code:</label>
-                <span>{{ certification.statusCode }}</span>
+    @for (certification of collegeCertifications$ | async; track certification) {
+      <div>
+        <div class="card-styles">
+          <div class="card-header-icon">
+            <div class="card-icon">
+              <img
+                src="/assets/images/college-licence-logo.svg"
+                alt="college-licence-logo" />
               </div>
             </div>
-            <app-college-licence-information-detail
-              class="licence-detail"
-              labelText="College ID:"
-              [valueText]="certification.collegeId"></app-college-licence-information-detail>
-            <app-college-licence-information-detail
-              class="licence-detail"
-              labelText="Status Start Date:"
-              [valueText]="certification.statusStartDate"></app-college-licence-information-detail>
-            <app-college-licence-information-detail
-              class="licence-detail"
-              labelText="Provider Role Type:"
-              [valueText]="certification.providerRoleType"></app-college-licence-information-detail>
+            <div class="licence-detail-box">
+              <h2>College information</h2>
+              <div class="licence-detail-content">
+                <app-college-licence-information-detail
+                  class="licence-detail"
+                  labelText="Identifier Type:"
+                [valueText]="certification.identifierType"></app-college-licence-information-detail>
+                <div>
+                  @switch (certification.statusCode) {
+                    @case ('ACTIVE') {
+                      <div class="status-active">
+                        <label>Status Code:</label>
+                        <span>Active</span>
+                        <img
+                          src="/assets/images/icons/icon-check-circle.svg"
+                          alt="check circle" />
+                        </div>
+                      }
+                      @default {
+                        <div class="status-non-active">
+                          <label>Status Code:</label>
+                          <span>{{ certification.statusCode }}</span>
+                        </div>
+                      }
+                    }
+                  </div>
+                  <app-college-licence-information-detail
+                    class="licence-detail"
+                    labelText="College ID:"
+                  [valueText]="certification.collegeId"></app-college-licence-information-detail>
+                  <app-college-licence-information-detail
+                    class="licence-detail"
+                    labelText="Status Start Date:"
+                  [valueText]="certification.statusStartDate"></app-college-licence-information-detail>
+                  <app-college-licence-information-detail
+                    class="licence-detail"
+                    labelText="Provider Role Type:"
+                  [valueText]="certification.providerRoleType"></app-college-licence-information-detail>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+        }
       </div>
-    </div>
-  </div>
-  <div class="actions">
-    <span>
-      <button
-        mat-stroked-button
-        type="button"
-        color="primary"
-        (click)="onBack()">
-        Home
-      </button>
-    </span>
-  </div>
-</section>
+      <div class="actions">
+        <span>
+          <button
+            mat-stroked-button
+            type="button"
+            color="primary"
+            (click)="onBack()">
+            Home
+          </button>
+        </span>
+      </div>
+    </section>

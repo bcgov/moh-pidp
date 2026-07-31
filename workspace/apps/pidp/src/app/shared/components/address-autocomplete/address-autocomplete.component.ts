@@ -1,5 +1,5 @@
-import { NgFor } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -29,7 +29,6 @@ import { AddressAutocompleteRetrieveResponse } from './address-autocomplete-retr
   selector: 'app-address-autocomplete',
   templateUrl: './address-autocomplete.component.html',
   styleUrls: ['./address-autocomplete.component.scss'],
-  standalone: true,
   imports: [
     AnchorDirective,
     InjectViewportCssClassDirective,
@@ -37,11 +36,14 @@ import { AddressAutocompleteRetrieveResponse } from './address-autocomplete-retr
     MatFormFieldModule,
     MatInputModule,
     MatOptionModule,
-    NgFor,
-    ReactiveFormsModule,
-  ],
+    ReactiveFormsModule
+],
 })
 export class AddressAutocompleteComponent implements OnInit {
+  private readonly fb = inject(FormBuilder);
+  private readonly toastService = inject(ToastService);
+  private readonly addressAutocompleteResource = inject(AddressAutocompleteResource);
+
   /**
    * @description
    * Whether BC addresses can only be selected using
@@ -58,11 +60,7 @@ export class AddressAutocompleteComponent implements OnInit {
   public addressAutocompleteFields: AddressAutocompleteFindResponse[];
   public canadaPostUrl: string;
 
-  public constructor(
-    private fb: FormBuilder,
-    private toastService: ToastService,
-    private addressAutocompleteResource: AddressAutocompleteResource,
-  ) {
+  public constructor() {
     this.inBc = false;
     this.autocompleteAddress = new EventEmitter<Address>();
     this.addressAutocompleteFields = [];
@@ -89,9 +87,11 @@ export class AddressAutocompleteComponent implements OnInit {
             addressRetrieved.postalCode,
           );
 
-          !this.inBc || address.provinceCode === Province.BRITISH_COLUMBIA
-            ? this.autocompleteAddress.emit(address)
-            : this.toastService.openErrorToast('Address must be located in BC');
+          if(!this.inBc || address.provinceCode === Province.BRITISH_COLUMBIA){
+            this.autocompleteAddress.emit(address);
+          } else {
+            this.toastService.openErrorToast('Address must be located in BC');
+          }
         } else {
           this.toastService.openErrorToast('Address could not be retrieved');
         }

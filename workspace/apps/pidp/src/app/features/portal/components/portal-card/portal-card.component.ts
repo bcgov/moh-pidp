@@ -1,4 +1,4 @@
-import { NgClass, NgIf } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { Component, Inject, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
@@ -23,7 +23,6 @@ import { IPortalSection } from '../../state/portal-section.model';
     InjectViewportCssClassDirective,
     MatButtonModule,
     NgClass,
-    NgIf,
   ],
 })
 export class PortalCardComponent {

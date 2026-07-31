@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -17,7 +17,6 @@ import { AccessRoutes } from '@app/features/access/access.routes';
   selector: 'app-breadcrumb',
   templateUrl: './breadcrumb.component.html',
   styleUrl: './breadcrumb.component.scss',
-  standalone: true,
   imports: [
     CommonModule,
     InjectViewportCssClassDirective,
@@ -26,14 +25,12 @@ import { AccessRoutes } from '@app/features/access/access.routes';
   ],
 })
 export class BreadcrumbComponent {
+  private readonly router = inject(Router);
+  private readonly navigationService = inject(NavigationService);
+
   public faAngleRight = faAngleRight;
   public AccessRoutes = AccessRoutes;
   @Input() public breadcrumbs: Array<{ title: string; path: string }> = [];
-
-  public constructor(
-    private readonly router: Router,
-    private readonly navigationService: NavigationService,
-  ) {}
 
   public onBack(): void {
     this.navigationService.navigateToRoot();

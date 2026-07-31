@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -10,14 +10,12 @@ import { NgxMaskDirective } from 'ngx-mask';
   selector: 'ui-contact-info-form',
   templateUrl: './contact-info-form.component.html',
   styleUrls: ['./contact-info-form.component.scss'],
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    NgIf,
-    NgxMaskDirective,
-  ],
+    NgxMaskDirective
+],
 })
 export class ContactFormComponent {
   /**

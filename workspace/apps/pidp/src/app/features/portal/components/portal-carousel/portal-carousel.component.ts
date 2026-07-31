@@ -1,4 +1,3 @@
-import { NgFor } from '@angular/common';
 import {
   CUSTOM_ELEMENTS_SCHEMA,
   Component,
@@ -28,7 +27,7 @@ import { PortalCardComponent } from '../portal-card/portal-card.component';
   templateUrl: './portal-carousel.component.html',
   styleUrls: ['./portal-carousel.component.scss'],
   standalone: true,
-  imports: [InjectViewportCssClassDirective, NgFor, PortalCardComponent],
+  imports: [InjectViewportCssClassDirective, PortalCardComponent],
   schemas: [
     // This causes the compiler to allow the non-angular swiper html tags.
     // Without this schema, compiling will fail on the swiper tags.

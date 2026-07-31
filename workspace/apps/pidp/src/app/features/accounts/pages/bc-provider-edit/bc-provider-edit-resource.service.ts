@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable, catchError, throwError } from 'rxjs';
 
@@ -16,7 +16,8 @@ export interface BcProviderChangePasswordRequest {
 
 @Injectable({ providedIn: 'root' })
 export class BcProviderEditResource {
-  public constructor(private readonly apiResource: ApiHttpClient) {}
+  private readonly apiResource = inject(ApiHttpClient);
+
 
   public get(partyId: number): Observable<BcProviderEditInitialStateModel> {
     const url = `parties/${partyId}/credentials/bc-provider`;

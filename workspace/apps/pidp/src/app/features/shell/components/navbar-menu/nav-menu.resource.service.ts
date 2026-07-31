@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable, catchError, of, throwError } from 'rxjs';
 
@@ -11,7 +11,8 @@ import { Credential } from './nav-menu.model';
   providedIn: 'root',
 })
 export class NavMenuResource {
-  public constructor(protected apiResource: ApiHttpClient) {}
+  protected apiResource = inject(ApiHttpClient);
+
 
   public getCredentials(partyId: number): Observable<Credential[] | null> {
     if (!partyId) {

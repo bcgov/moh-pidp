@@ -25,7 +25,7 @@
                   type="text"
                   placeholder="Enter here"
                   maxlength="1000"
-                  aria-labelledby="feedback"
+                  aria-label="Feedback"
                   (input)="onFeedbackChange($event)">
                 </textarea>
                 <mat-error>{{ formState.getErrorMessage() }}</mat-error>
@@ -43,66 +43,69 @@
                     <img
                       src="assets/images/icons/icon-screenshot.svg"
                       alt="Screenshot" />
-                  </button>
-                </div>
-                <div class="right-placeholder">
-                  <span class="attach">Attach</span>
-                  <button
-                    class="icon-button"
-                    aria-label="Take Screenshot"
-                    (click)="uploadFile($event)">
-                    <img
-                      src="assets/images/icons/icon-file-attach.svg"
-                      alt="File Upload" />
-                  </button>
-                  <input
-                    id="file"
-                    hidden
-                    type="file"
-                    formControlName="attachment"
-                    accept="image/*"
-                    (change)="onFileSelected()" />
-                </div>
-              </div>
-              <input matInput />
-            </mat-form-field>
-            <div *ngIf="selectedFile">
-              <span class="file-name">{{selectedFile.name}}</span>
-            </div>
-            <ng-container *ngIf="showErrorCard">
-              <section class="error-card" [class.show-card]="showErrorCard">
-                <p class="error-card">File size should be less than 2MB</p>
-              </section>
-            </ng-container>
+                    </button>
+                  </div>
+                  <div class="right-placeholder">
+                    <span class="attach">Attach</span>
+                    <button
+                      class="icon-button"
+                      aria-label="Take Screenshot"
+                      (click)="uploadFile($event)">
+                      <img
+                        src="assets/images/icons/icon-file-attach.svg"
+                        alt="File Upload" />
+                      </button>
+                      <input
+                        id="file"
+                        hidden
+                        type="file"
+                        formControlName="attachment"
+                        aria-label="File Attachment"
+                        accept="image/*"
+                        (change)="onFileSelected()" />
+                      </div>
+                    </div>
+                    <input matInput aria-label="File Attachment" aria-hidden="true" tabindex="-1"/>
+                  </mat-form-field>
+                  @if (selectedFile) {
+                    <div>
+                      <span class="file-name">{{selectedFile.name}}</span>
+                    </div>
+                  }
+                  @if (showErrorCard) {
+                    <section class="error-card" [class.show-card]="showErrorCard">
+                      <p class="error-card">File size should be less than 2MB</p>
+                    </section>
+                  }
 
-            <div class="disclaimer-container">
-              <div class="disclaimer-field">
-                <div
-                  class="textarea-field-disclaimer"
-                  [innerHTML]="disclaimerText"
-                  [class.disabled]="disableDisclaimer"></div>
-              </div>
-            </div>
+                  <div class="disclaimer-container">
+                    <div class="disclaimer-field">
+                      <div
+                        class="textarea-field-disclaimer"
+                        [innerHTML]="disclaimerText"
+                      [class.disabled]="disableDisclaimer"></div>
+                    </div>
+                  </div>
 
-            <div class="form-button-container">
-              <button
-                class="send-button"
-                mat-flat-button
-                type="submit"
-                color="primary"
-                [disabled]="disableSend"
-                (click)="sendFeedback($event)">
-                Send
-              </button>
+                  <div class="form-button-container">
+                    <button
+                      class="send-button"
+                      mat-flat-button
+                      type="submit"
+                      color="primary"
+                      [disabled]="disableSend"
+                      (click)="sendFeedback($event)">
+                      Send
+                    </button>
+                  </div>
+                </div>
+              </form>
             </div>
-          </div>
-        </form>
+          </section>
+        </div>
       </div>
-    </section>
-  </div>
-</div>
 
-<ng-template #successDialog>
-  <app-success-dialog title="Thank You!" [componentType]="componentType">
-  </app-success-dialog>
-</ng-template>
+      <ng-template #successDialog>
+        <app-success-dialog title="Thank You!" [componentType]="componentType">
+        </app-success-dialog>
+      </ng-template>

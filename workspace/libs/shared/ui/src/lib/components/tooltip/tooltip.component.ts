@@ -1,11 +1,10 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'ui-tooltip',
-  standalone: true,
-  imports: [CommonModule, MatIconModule],
+  imports: [MatIconModule],
   templateUrl: './tooltip.component.html',
   styleUrl: './tooltip.component.scss',
 })

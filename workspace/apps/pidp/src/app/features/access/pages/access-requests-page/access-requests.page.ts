@@ -1,11 +1,5 @@
-import { NgFor, NgIf } from '@angular/common';
-import {
-  Component,
-  HostListener,
-  Inject,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+
+import { Component, HostListener, OnDestroy, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 
 import { Observable, Subject, map, takeUntil, tap } from 'rxjs';
@@ -16,9 +10,7 @@ import {
   faMagnifyingGlass,
 } from '@fortawesome/free-solid-svg-icons';
 
-import {
-  InjectViewportCssClassDirective,
-} from '@bcgov/shared/ui';
+import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';
 import { PartyService } from '@app/core/party/party.service';
@@ -35,18 +27,20 @@ import { AccessRequestCardComponent } from '../../components/access-request-card
   selector: 'app-access-request-page',
   templateUrl: './access-requests.page.html',
   styleUrls: ['./access-requests.page.scss'],
-  standalone: true,
   imports: [
     BreadcrumbComponent,
     FaIconComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
-    NgIf,
-    AccessRequestCardComponent,
-    NgFor,
-  ],
+    AccessRequestCardComponent
+],
 })
 export class AccessRequestsPage implements OnInit, OnDestroy {
+  private readonly config = inject<AppConfig>(APP_CONFIG);
+  private readonly partyService = inject(PartyService);
+  private readonly portalService = inject(PortalService);
+  private readonly portalResource = inject(PortalResource);
+
   /**
    * @description
    * State for driving the displayed groups and sections of
@@ -68,12 +62,7 @@ export class AccessRequestsPage implements OnInit, OnDestroy {
   ];
   private readonly destroy$ = new Subject<void>();
 
-  public constructor(
-    @Inject(APP_CONFIG) private readonly config: AppConfig,
-    private readonly partyService: PartyService,
-    private readonly portalService: PortalService,
-    private readonly portalResource: PortalResource,
-  ) {
+  public constructor() {
     this.accessState$ = this.portalService.accessState$;
     this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
@@ -107,7 +96,7 @@ export class AccessRequestsPage implements OnInit, OnDestroy {
           (section) =>
             section.heading.toLowerCase().includes(text.toLowerCase()) ||
             section.description.toLowerCase().includes(text.toLowerCase()) ||
-            section.keyWords?.includes(text.toLocaleLowerCase())
+            section.keyWords?.includes(text.toLocaleLowerCase()),
         );
       });
   }

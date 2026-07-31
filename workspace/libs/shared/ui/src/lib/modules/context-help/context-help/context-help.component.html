@@ -1,27 +1,35 @@
-<a
-  mat-icon-button
-  aria-label="Help"
-  [color]="menuIconColor"
-  [class.small]="small"
-  [matMenuTriggerFor]="help"
+<a mat-icon-button aria-label="Help" [color]="menuIconColor" [class.small]="small" [matMenuTriggerFor]="help"
   (click)="onOpenContextMenu($event)">
   <mat-icon [class.material-icons-outlined]="outlined">{{ icon }}</mat-icon>
 </a>
 <mat-menu #help="matMenu" [xPosition]="xPosition" [yPosition]="yPosition">
   <ng-template matMenuContent>
     <div class="context-help-menu">
+      <ng-template #titleSlot>
+        <ng-content select="[uiContextHelpTitle]"></ng-content>
+      </ng-template>
+      <ng-template #contentSlot>
+        <ng-content select="[uiContextHelpContent]"></ng-content>
+      </ng-template>
+
       <!-- Use directive for projection to use provided markup -->
-      <div *ngIf="contextHelpTitleChildren?.length" class="header">
-        <mat-icon *ngIf="titleIcon" class="title-icon" color="primary">
+      @if (contextHelpTitleChildren?.length) {
+      <div class="header">
+        @if (titleIcon) {
+        <mat-icon class="title-icon" color="primary">
           {{ titleIcon }}
         </mat-icon>
+        }
         <h2>
-          <ng-content select="[uiContextHelpTitle]"></ng-content>
+          <ng-container *ngTemplateOutlet="titleSlot"></ng-container>
         </h2>
       </div>
-      <p *ngIf="contextHelpContentChildren?.length" class="content">
-        <ng-content select="[uiContextHelpContent]"></ng-content>
+      }
+      @if (contextHelpContentChildren?.length) {
+      <p class="content">
+        <ng-container *ngTemplateOutlet="contentSlot"></ng-container>
       </p>
+      }
       <!-- Customize with own markup by not using directives for projection -->
       <ng-content></ng-content>
     </div>

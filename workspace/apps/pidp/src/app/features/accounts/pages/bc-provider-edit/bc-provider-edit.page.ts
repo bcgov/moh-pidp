@@ -1,15 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AsyncPipe, NgClass, NgIf, NgOptimizedImage } from '@angular/common';
-import {
-  Component,
-  Inject,
-  OnDestroy,
-  OnInit,
-  TemplateRef,
-  ViewChild,
-  inject,
-  signal,
-} from '@angular/core';
+import { AsyncPipe, NgClass, NgOptimizedImage } from '@angular/common';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogConfig } from '@angular/material/dialog';
@@ -78,7 +69,6 @@ export interface BcProviderEditInitialStateModel {
   selector: 'app-bc-provider-edit',
   templateUrl: './bc-provider-edit.page.html',
   styleUrls: ['./bc-provider-edit.page.scss'],
-  standalone: true,
   imports: [
     BreadcrumbComponent,
     InjectViewportCssClassDirective,
@@ -86,7 +76,6 @@ export interface BcProviderEditInitialStateModel {
     MatFormFieldModule,
     MatInputModule,
     NeedHelpComponent,
-    NgIf,
     ReactiveFormsModule,
     SuccessDialogComponent,
     NgOptimizedImage,
@@ -95,13 +84,19 @@ export interface BcProviderEditInitialStateModel {
     ConfirmDialogComponent,
     NgClass,
     FaIconComponent,
-    TooltipComponent,
-  ],
+    TooltipComponent
+],
 })
 export class BcProviderEditPage
   extends AbstractFormPage<BcProviderEditFormState>
   implements OnDestroy, OnInit
 {
+  private readonly config = inject<AppConfig>(APP_CONFIG);
+  private readonly navigationService = inject(NavigationService);
+  private readonly router = inject(Router);
+  private readonly authorizedUserService = inject(AuthorizedUserService);
+  private readonly authService = inject(AuthService);
+
   public faCircleCheck = faCircleCheck;
   public faXmark = faXmark;
   public faCircleQuestion = faCircleQuestion;
@@ -149,15 +144,10 @@ export class BcProviderEditPage
     return this.formState.form.valid;
   }
 
-  public constructor(
-    @Inject(APP_CONFIG) private readonly config: AppConfig,
-    dependenciesService: AbstractFormDependenciesService,
-    fb: FormBuilder,
-    private readonly navigationService: NavigationService,
-    private readonly router: Router,
-    private readonly authorizedUserService: AuthorizedUserService,
-    private readonly authService: AuthService,
-  ) {
+  public constructor() {
+    const dependenciesService = inject(AbstractFormDependenciesService);
+    const fb = inject(FormBuilder);
+
     super(dependenciesService);
     this.formState = new BcProviderEditFormState(fb);
     this.identityProvider$ = this.authorizedUserService.identityProvider$;

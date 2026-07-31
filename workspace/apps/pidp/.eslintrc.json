@@ -46,7 +46,9 @@
             "ignoreRestSiblings": false,
             "argsIgnorePattern": "_"
           }
-        ]
+        ],
+        "@angular-eslint/prefer-standalone": "off",
+        "@angular-eslint/prefer-inject": "warn"
       }
     },
     {

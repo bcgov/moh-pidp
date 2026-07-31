@@ -1,6 +1,6 @@
-import { NgIf, NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
+import { NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
-import { AfterViewInit, Component, Inject, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
@@ -46,7 +46,6 @@ export interface LoginPageRouteData {
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
-  standalone: true,
   imports: [
     AnchorDirective,
     ExpansionPanelComponent,
@@ -54,13 +53,24 @@ export interface LoginPageRouteData {
     LayoutHeaderFooterComponent,
     MatButtonModule,
     NeedHelpComponent,
-    NgIf,
     NgOptimizedImage,
     NgTemplateOutlet,
-    BannerComponent,
-  ],
+    BannerComponent
+],
 })
 export class LoginPage implements OnInit, AfterViewInit {
+  private readonly config = inject<AppConfig>(APP_CONFIG);
+  private readonly authService = inject(AuthService);
+  private readonly clientLogsService = inject(ClientLogsService);
+  private readonly route = inject(ActivatedRoute);
+  private readonly dialog = inject(MatDialog);
+  private readonly documentService = inject(DocumentService);
+  private readonly viewportService = inject(ViewportService);
+  private readonly linkAccountConfirmResource = inject(LinkAccountConfirmResource);
+  private readonly snowplowService = inject(SnowplowService);
+  private readonly loginResource = inject(LoginResource);
+  private readonly logger = inject(LoggerService);
+
   public viewportOptions = PidpViewport;
 
   public bcscMobileSetupUrl: string;
@@ -80,19 +90,7 @@ export class LoginPage implements OnInit, AfterViewInit {
     return this.showOtherLoginOptions ? 'indeterminate_check_box' : 'add_box';
   }
 
-  public constructor(
-    @Inject(APP_CONFIG) private readonly config: AppConfig,
-    private readonly authService: AuthService,
-    private readonly clientLogsService: ClientLogsService,
-    private readonly route: ActivatedRoute,
-    private readonly dialog: MatDialog,
-    private readonly documentService: DocumentService,
-    private readonly viewportService: ViewportService,
-    private readonly linkAccountConfirmResource: LinkAccountConfirmResource,
-    private readonly snowplowService: SnowplowService,
-    private readonly loginResource: LoginResource,
-    private readonly logger: LoggerService,
-  ) {
+  public constructor() {
     const routeSnapshot = this.route.snapshot;
 
     const routeData = routeSnapshot.data.loginPageData as LoginPageRouteData;

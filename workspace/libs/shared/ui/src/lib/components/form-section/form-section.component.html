@@ -2,28 +2,28 @@
   <span>
     <ng-content></ng-content>
   </span>
-  <span *ngIf="showAction">
-    <ng-container *ngIf="contextHelpContentChildren?.length; else default">
+  @if (showAction) {
+  <span>
+    @if (contextHelpContentChildren?.length) {
       <ui-context-help>
         <!-- Work around for ngProjectAs not passing directive reference when applied to ng-content -->
-        <ng-container
-          *ngIf="contextHelpTitleChildren?.length"
-          uiContextHelpTitle>
+        @if (contextHelpTitleChildren?.length) {
+        <ng-container uiContextHelpTitle>
           <ng-content select="[uiContextHelpTitle]"></ng-content>
         </ng-container>
+        }
         <!-- Work around for ngProjectAs not passing directive reference when applied to ng-content -->
         <ng-container uiContextHelpContent>
           <ng-content select="[uiContextHelpContent]"></ng-content>
         </ng-container>
       </ui-context-help>
-    </ng-container>
-
-    <ng-template #default>
+    } @else {
       <button mat-icon-button type="button" (click)="onFormSectionAction()">
         <mat-icon matTooltip="Remove" matTooltipPosition="after">
           close
         </mat-icon>
       </button>
-    </ng-template>
+    }
   </span>
+  }
 </div>

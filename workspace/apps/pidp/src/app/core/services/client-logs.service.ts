@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { catchError, throwError } from 'rxjs';
 
@@ -27,7 +27,8 @@ export enum MicrosoftLogLevel {
   providedIn: 'root',
 })
 export class ClientLogsService {
-  public constructor(private readonly apiResource: ApiHttpClient) {}
+  private readonly apiResource = inject(ApiHttpClient);
+
 
   public createClientLog(log: ClientLog): NoContent {
     return this.apiResource.post<NoContent>('client-logs', log).pipe(

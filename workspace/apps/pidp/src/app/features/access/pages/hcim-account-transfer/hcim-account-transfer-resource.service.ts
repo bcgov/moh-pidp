@@ -1,5 +1,5 @@
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable, catchError, map, of, throwError } from 'rxjs';
 
@@ -27,10 +27,9 @@ export interface HcimAccountTransferResponse {
   providedIn: 'root',
 })
 export class HcimAccountTransferResource {
-  public constructor(
-    protected apiResource: ApiHttpClient,
-    private readonly portalResource: PortalResource,
-  ) {}
+  protected apiResource = inject(ApiHttpClient);
+  private readonly portalResource = inject(PortalResource);
+
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
     return this.portalResource.getProfileStatus(partyId);

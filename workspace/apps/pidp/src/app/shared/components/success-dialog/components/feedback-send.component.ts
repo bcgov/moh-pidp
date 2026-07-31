@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
@@ -34,8 +34,9 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
   standalone: true,
 })
 export class FeedbackSendComponent {
+  private readonly dialog = inject(MatDialog);
+
   public faXmark = faXmark;
-  public constructor(public dialog: MatDialog) {}
 
   public onSuccessDialogClose(): void {
     this.dialog.closeAll();

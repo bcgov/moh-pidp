@@ -1,20 +1,6 @@
-import {
-  AsyncPipe,
-  NgIf,
-  NgOptimizedImage,
-  NgSwitch,
-  NgSwitchCase,
-  NgSwitchDefault,
-  NgTemplateOutlet,
-} from '@angular/common';
+import { AsyncPipe, NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
 import { Element } from '@angular/compiler';
-import {
-  Component,
-  Inject,
-  OnInit,
-  TemplateRef,
-  ViewChild,
-} from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogConfig } from '@angular/material/dialog';
@@ -81,7 +67,6 @@ import { BcProviderApplicationResource } from './bc-provider-application-resourc
   selector: 'app-bc-provider-application',
   templateUrl: './bc-provider-application.page.html',
   styleUrls: ['./bc-provider-application.page.scss'],
-  standalone: true,
   imports: [
     AsyncPipe,
     BreadcrumbComponent,
@@ -91,20 +76,28 @@ import { BcProviderApplicationResource } from './bc-provider-application-resourc
     MatInputModule,
     MatTooltipModule,
     NeedHelpComponent,
-    NgIf,
     NgOptimizedImage,
-    NgSwitch,
-    NgSwitchCase,
-    NgSwitchDefault,
     NgTemplateOutlet,
     ReactiveFormsModule,
-    SuccessDialogComponent,
-  ],
+    SuccessDialogComponent
+],
 })
 export class BcProviderApplicationPage
   extends AbstractFormPage<BcProviderApplicationFormState>
   implements OnInit
 {
+  private readonly config = inject<AppConfig>(APP_CONFIG);
+  private readonly authService = inject(AuthService);
+  private readonly documentService = inject(DocumentService);
+  private readonly loadingOverlayService = inject(LoadingOverlayService);
+  private readonly logger = inject(LoggerService);
+  private readonly router = inject(Router);
+  private readonly navigationService = inject(NavigationService);
+  private readonly partyService = inject(PartyService);
+  private readonly resource = inject(BcProviderApplicationResource);
+  private readonly route = inject(ActivatedRoute);
+  private readonly utilsService = inject(UtilsService);
+
   public faCircleCheck = faCircleCheck;
   public faAngleRight = faAngleRight;
   public faLockOpen = faLockOpen;
@@ -149,21 +142,10 @@ export class BcProviderApplicationPage
     AccessRoutes.PROVINCIAL_ATTACHMENT_SYSTEM,
   ];
 
-  public constructor(
-    @Inject(APP_CONFIG) private readonly config: AppConfig,
-    dependenciesService: AbstractFormDependenciesService,
-    fb: FormBuilder,
-    private readonly authService: AuthService,
-    private readonly documentService: DocumentService,
-    private readonly loadingOverlayService: LoadingOverlayService,
-    private readonly logger: LoggerService,
-    private readonly router: Router,
-    private readonly navigationService: NavigationService,
-    private readonly partyService: PartyService,
-    private readonly resource: BcProviderApplicationResource,
-    private readonly route: ActivatedRoute,
-    private readonly utilsService: UtilsService,
-  ) {
+  public constructor() {
+    const dependenciesService = inject(AbstractFormDependenciesService);
+    const fb = inject(FormBuilder);
+
     super(dependenciesService);
     this.formState = new BcProviderApplicationFormState(fb);
     this.previousUrl = this.navigationService.getPreviousUrl();

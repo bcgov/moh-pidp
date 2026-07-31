@@ -5,8 +5,10 @@
       <div class="content-header">
         <h1>Medical Certification of Death (PEMCOD)</h1>
         <p>
-          This application enables physicians and nurse practitioners to complete and submit Medical Certifications of
-          Death (MCOD) or MCOD Amendments electronically to the Vital Statistics agency and designated funeral homes.
+          This application enables physicians and nurse practitioners to
+          complete and submit Medical Certifications of Death (MCOD) or MCOD
+          Amendments electronically to the Vital Statistics agency and
+          designated funeral homes.
         </p>
       </div>
     </section>
@@ -75,20 +77,21 @@
                 Use your newly created BCProvider to login to the Practitioner's
                 eMCOD portal
               </p>
-              <p
-                *ngIf="bcProviderStatusCode === StatusCode.COMPLETED"
-                class="bcprovider-username">
-                <strong>{{ bcProviderUsername }}</strong>
-                <button
-                  mat-icon-button
-                  type="button"
-                  matTooltip="Copy your BCProvider to clipboard"
-                  aria-label="Copy your BCProvider to clipboard"
-                  [cdkCopyToClipboard]="bcProviderUsername"
-                  (cdkCopyToClipboardCopied)="onCopy()">
-                  <mat-icon>content_paste</mat-icon>
-                </button>
-              </p>
+              @if (bcProviderStatusCode === StatusCode.COMPLETED) {
+                <p
+                  class="bcprovider-username">
+                  <strong>{{ bcProviderUsername }}</strong>
+                  <button
+                    mat-icon-button
+                    type="button"
+                    matTooltip="Copy your BCProvider to clipboard"
+                    aria-label="Copy your BCProvider to clipboard"
+                    [cdkCopyToClipboard]="bcProviderUsername"
+                    (cdkCopyToClipboardCopied)="onCopy()">
+                    <mat-icon>content_paste</mat-icon>
+                  </button>
+                </p>
+              }
               <button
                 mat-flat-button
                 type="button"
@@ -115,33 +118,33 @@
             alt="pemcod-records"
             priority
             fill />
-          <div class="card-container auth-card">
-            <div class="card-footer auth-card-footer">
-              <button
-                mat-flat-button
-                uiPageFooterAction
-                type="submit"
-                color="primary"
-                aria-labelledby="navigate-to-pemcod"
-                [disabled]="pemcod$ | async"
-                (click)="navigateToPath()">
-                <fa-icon [icon]="faArrowRight"></fa-icon>
-              </button>
+            <div class="card-container auth-card">
+              <div class="card-footer auth-card-footer">
+                <button
+                  mat-flat-button
+                  uiPageFooterAction
+                  type="submit"
+                  color="primary"
+                  aria-labelledby="navigate-to-pemcod"
+                  [disabled]="pemcod$ | async"
+                  (click)="navigateToPath()">
+                  <fa-icon [icon]="faArrowRight"></fa-icon>
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="main-image-text">
-          <div class="main-image-text-title">
-            <mat-icon
-              class="assistance-content__icon"
-              [svgIcon]="'pemcod-icon'"></mat-icon
-            ><strong>Medical Certification of Death (PEMCOD)</strong>
+          <div class="main-image-text">
+            <div class="main-image-text-title">
+              <mat-icon
+                class="assistance-content__icon"
+                [svgIcon]="'pemcod-icon'"></mat-icon
+                ><strong>Medical Certification of Death (PEMCOD)</strong>
+              </div>
+              <div class="main-image-text-instructions">
+                Login once the instructions are complete.
+              </div>
+            </div>
           </div>
-          <div class="main-image-text-instructions">
-            Login once the instructions are complete.
-          </div>
-        </div>
+        </section>
       </div>
-    </section>
-  </div>
-</div>
+    </div>

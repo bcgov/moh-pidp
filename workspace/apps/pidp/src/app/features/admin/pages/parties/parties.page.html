@@ -6,7 +6,7 @@
   <p id="parties-table-description">
     <strong>List of users in OneHealthID Service.</strong>
   </p>
-  <ng-container *ngIf="environment !== production">
+  @if (environment !== production) {
     <button
       mat-stroked-button
       type="button"
@@ -14,7 +14,7 @@
       (click)="onDeleteParties()">
       Delete all
     </button>
-  </ng-container>
+  }
 </div>
 
 <table
@@ -50,15 +50,17 @@
     </td>
   </ng-container>
 
-  <ng-container *ngIf="environment !== production" matColumnDef="delete">
-    <th *matHeaderCellDef scope="col" mat-header-cell></th>
-    <td *matCellDef="let element" mat-cell>
-      <mat-icon class="delete" (click)="onDeleteParty(element.id)"
-        >delete</mat-icon
-      >
-    </td>
-  </ng-container>
+  @if (environment !== production) {
+    <ng-container matColumnDef="delete">
+      <th *matHeaderCellDef scope="col" mat-header-cell></th>
+      <td *matCellDef="let element" mat-cell>
+        <mat-icon class="delete" (click)="onDeleteParty(element.id)"
+          >delete</mat-icon
+          >
+        </td>
+      </ng-container>
+    }
 
-  <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-  <tr *matRowDef="let row; columns: displayedColumns" mat-row></tr>
-</table>
+    <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+    <tr *matRowDef="let row; columns: displayedColumns" mat-row></tr>
+  </table>

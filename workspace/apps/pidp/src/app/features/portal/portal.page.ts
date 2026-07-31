@@ -1,6 +1,6 @@
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { AsyncPipe, NgIf, NgOptimizedImage } from '@angular/common';
-import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
+import { AsyncPipe, NgOptimizedImage } from '@angular/common';
+import { AfterViewInit, Component, HostListener, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Observable, map } from 'rxjs';
@@ -30,16 +30,19 @@ import { PortalResource } from './portal-resource.service';
       useValue: { displayDefaultIndicatorType: false },
     },
   ],
-  standalone: true,
   imports: [
     FaIconComponent,
     InjectViewportCssClassDirective,
-    NgIf,
     NgOptimizedImage,
-    AsyncPipe,
-  ],
+    AsyncPipe
+],
 })
 export class PortalPage implements OnInit, AfterViewInit {
+  private readonly partyService = inject(PartyService);
+  private readonly resource = inject(PortalResource);
+  private readonly router = inject(Router);
+  private readonly snowplowService = inject(SnowplowService);
+
   public faBookmark = faBookmark;
   public faArrowUp = faArrowUp;
   public showBackToTopButton = false;
@@ -49,13 +52,6 @@ export class PortalPage implements OnInit, AfterViewInit {
   public AlertCode = AlertCode;
   public faBell = faBell;
   public alerts$!: Observable<AlertCode[]>;
-
-  public constructor(
-    private partyService: PartyService,
-    private resource: PortalResource,
-    private router: Router,
-    private snowplowService: SnowplowService,
-  ) {}
 
   @HostListener('window:scroll', [])
   public onWindowScroll(): void {

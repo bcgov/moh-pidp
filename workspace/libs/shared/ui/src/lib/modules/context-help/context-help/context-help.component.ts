@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+import { NgTemplateOutlet  } from '@angular/common';  
 import {
   ChangeDetectionStrategy,
   Component,
@@ -25,8 +25,7 @@ import { ContextHelpTitleDirective } from '../context-help-title.directive';
   templateUrl: './context-help.component.html',
   styleUrls: ['./context-help.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [MatButtonModule, MatMenuModule, MatIconModule, NgIf],
+  imports: [MatButtonModule, MatMenuModule, MatIconModule, NgTemplateOutlet],
 })
 export class ContextHelpComponent {
   @Input() public xPosition: MenuPositionX;

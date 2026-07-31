@@ -26,24 +26,19 @@ nginx:
   nameOverride: ingress
   image:
     registry: public.ecr.aws
-
   containerPorts:
     http: 8080
     https: 8443
     mtls: 8543
-
   metrics:
     enabled: true
     image:
       registry: public.ecr.aws
-    
   service:
     type: ClusterIP
     port: 8080
     httpsPort: 8443
     mtlsPort: 8543
-
-  # mounting certificates
   extraVolumes:
     - name: tls-certs
       secret:
@@ -51,7 +46,6 @@ nginx:
     - name: plr-integration
       secret:
         secretName: plr-integration
-  
   extraVolumeMounts:
     - name: tls-certs
       readOnly: true
@@ -59,7 +53,6 @@ nginx:
     - name: plr-integration
       readOnly: true
       mountPath: /opt/bitnami/nginx/conf/certs/plr
-
   serverBlock: |-
     server {
       listen 8080;
@@ -188,11 +181,9 @@ nginx:
       }
     }
 
-
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
-
 serviceAccount:
   # Specifies whether a service account should be created
   create: false
@@ -201,12 +192,9 @@ serviceAccount:
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
   name: ""
-
 podAnnotations: {}
-
 podSecurityContext: {}
   # fsGroup: 2000
-
 securityContext: {}
   # capabilities:
   #   drop:
@@ -214,42 +202,24 @@ securityContext: {}
   # readOnlyRootFilesystem: true
   # runAsNonRoot: true
   # runAsUser: 1000
-
 service:
   type: ClusterIP
   port: 80
-
 ingress:
   enabled: true
   className: ""
   annotations:
     route.openshift.io/termination: "passthrough" 
   tls: {}
-
 resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-
 autoscaling:
   enabled: false
   minReplicas: 1
-  maxReplicas: 100
+  maxReplicas: 5
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
-
 nodeSelector: {}
-
 tolerations: []
-
 affinity: {}
-
 rabbitmq:
   autoCreate: false

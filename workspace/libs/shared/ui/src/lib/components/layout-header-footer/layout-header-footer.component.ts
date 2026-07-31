@@ -1,5 +1,5 @@
-import { NgIf } from '@angular/common';
-import { Component, Input } from '@angular/core';
+
+import { Component, Input, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { InjectViewportCssClassDirective } from '../../directives/viewport-css.directive';
@@ -10,17 +10,17 @@ import { AnchorDirective } from '../anchor/anchor.directive';
   selector: 'ui-layout-header-footer',
   templateUrl: './layout-header-footer.component.html',
   styleUrls: ['./layout-header-footer.component.scss'],
-  standalone: true,
-  imports: [AnchorDirective, InjectViewportCssClassDirective, NgIf],
+  imports: [AnchorDirective, InjectViewportCssClassDirective],
 })
 export class LayoutHeaderFooterComponent {
+  private readonly router = inject(Router);
+
   @Input() public emailSupport!: string;
   public isMobile = true;
 
-  public constructor(
-    viewportService: ViewportService,
-    private readonly router: Router,
-  ) {
+  public constructor() {
+    const viewportService = inject(ViewportService);
+
     viewportService.viewportBroadcast$.subscribe((viewport) =>
       this.onViewportChange(viewport),
     );

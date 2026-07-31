@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -15,7 +15,8 @@ import { Router } from '@angular/router';
   standalone: true,
 })
 export class PendingEndorsementComponent {
-  public constructor(private readonly router: Router) {}
+  private readonly router = inject(Router);
+
   private readonly route = '/organization-info/endorsements';
 
   public onClick(): void {

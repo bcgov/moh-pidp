@@ -1,4 +1,4 @@
-import { NgIf, NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -19,16 +19,14 @@ import { CardComponent } from '../card/card.component';
   templateUrl: './card-summary.component.html',
   styleUrls: ['./card-summary.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     CardActionsDirective,
     CardComponent,
     CardContentDirective,
     CardHintDirective,
     MatButtonModule,
-    NgIf,
-    NgTemplateOutlet,
-  ],
+    NgTemplateOutlet
+],
 })
 export class CardSummaryComponent {
   @Input() public icon?: string;

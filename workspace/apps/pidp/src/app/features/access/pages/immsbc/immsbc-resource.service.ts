@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
@@ -9,7 +9,8 @@ import { PortalResource } from '@app/features/portal/portal-resource.service';
   providedIn: 'root',
 })
 export class ImmsbcResource {
-  public constructor(private readonly portalResource: PortalResource) {}
+  private readonly portalResource = inject(PortalResource);
+
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
     return this.portalResource.getProfileStatus(partyId);

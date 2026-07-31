@@ -1,12 +1,5 @@
-import { NgIf } from '@angular/common';
-import {
-  AfterViewInit,
-  Component,
-  HostListener,
-  Inject,
-  OnInit,
-  signal,
-} from '@angular/core';
+
+import { AfterViewInit, Component, HostListener, OnInit, signal, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { Router } from '@angular/router';
@@ -31,18 +24,21 @@ import { FaqRoutes } from '../../faq.routes';
   selector: 'app-help',
   templateUrl: './help.page.html',
   styleUrls: ['./help.page.scss'],
-  standalone: true,
   imports: [
     AnchorDirective,
     BreadcrumbComponent,
     FaIconComponent,
     MatButtonModule,
     MatExpansionModule,
-    NgIf,
-    InjectViewportCssClassDirective,
-  ],
+    InjectViewportCssClassDirective
+],
 })
 export class HelpPage implements OnInit, AfterViewInit {
+  private readonly config = inject<AppConfig>(APP_CONFIG);
+  private readonly router = inject(Router);
+  private readonly utilsService = inject(UtilsService);
+  private readonly snowplowService = inject(SnowplowService);
+
   public providerIdentitySupport: string;
   public readonly panelOpenState = signal(false);
   public showBackToTopButton = false;
@@ -53,12 +49,7 @@ export class HelpPage implements OnInit, AfterViewInit {
     { title: 'Help', path: '' },
   ];
 
-  public constructor(
-    @Inject(APP_CONFIG) private readonly config: AppConfig,
-    private readonly router: Router,
-    private readonly utilsService: UtilsService,
-    private readonly snowplowService: SnowplowService,
-  ) {
+  public constructor() {
     this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
     this.applicationUrl = this.config.applicationUrl;
   }

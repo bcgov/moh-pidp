@@ -14,7 +14,6 @@ import {
   templateUrl: './user-info.component.html',
   styleUrls: ['./user-info.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [KeyValueInfoComponent, DefaultPipe, FullnamePipe],
 })
 export class UserInfoComponent {

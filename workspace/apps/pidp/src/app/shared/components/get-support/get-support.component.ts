@@ -1,4 +1,3 @@
-import { NgFor } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -32,7 +31,6 @@ interface SupportProps {
     AnchorDirective,
     PageSectionComponent,
     PageSectionSubheaderComponent,
-    NgFor,
   ],
 })
 export class GetSupportComponent implements OnInit {

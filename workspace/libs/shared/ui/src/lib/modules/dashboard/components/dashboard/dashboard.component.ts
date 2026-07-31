@@ -1,13 +1,5 @@
 import { BreakpointState } from '@angular/cdk/layout';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, ViewChild, inject } from '@angular/core';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { RouterOutlet } from '@angular/router';
 
@@ -32,7 +24,6 @@ import { DashboardMenuComponent } from '../dashboard-menu/dashboard-menu.compone
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     DashboardHeaderComponent,
     MatSidenavModule,
@@ -41,6 +32,8 @@ import { DashboardMenuComponent } from '../dashboard-menu/dashboard-menu.compone
   ],
 })
 export class DashboardComponent implements OnInit {
+  private readonly viewportService = inject(ViewportService);
+
   /**
    * @description
    * Dashboard header configuration.
@@ -86,7 +79,7 @@ export class DashboardComponent implements OnInit {
 
   public sideNavProps!: DashboardSidenavProps;
 
-  public constructor(private viewportService: ViewportService) {
+  public constructor() {
     this.headerConfig = {
       theme: 'dark',
       allowMobileToggle: true,

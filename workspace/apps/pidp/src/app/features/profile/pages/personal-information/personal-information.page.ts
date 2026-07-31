@@ -1,6 +1,6 @@
-import { AsyncPipe, NgIf } from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -58,7 +58,6 @@ import { PersonalInformation } from './personal-information.model';
   templateUrl: './personal-information.page.html',
   styleUrls: ['./personal-information.page.scss'],
   viewProviders: [PersonalInformationResource],
-  standalone: true,
   imports: [
     AsyncPipe,
     BreadcrumbComponent,
@@ -69,7 +68,6 @@ import { PersonalInformation } from './personal-information.model';
     MatButtonModule,
     MatExpansionModule,
     MatIconModule,
-    NgIf,
     PageComponent,
     PageFooterActionDirective,
     PageFooterComponent,
@@ -77,13 +75,23 @@ import { PersonalInformation } from './personal-information.model';
     PageSectionSubheaderComponent,
     PageSectionSubheaderDescDirective,
     PreferredNameFormComponent,
-    UserInfoComponent,
-  ],
+    UserInfoComponent
+],
 })
 export class PersonalInformationPage
   extends AbstractFormPage<PersonalInformationFormState>
   implements OnInit
 {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly partyService = inject(PartyService);
+  private readonly resource = inject(PersonalInformationResource);
+  private readonly portalResource = inject(PortalResource);
+  private readonly authorizedUserService = inject(AuthorizedUserService);
+  private readonly logger = inject(LoggerService);
+  private readonly _snackBar = inject(MatSnackBar);
+  private readonly lookupResource = inject(LookupResource);
+
   public title: string;
   public formState: PersonalInformationFormState;
   public user$: Observable<User>;
@@ -106,19 +114,10 @@ export class PersonalInformationPage
     { title: 'Personal Information', path: '' },
   ];
 
-  public constructor(
-    dependenciesService: AbstractFormDependenciesService,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly partyService: PartyService,
-    private readonly resource: PersonalInformationResource,
-    private readonly portalResource: PortalResource,
-    private readonly authorizedUserService: AuthorizedUserService,
-    private readonly logger: LoggerService,
-    private readonly _snackBar: MatSnackBar,
-    private readonly lookupResource: LookupResource,
-    fb: FormBuilder,
-  ) {
+  public constructor() {
+    const dependenciesService = inject(AbstractFormDependenciesService);
+    const fb = inject(FormBuilder);
+
     super(dependenciesService);
 
     this.title = this.route.snapshot.data.title;
@@ -229,7 +228,11 @@ export class PersonalInformationPage
       this.formState.preferredFirstName,
       this.formState.preferredLastName,
     ].forEach((field: FormControl) => {
-      this.formUtilsService.setOrResetValidators(checked, field);
+      if (checked) {
+        this.formUtilsService.setValidators(field);
+      } else {
+        this.formUtilsService.resetAndClearValidators(field);
+      }
     });
     if (!checked) {
       this.formState.preferredMiddleName.reset();

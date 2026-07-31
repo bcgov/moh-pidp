@@ -1,5 +1,5 @@
-import { NgFor, NgIf } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatOptionModule } from '@angular/material/core';
@@ -26,7 +26,6 @@ import { AddressAutocompleteComponent } from '../address-autocomplete/address-au
   selector: 'app-address-form',
   templateUrl: './address-form.component.html',
   styleUrls: ['./address-form.component.scss'],
-  standalone: true,
   imports: [
     AddressAutocompleteComponent,
     InjectViewportCssClassDirective,
@@ -36,13 +35,14 @@ import { AddressAutocompleteComponent } from '../address-autocomplete/address-au
     MatInputModule,
     MatOptionModule,
     MatSelectModule,
-    NgFor,
-    NgIf,
     NgxMaskDirective,
-    ReactiveFormsModule,
-  ],
+    ReactiveFormsModule
+],
 })
 export class AddressFormComponent implements OnInit {
+  private readonly lookupService = inject(LookupService);
+  private readonly formUtilsService = inject(FormUtilsService);
+
   /**
    * @description
    * Address line form.
@@ -83,10 +83,7 @@ export class AddressFormComponent implements OnInit {
   public postalLabel!: string;
   public postalMask!: string;
 
-  public constructor(
-    private lookupService: LookupService,
-    private formUtilsService: FormUtilsService,
-  ) {
+  public constructor() {
     this.formControlNames = [
       'countryCode',
       'provinceCode',

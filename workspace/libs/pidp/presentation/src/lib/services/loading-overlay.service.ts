@@ -1,5 +1,5 @@
-import { NgIf } from '@angular/common';
-import { Component, Inject, Injectable } from '@angular/core';
+
+import { Component, Injectable, inject } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialog,
@@ -16,7 +16,8 @@ export const LOADING_OVERLAY_DEFAULT_MESSAGE =
  */
 @Injectable({ providedIn: 'root' })
 export class LoadingOverlayService {
-  constructor(private dialog: MatDialog) {}
+  private readonly dialog = inject(MatDialog);
+
 
   public open(message?: string): void {
     // Uses mat-dialog to display the overlay with minimal custom UI code and CSS.
@@ -46,13 +47,15 @@ interface PidpLoadingDialogData {
 @Component({
   // Putting template and css inline for simplicity.
   template: `<div class="loader-container">
-    <div class="spinner">
-      <mat-spinner color="primary" mode="indeterminate"></mat-spinner>
-    </div>
-    <div *ngIf="data.message" class="message">
-      {{ data.message }}
-    </div>
-  </div>`,
+      <div class="spinner">
+        <mat-spinner color="primary" mode="indeterminate"></mat-spinner>
+      </div>
+      @if (data.message) {
+        <div class="message">
+          {{ data.message }}
+        </div>
+      }
+    </div>`,
   styles: [
     `
       .loader-container {
@@ -67,12 +70,10 @@ interface PidpLoadingDialogData {
       }
     `,
   ],
-  standalone: true,
-  imports: [MatProgressSpinnerModule, NgIf],
+  imports: [MatProgressSpinnerModule],
 })
 export class PidpLoadingDialogComponent {
-  public constructor(
-    public dialogRef: MatDialogRef<PidpLoadingDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: PidpLoadingDialogData,
-  ) {}
+  public readonly dialogRef = inject<MatDialogRef<PidpLoadingDialogComponent>>(MatDialogRef);
+  public readonly data = inject<PidpLoadingDialogData>(MAT_DIALOG_DATA);
+
 }

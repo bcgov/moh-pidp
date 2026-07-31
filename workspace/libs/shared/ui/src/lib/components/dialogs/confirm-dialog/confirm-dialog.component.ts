@@ -1,15 +1,5 @@
-import { AsyncPipe, NgIf } from '@angular/common';
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  Inject,
-  Input,
-  OnInit,
-  Type,
-  ViewChild,
-  ViewContainerRef,
-} from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { AfterViewInit, ChangeDetectionStrategy, Component, Input, OnInit, Type, ViewChild, ViewContainerRef, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import {
   MAT_DIALOG_DATA,
@@ -38,11 +28,9 @@ import { DIALOG_DEFAULT_OPTION } from '../dialogs-properties.provider';
   templateUrl: './confirm-dialog.component.html',
   styleUrls: ['./confirm-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     AnchorDirective,
     MatDialogTitle,
-    NgIf,
     MatIconModule,
     MatDialogContent,
     MatDialogActions,
@@ -50,10 +38,14 @@ import { DIALOG_DEFAULT_OPTION } from '../dialogs-properties.provider';
     MatDialogClose,
     AnchorDirective,
     MatProgressBarModule,
-    AsyncPipe,
-  ],
+    AsyncPipe
+],
 })
 export class ConfirmDialogComponent implements OnInit, AfterViewInit {
+  private readonly dialogRef = inject<MatDialogRef<ConfirmDialogComponent>>(MatDialogRef);
+  private readonly customOptions = inject<DialogOptions>(MAT_DIALOG_DATA);
+  private readonly defaultOptions = inject<DialogDefaultOptions>(DIALOG_DEFAULT_OPTION);
+
   public options: DialogOptions;
   public dialogContentOutput: DialogContentOutput<unknown> | null;
   public readonly loading$: Observable<LoadingOptions | null>;
@@ -64,12 +56,11 @@ export class ConfirmDialogComponent implements OnInit, AfterViewInit {
   @ViewChild('dialogContentHost', { static: true, read: ViewContainerRef })
   public dialogContentHost!: ViewContainerRef;
 
-  public constructor(
-    public dialogRef: MatDialogRef<ConfirmDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public customOptions: DialogOptions,
-    @Inject(DIALOG_DEFAULT_OPTION) public defaultOptions: DialogDefaultOptions,
-    loadingService: LoadingService,
-  ) {
+  public constructor() {
+    const customOptions = this.customOptions;
+    const defaultOptions = this.defaultOptions;
+    const loadingService = inject(LoadingService);
+
     this.options =
       typeof customOptions === 'string'
         ? this.getOptions(defaultOptions[customOptions]())
@@ -96,7 +87,9 @@ export class ConfirmDialogComponent implements OnInit, AfterViewInit {
     }
 
     this.dialogRef.updateSize(this.options.width, this.options.height);
-    this.options.class && this.dialogRef.addPanelClass(this.options.class);
+    if (this.options.class) {
+      this.dialogRef.addPanelClass(this.options.class);
+    }
   }
 
   public ngAfterViewInit(): void {

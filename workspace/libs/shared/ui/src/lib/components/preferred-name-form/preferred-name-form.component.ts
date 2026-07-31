@@ -1,4 +1,4 @@
-import { NgFor } from '@angular/common';
+
 import { Component, Input } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -10,14 +10,12 @@ import { TrimDirective } from '../../directives/trim.directive';
   selector: 'ui-preferred-name-form',
   templateUrl: './preferred-name-form.component.html',
   styleUrls: ['./preferred-name-form.component.scss'],
-  standalone: true,
   imports: [
     ReactiveFormsModule,
-    NgFor,
     MatFormFieldModule,
     MatInputModule,
-    TrimDirective,
-  ],
+    TrimDirective
+],
 })
 export class PreferredNameFormComponent {
   /**
