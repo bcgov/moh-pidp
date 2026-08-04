@@ -26,15 +26,28 @@ export class PharmacyResource {
     return this.http.get<Pharmacy | null>(`${this.apiEndpoint}/${pharmacyId}`);
   }
 
+  public createPharmacy(payload: unknown): Observable<number> {
+    return this.http.post<number>(this.apiEndpoint, payload);
+  }
+
   public updatePharmacy(
     pharmacyId: number,
     payload: Partial<Pharmacy>,
   ): Observable<void> {
+    payload.id = pharmacyId;
+    console.log("Payloadid: " + payload.id);
     return this.http.put<void>(`${this.apiEndpoint}/${pharmacyId}`, payload);
   }
 
   public getStaff(pharmacyId: number): Observable<IStaff[]> {
     return this.http.get<IStaff[]>(`${this.apiEndpoint}/${pharmacyId}/staff`);
+  }
+
+  public getStaffDetails(
+    pharmacyId: number,
+    partyId: number,
+  ): Observable<IStaff> {
+    return this.http.get<IStaff>(`${this.apiEndpoint}/${pharmacyId}/staff/${partyId}`);
   }
 
   public generateEnrolmentToken(
@@ -45,6 +58,10 @@ export class PharmacyResource {
       params: { role: role.toString() },
       responseType: 'text',
     });
+  }
+
+  public enrolStaff(token: string): Observable<void> {
+    return this.http.post<void>(`${this.apiEndpoint}/enrolments/${token}`, {});
   }
 
   public deleteStaff(

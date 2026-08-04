@@ -11,7 +11,7 @@ import { QRCodeComponent } from 'angularx-qrcode';
   template: `
     <h2 mat-dialog-title>Enrolment Link for {{ data.role }}</h2>
     <mat-dialog-content>
-      <p>Share this link or QR code with the staff member.</p>
+      <p>Share this link and/or QR code with {{ data.pharmacyName }} {{ data.role }}(s).<br />This link and QR code are valid for 90 days</p>
       <div class="qr-code-container">
         <qrcode [qrdata]="data.link" [width]="200" [errorCorrectionLevel]="'M'"></qrcode>
       </div>
@@ -28,7 +28,7 @@ import { QRCodeComponent } from 'angularx-qrcode';
   imports: [MatDialogModule, MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule, QRCodeComponent]
 })
 export class QrCodeDialogComponent {
-  public constructor(@Inject(MAT_DIALOG_DATA) public data: { link: string; role: string }) {}
+  public constructor(@Inject(MAT_DIALOG_DATA) public data: { link: string; pharmacyName: string; role: string }) {}
 
   public copyLink(link: string): void {
     navigator.clipboard.writeText(link);

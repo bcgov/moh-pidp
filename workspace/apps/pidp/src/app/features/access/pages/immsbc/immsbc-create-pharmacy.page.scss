@@ -1,5 +1,9 @@
 @use 'pidp-variables' as pidp;
 
+.form-error {
+  color: red;
+}
+
 .viewport-all {
   --gap: 1rem;
   --font-size: 0.75rem;

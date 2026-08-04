@@ -11,6 +11,7 @@ import {
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
 
 import { IStaff, PharmacyRole } from './pharmacy-staff.model';
@@ -24,7 +25,7 @@ export interface EditStaffDialogData {
 @Component({
   selector: 'app-edit-staff-dialog',
   template: `
-    <h2 mat-dialog-title>Edit Staff: {{ data.staff.partyName }}</h2>
+    <h2 mat-dialog-title>Edit Staff: </h2>
     <mat-dialog-content>
       <form [formGroup]="form">
         <mat-form-field class="w-100">
@@ -32,7 +33,8 @@ export interface EditStaffDialogData {
           <mat-select formControlName="role">
             <mat-option [value]="PharmacyRole.Clinician">Clinician</mat-option>
             <mat-option [value]="PharmacyRole.Clerk">Clerk</mat-option>
-            <mat-option [value]="PharmacyRole.None">None (Remove Access)</mat-option>
+            <mat-option [value]="PharmacyRole.Admin">Administrator</mat-option>
+            <mat-option [value]="PharmacyRole.Unknown">None</mat-option>
           </mat-select>
         </mat-form-field>
 
@@ -57,6 +59,15 @@ export interface EditStaffDialogData {
             [matDatepicker]="endPicker"
             formControlName="effectiveEndDate"
           />
+          <button
+            mat-icon-button
+            matSuffix
+            (click)="extendDate()"
+            type="button"
+            aria-label="Set to next August 1st"
+          >
+            <mat-icon>update</mat-icon>
+          </button>
           <mat-datepicker-toggle
             matSuffix
             [for]="endPicker"
@@ -84,6 +95,7 @@ export interface EditStaffDialogData {
     MatDialogModule,
     MatButtonModule,
     MatFormFieldModule,
+    MatIconModule,
     MatInputModule,
     MatSelectModule,
     MatDatepickerModule,
@@ -129,6 +141,19 @@ export class EditStaffDialogComponent implements OnInit {
         endDateControl?.setValue(newEndDate);
       }
     });
+  }
+
+  public extendDate(): void {
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    let nextAugustFirst = new Date(currentYear, 7, 1); // Month is 0-indexed
+
+    if (today >= nextAugustFirst) {
+      nextAugustFirst.setFullYear(currentYear + 1);
+    }
+
+    this.form.get('effectiveEndDate')?.setValue(nextAugustFirst);
+    this.form.markAsDirty();
   }
 
   public onCancel(): void {

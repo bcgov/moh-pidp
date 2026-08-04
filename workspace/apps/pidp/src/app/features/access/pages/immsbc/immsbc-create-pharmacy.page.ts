@@ -1,10 +1,15 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { EMPTY, catchError } from 'rxjs';
+
 import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 import { AccessRoutes } from '@app/features/access/access.routes';
+import { PharmacyResource } from './pharmacy-resource.service';
 
 @Component({
   selector: 'app-immsbc-create-pharmacy',
@@ -15,6 +20,7 @@ import { AccessRoutes } from '@app/features/access/access.routes';
     MatButtonModule,
     InjectViewportCssClassDirective,
     BreadcrumbComponent,
+    MatSnackBarModule,
   ],
   templateUrl: './immsbc-create-pharmacy.page.html',
   styleUrl: './immsbc-create-pharmacy.page.scss',
@@ -23,31 +29,10 @@ export class ImmsbcCreatePharmacyPage implements OnInit {
   public breadcrumbsData: Array<{ title: string; path: string }> = [];
   public form!: FormGroup;
 
-  public readonly occupations = [
-    'Pharmacist RPH',
-    'Pharmacy Student',
-    'Pharmacy Technician RPHT',
-    'Pharmacy Assistant',
-    'Doctor MD',
-    'Nurse NP, RN, LPN',
-    'Paramedic',
-    'Other',
-  ];
-
-  public readonly accessLevels = [
-    {
-      value: 'clinician',
-      title: 'Clinician',
-      description: 'Clerk plus administer vaccinations and view appointments.',
-    },
-    {
-      value: 'clerk',
-      title: 'Clerk',
-      description: 'Basic access to check-in patients.',
-    },
-  ];
-
   private readonly fb = inject(FormBuilder);
+  private readonly resource = inject(PharmacyResource);
+  private readonly router = inject(Router);
+  private readonly snackBar = inject(MatSnackBar);
 
   public ngOnInit(): void {
     this.breadcrumbsData = [
@@ -64,45 +49,43 @@ export class ImmsbcCreatePharmacyPage implements OnInit {
     ];
 
     this.form = this.fb.group({
-      pharmacyManagerName: ['', Validators.required],
-      pharmacyManagerEmail: ['', [Validators.required, Validators.email]],
-      pharmacyName: ['', Validators.required],
-      pharmacareCode: ['', Validators.required],
-      streetAddress: ['', Validators.required],
+      name: ['', Validators.required],
+      address: ['', Validators.required],
       postalCode: ['', Validators.required],
-      pharmacyPhone: ['', Validators.required],
-      legalFirstName: ['', Validators.required],
-      legalLastName: ['', Validators.required],
-      bcphaEmail: ['', [Validators.required, Validators.email]],
-      mobilePhone: ['', Validators.required],
-      occupation: ['', Validators.required],
-      accessLevel: ['', Validators.required],
-      trainingConfirmed: [false, Validators.requiredTrue],
-      ackIndividualAccounts: [false, Validators.requiredTrue],
-      ackMfa: [false, Validators.requiredTrue],
+      phone: ['', Validators.required],
+      fax: ['', Validators.required],
+      managerName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      pharmacareCode: ['', Validators.required],
+      ackImmunizationScope: [false, Validators.requiredTrue],
+      ackAccessToVaccines: [false, Validators.requiredTrue],
       ackPrivacy: [false, Validators.requiredTrue],
       ackRemovalAccess: [false, Validators.requiredTrue],
     });
   }
 
-  public selectOccupation(occupation: string): void {
-    this.form.patchValue({ occupation });
-  }
-
-  public selectAccessLevel(level: string): void {
-    this.form.patchValue({ accessLevel: level });
-  }
-
-  public toggleTrainingConfirmed(): void {
-    const current = this.form.get('trainingConfirmed')?.value as boolean;
-    this.form.patchValue({ trainingConfirmed: !current });
-  }
-
   public onSubmit(): void {
-    if (this.form.valid) {
-      console.log(this.form.value);
-    } else {
+    if (this.form.invalid) {
+      console.log('Create Pharmacy - Invalid State, Form Value:', this.form.value);
       this.form.markAllAsTouched();
+      return;
     }
+
+    console.log('Create Pharmacy - Form Value:', this.form.value);
+
+    this.resource
+      .createPharmacy(this.form.value)
+      .pipe(
+        catchError(() => {
+          this.snackBar.open('An error occurred while creating the pharmacy. Please try again.', 'Close', { duration: 5000 });
+          return EMPTY;
+        }),
+      )
+      .subscribe(() => {
+        this.snackBar.open('Pharmacy created successfully!', 'Close', {
+          duration: 3000,
+        });
+        this.router.navigate([AccessRoutes.routePath(AccessRoutes.IMMSBC)]);
+      });
   }
 }

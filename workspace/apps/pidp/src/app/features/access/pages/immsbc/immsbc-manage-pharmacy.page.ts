@@ -2,12 +2,13 @@ import { Component, Input, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { Observable, tap } from 'rxjs';
+import { EMPTY, Observable, catchError, tap } from 'rxjs';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
 
 import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
@@ -31,6 +32,7 @@ import { Pharmacy, PharmacyRole, PharmacyProfile } from './pharmacy-staff.model'
     MatCardModule,
     MatIconModule,
     MatProgressBarModule,
+    MatSnackBarModule,
     MatTabsModule,
     InjectViewportCssClassDirective,
     BreadcrumbComponent,
@@ -43,6 +45,7 @@ import { Pharmacy, PharmacyRole, PharmacyProfile } from './pharmacy-staff.model'
 export class ImmsbcManagePharmacyPage implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly resource = inject(PharmacyResource);
+  private readonly snackBar = inject(MatSnackBar);
 
   public breadcrumbsData: Array<{ title: string; path: string }> = [];
   public pharmacyProfile$!: Observable<PharmacyProfile>;
@@ -84,10 +87,22 @@ export class ImmsbcManagePharmacyPage implements OnInit {
   }
 
   public onUpdateDetails(): void {
-    if (this.detailsForm.valid && this.selectedPharmacy) {
-      this.resource.updatePharmacy(this.selectedPharmacy.pharmacyId, this.detailsForm.value).subscribe(() => {
-        this.detailsForm.markAsPristine();
-      });
+    console.log("updating details:  " + this.detailsForm.valid + ", " + this.detailsForm.dirty + ", " + this.selectedPharmacy);
+    if (this.selectedPharmacy) {
+      this.resource
+        .updatePharmacy(this.selectedPharmacy.pharmacyId, this.detailsForm.value)
+        .pipe(
+          catchError(() => {
+            this.snackBar.open('An error occurred while saving. Please try again.', 'Close', { duration: 5000 });
+            return EMPTY;
+          })
+        )
+        .subscribe(() => {
+          this.detailsForm.markAsPristine();
+          this.snackBar.open('Pharmacy details saved successfully!', 'Close', {
+            duration: 3000,
+          });
+        });
     }
   }
 

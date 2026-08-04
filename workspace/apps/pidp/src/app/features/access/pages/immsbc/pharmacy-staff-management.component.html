@@ -1,8 +1,5 @@
-<div class="page-header-section">
-  <h2>Staff Enrolment</h2>
-</div>
 <div class="form-panel">
-  <h2 class="panel-title">Staff Enrolment</h2>
+  <h4 class="panel-title">Enrolment</h4>
   <p class="panel-description">
     Share these links with new staff members to add them to this pharmacy. They
     will need to log in with their BC Services Card. New staff will appear in
@@ -19,12 +16,9 @@
     </button>
   </div>
 </div>
-
-<div class="page-header-section">
-  <h2>Staff Management</h2>
-</div>
+<p style="margin-top: 5px">&nbsp;</p>
 <div class="form-panel">
-  <h2 class="panel-title">Staff List</h2>
+  <h4 class="panel-title">Staff List</h4>
   <ng-container *ngIf="staff$ | async as staff; else loading">
     <div *ngIf="!staff.length" class="text-center">
       <p>No staff members are associated with this pharmacy.</p>
