@@ -28,7 +28,7 @@ public class PharmaciesController(IMediator mediator, PidpDbContext context) : C
     [Authorize(Policy = Policies.BcscAuthentication)]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<int>> CreatePharmacy([FromBody] Create.Command command)
+    public async Task<ActionResult<int>> CreatePharmacy([FromBody] PharmacyCreate.Command command)
     {
         command.PartyId = this.User.GetPartyId(this.context);
         var newPharmacyId = await this.mediator.Send(command);
@@ -37,18 +37,19 @@ public class PharmaciesController(IMediator mediator, PidpDbContext context) : C
 
     [HttpGet("{pharmacyId}")]
     [Authorize(Policy = Policies.BcscAuthentication)]
-    [ProducesResponseType(typeof(Details.Model), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PharmacyDetails.Model), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<Details.Model?>> GetPharmacyDetails([FromRoute] int pharmacyId)
-        => await this.mediator.Send(new Details.Query { PharmacyId = pharmacyId, PartyId = this.User.GetPartyId(this.context) });
+    public async Task<ActionResult<PharmacyDetails.Model?>> GetPharmacyDetails([FromRoute] int pharmacyId)
+        => await this.mediator.Send(new PharmacyDetails.Query { PharmacyId = pharmacyId, PartyId = this.User.GetPartyId(this.context) });
 
     [HttpPut("{pharmacyId}")]
     [Authorize(Policy = Policies.BcscAuthentication)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdatePharmacy([FromRoute] int pharmacyId, [FromBody] Update.Command command)
+    public async Task<IActionResult> UpdatePharmacy([FromRoute] int pharmacyId, [FromBody] PharmacyUpdate.Command command)
     {
+        Console.WriteLine($"Updating pharmacy {pharmacyId} with data: {command}");
         command.PharmacyId = pharmacyId;
         command.RequestingPartyId = this.User.GetPartyId(this.context);
         await this.mediator.Send(command);
@@ -72,6 +73,22 @@ public class PharmaciesController(IMediator mediator, PidpDbContext context) : C
         return this.Ok(token);
     }
 
+    [HttpPost("enrolments/{token}")]
+    [Authorize(Policy = Policies.BcscAuthentication)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> StaffCreate([FromRoute] string token)
+    {
+        var command = new StaffCreate.Command
+        {
+            Token = new Guid(token),
+            PartyId = this.User.GetPartyId(this.context)
+        };
+        await this.mediator.Send(command);
+        return this.NoContent();
+    }
+
     [HttpGet("{pharmacyId}/staff")]
     [Authorize(Policy = Policies.BcscAuthentication)]
     // [Authorize(Policy = Policies.PharmacyAdmin)]
@@ -82,13 +99,23 @@ public class PharmaciesController(IMediator mediator, PidpDbContext context) : C
         return await this.mediator.Send(new Staff.Query { PharmacyId = pharmacyId, PartyId = this.User.GetPartyId(this.context) });
     }
 
+    [HttpGet("{pharmacyId}/staff/{partyId}")]
+    [Authorize(Policy = Policies.BcscAuthentication)]
+    // [Authorize(Policy = Policies.PharmacyAdmin)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<StaffDetails.Model>> GetStaffDetails([FromRoute] int pharmacyId, [FromRoute] int partyId)
+    {
+        return await this.mediator.Send(new StaffDetails.Query { PharmacyId = pharmacyId, PartyId = partyId });
+    }
+
     [HttpPut("{pharmacyId}/staff/{partyId}")]
     [Authorize(Policy = Policies.BcscAuthentication)]
     // [Authorize(Policy = Policies.PharmacyAdmin)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateStaff([FromRoute] int pharmacyId, [FromRoute] int partyId, [FromBody] UpdateStaff.Command command)
+    public async Task<IActionResult> UpdateStaff([FromRoute] int pharmacyId, [FromRoute] int partyId, [FromBody] StaffUpdate.Command command)
     {
         command.PharmacyId = pharmacyId;
         command.PartyId = partyId;
@@ -104,7 +131,7 @@ public class PharmaciesController(IMediator mediator, PidpDbContext context) : C
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteStaff([FromRoute] int pharmacyId, [FromRoute] int partyId)
     {
-        await this.mediator.Send(new DeleteStaff.Command { PharmacyId = pharmacyId, PartyId = partyId, RequestingPartyId = this.User.GetPartyId(this.context) });
+        await this.mediator.Send(new StaffDelete.Command { PharmacyId = pharmacyId, PartyId = partyId, RequestingPartyId = this.User.GetPartyId(this.context) });
         return this.NoContent();
     }
 }

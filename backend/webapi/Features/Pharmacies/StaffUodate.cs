@@ -6,13 +6,14 @@ using Pidp.Data;
 using Pidp.Models;
 using Pidp.Models.Lookups;
 
-public class UpdateStaff
+public class StaffUpdate
 {
     public class Command : IRequest
     {
         public int PharmacyId { get; set; }
         public int PartyId { get; set; }
         public PharmacyRole Role { get; set; }
+        public DateTime? EffectiveStartDate { get; set; }
         public DateTime? EffectiveEndDate { get; set; }
         public int RequestingPartyId { get; set; }
     }
@@ -43,9 +44,8 @@ public class UpdateStaff
             }
 
             staffRole.Role = request.Role;
-
-            // Assuming PharmacyPartyRole has this field
-            // staffRole.EffectiveEndDate = request.EffectiveEndDate;
+            staffRole.EffectiveStartDate = request.EffectiveStartDate?.ToUniversalTime();
+            staffRole.EffectiveEndDate = request.EffectiveEndDate?.ToUniversalTime();
 
             await context.SaveChangesAsync(cancellationToken);
         }

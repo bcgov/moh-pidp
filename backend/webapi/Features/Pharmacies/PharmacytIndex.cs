@@ -7,7 +7,7 @@ using NodaTime;
 using Pidp.Data;
 using Pidp.Extensions;
 
-public class Index
+public class PharmacyIndex
 {
     public class Query : IQuery<List<Model>>
     {

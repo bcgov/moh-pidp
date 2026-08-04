@@ -7,7 +7,7 @@ using Pidp.Data;
 using Pidp.Models;
 using Pidp.Models.Lookups;
 
-public class Update
+public class PharmacyUpdate
 {
     public class Command : IRequest
     {
@@ -20,18 +20,6 @@ public class Update
         public string Fax { get; set; } = string.Empty;
         public string PharmaCareCode { get; set; } = string.Empty;
         public int RequestingPartyId { get; set; }
-    }
-
-    public class CommandValidator : AbstractValidator<Command>
-    {
-        public CommandValidator()
-        {
-            this.RuleFor(x => x.PharmacyId).GreaterThan(0);
-            this.RuleFor(x => x.Name).NotEmpty();
-            this.RuleFor(x => x.Address).NotEmpty();
-            this.RuleFor(x => x.ManagerName).NotEmpty();
-            this.RuleFor(x => x.Email).NotEmpty().EmailAddress();
-        }
     }
 
     public class CommandHandler(PidpDbContext context) : IRequestHandler<Command>

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Pidp.Data;
 using Pidp.Models;
 
-public class Details
+public class PharmacyDetails
 {
     public class Query : IRequest<Model?>
     {

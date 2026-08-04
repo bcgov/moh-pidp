@@ -7,7 +7,7 @@ using Pidp.Data;
 using Pidp.Models;
 using Pidp.Models.Lookups;
 
-public class DeleteStaff
+public class StaffDelete
 {
     public class Command : IRequest
     {

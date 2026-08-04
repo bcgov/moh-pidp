@@ -44,10 +44,9 @@ public class Staff
                 {
                     PartyId = role.PartyId,
                     FullName = role.Party.FullName, // Assuming Party has FullName
-                    Role = role.Role
-                    // Assuming PharmacyPartyRole has these fields
-                    // EffectiveStartDate = role.EffectiveStartDate,
-                    // EffectiveEndDate = role.EffectiveEndDate
+                    Role = role.Role,
+                    EffectiveStartDate = role.EffectiveStartDate ?? DateTime.MinValue,
+                    EffectiveEndDate = role.EffectiveEndDate ?? DateTime.MinValue,
                 })
                 .ToListAsync(cancellationToken);
         }
