@@ -19,17 +19,18 @@
 <p style="margin-top: 5px">&nbsp;</p>
 <div class="form-panel">
   <h4 class="panel-title">Staff List</h4>
-  <ng-container *ngIf="staff$ | async as staff; else loading">
-    <div *ngIf="!staff.length" class="text-center">
-      <p>No staff members are associated with this pharmacy.</p>
-    </div>
-
-    <table
-      *ngIf="staff.length"
-      mat-table
-      [dataSource]="dataSource"
-      class="mat-elevation-z8"
-    >
+  @if (staff$ | async; as staff) {
+    @if (!staff.length) {
+      <div class="text-center">
+        <p>No staff members are associated with this pharmacy.</p>
+      </div>
+    }
+    @if (staff.length) {
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        class="mat-elevation-z8"
+      >
       <!-- Name Column -->
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef>Name</th>
@@ -95,10 +96,9 @@
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
-  </ng-container>
-
-  <ng-template #loading>
+      </table>
+    }
+  } @else {
     <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-  </ng-template>
+  }
 </div>

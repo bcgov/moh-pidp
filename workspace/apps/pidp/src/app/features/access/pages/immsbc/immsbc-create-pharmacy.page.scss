@@ -7,6 +7,8 @@
 .viewport-all {
   --gap: 1rem;
   --font-size: 0.75rem;
+  padding: 1.25rem 0.75rem;
+  font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
 }
 
 .viewport-small,
@@ -17,9 +19,6 @@
 }
 
 .viewport-all {
-  padding: 1.25rem 0.75rem;
-  font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
-
   .content {
     display: flex;
     flex-direction: column;

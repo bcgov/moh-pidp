@@ -3,43 +3,48 @@
   <div class="content">
     <section class="page-intro">
       <h1>ImmsBC - Manage Pharmacy</h1>
-      <p class="intro-welcome" *ngIf="!selectedPharmacy">
-        Select a pharmacy from the list below to start managing it.
-      </p>
-      <p class="intro-welcome" *ngIf="selectedPharmacy">
-        Manage details and staff for {{ selectedPharmacy.pharmacyName }}.
-      </p>
+      @if (!selectedPharmacy) {
+        <p class="intro-welcome">
+          Select a pharmacy from the list below to start managing it.
+        </p>
+      } @else {
+        <p class="intro-welcome">
+          Manage details and staff for {{ selectedPharmacy.pharmacyName }}.
+        </p>
+      }
     </section>
     <!-- Step 1: Pharmacy Selection -->
-    <ng-container *ngIf="!selectedPharmacy; else pharmacyManagement">
+    @if (!selectedPharmacy) {
       <section>
         <div class="form-panel">
-          <ng-container *ngIf="pharmacyProfile$ | async as profile; else loading">
-            <div *ngIf="!profile.isPharmacyAdmin || profile.associations.length === 0" class="text-center my-5">
-              <p class="mb-3">You are not registered as an administrator for any pharmacies.</p>
-              <button mat-flat-button color="primary" routerLink="/access/immsbc/create-pharmacy">Add a Pharmacy</button>
-            </div>
-            <ng-container *ngFor="let assoc of profile.associations">
-              <mat-card *ngIf="getRole(assoc.role) === 'Admin'"
-                        (click)="selectPharmacy(assoc)"
-                        class="clickable-card mb-3"
-                        [class.mat-elevation-z4]="true">
-                <mat-card-header>
-                  <mat-card-title> {{ assoc.pharmacyName }} </mat-card-title>
-                </mat-card-header>
-                <mat-card-content>
-                  Role: {{ getRole(assoc.role) }}
-                </mat-card-content>
-              </mat-card>
-            </ng-container>
-          </ng-container>
+          @if (pharmacyProfile$ | async; as profile) {
+            @if (!profile.isPharmacyAdmin || profile.associations.length === 0) {
+              <div class="text-center my-5">
+                <p class="mb-3">You are not registered as an administrator for any pharmacies.</p>
+                <button mat-flat-button color="primary" routerLink="/access/immsbc/create-pharmacy">Add a Pharmacy</button>
+              </div>
+            }
+            @for (assoc of profile.associations; track assoc.pharmacyId) {
+              @if (getRole(assoc.role) === 'Admin') {
+                <mat-card (click)="selectPharmacy(assoc)"
+                          class="clickable-card mb-3"
+                          [class.mat-elevation-z4]="true">
+                  <mat-card-header>
+                    <mat-card-title> {{ assoc.pharmacyName }} </mat-card-title>
+                  </mat-card-header>
+                  <mat-card-content>
+                    Role: {{ getRole(assoc.role) }}
+                  </mat-card-content>
+                </mat-card>
+              }
+            }
+          } @else {
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+          }
         </div>
       </section>
-    </ng-container>
-
-    <!-- Step 2: Pharmacy Management View -->
-    <ng-template #pharmacyManagement>
-      <ng-container *ngIf="selectedPharmacy">
+    } @else {
+      @if (selectedPharmacy) {
         <div class="d-flex align-items-center mb-4">
           <button mat-stroked-button (click)="deselectPharmacy()" class="ml-auto">
             <mat-icon>arrow_back</mat-icon>
@@ -105,11 +110,7 @@
             </ng-template>
           </mat-tab>
         </mat-tab-group>
-      </ng-container>
-    </ng-template>
-
-    <ng-template #loading>
-      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-    </ng-template>
+      }
+    }
   </div>
 </div>

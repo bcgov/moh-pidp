@@ -107,10 +107,10 @@ export class EditStaffDialogComponent implements OnInit {
   public PharmacyRole = PharmacyRole;
 
   public constructor(
-    private fb: FormBuilder,
-    private dialogRef: MatDialogRef<EditStaffDialogComponent>,
+    private readonly fb: FormBuilder,
+    private readonly dialogRef: MatDialogRef<EditStaffDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: EditStaffDialogData,
-    private pharmacyResource: PharmacyResource
+    private readonly pharmacyResource: PharmacyResource
   ) {
     this.form = this.fb.group({
       role: [this.data.staff.role],
@@ -146,7 +146,7 @@ export class EditStaffDialogComponent implements OnInit {
   public extendDate(): void {
     const today = new Date();
     const currentYear = today.getFullYear();
-    let nextAugustFirst = new Date(currentYear, 7, 1); // Month is 0-indexed
+    const nextAugustFirst = new Date(currentYear, 7, 1); // Month is 0-indexed
 
     if (today >= nextAugustFirst) {
       nextAugustFirst.setFullYear(currentYear + 1);

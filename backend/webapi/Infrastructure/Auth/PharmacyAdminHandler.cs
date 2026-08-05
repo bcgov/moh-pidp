@@ -20,7 +20,7 @@ public class PharmacyAdminHandler : AuthorizationHandler<PharmacyAdminRequiremen
         this.clock = clock;
     }
 
-    protected override async Task HandleRequirementAsync(AuthorizationHandlerContext authContext, PharmacyAdminRequirement requirement)
+    protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, PharmacyAdminRequirement requirement)
     {
         var httpContext = this.httpContextAccessor.HttpContext;
         if (httpContext == null)
@@ -49,7 +49,7 @@ public class PharmacyAdminHandler : AuthorizationHandler<PharmacyAdminRequiremen
 
         if (isPharmacyAdmin)
         {
-            authContext.Succeed(requirement);
+            context.Succeed(requirement);
         }
     }
 }

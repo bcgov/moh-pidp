@@ -51,73 +51,75 @@
           <label for="pharmacyName">Pharmacy Name</label>
           <input id="pharmacyName" type="text" formControlName="name" autocomplete="organization" />
           <span class="helper-text">Please include store number if applicable</span>
-          <div *ngIf="form.get('name')?.invalid && form.get('name')?.touched" class="form-error">
-            Pharmacy Name is required.
-          </div>
+          @if (form.get('name')?.invalid && form.get('name')?.touched) {
+            <div class="form-error">Pharmacy Name is required.</div>
+          }
         </div>        
 
         <div class="form-field">
           <label for="streetAddress">Street Address</label>
-          <input id="streetAddress" type="text" formControlName="address" autocomplete="street-address" />
-          <div *ngIf="form.get('address')?.invalid && form.get('address')?.touched" class="form-error">
-            Street Address is required.
-          </div>
+          <input id="streetAddress" type="text" formControlName="address" autocomplete="address" />
+          @if (form.get('address')?.invalid && form.get('address')?.touched) {
+            <div class="form-error">Street Address is required.</div>
+          }
         </div>
 
         <div class="form-field">
           <label for="postalCode">Postal Code</label>
           <input id="postalCode" type="text" formControlName="postalCode" autocomplete="postal-code" />
-          <div *ngIf="form.get('postalCode')?.invalid && form.get('postalCode')?.touched" class="form-error">
-            Postal Code is required.
-          </div>
+          @if (form.get('postalCode')?.invalid && form.get('postalCode')?.touched) {
+            <div class="form-error">Postal Code is required.</div>
+          }
         </div>
 
         <div class="form-field">
           <label for="pharmacyPhone">Pharmacy Phone Number (Format: XXX-XXX-XXXX)</label>
           <input id="pharmacyPhone" type="tel" formControlName="phone" autocomplete="tel" />
-          <div *ngIf="form.get('phone')?.invalid && form.get('phone')?.touched" class="form-error">
-            Phone Number is required.
-          </div>
+          @if (form.get('phone')?.invalid && form.get('phone')?.touched) {
+            <div class="form-error">Phone Number is required.</div>
+          }
         </div>
 
         <div class="form-field">
           <label for="pharmacyFax">Pharmacy Fax Number (Format: XXX-XXX-XXXX)</label>
           <input id="pharmacyFax" type="tel" formControlName="fax" autocomplete="tel" />
-          <div *ngIf="form.get('fax')?.invalid && form.get('fax')?.touched" class="form-error">
-            Fax Number is required.
-          </div>
+          @if (form.get('fax')?.invalid && form.get('fax')?.touched) {
+            <div class="form-error">Fax Number is required.</div>
+          }
         </div>
 
         <div class="form-field">
           <label for="pharmacyManagerName">Pharmacy Manager Name</label>
           <input id="pharmacyManagerName" type="text" formControlName="managerName"
             placeholder="FirstName LastName" autocomplete="name" />
-          <div *ngIf="form.get('managerName')?.invalid && form.get('managerName')?.touched" class="form-error">
-            Pharmacy Manager Name is required.
-          </div>
+          @if (form.get('managerName')?.invalid && form.get('managerName')?.touched) {
+            <div class="form-error">Pharmacy Manager Name is required.</div>
+          }
         </div>
 
         <div class="form-field">
           <label for="pharmacyManagerEmail">Pharmacy Manager Email Address</label>
           <input id="pharmacyManagerEmail" type="email" formControlName="email"
             placeholder="FirstName.LastName@bcprovider.ca" autocomplete="email" />
-          <div *ngIf="form.get('email')?.invalid && form.get('email')?.touched" class="form-error">
-            <ng-container *ngIf="form.get('email')?.hasError('required')">
-              Email is required.
-            </ng-container>
-            <ng-container *ngIf="form.get('email')?.hasError('email')">
-              Please enter a valid email address.
-            </ng-container>
-          </div>
+          @if (form.get('email')?.invalid && form.get('email')?.touched) {
+            <div class="form-error">
+              @if (form.get('email')?.hasError('required')) {
+                Email is required.
+              }
+              @if (form.get('email')?.hasError('email')) {
+                Please enter a valid email address.
+              }
+            </div>
+          }
         </div>
 
         <div class="form-field">
           <label for="pharmacareCode">PharmaCare Code (BC00000XXX)</label>
           <input id="pharmacareCode" type="text" formControlName="pharmacareCode" />
           <span class="helper-text">Enter the three digits for PharmaCare Code representing your pharmacy</span>
-          <div *ngIf="form.get('pharmacareCode')?.invalid && form.get('pharmacareCode')?.touched" class="form-error">
-            PharmaCare Code is required.
-          </div>
+          @if (form.get('pharmacareCode')?.invalid && form.get('pharmacareCode')?.touched) {
+            <div class="form-error">PharmaCare Code is required.</div>
+          }
         </div>
 
         <div class="acknowledgement-group">
@@ -129,9 +131,9 @@
               is able to provide immunization services in the Province of British Columbia.
             </span>
           </label>
-          <div *ngIf="form.get('ackImmunizationScope')?.invalid && form.get('ackImmunizationScope')?.touched" class="form-error">
-            This acknowledgement is required.
-          </div>
+          @if (form.get('ackImmunizationScope')?.invalid && form.get('ackImmunizationScope')?.touched) {
+            <div class="form-error">This acknowledgement is required.</div>
+          }
         </div>
 
         <div class="acknowledgement-group">
@@ -143,9 +145,9 @@
               to all age cohorts eligible in the Province of British Columbia to receive a vaccination.
             </span>
           </label>
-          <div *ngIf="form.get('ackAccessToVaccines')?.invalid && form.get('ackAccessToVaccines')?.touched" class="form-error">
-            This acknowledgement is required.
-          </div>
+          @if (form.get('ackAccessToVaccines')?.invalid && form.get('ackAccessToVaccines')?.touched) {
+            <div class="form-error">This acknowledgement is required.</div>
+          }
         </div>
 
         <div class="acknowledgement-group">
@@ -157,9 +159,9 @@
               Acknowledgement before gaining access to the system.
             </span>
           </label>
-          <div *ngIf="form.get('ackPrivacy')?.invalid && form.get('ackPrivacy')?.touched" class="form-error">
-            This acknowledgement is required.
-          </div>
+          @if (form.get('ackPrivacy')?.invalid && form.get('ackPrivacy')?.touched) {
+            <div class="form-error">This acknowledgement is required.</div>
+          }
         </div>
 
         <div class="acknowledgement-group">
@@ -171,9 +173,9 @@
               staff via the OneHealthID Manage Pharmacy option under the IMMSBC section.
             </span>
           </label>
-          <div *ngIf="form.get('ackRemovalAccess')?.invalid && form.get('ackRemovalAccess')?.touched" class="form-error">
-            This acknowledgement is required.
-          </div>
+          @if (form.get('ackRemovalAccess')?.invalid && form.get('ackRemovalAccess')?.touched) {
+            <div class="form-error">This acknowledgement is required.</div>
+          }
         </div>
 
       </div>

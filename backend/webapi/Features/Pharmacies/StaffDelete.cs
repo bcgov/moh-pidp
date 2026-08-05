@@ -43,7 +43,6 @@ public class StaffDelete
 
             if (staffRole is not null)
             {
-                // staffRole.EffectiveEndDate = clock.GetCurrentInstant().ToDateTimeUtc();
                 context.PharmacyPartyRoles.Remove(staffRole); // Or soft delete
                 await context.SaveChangesAsync(cancellationToken);
             }

@@ -11,6 +11,7 @@ public class PharmacyUpdate
 {
     public class Command : IRequest
     {
+        [Required]
         public int PharmacyId { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
@@ -19,6 +20,7 @@ public class PharmacyUpdate
         public string Phone { get; set; } = string.Empty;
         public string Fax { get; set; } = string.Empty;
         public string PharmaCareCode { get; set; } = string.Empty;
+        [Required]
         public int RequestingPartyId { get; set; }
     }
 

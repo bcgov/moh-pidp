@@ -1,10 +1,5 @@
 @use 'pidp-variables' as pidp;
 
-.viewport-all {
-  --gap: 1rem;
-  --font-size: 0.75rem;
-}
-
 .mat-mdc-card {
   background-color: #1B3A66;
   color: white;
@@ -18,6 +13,8 @@
 }
 
 .viewport-all {
+  --gap: 1rem;
+  --font-size: 0.75rem;
   padding: 1.25rem 0.75rem;
   font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
 

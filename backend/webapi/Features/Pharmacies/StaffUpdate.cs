@@ -10,11 +10,14 @@ public class StaffUpdate
 {
     public class Command : IRequest
     {
+        [Required]
         public int PharmacyId { get; set; }
+        [Required]
         public int PartyId { get; set; }
         public PharmacyRole Role { get; set; }
         public DateTime? EffectiveStartDate { get; set; }
         public DateTime? EffectiveEndDate { get; set; }
+        [Required]
         public int RequestingPartyId { get; set; }
     }
 

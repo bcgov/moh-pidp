@@ -9,5 +9,5 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./pill.component.scss'],
 })
 export class PillComponent {
-  @Input() label = '';
+  @Input() public label = '';
 }

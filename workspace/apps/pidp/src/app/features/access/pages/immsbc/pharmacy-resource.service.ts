@@ -14,9 +14,9 @@ import {
   providedIn: 'root',
 })
 export class PharmacyResource {
-  private apiEndpoint = '/api/pharmacies';
+  private readonly apiEndpoint = '/api/pharmacies';
 
-  public constructor(private http: HttpClient) {}
+  public constructor(private readonly http: HttpClient) {}
 
   public getPharmacyAdminProfile(): Observable<PharmacyProfile> {
     return this.http.get<PharmacyProfile>('/api/pharmacies/profile');

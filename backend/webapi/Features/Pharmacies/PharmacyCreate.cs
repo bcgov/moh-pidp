@@ -18,13 +18,18 @@ public class PharmacyCreate
         public string Phone { get; set; } = string.Empty;
         public string Fax { get; set; } = string.Empty;
         public string PharmaCareCode { get; set; } = string.Empty;
+        [JsonRequiredAttribute]
         public bool IsCareConnectCompleted { get; set; }
         public DateTime? VerifiedCareConnectCompletedDate { get; set; }
         public string? VerifiedCareConnectCompleted { get; set; } = string.Empty;
         public int PartyId { get; set; }
+        [JsonRequiredAttribute]
         public bool ackImmunizationScope { get; set; }
+        [JsonRequiredAttribute]
         public bool ackAccessToVaccines { get; set; }
+        [JsonRequiredAttribute]
         public bool ackPrivacy { get; set; }
+        [JsonRequiredAttribute]
         public bool ackRemovalAccess { get; set; }
     }
 

@@ -4,7 +4,9 @@
     <div class="row justify-content-center">
       <div class="col-sm-12 col-md-10 col-lg-8">
         <div class="text-center py-5">
-          <mat-progress-bar *ngIf="!isError" mode="indeterminate"></mat-progress-bar>
+          @if (!isError) {
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+          }
           <p class="mt-4 lead" [class.text-danger]="isError">{{ message }}</p>
         </div>
       </div>
