@@ -11,7 +11,7 @@ public class PharmacyUpdate
 {
     public class Command : IRequest
     {
-        public required int PharmacyId { get; set; }
+        public int? PharmacyId { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
         public string ManagerName { get; set; } = string.Empty;
@@ -19,7 +19,7 @@ public class PharmacyUpdate
         public string Phone { get; set; } = string.Empty;
         public string Fax { get; set; } = string.Empty;
         public string PharmaCareCode { get; set; } = string.Empty;
-        public required int RequestingPartyId { get; set; }
+        public int? RequestingPartyId { get; set; }
     }
 
     public class CommandHandler(PidpDbContext context) : IRequestHandler<Command>

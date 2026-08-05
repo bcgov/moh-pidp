@@ -10,12 +10,12 @@ public class StaffUpdate
 {
     public class Command : IRequest
     {
-        public required int PharmacyId { get; set; }
-        public required int PartyId { get; set; }
+        public int PharmacyId { get; set; } = 0;
+        public int PartyId { get; set; } = 0;
         public required PharmacyRole Role { get; set; }
         public DateTime? EffectiveStartDate { get; set; }
         public DateTime? EffectiveEndDate { get; set; }
-        public required int RequestingPartyId { get; set; }
+        public int RequestingPartyId { get; set; } = 0;
     }
 
     public class CommandHandler(PidpDbContext context) : IRequestHandler<Command>
