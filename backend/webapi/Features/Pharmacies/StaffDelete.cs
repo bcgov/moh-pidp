@@ -28,7 +28,7 @@ public class StaffDelete
 
             if (!requestingPartyIsAdmin)
             {
-                throw new AccessViolationException("User is not an admin of this pharmacy.");
+                throw new InvalidOperationException("User is not an admin of this pharmacy.");
             }
 
             if (request.PartyId == request.RequestingPartyId)

@@ -434,18 +434,14 @@
   }
 }
 
-.viewport-xsmall {
+.viewport-small {
   .page-intro h1 {
     font-size: 1.6rem;
   }
 
   .form-panel {
     padding: 16px !important;
-  }
-}
-
-
-.viewport-small {
+  }  
   .main {
     display: flex !important;
     flex-direction: column !important;

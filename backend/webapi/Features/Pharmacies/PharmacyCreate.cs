@@ -5,13 +5,12 @@ using Pidp.Data;
 using Pidp.Models;
 using Pidp.Models.Lookups;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 
 public class PharmacyCreate
 {
     public class Command : IRequest<int>
     {
-        public int Id { get; set; }
+        public required int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
         public string ManagerName { get; set; } = string.Empty;
@@ -19,19 +18,14 @@ public class PharmacyCreate
         public string Phone { get; set; } = string.Empty;
         public string Fax { get; set; } = string.Empty;
         public string PharmaCareCode { get; set; } = string.Empty;
-        [Required]
-        public bool IsCareConnectCompleted { get; set; }
+        public required bool IsCareConnectCompleted { get; set; }
         public DateTime? VerifiedCareConnectCompletedDate { get; set; }
         public string? VerifiedCareConnectCompleted { get; set; } = string.Empty;
         public int PartyId { get; set; }
-        [Required]
-        public bool ackImmunizationScope { get; set; }
-        [Required]
-        public bool ackAccessToVaccines { get; set; }
-        [Required]
-        public bool ackPrivacy { get; set; }
-        [Required]
-        public bool ackRemovalAccess { get; set; }
+        public required bool AckImmunizationScope { get; set; }
+        public required bool AckAccessToVaccines { get; set; }
+        public required bool AckPrivacy { get; set; }
+        public required bool AckRemovalAccess { get; set; }
     }
 
     public class CommandHandler(PidpDbContext context) : IRequestHandler<Command, int>
@@ -49,7 +43,7 @@ public class PharmacyCreate
                 throw new InvalidOperationException("All required fields must be filled.");
             }
 
-            if (!request.ackImmunizationScope || !request.ackAccessToVaccines || !request.ackPrivacy || !request.ackRemovalAccess)
+            if (!request.AckImmunizationScope || !request.AckAccessToVaccines || !request.AckPrivacy || !request.AckRemovalAccess)
             {
                 throw new InvalidOperationException("All acknowledgements must be accepted.");
             }

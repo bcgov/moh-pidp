@@ -3,7 +3,6 @@ namespace Pidp.Features.Pharmacies;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 using Pidp.Data;
 using Pidp.Models;
 using Pidp.Models.Lookups;
@@ -12,8 +11,7 @@ public class PharmacyUpdate
 {
     public class Command : IRequest
     {
-        [Required]
-        public int PharmacyId { get; set; }
+        public required int PharmacyId { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
         public string ManagerName { get; set; } = string.Empty;
@@ -21,8 +19,7 @@ public class PharmacyUpdate
         public string Phone { get; set; } = string.Empty;
         public string Fax { get; set; } = string.Empty;
         public string PharmaCareCode { get; set; } = string.Empty;
-        [Required]
-        public int RequestingPartyId { get; set; }
+        public required int RequestingPartyId { get; set; }
     }
 
     public class CommandHandler(PidpDbContext context) : IRequestHandler<Command>

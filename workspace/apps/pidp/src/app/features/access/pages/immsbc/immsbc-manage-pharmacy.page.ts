@@ -87,7 +87,7 @@ export class ImmsbcManagePharmacyPage implements OnInit {
   }
 
   public onUpdateDetails(): void {
-    console.log("updating details:  " + this.detailsForm.valid + ", " + this.detailsForm.dirty + ", " + this.selectedPharmacy);
+    // console.log("updating details:  " + this.detailsForm.valid + ", " + this.detailsForm.dirty + ", " + this.selectedPharmacy);
     if (this.selectedPharmacy) {
       this.resource
         .updatePharmacy(this.selectedPharmacy.pharmacyId, this.detailsForm.value)

@@ -5,21 +5,17 @@ using Microsoft.EntityFrameworkCore;
 using Pidp.Data;
 using Pidp.Models;
 using Pidp.Models.Lookups;
-using System.ComponentModel.DataAnnotations;
 
 public class StaffUpdate
 {
     public class Command : IRequest
     {
-        [Required]
-        public int PharmacyId { get; set; }
-        [Required]
-        public int PartyId { get; set; }
-        public PharmacyRole Role { get; set; }
+        public required int PharmacyId { get; set; }
+        public required int PartyId { get; set; }
+        public required PharmacyRole Role { get; set; }
         public DateTime? EffectiveStartDate { get; set; }
         public DateTime? EffectiveEndDate { get; set; }
-        [Required]
-        public int RequestingPartyId { get; set; }
+        public required int RequestingPartyId { get; set; }
     }
 
     public class CommandHandler(PidpDbContext context) : IRequestHandler<Command>

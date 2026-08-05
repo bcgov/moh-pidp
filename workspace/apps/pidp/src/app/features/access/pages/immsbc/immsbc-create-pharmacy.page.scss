@@ -4,13 +4,6 @@
   color: red;
 }
 
-.viewport-all {
-  --gap: 1rem;
-  --font-size: 0.75rem;
-  padding: 1.25rem 0.75rem;
-  font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
-}
-
 .viewport-small,
 .viewport-medium,
 .viewport-large {
@@ -19,6 +12,11 @@
 }
 
 .viewport-all {
+  --gap: 1rem;
+  --font-size: 0.75rem;
+  padding: 1.25rem 0.75rem;
+  font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+
   .content {
     display: flex;
     flex-direction: column;
@@ -443,17 +441,6 @@
   .form-panel {
     padding: 16px !important;
   }
-}
-
-
-.viewport-small {
-  .main {
-    display: flex !important;
-    flex-direction: column !important;
-  }
-}
-
-.viewport-xsmall {
   .content-header {
     margin: 0 20px 0 20px;
   }
@@ -470,5 +457,12 @@
     & .card {
       margin-left: 0 !important;
     }
+  }  
+}
+
+.viewport-small {
+  .main {
+    display: flex !important;
+    flex-direction: column !important;
   }
 }
