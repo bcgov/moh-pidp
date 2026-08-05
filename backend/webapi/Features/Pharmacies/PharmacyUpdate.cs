@@ -3,6 +3,7 @@ namespace Pidp.Features.Pharmacies;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using Pidp.Data;
 using Pidp.Models;
 using Pidp.Models.Lookups;

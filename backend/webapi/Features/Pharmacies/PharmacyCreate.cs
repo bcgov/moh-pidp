@@ -5,6 +5,7 @@ using Pidp.Data;
 using Pidp.Models;
 using Pidp.Models.Lookups;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 public class PharmacyCreate
 {
@@ -18,18 +19,18 @@ public class PharmacyCreate
         public string Phone { get; set; } = string.Empty;
         public string Fax { get; set; } = string.Empty;
         public string PharmaCareCode { get; set; } = string.Empty;
-        [JsonRequiredAttribute]
+        [Required]
         public bool IsCareConnectCompleted { get; set; }
         public DateTime? VerifiedCareConnectCompletedDate { get; set; }
         public string? VerifiedCareConnectCompleted { get; set; } = string.Empty;
         public int PartyId { get; set; }
-        [JsonRequiredAttribute]
+        [Required]
         public bool ackImmunizationScope { get; set; }
-        [JsonRequiredAttribute]
+        [Required]
         public bool ackAccessToVaccines { get; set; }
-        [JsonRequiredAttribute]
+        [Required]
         public bool ackPrivacy { get; set; }
-        [JsonRequiredAttribute]
+        [Required]
         public bool ackRemovalAccess { get; set; }
     }
 

@@ -16,7 +16,7 @@ namespace Pidp.Data.Migrations
                 table: "PharmacyEnrolments",
                 type: "uuid",
                 nullable: false,
-                defaultValue: Guid.Default);
+                defaultValue: Guid.Empty);
         }
 
         /// <inheritdoc />

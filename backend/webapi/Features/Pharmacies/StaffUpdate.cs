@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Pidp.Data;
 using Pidp.Models;
 using Pidp.Models.Lookups;
+using System.ComponentModel.DataAnnotations;
 
 public class StaffUpdate
 {
