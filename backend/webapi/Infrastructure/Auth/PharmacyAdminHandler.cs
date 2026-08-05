@@ -1,24 +1,13 @@
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
-using NodaTime;
+namespace Pidp.Infrastructure.Auth;
+
 using Pidp.Data;
 using Pidp.Extensions;
 using Pidp.Models.Lookups;
 
-namespace Pidp.Infrastructure.Auth;
-
-public class PharmacyAdminHandler : AuthorizationHandler<PharmacyAdminRequirement>
+public class PharmacyAdminHandler(IHttpContextAccessor httpContextAccessor, PidpDbContext context) : AuthorizationHandler<PharmacyAdminRequirement>
 {
-    private readonly IHttpContextAccessor httpContextAccessor;
-    private readonly PidpDbContext context;
-    private readonly IClock clock;
-
-    public PharmacyAdminHandler(IHttpContextAccessor httpContextAccessor, PidpDbContext context, IClock clock)
-    {
-        this.httpContextAccessor = httpContextAccessor;
-        this.context = context;
-        this.clock = clock;
-    }
+    private readonly IHttpContextAccessor httpContextAccessor = httpContextAccessor;
+    private readonly PidpDbContext context = context;
 
     protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, PharmacyAdminRequirement requirement)
     {
