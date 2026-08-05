@@ -61,6 +61,36 @@
           padding-left: 1.8rem;
         }
       }
+      .action-buttons-card {
+        display: flex;
+        flex-direction: column;
+        padding-right: calc(var(--gap) * 0.9);
+        position: relative;
+        line-height: 1.5rem;
+        flex: 1;
+        gap: 1rem;
+
+        .action-buttons-title {
+          color: pidp.$bcgov-color-text;
+          font-size: 1.5rem;
+          font-weight: 700;
+          margin-bottom: calc(var(--gap) / 2);
+        }
+
+        .action-buttons-group {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+
+          .action-button-large {
+            padding: 1rem 1.5rem !important;
+            font-size: 1rem !important;
+            height: auto !important;
+            min-height: 50px;
+            text-transform: none !important;
+          }
+        }
+      }
       .imms-button-container {
         display: flex;
         flex-direction: column;

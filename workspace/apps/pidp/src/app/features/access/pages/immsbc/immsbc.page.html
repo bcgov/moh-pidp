@@ -18,12 +18,8 @@
     <section class="main">
       <div class="card main-stepper">
         <div class="stepper-title">Instructions</div>
-        <mat-stepper
-          orientation="vertical"
-          #stepper
-          [selectedIndex]="selectedIndex">
-          <mat-step
-            [state]="bcProviderStatusCode === StatusCode.COMPLETED ? 'done' : 'number'"
+        <mat-stepper orientation="vertical" #stepper [selectedIndex]="selectedIndex">
+          <mat-step [state]="bcProviderStatusCode === StatusCode.COMPLETED ? 'done' : 'number'"
             [completed]="bcProviderStatusCode === StatusCode.COMPLETED">
             <ng-template matStepLabel>
               Create a BCProvider Credential
@@ -34,19 +30,13 @@
                 In the future the BCProvider will be integrated with multiple
                 health authorities, EMRs and other government health services.
               </p>
-              <button
-                mat-flat-button
-                type="button"
-                color="primary"
-                routerLink="/account/bc-provider-application"
-                aria-labelledby="complete-bcprovider"
-                [disabled]="bcProvider$ | async">
+              <button mat-flat-button type="button" color="primary" routerLink="/account/bc-provider-application"
+                aria-labelledby="complete-bcprovider" [disabled]="bcProvider$ | async">
                 Create a BCProvider Credential
               </button>
             </div>
             <div class="smaller-text">
-              <em
-                >Need help? Try this
+              <em>Need help? Try this
                 <a uiAnchor [attr.href]="bcProviderTutorial">video tutorial</a>
               </em>
             </div>
@@ -113,19 +103,25 @@
           </mat-step>
         </mat-stepper>
       </div>
+      <div class="card action-buttons-card">
+        <div class="action-buttons-group">
+          <button mat-flat-button type="button" color="primary" class="action-button-large"
+            routerLink="/access/immsbc/create-pharmacy">
+            Add Pharmacy
+          </button> 
+          <button mat-flat-button type="button" color="primary" class="action-button-large"
+            routerLink="/access/immsbc/manage-pharmacy">
+            Manage Pharmacy
+          </button>
+        </div>
+      </div>
       <div class="imms-button-container">
         <div class="card imms-button">
           <img ngSrc="/assets/images/checkup.png" alt="checkup" priority fill />
           <div class="card-container auth-card">
             <div class="card-footer auth-card-footer">
-              <button
-                mat-flat-button
-                uiPageFooterAction
-                type="submit"
-                color="primary"
-                aria-labelledby="navigate-to-immsbc"
-                [disabled]="immsbc$ | async"
-                (click)="navigateToPath()">
+              <button mat-flat-button uiPageFooterAction type="submit" color="primary"
+                aria-labelledby="navigate-to-immsbc" [disabled]="immsbc$ | async" (click)="navigateToPath()">
                 <fa-icon [icon]="faArrowRight"></fa-icon>
               </button>
             </div>
