@@ -36,7 +36,7 @@ import { BcProviderEditResource } from '../../../accounts/pages/bc-provider-edit
 import { BcProviderEditInitialStateModel } from '../../../accounts/pages/bc-provider-edit/bc-provider-edit.page';
 import { AccessRoutes } from '../../access.routes';
 import { bcProviderTutorialLink } from '../provincial-attachment-system/provincial-attachment-system.constants';
-import { hcimWebPcrUrl } from './hcim-web-pcr-constants';
+import { hcimWebPcrUrl, registriesConnectionsEmail } from './hcim-web-pcr-constants';
 
 @Component({
   selector: 'app-hcim-web-pcr',
@@ -86,6 +86,7 @@ export class HcimWebPcrPage implements OnInit, OnDestroy {
   public StatusCode = StatusCode;
   public AccessRoutes = AccessRoutes;
   public readonly hcimWebPcrUrl = hcimWebPcrUrl;
+  public readonly registriesConnectionsEmail = registriesConnectionsEmail;
   private destroy$ = new Subject<void>();
   public breadcrumbsData: Array<{ title: string; path: string }> = [
     { title: 'Home', path: '' },
@@ -93,7 +94,7 @@ export class HcimWebPcrPage implements OnInit, OnDestroy {
       title: 'Access',
       path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
     },
-    { title: 'HCIM Web (Provincial Client Registry-PCR)', path: '' },
+    { title: 'Provincial Client Registry', path: '' },
   ];
 
   public constructor() {

@@ -222,10 +222,11 @@ public partial class ProfileStatus
             {
                 return profile switch
                 {
-                    _ when (profile.EndorsementPlrStanding.HasGoodStanding
-                        || profile.PartyPlrStanding.HasGoodStanding)
+                    _ when profile.PartyPlrStanding.HasGoodStanding
+                        && profile.HasBCServicesCardCredential
                         && profile.HasBCProviderCredential => StatusCode.Complete,
-                    { HasBCServicesCardCredential: true } => StatusCode.Incomplete,
+                    _ when profile.HasBCServicesCardCredential
+                        && profile.PartyPlrStanding.HasGoodStanding => StatusCode.Incomplete,
                     _ => StatusCode.Locked
                 };
             }
