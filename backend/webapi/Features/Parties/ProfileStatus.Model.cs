@@ -222,8 +222,7 @@ public partial class ProfileStatus
             {
                 return profile switch
                 {
-                    _ when profile.PartyPlrStanding.HasGoodStanding
-                        && profile.HasBCServicesCardCredential
+                    _ when profile.HasEnrolment(AccessTypeCode.HcimWebPcr)
                         && profile.HasBCProviderCredential => StatusCode.Complete,
                     _ when profile.HasBCServicesCardCredential
                         && profile.PartyPlrStanding.HasGoodStanding => StatusCode.Incomplete,
