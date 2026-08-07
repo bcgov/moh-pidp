@@ -1,6 +1,22 @@
 <div class="box container" uiPidpInjectViewportCss>
     <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
     <div class="content">
+        @if (accessRequestFailed) {
+        <section class="alert">
+            <h2>Error Requesting Access</h2>
+            <p>
+                Your request for access to the Provincial Client Registry could not be processed at this time. If this
+                issue persists, contact
+                <a [attr.href]="'mailto:' + registriesConnectionsEmail">{{ registriesConnectionsEmail }}</a>
+                for assistance.
+            </p>
+        </section>
+        }
+
+        @if (enrolmentError) {
+        <app-enrolment-error></app-enrolment-error>
+        }
+
         <section class="intro">
             <div class="content-header">
                 <h1>Provincial Client Registry</h1>
@@ -71,6 +87,28 @@
                         </div>
                     </mat-step>
 
+                    <mat-step [state]="hcimWebPcrStatusCode === StatusCode.COMPLETED ? 'done' : 'number'"
+                        [completed]="hcimWebPcrStatusCode === StatusCode.COMPLETED">
+                        <ng-template matStepLabel>
+                            Get Access to the Provincial Client Registry
+                        </ng-template>
+                        <div>
+                            <p class="guide-information">
+                                Request access to the Provincial Client Registry. Once your access has been granted
+                                you can log in below with your BCProvider credential.
+                            </p>
+                            <button mat-flat-button type="button" color="primary"
+                                aria-labelledby="request-hcim-web-pcr-access" [disabled]="getAccessDisabled"
+                                (click)="onRequestAccess()">
+                                Get Access
+                            </button>
+                        </div>
+                        <div class="stepper-buttons">
+                            <button mat-stroked-button matStepperPrevious>Back</button>
+                            <button mat-stroked-button matStepperNext>Next</button>
+                        </div>
+                    </mat-step>
+
                     <mat-step [completed]="false">
                         <ng-template matStepLabel>
                             Login to the Provincial Client Registry with your BCProvider
@@ -120,7 +158,11 @@
                 </div>
                 @if ((hcimWebPcr$ | async)) {
                 <div class="pcr-button-text">
-                    <i>You will need a BCProvider credential before logging in.</i>
+                    @if (bcProviderStatusCode === StatusCode.COMPLETED) {
+                    <i>You will need to get access before logging in.</i>
+                    } @else {
+                    <i>You will need a BCProvider credential, and to get access, before logging in.</i>
+                    }
                 </div>
                 }
             </div>

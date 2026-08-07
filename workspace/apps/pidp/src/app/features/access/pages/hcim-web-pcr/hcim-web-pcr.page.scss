@@ -477,3 +477,21 @@
   font-size: smaller;
   margin-bottom: 10px;
 }
+
+.content .alert {
+  border: 1px solid pidp.$bcgov-color-semantic-error;
+  border-left-width: 0.25rem;
+  border-radius: var(--card-border-radius);
+  padding: var(--gap);
+
+  h2 {
+    color: pidp.$bcgov-color-semantic-error;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem;
+  }
+
+  p {
+    margin: 0;
+  }
+}
