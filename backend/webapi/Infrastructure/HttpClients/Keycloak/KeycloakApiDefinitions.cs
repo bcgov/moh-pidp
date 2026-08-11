@@ -11,6 +11,7 @@ public class MohKeycloakEnrolment
     public static readonly MohKeycloakEnrolment DriverFitness = new("DMFT-WEBAPP", AccessTypeCode.DriverFitness, "DMFT_ENROLLED");
     public static readonly MohKeycloakEnrolment HcimWebPcr = new("HCIMWEB", AccessTypeCode.HcimWebPcr, "READ_ONLY_ALL_SRC");
     public static readonly MohKeycloakEnrolment ImmsBCEforms = new("SAT-EFORMS", AccessTypeCode.ImmsBCEforms, "phsa_eforms_imms");
+    public static readonly MohKeycloakEnrolment InfantRsvEforms = new("SAT-EFORMS", AccessTypeCode.InfantRsvEforms, "phsa_eforms_infant_rsv");
     public static readonly MohKeycloakEnrolment ProviderReportingPortal = new("PRP-SERVICE", AccessTypeCode.ProviderReportingPortal, "MSPQI", "PMP");
     public static readonly MohKeycloakEnrolment SAEforms = new("SAT-EFORMS", AccessTypeCode.SAEforms, "phsa_eforms_sat");
 
