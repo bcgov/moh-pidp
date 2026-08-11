@@ -250,6 +250,25 @@ public partial class ProfileStatus
             }
         }
 
+        public class InfantRsvEformsSection : ProfileSection
+        {
+            internal override string SectionName => "infantRsvEforms";
+            public override string[] KeyWords => ["doctors", "nursing", "moa"];
+
+            protected override StatusCode Compute(ProfileData profile)
+            {
+                return profile switch
+                {
+                    { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
+                    _ when profile.HasEnrolment(AccessTypeCode.InfantRsvEforms) => StatusCode.Complete,
+                    _ when InfantRsvEforms.IsEligible(profile.PartyPlrStanding) ||
+                        profile.EndorsementPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding ||
+                        profile.EndorsementPlrStanding.With(IdentifierType.Nurse).HasGoodStanding => StatusCode.Incomplete,
+                    _ => StatusCode.Locked
+                };
+            }
+        }
+
         public class ImmsBCSection : ProfileSection
         {
             internal override string SectionName => "immsBC";

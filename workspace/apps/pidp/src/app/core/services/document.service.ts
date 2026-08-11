@@ -12,6 +12,7 @@ export enum DocumentType {
   MS_TEAMS_IT_SECURITY_AGREEMENT = 'ms-teams-it-security-agreement',
   PROVIDER_REPORTING_PORTAL_COLLECTION_NOTICE = 'provider-reporting-portal-collection-notice',
   IMMSBC_EFORMS_COLLECTION_NOTICE = 'immsbc-eforms-collection-notice',
+  INFANT_RSV_EFORMS_COLLECTION_NOTICE = 'infant-rsv-eforms-collection-notice',
   PHARMACY_ADMIN_COLLECTION_NOTICE = 'pharmacy-admin-collection-notice',
 }
 
@@ -72,6 +73,10 @@ export class DocumentService {
         title: 'Immunization Entry eForm Collection Notice',
       },
       {
+        type: DocumentType.INFANT_RSV_EFORMS_COLLECTION_NOTICE,
+        title: 'Infant RSV Immunization Request eForm Collection Notice',
+      },
+      {
         type: DocumentType.PHARMACY_ADMIN_COLLECTION_NOTICE,
         title: 'Pharmacy Administration Collection Notice',
       },
@@ -123,6 +128,11 @@ export class DocumentService {
         return {
           ...this.getDocumentMetaData(documentType),
           content: this.getImmsBCEformsCollectionNotice(),
+        };
+      case DocumentType.INFANT_RSV_EFORMS_COLLECTION_NOTICE:
+        return {
+          ...this.getDocumentMetaData(documentType),
+          content: this.getInfantRsvEformsCollectionNotice(),
         };
       case DocumentType.PHARMACY_ADMIN_COLLECTION_NOTICE:
         return {
@@ -346,6 +356,16 @@ export class DocumentService {
       and will not be used for any other purpose other than the one stated above. If you have any questions
       about the collection of this personal information please contact PHSA's Information Access & Privacy
       Office at 1-855-229-9800 or at <a href="mailto:${this.config.emails.immsBCEformsSupport}">${this.config.emails.immsBCEformsSupport}</a>.
+    `;
+  }
+
+  public getInfantRsvEformsCollectionNotice(): string {
+    return `
+      Personal information is protected under BC privacy laws and is collected under the authority of section
+      26(c) of the Freedom of Information Protection of Privacy Act. All data will be securely stored at PHSA
+      and will not be used for any other purpose other than the one stated above. If you have any questions
+      about the collection of this personal information please contact PHSA's Information Access & Privacy
+      Office at 1-855-229-9800 or at <a href="mailto:${this.config.emails.infantRsvEformsSupport}">${this.config.emails.infantRsvEformsSupport}</a>.
     `;
   }
 

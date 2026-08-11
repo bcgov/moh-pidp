@@ -40,6 +40,7 @@ export class MockProfileStatus {
         complianceTraining: { statusCode: StatusCode.AVAILABLE },
         provincialAttachmentSystem: { statusCode: StatusCode.AVAILABLE },
         immsBCEforms: { statusCode: StatusCode.AVAILABLE },
+        infantRsvEforms: { statusCode: StatusCode.AVAILABLE },
         externalAccounts: { statusCode: StatusCode.AVAILABLE },
         halo: { statusCode: StatusCode.AVAILABLE },
         ivf: { statusCode: StatusCode.AVAILABLE },

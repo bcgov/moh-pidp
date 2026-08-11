@@ -80,6 +80,7 @@ public partial class ProfileStatus
                     ProfileSection.Create<HcimWebPcrSection>(data),
                     ProfileSection.Create<ImmsBCEformsSection>(data),
                     ProfileSection.Create<ImmsBCSection>(data),
+                    ProfileSection.Create<InfantRsvEformsSection>(data),
                     ProfileSection.Create<IvfSection>(data),
                     ProfileSection.Create<MSTeamsClinicMemberSection>(data),
                     ProfileSection.Create<MSTeamsPrivacyOfficerSection>(data),

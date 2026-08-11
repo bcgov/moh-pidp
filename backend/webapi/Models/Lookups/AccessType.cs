@@ -15,7 +15,8 @@ public enum AccessTypeCode
     MSTeamsClinicMember,
     UserAccessAgreement,
     ImmsBCEforms,
-    HcimWebPcr
+    HcimWebPcr,
+    InfantRsvEforms
 }
 
 [Table("AccessTypeLookup")]
@@ -41,6 +42,7 @@ public class AccessTypeDataGenerator : ILookupDataGenerator<AccessType>
         new AccessType { Code = AccessTypeCode.MSTeamsClinicMember,      Name = "MS Teams for Clinical Use - Clinic Member"   },
         new AccessType { Code = AccessTypeCode.UserAccessAgreement,      Name = "OneHealthID Service Use Policy Agreement"    },
         new AccessType { Code = AccessTypeCode.ImmsBCEforms,             Name = "Immunization Entry eForm"                    },
-        new AccessType { Code = AccessTypeCode.HcimWebPcr,               Name = "Provincial Client Registry"                  }
+        new AccessType { Code = AccessTypeCode.HcimWebPcr,               Name = "Provincial Client Registry"                  },
+        new AccessType { Code = AccessTypeCode.InfantRsvEforms,          Name = "Infant RSV Immunization Request eForm"        }
     ];
 }
