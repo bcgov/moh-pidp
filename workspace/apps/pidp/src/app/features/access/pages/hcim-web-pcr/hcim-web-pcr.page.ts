@@ -85,9 +85,11 @@ export class HcimWebPcrPage implements OnInit, OnDestroy {
   private readonly loadingOverlayService = inject(LoadingOverlayService);
   private readonly toastService = inject(ToastService);
 
-  public bcProvider$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public readonly bcProvider$: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(false);
   public destination$: Observable<Destination>;
-  public hcimWebPcr$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+  public readonly hcimWebPcr$: BehaviorSubject<boolean> =
+    new BehaviorSubject<boolean>(true);
   public bcProviderStatusCode: number | undefined;
   public hcimWebPcrStatusCode: number | undefined;
   public accessRequestFailed = false;
@@ -104,7 +106,7 @@ export class HcimWebPcrPage implements OnInit, OnDestroy {
   public AccessRoutes = AccessRoutes;
   public readonly hcimWebPcrUrl = hcimWebPcrUrl;
   public readonly registriesConnectionsEmail = registriesConnectionsEmail;
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
   public breadcrumbsData: Array<{ title: string; path: string }> = [
     { title: 'Home', path: '' },
     {

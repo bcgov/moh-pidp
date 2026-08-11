@@ -16,7 +16,7 @@ public class HcimWebPcr
 {
     public class Command : ICommand<IDomainResult>
     {
-        public int PartyId { get; set; }
+        public required int PartyId { get; set; }
     }
 
     public class CommandValidator : AbstractValidator<Command>
