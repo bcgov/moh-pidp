@@ -13,6 +13,7 @@ import { BcProviderPortalSection } from './access/bc-provider-portal-section.cla
 import { DriverFitnessPortalSection } from './access/driver-fitness-portal-section.class';
 import { HaloPortalSection } from './access/halo-portal-section.class';
 import { HcimAccountTransferPortalSection } from './access/hcim-account-transfer-portal-section.class';
+import { HcimWebPcrPortalSection } from './access/hcim-web-pcr-portal-section.class';
 import { ImmsBCEformsPortalSection } from './access/immsbc-eforms-portal-section.class';
 import { ImmsbcPortalSection } from './access/immscbc-portal-section.class';
 import { IvfPortalSection } from './access/ivf-portal-section.class';
@@ -95,6 +96,11 @@ export class AccessStateBuilder {
         () => [
           new HcimAccountTransferPortalSection(profileStatus, this.router),
         ],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('hcimWebPcr', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        () => [new HcimWebPcrPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
         this.insertSection('driverFitness', profileStatus),
@@ -237,6 +243,11 @@ export class PortalStateBuilder {
         () => [
           new HcimAccountTransferPortalSection(profileStatus, this.router),
         ],
+      ),
+      ...ArrayUtils.insertResultIf<IPortalSection>(
+        this.insertSection('hcimWebPcr', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        () => [new HcimWebPcrPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('driverFitness', profileStatus),

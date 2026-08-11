@@ -213,6 +213,24 @@ public partial class ProfileStatus
             }
         }
 
+        public class HcimWebPcrSection : ProfileSection
+        {
+            internal override string SectionName => "hcimWebPcr";
+            public override string[] KeyWords => [];
+
+            protected override StatusCode Compute(ProfileData profile)
+            {
+                return profile switch
+                {
+                    _ when profile.HasEnrolment(AccessTypeCode.HcimWebPcr)
+                        && profile.HasBCProviderCredential => StatusCode.Complete,
+                    _ when profile.HasBCServicesCardCredential
+                        && profile.PartyPlrStanding.HasGoodStanding => StatusCode.Incomplete,
+                    _ => StatusCode.Locked
+                };
+            }
+        }
+
         public class ImmsBCEformsSection : ProfileSection
         {
             internal override string SectionName => "immsBCEforms";
