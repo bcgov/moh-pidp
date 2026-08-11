@@ -91,6 +91,15 @@ public class AccessRequestsController(IPidpAuthorizationService authorizationSer
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
+    [HttpPost("infant-rsv-eforms")]
+    [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateInfantRsvEformsEnrolment([FromServices] ICommandHandler<InfantRsvEforms.Command, IDomainResult> handler,
+                                                                    [FromRoute] InfantRsvEforms.Command command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
+            .ToActionResult();
+
     [HttpPost("ms-teams-clinic-member")]
     [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
