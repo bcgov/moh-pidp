@@ -11,6 +11,7 @@ export const accessSectionKeys = [
   'saEforms',
   'accountLinking',
   'hcimAccountTransfer',
+  'hcimWebPcr',
   'immsBCEforms',
   'driverFitness',
   'msTeamsPrivacyOfficer',
@@ -43,6 +44,7 @@ export interface AccessGroup extends IAccessGroup {
   accountLinking: Section;
   bcProvider: Section;
   hcimAccountTransfer: Section;
+  hcimWebPcr: Section;
   immsBCEforms: Section;
   driverFitness: Section;
   msTeamsPrivacyOfficer: Section;

@@ -34,6 +34,15 @@ public class AccessRequestsController(IPidpAuthorizationService authorizationSer
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 
+    [HttpPost("hcim-web-pcr")]
+    [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateHcimWebPcrEnrolment([FromServices] ICommandHandler<HcimWebPcr.Command, IDomainResult> handler,
+                                                               [FromRoute] HcimWebPcr.Command command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
+            .ToActionResult();
+
     [HttpPost("hcim-account-transfer")]
     [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
