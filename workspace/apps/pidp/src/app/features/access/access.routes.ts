@@ -8,11 +8,9 @@ export class AccessRoutes {
   public static readonly IMMSBC_EFORMS = 'immsbc-eforms';
   public static readonly MS_TEAMS_PRIVACY_OFFICER = 'ms-teams-privacy-officer';
   public static readonly MS_TEAMS_CLINIC_MEMBER = 'ms-teams-clinic-member';
-  public static readonly PROVIDER_REPORTING_PORTAL =
-    'provider-reporting-portal';
+  public static readonly PROVIDER_REPORTING_PORTAL = 'provider-reporting-portal';
   public static readonly SPECIAL_AUTH_EFORMS = 'sa-eforms';
-  public static readonly PROVINCIAL_ATTACHMENT_SYSTEM =
-    'provincial-attachment-system';
+  public static readonly PROVINCIAL_ATTACHMENT_SYSTEM = 'provincial-attachment-system';
   public static readonly HALO = 'halo';
   public static readonly IVF = 'ivf';
   public static readonly IMMSBC = 'immsbc';
