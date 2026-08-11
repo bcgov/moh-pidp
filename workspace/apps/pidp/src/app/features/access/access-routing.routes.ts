@@ -65,6 +65,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: AccessRoutes.INFANT_RSV_EFORMS,
+    loadChildren: (): Promise<Routes> =>
+      import('./pages/infant-rsv-eforms/infant-rsv-eforms-routing.routes').then(
+        (m) => m.routes,
+      ),
+  },
+  {
     path: AccessRoutes.PROVINCIAL_ATTACHMENT_SYSTEM,
     loadChildren: (): Promise<Routes> =>
       import(

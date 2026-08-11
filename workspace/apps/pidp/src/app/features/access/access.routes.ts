@@ -6,6 +6,7 @@ export class AccessRoutes {
   public static readonly HCIM_ACCOUNT_TRANSFER = 'hcim-account-transfer';
   public static readonly HCIM_WEB_PCR = 'hcim-web-pcr';
   public static readonly IMMSBC_EFORMS = 'immsbc-eforms';
+  public static readonly INFANT_RSV_EFORMS = 'infant-rsv-eforms';
   public static readonly MS_TEAMS_PRIVACY_OFFICER = 'ms-teams-privacy-officer';
   public static readonly MS_TEAMS_CLINIC_MEMBER = 'ms-teams-clinic-member';
   public static readonly PROVIDER_REPORTING_PORTAL = 'provider-reporting-portal';
