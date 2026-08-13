@@ -15,7 +15,7 @@ using Pidp.Models.Lookups;
 
 public class InfantRsvEforms
 {
-    public static IdentifierType[] AllowedIdentifierTypes => [IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse];
+    public static IdentifierType[] AllowedIdentifierTypes => [IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife];
 
     public static bool IsEligible(PlrStandingsDigest partyPlrStanding)
     {
@@ -55,15 +55,18 @@ public class InfantRsvEforms
                 {
                     AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.InfantRsvEforms),
                     UserIds = party.Credentials
-                        .Where(credential => credential.IdentityProvider == IdentityProviders.BCServicesCard || credential.IdentityProvider == IdentityProviders.BCProvider)
+                        .Where(credential => credential.IdentityProvider == IdentityProviders.BCServicesCard)
                         .Select(credential => credential.UserId),
                     party.Email,
                     party.Cpn,
                 })
                 .SingleAsync();
 
+            // UserIds holds only BC Services Card credentials, so an empty set means the
+            // Party has none; the role has nowhere to land and the request must be denied.
             if (dto.AlreadyEnroled
-                || dto.Email == null)
+                || dto.Email == null
+                || !dto.UserIds.Any())
             {
                 this.logger.LogAccessRequestDenied(command.PartyId);
                 return DomainResult.Failed();

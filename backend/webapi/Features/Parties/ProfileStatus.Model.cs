@@ -259,8 +259,10 @@ public partial class ProfileStatus
             {
                 return profile switch
                 {
-                    { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
                     _ when profile.HasEnrolment(AccessTypeCode.InfantRsvEforms) => StatusCode.Complete,
+                    // The Keycloak role is only ever granted to a BC Services Card credential,
+                    // so a Party without one can never complete this enrolment.
+                    { HasBCServicesCardCredential: false } or { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
                     _ when InfantRsvEforms.IsEligible(profile.PartyPlrStanding) ||
                         profile.EndorsementPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding ||
                         profile.EndorsementPlrStanding.With(IdentifierType.Nurse).HasGoodStanding => StatusCode.Incomplete,
