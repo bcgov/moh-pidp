@@ -34,7 +34,6 @@ export interface EditStaffDialogData {
             <mat-option [value]="PharmacyRole.Clinician">Clinician</mat-option>
             <mat-option [value]="PharmacyRole.Clerk">Clerk</mat-option>
             <mat-option [value]="PharmacyRole.Admin">Administrator</mat-option>
-            <mat-option [value]="PharmacyRole.Unknown">None</mat-option>
           </mat-select>
         </mat-form-field>
 

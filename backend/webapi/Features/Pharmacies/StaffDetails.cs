@@ -19,7 +19,7 @@ public class StaffDetails
         public int PartyId { get; set; }
         public string FullName { get; set; } = string.Empty;
         public PharmacyRole Role { get; set; }
-        public DateTime EffectiveStartDate { get; set; }
+        public DateTime? EffectiveStartDate { get; set; }
         public DateTime? EffectiveEndDate { get; set; }
     }
 
@@ -27,17 +27,28 @@ public class StaffDetails
     {
         public async Task<Model> Handle(Query request, CancellationToken cancellationToken)
         {
-            return await context.PharmacyPartyRoles
+
+            var role = await context.PharmacyPartyRoles
                 .Where(role => role.PharmacyId == request.PharmacyId && role.PartyId == request.PartyId)
                 .Select(role => new Model
                 {
                     PartyId = role.PartyId,
-                    FullName = role.Party.FullName, // Assuming Party has FullName
+                    FullName = role.Party.FullName,
                     Role = role.Role,
                     EffectiveStartDate = role.EffectiveStartDate ?? DateTime.MinValue,
-                    EffectiveEndDate = role.EffectiveEndDate ?? DateTime.MinValue,
+                    EffectiveEndDate = role.EffectiveEndDate ?? DateTime.MinValue
                 })
                 .SingleOrDefaultAsync(cancellationToken);
+
+            var m = new Model
+            {
+                PartyId = role.PartyId,
+                FullName = role.FullName,
+                Role = role.Role,
+                EffectiveStartDate = role.EffectiveStartDate.HasValue ? DateTime.SpecifyKind(role.EffectiveStartDate.Value, DateTimeKind.Unspecified) : DateTime.MinValue,
+                EffectiveEndDate = role.EffectiveEndDate.HasValue ? DateTime.SpecifyKind(role.EffectiveEndDate.Value, DateTimeKind.Unspecified) : DateTime.MinValue
+            };
+            return m;
         }
     }
 }

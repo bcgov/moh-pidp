@@ -35,7 +35,7 @@ public class PharmacyUpdate
 
             if (!partyIsAdmin)
             {
-                throw new AccessViolationException("User is not an admin of this pharmacy.");
+                throw new InvalidOperationException("User is not an admin of this pharmacy.");
             }
 
             var pharmacy = await context.Pharmacies.FindAsync(new object[] { request.PharmacyId }, cancellationToken);

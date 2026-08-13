@@ -28,5 +28,5 @@ workspace/.nx/workspace-data/d/server-process.json
 workspace/.nx/workspace-data/file-map.json
 /workspace/.nx
 
-# Helm chart dependencies
-/charts/nginx/charts/
+# Helm chart
+/charts/*/charts/*.tgz
