@@ -68,6 +68,8 @@ public class ImmsBCEforms
                 || dto.Email == null)
             {
                 this.logger.LogAccessRequestDenied(command.PartyId);
+                this.context.BusinessEvents.Add(AccessRequestFailed.Create(command.PartyId, AccessTypeCode.ImmsBCEforms.ToString(), this.clock.GetCurrentInstant()));
+                await this.context.SaveChangesAsync();
                 return DomainResult.Failed();
             }
 
@@ -84,6 +86,8 @@ public class ImmsBCEforms
                     !endorsementPlrStanding.With(IdentifierType.Nurse).HasGoodStanding)
                 {
                     this.logger.LogAccessRequestDenied(command.PartyId);
+                    this.context.BusinessEvents.Add(AccessRequestFailed.Create(command.PartyId, AccessTypeCode.ImmsBCEforms.ToString(), this.clock.GetCurrentInstant()));
+                    await this.context.SaveChangesAsync();
                     return DomainResult.Failed();
                 }
             }
@@ -92,6 +96,8 @@ public class ImmsBCEforms
                 if (!IsEligible(await this.plrClient.GetStandingsDigestAsync(dto.Cpn)))
                 {
                     this.logger.LogAccessRequestDenied(command.PartyId);
+                    this.context.BusinessEvents.Add(AccessRequestFailed.Create(command.PartyId, AccessTypeCode.ImmsBCEforms.ToString(), this.clock.GetCurrentInstant()));
+                    await this.context.SaveChangesAsync();
                     return DomainResult.Failed();
                 }
             }
@@ -107,6 +113,8 @@ public class ImmsBCEforms
                 AccessTypeCode = AccessTypeCode.ImmsBCEforms,
                 RequestedOn = this.clock.GetCurrentInstant()
             });
+
+            this.context.BusinessEvents.Add(AccessRequestSubmitted.Create(command.PartyId, AccessTypeCode.ImmsBCEforms.ToString(), this.clock.GetCurrentInstant()));
 
             await this.context.SaveChangesAsync();
 

@@ -5,6 +5,7 @@ using Pidp.Data;
 using Pidp.Models;
 using Pidp.Models.Lookups;
 using Microsoft.EntityFrameworkCore;
+using NodaTime;
 
 public class PharmacyCreate
 {
@@ -27,8 +28,9 @@ public class PharmacyCreate
         public required bool AckRemovalAccess { get; set; }
     }
 
-    public class CommandHandler(PidpDbContext context) : IRequestHandler<Command, int>
+    public class CommandHandler(IClock clock, PidpDbContext context) : IRequestHandler<Command, int>
     {
+        private readonly IClock clock = clock;
         private readonly PidpDbContext context = context;
         public async Task<int> Handle(Command request, CancellationToken cancellationToken)
         {
@@ -68,6 +70,7 @@ public class PharmacyCreate
                 Role = PharmacyRole.Admin
             };
             this.context.PharmacyPartyRoles.Add(partyPharmacyRole);
+            this.context.BusinessEvents.Add(PharmacyAdded.Create(request.PartyId, request.Name, this.clock.GetCurrentInstant()));
 
             await this.context.SaveChangesAsync(cancellationToken);
 

@@ -137,3 +137,157 @@ public class CollegeLicenceSearchError : PartyBusinessEvent
         };
     }
 }
+
+public class DemographicsUpdated : PartyBusinessEvent
+{
+    public static DemographicsUpdated Create(int partyId, Instant recordedOn)
+    {
+        return new DemographicsUpdated
+        {
+            PartyId = partyId,
+            Description = "Party's demographics were updated.",
+            Severity = LogLevel.Information,
+            RecordedOn = recordedOn
+        };
+    }
+}
+
+public class AccessRequestSubmitted : PartyBusinessEvent
+{
+    public static AccessRequestSubmitted Create(int partyId, string accessType, Instant recordedOn)
+    {
+        return new AccessRequestSubmitted
+        {
+            PartyId = partyId,
+            Description = $"Party submitted an access request for {accessType}.",
+            Severity = LogLevel.Information,
+            RecordedOn = recordedOn
+        };
+    }
+}
+
+public class AccessRequestFailed : PartyBusinessEvent
+{
+    public static AccessRequestFailed Create(int partyId, string accessType, Instant recordedOn)
+    {
+        return new AccessRequestFailed
+        {
+            PartyId = partyId,
+            Description = $"Party's access request for {accessType} failed due to unmet prerequisites.",
+            Severity = LogLevel.Warning,
+            RecordedOn = recordedOn
+        };
+    }
+}
+
+public class EndorsementRequestCreated : PartyBusinessEvent
+{
+    public static EndorsementRequestCreated Create(int partyId, string recipientEmail, Instant recordedOn)
+    {
+        return new EndorsementRequestCreated
+        {
+            PartyId = partyId,
+            Description = $"Party sent an endorsement request to {recipientEmail}.",
+            Severity = LogLevel.Information,
+            RecordedOn = recordedOn
+        };
+    }
+}
+
+public class EndorsementApproved : PartyBusinessEvent
+{
+    public static EndorsementApproved Create(int partyId, int endorsementRequestId, Instant recordedOn)
+    {
+        return new EndorsementApproved
+        {
+            PartyId = partyId,
+            Description = $"Party approved endorsement request ID {endorsementRequestId}.",
+            Severity = LogLevel.Information,
+            RecordedOn = recordedOn
+        };
+    }
+}
+
+public class EndorsementDenied : PartyBusinessEvent
+{
+    public static EndorsementDenied Create(int partyId, int endorsementRequestId, Instant recordedOn)
+    {
+        return new EndorsementDenied
+        {
+            PartyId = partyId,
+            Description = $"Party declined endorsement request ID {endorsementRequestId}.",
+            Severity = LogLevel.Information,
+            RecordedOn = recordedOn
+        };
+    }
+}
+
+public class EndorsementCancelled : PartyBusinessEvent
+{
+    public static EndorsementCancelled Create(int partyId, int endorsementId, Instant recordedOn)
+    {
+        return new EndorsementCancelled
+        {
+            PartyId = partyId,
+            Description = $"Party cancelled active endorsement ID {endorsementId}.",
+            Severity = LogLevel.Information,
+            RecordedOn = recordedOn
+        };
+    }
+}
+
+public class PharmacyAdded : PartyBusinessEvent
+{
+    public static PharmacyAdded Create(int partyId, string pharmacyName, Instant recordedOn)
+    {
+        return new PharmacyAdded
+        {
+            PartyId = partyId,
+            Description = $"Party added a new pharmacy: {pharmacyName}.",
+            Severity = LogLevel.Information,
+            RecordedOn = recordedOn
+        };
+    }
+}
+
+public class PharmacyUpdated : PartyBusinessEvent
+{
+    public static PharmacyUpdated Create(int partyId, string pharmacyName, Instant recordedOn)
+    {
+        return new PharmacyUpdated
+        {
+            PartyId = partyId,
+            Description = $"Party updated details for pharmacy: {pharmacyName}.",
+            Severity = LogLevel.Information,
+            RecordedOn = recordedOn
+        };
+    }
+}
+
+public class PharmacyStaffChanged : PartyBusinessEvent
+{
+    public static PharmacyStaffChanged Create(int partyId, string pharmacyName, Instant recordedOn)
+    {
+        return new PharmacyStaffChanged
+        {
+            PartyId = partyId,
+            Description = $"Party modified the staffing at pharmacy: {pharmacyName}.",
+            Severity = LogLevel.Information,
+            RecordedOn = recordedOn
+        };
+    }
+}
+
+public class PlrStatusUpdated : PartyBusinessEvent
+{
+    public static PlrStatusUpdated Create(int partyId, string providerRoleType, Instant recordedOn)
+    {
+        return new PlrStatusUpdated
+        {
+            PartyId = partyId,
+            Description = $"Party's PLR standing was updated for Role Type: {providerRoleType}.",
+            Severity = LogLevel.Information,
+            RecordedOn = recordedOn
+        };
+    }
+}

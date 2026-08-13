@@ -24,7 +24,6 @@ import { EditStaffDialogComponent } from './edit-staff-dialog.component';
     MatProgressBarModule,
     MatTableModule,
     PillComponent,
-    EditStaffDialogComponent,
   ],
   templateUrl: './pharmacy-staff-management.component.html',
 })

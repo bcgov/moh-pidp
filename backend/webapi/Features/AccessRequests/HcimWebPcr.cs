@@ -59,6 +59,8 @@ public class HcimWebPcr
                 || !(await this.plrClient.GetStandingsDigestAsync(dto.Cpn)).HasGoodStanding)
             {
                 this.logger.LogAccessRequestDenied();
+                this.context.BusinessEvents.Add(AccessRequestFailed.Create(command.PartyId, AccessTypeCode.HcimWebPcr.ToString(), this.clock.GetCurrentInstant()));
+                await this.context.SaveChangesAsync();
                 return DomainResult.Failed();
             }
 
@@ -74,6 +76,8 @@ public class HcimWebPcr
                 AccessTypeCode = AccessTypeCode.HcimWebPcr,
                 RequestedOn = this.clock.GetCurrentInstant()
             });
+
+            this.context.BusinessEvents.Add(AccessRequestSubmitted.Create(command.PartyId, AccessTypeCode.HcimWebPcr.ToString(), this.clock.GetCurrentInstant()));
 
             await this.context.SaveChangesAsync();
 

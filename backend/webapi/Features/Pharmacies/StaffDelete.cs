@@ -43,6 +43,13 @@ public class StaffDelete
 
             if (staffRole is not null)
             {
+                var pharmacyName = await context.Pharmacies
+                    .Where(p => p.Id == request.PharmacyId)
+                    .Select(p => p.Name)
+                    .SingleOrDefaultAsync(cancellationToken) ?? string.Empty;
+
+                context.BusinessEvents.Add(PharmacyStaffChanged.Create(request.RequestingPartyId, pharmacyName, clock.GetCurrentInstant()));
+
                 context.PharmacyPartyRoles.Remove(staffRole); // Or soft delete
                 await context.SaveChangesAsync(cancellationToken);
             }

@@ -37,7 +37,6 @@ import { Pharmacy, PharmacyRole, PharmacyProfile } from './pharmacy-staff.model'
     InjectViewportCssClassDirective,
     BreadcrumbComponent,
     PharmacyStaffManagementComponent,
-    PillComponent,
   ],
   templateUrl: './immsbc-manage-pharmacy.page.html',
   styleUrl: './immsbc-manage-pharmacy.page.scss',

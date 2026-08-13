@@ -66,6 +66,8 @@ public class InfantRsvEforms
                 || dto.Email == null)
             {
                 this.logger.LogAccessRequestDenied(command.PartyId);
+                this.context.BusinessEvents.Add(AccessRequestFailed.Create(command.PartyId, AccessTypeCode.InfantRsvEforms.ToString(), this.clock.GetCurrentInstant()));
+                await this.context.SaveChangesAsync();
                 return DomainResult.Failed();
             }
 
@@ -82,6 +84,8 @@ public class InfantRsvEforms
                     !endorsementPlrStanding.With(IdentifierType.Nurse).HasGoodStanding)
                 {
                     this.logger.LogAccessRequestDenied(command.PartyId);
+                    this.context.BusinessEvents.Add(AccessRequestFailed.Create(command.PartyId, AccessTypeCode.InfantRsvEforms.ToString(), this.clock.GetCurrentInstant()));
+                    await this.context.SaveChangesAsync();
                     return DomainResult.Failed();
                 }
             }
@@ -90,6 +94,8 @@ public class InfantRsvEforms
                 if (!IsEligible(await this.plrClient.GetStandingsDigestAsync(dto.Cpn)))
                 {
                     this.logger.LogAccessRequestDenied(command.PartyId);
+                    this.context.BusinessEvents.Add(AccessRequestFailed.Create(command.PartyId, AccessTypeCode.InfantRsvEforms.ToString(), this.clock.GetCurrentInstant()));
+                    await this.context.SaveChangesAsync();
                     return DomainResult.Failed();
                 }
             }
@@ -108,6 +114,8 @@ public class InfantRsvEforms
                 AccessTypeCode = AccessTypeCode.InfantRsvEforms,
                 RequestedOn = this.clock.GetCurrentInstant()
             });
+
+            this.context.BusinessEvents.Add(AccessRequestSubmitted.Create(command.PartyId, AccessTypeCode.InfantRsvEforms.ToString(), this.clock.GetCurrentInstant()));
 
             await this.context.SaveChangesAsync();
 

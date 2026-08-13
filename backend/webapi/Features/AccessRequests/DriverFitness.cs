@@ -58,6 +58,8 @@ public class DriverFitness
                 || !dto.LicenceDeclarationCompleted)
             {
                 this.logger.LogAccessRequestDenied();
+                this.context.BusinessEvents.Add(AccessRequestFailed.Create(command.PartyId, AccessTypeCode.DriverFitness.ToString(), this.clock.GetCurrentInstant()));
+                await this.context.SaveChangesAsync();
                 return DomainResult.Failed();
             }
 
@@ -72,6 +74,8 @@ public class DriverFitness
                 if (!endorsementPlrStanding.HasGoodStanding)
                 {
                     this.logger.LogAccessRequestDenied();
+                    this.context.BusinessEvents.Add(AccessRequestFailed.Create(command.PartyId, AccessTypeCode.DriverFitness.ToString(), this.clock.GetCurrentInstant()));
+                    await this.context.SaveChangesAsync();
                     return DomainResult.Failed();
                 }
             }
@@ -83,6 +87,8 @@ public class DriverFitness
                     .HasGoodStanding)
                 {
                     this.logger.LogAccessRequestDenied();
+                    this.context.BusinessEvents.Add(AccessRequestFailed.Create(command.PartyId, AccessTypeCode.DriverFitness.ToString(), this.clock.GetCurrentInstant()));
+                    await this.context.SaveChangesAsync();
                     return DomainResult.Failed();
                 }
             }
@@ -98,6 +104,8 @@ public class DriverFitness
                 AccessTypeCode = AccessTypeCode.DriverFitness,
                 RequestedOn = this.clock.GetCurrentInstant()
             });
+
+            this.context.BusinessEvents.Add(AccessRequestSubmitted.Create(command.PartyId, AccessTypeCode.DriverFitness.ToString(), this.clock.GetCurrentInstant()));
 
             await this.context.SaveChangesAsync();
 

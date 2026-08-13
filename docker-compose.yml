@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   ###############################################################################
   ###                     PostgreSQL Database Definition                      ###
@@ -56,6 +54,7 @@ services:
       - pidp-net
     depends_on:
       - pidp-db
+      - pidp-rabbitmq
     entrypoint: /bin/bash
     command: [
       "-c",

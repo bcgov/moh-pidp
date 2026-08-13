@@ -1,7 +1,6 @@
 namespace Pidp.Features.Admin;
 
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 
 using Pidp.Data;
@@ -19,15 +18,14 @@ public class PartyIndex
         public bool SAEformsAccessRequest { get; set; }
     }
 
-    public class QueryHandler(IMapper mapper, PidpDbContext context) : IQueryHandler<Query, List<Model>>
+    public class QueryHandler(PidpDbContext context) : IQueryHandler<Query, List<Model>>
     {
-        private readonly IMapper mapper = mapper;
         private readonly PidpDbContext context = context;
 
         public async Task<List<Model>> HandleAsync(Query query)
         {
             return await this.context.Parties
-                .ProjectTo<Model>(this.mapper.ConfigurationProvider)
+                .ProjectToType<Model>()
                 .ToListAsync();
         }
     }

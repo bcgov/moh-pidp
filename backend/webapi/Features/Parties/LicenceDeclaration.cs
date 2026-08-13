@@ -1,7 +1,6 @@
 namespace Pidp.Features.Parties;
 
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
+using Mapster;
 using DomainResults.Common;
 using FluentValidation;
 using HybridModelBinding;
@@ -52,16 +51,15 @@ public class LicenceDeclaration
         }
     }
 
-    public class QueryHandler(IMapper mapper, PidpDbContext context) : IQueryHandler<Query, Command>
+    public class QueryHandler(PidpDbContext context) : IQueryHandler<Query, Command>
     {
-        private readonly IMapper mapper = mapper;
         private readonly PidpDbContext context = context;
 
         public async Task<Command> HandleAsync(Query query)
         {
             var cert = await this.context.PartyLicenceDeclarations
                 .Where(licence => licence.PartyId == query.PartyId)
-                .ProjectTo<Command>(this.mapper.ConfigurationProvider)
+                .ProjectToType<Command>()
                 .SingleOrDefaultAsync();
 
             return cert ?? new Command { PartyId = query.PartyId };

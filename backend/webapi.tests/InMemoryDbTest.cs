@@ -1,6 +1,5 @@
 namespace PidpTests;
 
-using AutoMapper;
 using FakeItEasy;
 using FakeItEasy.Sdk;
 using MediatR;
@@ -38,8 +37,6 @@ public class InMemoryDbTest : IDisposable
         GC.SuppressFinalize(this);
     }
 
-    public static IMapper DefaultMapper() => new MapperConfiguration(cfg => cfg.AddMaps(Assembly.GetAssembly(typeof(PidpDbContext)))).CreateMapper();
-
     /// <summary>
     /// Creates an instance of the given Type, injecting the TestDb, Automapper Configuration, and empty mocks for all dependencies (as applicable).
     /// Any supplied implementations or mocks of Interfaces will be used instead of empty mocks.
@@ -58,10 +55,6 @@ public class InMemoryDbTest : IDisposable
             if (parameterType == typeof(PidpDbContext))
             {
                 defaultParameter = this.TestDb;
-            }
-            else if (parameterType == typeof(IMapper))
-            {
-                defaultParameter = DefaultMapper();
             }
             else
             {

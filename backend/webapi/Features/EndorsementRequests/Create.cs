@@ -94,6 +94,7 @@ public class Create
             }
 
             this.context.EndorsementRequests.Add(request);
+            this.context.BusinessEvents.Add(EndorsementRequestCreated.Create(command.PartyId, command.RecipientEmail, this.clock.GetCurrentInstant()));
             await this.context.SaveChangesAsync();
 
             var requestingPartyName = await this.context.Parties

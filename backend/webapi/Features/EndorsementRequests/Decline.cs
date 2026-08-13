@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 using Pidp.Data;
+using Pidp.Models;
 
 public class Decline
 {
@@ -45,6 +46,7 @@ public class Decline
                 return result;
             }
 
+            this.context.BusinessEvents.Add(EndorsementDenied.Create(command.PartyId, command.EndorsementRequestId, this.clock.GetCurrentInstant()));
             await this.context.SaveChangesAsync();
 
             return DomainResult.Success();

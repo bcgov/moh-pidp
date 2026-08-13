@@ -1,7 +1,6 @@
 namespace Pidp.Features.Pharmacies;
 
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
+using Mapster;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Pidp.Data;
@@ -27,7 +26,7 @@ public class PharmacyDetails
         public string PharmaCareCode { get; set; } = string.Empty;
     }
 
-    public class QueryHandler(PidpDbContext context, IMapper mapper) : IRequestHandler<Query, Model?>
+    public class QueryHandler(PidpDbContext context) : IRequestHandler<Query, Model?>
     {
         public async Task<Model?> Handle(Query request, CancellationToken cancellationToken)
         {
@@ -41,13 +40,9 @@ public class PharmacyDetails
 
             return await context.Pharmacies
                 .Where(p => p.Id == request.PharmacyId)
-                .ProjectTo<Model>(mapper.ConfigurationProvider)
+                .ProjectToType<Model>()
                 .SingleOrDefaultAsync(cancellationToken);
         }
     }
 
-    public class ModelProjection : AutoMapper.Profile
-    {
-        public ModelProjection() => this.CreateMap<Pharmacy, Model>();
-    }
 }

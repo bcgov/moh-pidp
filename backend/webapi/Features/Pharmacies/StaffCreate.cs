@@ -60,6 +60,13 @@ public class StaffCreate
 
             this.context.PharmacyPartyRoles.Add(newRole);
 
+            var pharmacyName = await this.context.Pharmacies
+                .Where(p => p.Id == enrolment.PharmacyId)
+                .Select(p => p.Name)
+                .SingleOrDefaultAsync(cancellationToken) ?? string.Empty;
+
+            this.context.BusinessEvents.Add(PharmacyStaffChanged.Create(request.PartyId, pharmacyName, this.clock.GetCurrentInstant()));
+
             await this.context.SaveChangesAsync(cancellationToken);
         }
     }

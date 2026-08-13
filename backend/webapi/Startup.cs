@@ -6,7 +6,7 @@ using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using NodaTime;
 using NodaTime.Serialization.SystemTextJson;
 using Serilog;
@@ -33,8 +33,9 @@ public class Startup(IConfiguration configuration)
     {
         var config = this.InitializeConfiguration(services);
 
+        MapsterSetup.Configure();
+        
         services
-            .AddAutoMapper(typeof(Startup))
             .AddHostedService<PlrStatusUpdateSchedulingService>()
             .AddHttpClients(config)
             .AddHttpContextAccessor()
@@ -73,7 +74,7 @@ public class Startup(IConfiguration configuration)
             .AddApplicationStatus(tags: [HealthCheckTag.Liveness.Value])
             .AddCheck<BackgroundWorkerHealthCheck>("PlrStatusUpdateSchedulingService", tags: [HealthCheckTag.BackgroundServices.Value])
             .AddDbContextCheck<PidpDbContext>(tags: [HealthCheckTag.Readiness.Value])
-            .AddRabbitMQ(new Uri(config.RabbitMQ.HostAddress), tags: [HealthCheckTag.Readiness.Value]);
+            .AddRabbitMQ(sp => new RabbitMQ.Client.ConnectionFactory { Uri = new Uri(config.RabbitMQ.HostAddress) }.CreateConnectionAsync(), "rabbitmq", null, [HealthCheckTag.Readiness.Value], null);
 
         services.AddSwaggerGen(options =>
         {

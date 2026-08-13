@@ -2,8 +2,8 @@ namespace Pidp.Features.Credentials;
 
 using DomainResults.Common;
 using FluentValidation;
-using MassTransit;
 using MediatR;
+using Pidp.Infrastructure.Queue;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Graph.Models;
 using NodaTime;
@@ -18,7 +18,7 @@ using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using Pidp.Models.DomainEvents;
 using Pidp.Models.Lookups;
-using static Pidp.Features.CommonHandlers.UpdateKeycloakAttributesConsumer;
+using static Pidp.Features.CommonHandlers.UpdateKeycloakAttributesHandler;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 
 public class Create
@@ -191,9 +191,9 @@ public class Create
         }
     }
 
-    public class UpdateBCServicesCardAttributesHandler(IBus bus, PidpDbContext context) : INotificationHandler<CredentialLinked>
+    public class UpdateBCServicesCardAttributesHandler(IRabbitMqPublisher bus, PidpDbContext context) : INotificationHandler<CredentialLinked>
     {
-        private readonly IBus bus = bus;
+        private readonly IRabbitMqPublisher bus = bus;
         private readonly PidpDbContext context = context;
 
         public async Task Handle(CredentialLinked notification, CancellationToken cancellationToken)
@@ -212,19 +212,19 @@ public class Create
 
                 foreach (var credential in party.Credentials)
                 {
-                    await this.bus.Publish(UpdateKeycloakAttributes.FromUpdateAction(credential.UserId, user => user.SetOpId(party.OpId!)), cancellationToken);
+                    await this.bus.PublishAsync(UpdateKeycloakAttributes.FromUpdateAction(credential.UserId, user => user.SetOpId(party.OpId!)), cancellationToken);
                 }
             }
             else
             {
-                await this.bus.Publish(UpdateKeycloakAttributes.FromUpdateAction(newCredential.UserId, user => user.SetOpId(party.OpId!)), cancellationToken);
+                await this.bus.PublishAsync(UpdateKeycloakAttributes.FromUpdateAction(newCredential.UserId, user => user.SetOpId(party.OpId!)), cancellationToken);
             }
         }
     }
 
-    public class UpdateKeycloakAttributesHandler(IBus bus, PidpDbContext context) : INotificationHandler<CredentialLinked>
+    public class UpdateKeycloakAttributesHandler(IRabbitMqPublisher bus, PidpDbContext context) : INotificationHandler<CredentialLinked>
     {
-        private readonly IBus bus = bus;
+        private readonly IRabbitMqPublisher bus = bus;
         private readonly PidpDbContext context = context;
 
         public async Task Handle(CredentialLinked notification, CancellationToken cancellationToken)
@@ -238,7 +238,7 @@ public class Create
                 })
                 .SingleAsync(cancellationToken);
 
-            await this.bus.Publish(UpdateKeycloakAttributes.FromUpdateAction(notification.Credential.UserId, user => user.SetPidpEmail(attributes.Email!).SetPidpPhone(attributes.Phone!)), cancellationToken);
+            await this.bus.PublishAsync(UpdateKeycloakAttributes.FromUpdateAction(notification.Credential.UserId, user => user.SetPidpEmail(attributes.Email!).SetPidpPhone(attributes.Phone!)), cancellationToken);
         }
     }
 
