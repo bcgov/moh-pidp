@@ -59,34 +59,7 @@
                   Use this form to update the contact and address information for your pharmacy.
                 </p>
                 <form [formGroup]="detailsForm" (ngSubmit)="onUpdateDetails()" novalidate>
-                  <div class="form-field">
-                    <label for="name">Pharmacy Name</label>
-                    <input id="name" type="text" formControlName="name" />
-                  </div>
-                  <div class="form-field">
-                    <label for="address">Address</label>
-                    <input id="address" type="text" formControlName="address" />
-                  </div>
-                  <div class="form-field">
-                    <label for="managerName">Manager Name</label>
-                    <input id="managerName" type="text" formControlName="managerName" />
-                  </div>
-                  <div class="form-field">
-                    <label for="email">Email</label>
-                    <input id="email" type="email" formControlName="email" />
-                  </div>
-                  <div class="form-field">
-                    <label for="phone">Phone</label>
-                    <input id="phone" type="tel" formControlName="phone" />
-                  </div>
-                  <div class="form-field">
-                    <label for="fax">Fax</label>
-                    <input id="fax" type="tel" formControlName="fax" />
-                  </div>
-                  <div class="form-field">
-                    <label for="pharmaCareCode">PharmaCare Code</label>
-                    <input id="pharmaCareCode" type="text" formControlName="pharmaCareCode" />
-                  </div>
+                  <app-pharmacy-form [form]="detailsForm" [showAcknowledgements]="false" [isNameReadonly]="true"></app-pharmacy-form>
                   <div class="submit-row justify-content-end">
                     <button mat-flat-button type="submit" class="submit-btn">
                       Save Changes

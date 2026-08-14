@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
 using Pidp.Data;
+using Pidp.Infrastructure.Services;
 using Pidp.Models;
 using Pidp.Models.Lookups;
 
@@ -19,7 +20,7 @@ public class StaffUpdate
         public int RequestingPartyId { get; set; } = 0;
     }
 
-    public class CommandHandler(IClock clock, PidpDbContext context) : IRequestHandler<Command>
+    public class CommandHandler(IClock clock, PidpDbContext context, IBCProviderService bcProviderService) : IRequestHandler<Command>
     {
         public async Task Handle(Command request, CancellationToken cancellationToken)
         {
@@ -56,6 +57,8 @@ public class StaffUpdate
             context.BusinessEvents.Add(PharmacyStaffChanged.Create(request.RequestingPartyId, pharmacyName, clock.GetCurrentInstant()));
 
             await context.SaveChangesAsync(cancellationToken);
+
+            await bcProviderService.UpdatePharmStaffAttributes(request.PartyId, cancellationToken);
         }
     }
 }

@@ -4,6 +4,8 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
 using Pidp.Data;
+using Pidp.Infrastructure.Auth;
+using Pidp.Infrastructure.Services;
 using Pidp.Models;
 using Pidp.Models.Lookups;
 
@@ -19,11 +21,13 @@ public class StaffCreate
     {
         private readonly PidpDbContext context;
         private readonly IClock clock;
+        private readonly IBCProviderService bcProviderService;
 
-        public CommandHandler(PidpDbContext context, IClock clock)
+        public CommandHandler(PidpDbContext context, IClock clock, IBCProviderService bcProviderService)
         {
             this.context = context;
             this.clock = clock;
+            this.bcProviderService = bcProviderService;
         }
 
         public async Task Handle(Command request, CancellationToken cancellationToken)
@@ -68,6 +72,16 @@ public class StaffCreate
             this.context.BusinessEvents.Add(PharmacyStaffChanged.Create(request.PartyId, pharmacyName, this.clock.GetCurrentInstant()));
 
             await this.context.SaveChangesAsync(cancellationToken);
+
+            var hasBcProvider = await this.context.Credentials
+                .AnyAsync(c => c.PartyId == request.PartyId && c.IdentityProvider == IdentityProviders.BCProvider, cancellationToken);
+
+            if (!hasBcProvider)
+            {
+                throw new InvalidOperationException("Please link a BC Provider credential via /account/bc-provider-application.");
+            }
+
+            await this.bcProviderService.UpdatePharmStaffAttributes(request.PartyId, cancellationToken);
         }
     }
 }

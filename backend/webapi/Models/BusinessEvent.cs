@@ -291,3 +291,17 @@ public class PlrStatusUpdated : PartyBusinessEvent
         };
     }
 }
+
+public class BCProviderAttributesUpdated : PartyBusinessEvent
+{
+    public static BCProviderAttributesUpdated Create(int partyId, string details, Instant recordedOn)
+    {
+        return new BCProviderAttributesUpdated
+        {
+            PartyId = partyId,
+            Description = $"BCProvider attributes updated: {details}.",
+            Severity = LogLevel.Information,
+            RecordedOn = recordedOn
+        };
+    }
+}

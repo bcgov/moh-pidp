@@ -62,10 +62,14 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
       .pipe(
         catchError((error) => {
           const errorMessage = (error.error as string).split('\n')[0];
-          this.handleError(
-            errorMessage.substring(errorMessage.indexOf(': ') + 2).trim() ||
-              'An unexpected error occurred during enrolment.',
-          );
+          const parsedMessage = errorMessage.substring(errorMessage.indexOf(': ') + 2).trim() ||
+            'An unexpected error occurred during enrolment.';
+
+          if (parsedMessage.toLowerCase().includes('bc provider') || parsedMessage.includes('bc-provider-application')) {
+            this.handleMissingBcProviderError(parsedMessage);
+          } else {
+            this.handleError(parsedMessage);
+          }
           return EMPTY;
         }),
       )
@@ -86,6 +90,28 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
       .open(ConfirmDialogComponent, { data })
       .afterClosed()
       .subscribe(() => this.router.navigate(['/']));
+  }
+
+  private handleMissingBcProviderError(message: string): void {
+    this.message = message;
+    this.isError = true;
+    const data: DialogOptions = {
+      title: 'BC Provider Account Required',
+      message: message,
+      actionText: 'Link Account',
+      cancelText: 'Cancel',
+      cancelHide: false,
+    };
+    this.dialog
+      .open(ConfirmDialogComponent, { data })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result) {
+          this.router.navigate(['/account/bc-provider-application']);
+        } else {
+          this.router.navigate(['/']);
+        }
+      });
   }
 
   private handleError(message: string): void {

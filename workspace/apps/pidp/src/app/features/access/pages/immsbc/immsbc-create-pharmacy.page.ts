@@ -10,6 +10,7 @@ import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 import { AccessRoutes } from '@app/features/access/access.routes';
 import { PharmacyResource } from './pharmacy-resource.service';
+import { PharmacyFormComponent } from './pharmacy-form.component';
 
 @Component({
   selector: 'app-immsbc-create-pharmacy',
@@ -21,6 +22,7 @@ import { PharmacyResource } from './pharmacy-resource.service';
     InjectViewportCssClassDirective,
     BreadcrumbComponent,
     MatSnackBarModule,
+    PharmacyFormComponent,
   ],
   templateUrl: './immsbc-create-pharmacy.page.html',
   styleUrl: './immsbc-create-pharmacy.page.scss',
@@ -51,7 +53,6 @@ export class ImmsbcCreatePharmacyPage implements OnInit {
     this.form = this.fb.group({
       name: ['', Validators.required],
       address: ['', Validators.required],
-      postalCode: ['', Validators.required],
       phone: ['', Validators.required],
       fax: ['', Validators.required],
       managerName: ['', Validators.required],

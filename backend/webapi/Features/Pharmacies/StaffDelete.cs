@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
 using Pidp.Data;
+using Pidp.Infrastructure.Services;
 using Pidp.Models;
 using Pidp.Models.Lookups;
 
@@ -16,7 +17,7 @@ public class StaffDelete
         public int RequestingPartyId { get; set; }
     }
 
-    public class CommandHandler(PidpDbContext context, IClock clock) : IRequestHandler<Command>
+    public class CommandHandler(PidpDbContext context, IClock clock, IBCProviderService bcProviderService) : IRequestHandler<Command>
     {
         public async Task Handle(Command request, CancellationToken cancellationToken)
         {
@@ -50,8 +51,10 @@ public class StaffDelete
 
                 context.BusinessEvents.Add(PharmacyStaffChanged.Create(request.RequestingPartyId, pharmacyName, clock.GetCurrentInstant()));
 
-                context.PharmacyPartyRoles.Remove(staffRole); // Or soft delete
+                staffRole.EffectiveEndDate = clock.GetCurrentInstant().ToDateTimeUtc();
                 await context.SaveChangesAsync(cancellationToken);
+
+                await bcProviderService.UpdatePharmStaffAttributes(request.PartyId, cancellationToken);
             }
         }
     }

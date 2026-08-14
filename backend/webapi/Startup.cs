@@ -45,6 +45,9 @@ public class Startup(IConfiguration configuration)
             .AddScoped<IEmailService, EmailService>()
             .AddScoped<IPidpAuthorizationService, PidpAuthorizationService>()
             .AddScoped<IPlrStatusUpdateService, PlrStatusUpdateService>()
+            .AddScoped<IBCProviderService, BCProviderService>()
+            .AddScoped<IPharmacyStaffDeactivationService, PharmacyStaffDeactivationService>()
+            .AddHostedService<PharmacyStaffDeactivationHostedService>()
             .AddSingleton<IClock>(SystemClock.Instance)
             .AddSingleton<BackgroundWorkerHealthCheck>();
 
