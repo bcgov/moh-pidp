@@ -57,4 +57,10 @@ public interface IBCProviderClient
     /// <param name="userPrincipalName"></param>
     /// <param name="user"></param>
     public Task<bool> UpdateUser(string userPrincipalName, User user);
+
+    /// <summary>
+    /// Deletes the given BC Provider account from Microsoft Entra (Azure AD).
+    /// </summary>
+    /// <param name="userPrincipalName"></param>
+    public Task<bool> DeleteBCProviderAccount(string userPrincipalName);
 }

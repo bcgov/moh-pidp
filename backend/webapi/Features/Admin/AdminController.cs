@@ -1,5 +1,6 @@
 namespace Pidp.Features.Admin;
 
+using DomainResults.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -41,5 +42,29 @@ public class AdminController(IPidpAuthorizationService authorizationService) : P
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<List<PartyIndex.Model>>> GetParties([FromServices] IQueryHandler<PartyIndex.Query, List<PartyIndex.Model>> handler,
                                                                        [FromQuery] PartyIndex.Query query)
-        => await handler.HandleAsync(query);
+    {
+        return await handler.HandleAsync(query);
+    }
+
+    [HttpDelete("parties/{partyId}/credentials/{credentialId}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> DeleteCredential([FromServices] ICommandHandler<CredentialDelete.Command, DomainResults.Common.IDomainResult> handler,
+                                                      [FromRoute] int partyId,
+                                                      [FromRoute] int credentialId,
+                                                      [FromQuery] bool deleteFromBcProvider = false)
+    {
+        if (PidpConfiguration.IsProduction())
+        {
+            return this.Forbid();
+        }
+
+        return await handler.HandleAsync(new CredentialDelete.Command
+        {
+            PartyId = partyId,
+            CredentialId = credentialId,
+            DeleteFromBcProvider = deleteFromBcProvider
+        })
+        .ToActionResult();
+    }
 }

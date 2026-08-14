@@ -16,6 +16,14 @@ public class PartyIndex
         public string? ProviderName { get; set; }
         public CollegeCode? ProviderCollegeCode { get; set; }
         public bool SAEformsAccessRequest { get; set; }
+        public List<CredentialModel> Credentials { get; set; } = [];
+
+        public class CredentialModel
+        {
+            public int Id { get; set; }
+            public string IdentityProvider { get; set; } = string.Empty;
+            public string? IdpId { get; set; }
+        }
     }
 
     public class QueryHandler(PidpDbContext context) : IQueryHandler<Query, List<Model>>

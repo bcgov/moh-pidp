@@ -50,6 +50,32 @@
     </td>
   </ng-container>
 
+  <ng-container matColumnDef="credentials">
+    <th *matHeaderCellDef scope="col" mat-header-cell>Credentials</th>
+    <td *matCellDef="let element" mat-cell>
+      <div class="credentials-container">
+        @for (cred of element.credentials; track cred.id) {
+          <div class="credential-item">
+            <span class="credential-type">{{ cred.identityProvider }}</span>
+            @if (cred.idpId) {
+              <span class="credential-id">({{ cred.idpId }})</span>
+            }
+            @if (environment !== production) {
+              <button
+                mat-icon-button
+                type="button"
+                color="warn"
+                class="unlink-button"
+                (click)="onUnlinkCredential(element.id, cred)">
+                <mat-icon class="delete-icon">link_off</mat-icon>
+              </button>
+            }
+          </div>
+        }
+      </div>
+    </td>
+  </ng-container>
+
   @if (environment !== production) {
     <ng-container matColumnDef="delete">
       <th *matHeaderCellDef scope="col" mat-header-cell></th>
