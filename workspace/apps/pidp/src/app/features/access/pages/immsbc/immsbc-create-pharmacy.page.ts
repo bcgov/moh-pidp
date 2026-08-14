@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { EMPTY, catchError } from 'rxjs';
-
 import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 import { AccessRoutes } from '@app/features/access/access.routes';
@@ -72,13 +71,11 @@ export class ImmsbcCreatePharmacyPage implements OnInit {
       return;
     }
 
-    console.log('Create Pharmacy - Form Value:', this.form.value);
-
     this.resource
       .createPharmacy(this.form.value)
       .pipe(
         catchError(() => {
-          this.snackBar.open('An error occurred while creating the pharmacy. Please try again.', 'Close', { duration: 5000 });
+          this.snackBar.open('An error occurred while creating the pharmacy. Please try again.', 'Close', { duration: 10000 });
           return EMPTY;
         }),
       )

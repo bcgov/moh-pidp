@@ -16,6 +16,9 @@ public class PharmacyStaffDeactivationHostedService(
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+
+        Thread.Sleep(40000); // Wait for 40 seconds to allow the application to fully start before executing the service
+
         this.logger.LogInformation("Pharmacy Staff Deactivation Hosted Service is starting.");
 
         while (!stoppingToken.IsCancellationRequested)

@@ -93,6 +93,8 @@ public class PharmacyStaffDeactivationService(
                             this.logger.LogError("Failed to update job title for user '{upn}'.", upn);
                         }
                     }
+
+                    Thread.Sleep(5 * 1000);
                 }
             }
             catch (Exception ex)
