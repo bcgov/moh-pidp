@@ -265,7 +265,8 @@ public partial class ProfileStatus
                     { HasBCServicesCardCredential: false } or { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
                     _ when InfantRsvEforms.IsEligible(profile.PartyPlrStanding) ||
                         profile.EndorsementPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding ||
-                        profile.EndorsementPlrStanding.With(IdentifierType.Nurse).HasGoodStanding => StatusCode.Incomplete,
+                        profile.EndorsementPlrStanding.With(IdentifierType.Nurse).HasGoodStanding ||
+                        profile.EndorsementPlrStanding.With(IdentifierType.Midwife).HasGoodStanding => StatusCode.Incomplete,
                     _ => StatusCode.Locked
                 };
             }
