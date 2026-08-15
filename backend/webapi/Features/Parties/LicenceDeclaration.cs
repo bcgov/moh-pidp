@@ -4,7 +4,6 @@ using Mapster;
 using DomainResults.Common;
 using FluentValidation;
 using HybridModelBinding;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
 using System.Text.Json.Serialization;
@@ -111,16 +110,16 @@ public class LicenceDeclaration
         }
     }
 
-    public class PlrCpnLookupNotFoundHandler(IClock clock, PidpDbContext context) : INotificationHandler<PlrCpnLookupNotFound>
+    public class PlrCpnLookupNotFoundHandler(IClock clock, PidpDbContext context) : Mediator.INotificationHandler<PlrCpnLookupNotFound>
     {
         private readonly IClock clock = clock;
         private readonly PidpDbContext context = context;
 
-        public Task Handle(PlrCpnLookupNotFound notification, CancellationToken cancellationToken)
+        public ValueTask Handle(PlrCpnLookupNotFound notification, CancellationToken cancellationToken)
         {
             this.context.BusinessEvents.Add(PartyNotInPlr.Create(notification.PartyId, notification.CollegeCode, notification.LicenceNumber, this.clock.GetCurrentInstant()));
 
-            return Task.CompletedTask;
+            return default;
         }
     }
 }
@@ -130,3 +129,4 @@ public static partial class LicenceDeclarationLoggingExtensions
     [LoggerMessage(1, LogLevel.Error, "Unknown error occured while doing college license search")]
     public static partial void LogCollegeLicenceSearchError(this ILogger<LicenceDeclaration> logger, Exception e);
 }
+

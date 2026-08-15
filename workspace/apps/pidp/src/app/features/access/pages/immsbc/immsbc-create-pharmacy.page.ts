@@ -56,7 +56,7 @@ export class ImmsbcCreatePharmacyPage implements OnInit {
       fax: ['', Validators.required],
       managerName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      pharmacareCode: ['', Validators.required],
+      pharmaCareCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
       ackImmunizationScope: [false, Validators.requiredTrue],
       ackAccessToVaccines: [false, Validators.requiredTrue],
       ackPrivacy: [false, Validators.requiredTrue],

@@ -1,7 +1,7 @@
 namespace Pidp.Features.Pharmacies;
 
 using FluentValidation;
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
@@ -30,7 +30,7 @@ public class GenerateEnrolmentToken
 
     public class CommandHandler(PidpDbContext context, IClock clock) : IRequestHandler<Command, string>
     {
-        public async Task<string> Handle(Command request, CancellationToken cancellationToken)
+        public async ValueTask<string> Handle(Command request, CancellationToken cancellationToken)
         {
             var partyIsAdmin = await context.PharmacyPartyRoles
                 .AnyAsync(role => role.PartyId == request.RequestingPartyId

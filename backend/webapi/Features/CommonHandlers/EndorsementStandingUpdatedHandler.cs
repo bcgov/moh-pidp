@@ -1,6 +1,6 @@
 namespace Pidp.Features.CommonHandlers;
 
-using MediatR;
+using Mediator;
 using Pidp.Infrastructure.Queue;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,7 +23,7 @@ public class UpdateBCProviderAfterEndorsementStandingUpdated(
     private readonly PidpDbContext context = context;
     private readonly string clientId = config.BCProviderClient.ClientId;
 
-    public async Task Handle(EndorsementStandingUpdated notification, CancellationToken cancellationToken)
+    public async ValueTask Handle(EndorsementStandingUpdated notification, CancellationToken cancellationToken)
     {
         var party = await this.context.Parties
             .Where(party => party.Id == notification.PartyId)

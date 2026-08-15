@@ -2,7 +2,6 @@ namespace Pidp.Features.Credentials;
 
 using DomainResults.Common;
 using FluentValidation;
-using MediatR;
 using Pidp.Infrastructure.Queue;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Graph.Models;
@@ -109,14 +108,14 @@ public class Create
         IBCProviderClient bcProviderClient,
         IPlrClient plrClient,
         PidpConfiguration config,
-        PidpDbContext context) : INotificationHandler<CredentialLinked>
+        PidpDbContext context) : Mediator.INotificationHandler<CredentialLinked>
     {
         private readonly IBCProviderClient bcProviderClient = bcProviderClient;
         private readonly IPlrClient plrClient = plrClient;
         private readonly PidpDbContext context = context;
         private readonly string bcProviderClientId = config.BCProviderClient.ClientId;
 
-        public async Task Handle(CredentialLinked notification, CancellationToken cancellationToken)
+        public async ValueTask Handle(CredentialLinked notification, CancellationToken cancellationToken)
         {
             var credential = notification.Credential;
 
@@ -191,12 +190,12 @@ public class Create
         }
     }
 
-    public class UpdateBCServicesCardAttributesHandler(IRabbitMqPublisher bus, PidpDbContext context) : INotificationHandler<CredentialLinked>
+    public class UpdateBCServicesCardAttributesHandler(IRabbitMqPublisher bus, PidpDbContext context) : Mediator.INotificationHandler<CredentialLinked>
     {
         private readonly IRabbitMqPublisher bus = bus;
         private readonly PidpDbContext context = context;
 
-        public async Task Handle(CredentialLinked notification, CancellationToken cancellationToken)
+        public async ValueTask Handle(CredentialLinked notification, CancellationToken cancellationToken)
         {
             var newCredential = notification.Credential;
 
@@ -222,12 +221,12 @@ public class Create
         }
     }
 
-    public class UpdateKeycloakAttributesHandler(IRabbitMqPublisher bus, PidpDbContext context) : INotificationHandler<CredentialLinked>
+    public class UpdateKeycloakAttributesHandler(IRabbitMqPublisher bus, PidpDbContext context) : Mediator.INotificationHandler<CredentialLinked>
     {
         private readonly IRabbitMqPublisher bus = bus;
         private readonly PidpDbContext context = context;
 
-        public async Task Handle(CredentialLinked notification, CancellationToken cancellationToken)
+        public async ValueTask Handle(CredentialLinked notification, CancellationToken cancellationToken)
         {
             var attributes = await this.context.Parties
                 .Where(party => party.Id == notification.Credential.PartyId)
@@ -242,12 +241,12 @@ public class Create
         }
     }
 
-    public class UpdateKeycloakRolesHandler(IKeycloakAdministrationClient keycloakClient, PidpDbContext context) : INotificationHandler<CredentialLinked>
+    public class UpdateKeycloakRolesHandler(IKeycloakAdministrationClient keycloakClient, PidpDbContext context) : Mediator.INotificationHandler<CredentialLinked>
     {
         private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
         private readonly PidpDbContext context = context;
 
-        public async Task Handle(CredentialLinked notification, CancellationToken cancellationToken)
+        public async ValueTask Handle(CredentialLinked notification, CancellationToken cancellationToken)
         {
             var newCredential = notification.Credential;
             if (newCredential.IdentityProvider is not (IdentityProviders.BCServicesCard or IdentityProviders.BCProvider))
@@ -255,14 +254,20 @@ public class Create
                 return;
             }
 
-            var hasSAEformsEnrolment = await this.context.AccessRequests
-                .AnyAsync(request => request.PartyId == newCredential.PartyId
-                    && request.AccessTypeCode == AccessTypeCode.SAEforms, cancellationToken);
+            // This used to only update for Special Authorization eForms access request, but now all access requests should be associated with a Keycloak Role.
 
-            if (hasSAEformsEnrolment)
+            var accessRequestTypes = await this.context.AccessRequests
+                .Where(request => request.PartyId == newCredential.PartyId)
+                .Select(request => request.AccessTypeCode)
+                .ToListAsync(cancellationToken);
+
+            foreach (var accessType in accessRequestTypes)
             {
-                // TODO: bus message for roles
-                await this.keycloakClient.AssignAccessRoles(newCredential.UserId, MohKeycloakEnrolment.SAEforms);
+                var enrolment = MohKeycloakEnrolment.FromAssociatedAccessRequest(accessType);
+                if (enrolment != null)
+                {
+                    await this.keycloakClient.AssignAccessRoles(newCredential.UserId, enrolment);
+                }
             }
         }
     }
@@ -285,3 +290,4 @@ public static partial class CredentialCreateLoggingExtensions
     [LoggerMessage(5, LogLevel.Error, "Credential Link Ticket {credentialLinkTicketId} redemption failed, the Credential with ID {existingCredentialId} already exists.")]
     public static partial void LogCredentialAlreadyExists(this ILogger<Create.CommandHandler> logger, int credentialLinkTicketId, int existingCredentialId);
 }
+

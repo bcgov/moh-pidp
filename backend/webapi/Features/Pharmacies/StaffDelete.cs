@@ -1,6 +1,6 @@
 namespace Pidp.Features.Pharmacies;
 
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
 using Pidp.Data;
@@ -19,7 +19,7 @@ public class StaffDelete
 
     public class CommandHandler(PidpDbContext context, IClock clock, IBCProviderService bcProviderService) : IRequestHandler<Command>
     {
-        public async Task Handle(Command request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
             var requestingPartyIsAdmin = await context.PharmacyPartyRoles
                 .AnyAsync(role => role.PartyId == request.RequestingPartyId
@@ -56,6 +56,7 @@ public class StaffDelete
 
                 await bcProviderService.UpdatePharmStaffAttributes(request.PartyId, cancellationToken);
             }
+            return Unit.Value;
         }
     }
 }

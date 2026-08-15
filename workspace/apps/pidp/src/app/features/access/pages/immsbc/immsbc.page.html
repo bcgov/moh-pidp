@@ -99,14 +99,18 @@ For pharmacies that currently have access to ImmsBC, no action is required.</p>
       </div>
       <div class="card action-buttons-card">
         <div class="action-buttons-group">
-          <button mat-flat-button type="button" color="primary" class="action-button-large"
-            routerLink="/access/immsbc/create-pharmacy">
-            Add Pharmacy
-          </button> 
-          <button mat-flat-button type="button" color="primary" class="action-button-large"
-            routerLink="/access/immsbc/manage-pharmacy">
-            Manage Pharmacy
-          </button>
+          <div [matTooltip]="bcProviderStatusCode !== StatusCode.COMPLETED ? 'You must create a BCProvider Credential before adding or managing a pharmacy.' : ''">
+            <button mat-flat-button type="button" color="primary" class="action-button-large" style="width: 100%;"
+              routerLink="/access/immsbc/create-pharmacy" [disabled]="bcProviderStatusCode !== StatusCode.COMPLETED">
+              Add Pharmacy
+            </button> 
+          </div>
+          <div [matTooltip]="bcProviderStatusCode !== StatusCode.COMPLETED ? 'You must create a BCProvider Credential before adding or managing a pharmacy.' : ''">
+            <button mat-flat-button type="button" color="primary" class="action-button-large" style="width: 100%;"
+              routerLink="/access/immsbc/manage-pharmacy" [disabled]="bcProviderStatusCode !== StatusCode.COMPLETED">
+              Manage Pharmacy
+            </button>
+          </div>
         </div>
       </div>
       <div class="imms-button-container">

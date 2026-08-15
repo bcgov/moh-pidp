@@ -4,6 +4,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { BehaviorSubject, EMPTY, Observable, catchError, exhaustMap, filter, switchMap, tap } from 'rxjs';
 import { PillComponent } from '@app/shared/components/pill/pill.component';
@@ -23,6 +24,7 @@ import { EditStaffDialogComponent } from './edit-staff-dialog.component';
     MatIconModule,
     MatProgressBarModule,
     MatTableModule,
+    MatTooltipModule,
     PillComponent,
   ],
   templateUrl: './pharmacy-staff-management.component.html',
@@ -38,7 +40,7 @@ export class PharmacyStaffManagementComponent implements OnInit {
   public title = 'Staff Management';
   public staff$!: Observable<IStaff[]>;
   public dataSource = new MatTableDataSource<IStaff>();
-  public displayedColumns: string[] = ['name', 'role', 'status', 'actions'];
+  public displayedColumns: string[] = ['name', 'role', 'effectiveStartDate', 'effectiveEndDate', 'status', 'actions'];
   public PharmacyRole = PharmacyRole;
 
   public ngOnInit(): void {
@@ -84,14 +86,14 @@ export class PharmacyStaffManagementComponent implements OnInit {
             },
             width: '500px',
           })
-        .afterClosed()),
+            .afterClosed()),
         filter((result) => !!result),
       )
       .subscribe(() => this.refresh$.next());
   }
 
   public onDelete(staff: IStaff): void {
-    const confirmData: DialogOptions = { 
+    const confirmData: DialogOptions = {
       title: `Delete Staff Member?`,
       message: `Are you sure you want to delete this ${staff.fullName}?`,
       actionType: 'warn',
@@ -109,6 +111,52 @@ export class PharmacyStaffManagementComponent implements OnInit {
               const errorData: DialogOptions = {
                 title: 'Error Deleting Staff',
                 message: firstLine.substring(firstLine.indexOf(': ') + 2).trim() ?? 'An unexpected error occurred.',
+                actionText: 'OK',
+                cancelHide: true,
+              };
+              this.dialog.open(ConfirmDialogComponent, { data: errorData });
+              return EMPTY;
+            })
+          )
+        )
+      )
+      .subscribe(() => this.refresh$.next());
+  }
+
+  public onRenew(staff: IStaff): void {
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const nextAugustFirst = new Date(currentYear, 7, 1);
+
+    if (today >= nextAugustFirst) {
+      nextAugustFirst.setFullYear(currentYear + 1);
+    }
+
+    const payload = {
+      role: staff.role,
+      effectiveStartDate: today.toISOString().split('T')[0],
+      effectiveEndDate: nextAugustFirst.toISOString().split('T')[0]
+    };
+
+    const confirmData: DialogOptions = {
+      title: `Renew Staff Member?`,
+      message: `Are you sure you want to renew ${staff.fullName} until ${nextAugustFirst.toDateString()}?`,
+      actionType: 'primary',
+      actionText: `Renew ${staff.fullName}`
+    };
+
+    this.dialog
+      .open(ConfirmDialogComponent, { data: confirmData })
+      .afterClosed()
+      .pipe(
+        filter((confirmed: boolean) => confirmed),
+        exhaustMap(() =>
+          this.resource.updateStaff(this.pharmacyId, staff.partyId, payload).pipe(
+            catchError((error: any) => {
+              const errorMsg = error.error ? error.error.toString().split('\n')[0] : 'An unexpected error occurred.';
+              const errorData: DialogOptions = {
+                title: 'Error Renewing Staff',
+                message: errorMsg,
                 actionText: 'OK',
                 cancelHide: true,
               };

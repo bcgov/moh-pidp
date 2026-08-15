@@ -4,7 +4,6 @@ using Mapster;
 using FluentValidation;
 using HybridModelBinding;
 using Pidp.Infrastructure.Queue;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
@@ -110,11 +109,11 @@ public class Demographics
         }
     }
 
-    public class PartyEmailUpdatedHandler(IRabbitMqPublisher bus) : INotificationHandler<PartyEmailUpdated>
+    public class PartyEmailUpdatedHandler(IRabbitMqPublisher bus) : Mediator.INotificationHandler<PartyEmailUpdated>
     {
         private readonly IRabbitMqPublisher bus = bus;
 
-        public async Task Handle(PartyEmailUpdated notification, CancellationToken cancellationToken)
+        public async ValueTask Handle(PartyEmailUpdated notification, CancellationToken cancellationToken)
         {
             // TODO: replace by pushing a generic Update BC Provider Attribute message.
             await this.bus.PublishAsync(notification, cancellationToken);
@@ -159,11 +158,11 @@ public class Demographics
         }
     }
 
-    public class PartyPhoneUpdatedHandler(IRabbitMqPublisher bus) : INotificationHandler<PartyPhoneUpdated>
+    public class PartyPhoneUpdatedHandler(IRabbitMqPublisher bus) : Mediator.INotificationHandler<PartyPhoneUpdated>
     {
         private readonly IRabbitMqPublisher bus = bus;
 
-        public async Task Handle(PartyPhoneUpdated notification, CancellationToken cancellationToken)
+        public async ValueTask Handle(PartyPhoneUpdated notification, CancellationToken cancellationToken)
         {
             foreach (var userId in notification.UserIds)
             {
@@ -178,4 +177,5 @@ public static partial class PartyEmailUpdatedBcProviderHandlerLoggingExtensions
     [LoggerMessage(2, LogLevel.Error, "Error when updating the email to User #{userId} in Azure AD.")]
     public static partial void LogBCProviderEmailUpdateFailed(this ILogger<Demographics.PartyEmailUpdatedBcProviderHandler> logger, Guid userId);
 }
+
 

@@ -2,7 +2,6 @@ namespace Pidp.Features.Parties;
 
 using FluentValidation;
 using Pidp.Infrastructure.Queue;
-using MediatR;
 using NodaTime;
 
 using Pidp.Data;
@@ -75,10 +74,11 @@ public class Create
         }
     }
 
-    public class UpdateKeycloakWhenOpIdCreatedHandler(IRabbitMqPublisher bus) : INotificationHandler<OpIdCreated>
+    public class UpdateKeycloakWhenOpIdCreatedHandler(IRabbitMqPublisher bus) : Mediator.INotificationHandler<OpIdCreated>
     {
         private readonly IRabbitMqPublisher bus = bus;
 
-        public async Task Handle(OpIdCreated notification, CancellationToken cancellationToken) => await this.bus.PublishAsync(UpdateKeycloakAttributes.FromUpdateAction(notification.UserId, user => user.SetOpId(notification.OpId)), cancellationToken);
+        public async ValueTask Handle(OpIdCreated notification, CancellationToken cancellationToken) => await this.bus.PublishAsync(UpdateKeycloakAttributes.FromUpdateAction(notification.UserId, user => user.SetOpId(notification.OpId)), cancellationToken);
     }
 }
+

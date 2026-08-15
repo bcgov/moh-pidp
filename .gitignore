@@ -27,6 +27,9 @@ workspace/.nx/workspace-data/d/daemon.log
 workspace/.nx/workspace-data/d/server-process.json
 workspace/.nx/workspace-data/file-map.json
 /workspace/.nx
+/workspace/.vscode
+
+.vscode
 
 # Helm chart
 /charts/*/charts/*.tgz

@@ -1,7 +1,7 @@
 namespace Pidp.Features.Pharmacies;
 
 using Mapster;
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 using Pidp.Data;
@@ -37,7 +37,7 @@ public class Profile
             this.context = context;
         }
 
-        public async Task<Model> Handle(Query request, CancellationToken cancellationToken)
+        public async ValueTask<Model> Handle(Query request, CancellationToken cancellationToken)
         {
             var associations = await this.context.PharmacyPartyRoles
                 .Where(role => role.PartyId == request.PartyId)

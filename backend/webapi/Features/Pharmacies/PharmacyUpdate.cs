@@ -1,7 +1,7 @@
 namespace Pidp.Features.Pharmacies;
 
 using FluentValidation;
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 using Pidp.Data;
 using Pidp.Models;
@@ -25,7 +25,7 @@ public class PharmacyUpdate
 
     public class CommandHandler(IClock clock, PidpDbContext context) : IRequestHandler<Command>
     {
-        public async Task Handle(Command request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
             var partyIsAdmin = await context.PharmacyPartyRoles
                 .AnyAsync(role => role.PartyId == request.RequestingPartyId
@@ -49,6 +49,7 @@ public class PharmacyUpdate
             context.BusinessEvents.Add(PharmacyUpdated.Create(request.RequestingPartyId, pharmacy.Name, clock.GetCurrentInstant()));
 
             await context.SaveChangesAsync(cancellationToken);
+            return Unit.Value;
         }
     }
 }

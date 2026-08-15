@@ -1,6 +1,6 @@
 namespace Pidp.Features.Pharmacies;
 
-using MediatR;
+using Mediator;
 using Pidp.Data;
 using Pidp.Models;
 using Pidp.Models.Lookups;
@@ -32,7 +32,7 @@ public class PharmacyCreate
     {
         private readonly IClock clock = clock;
         private readonly PidpDbContext context = context;
-        public async Task<int> Handle(Command request, CancellationToken cancellationToken)
+        public async ValueTask<int> Handle(Command request, CancellationToken cancellationToken)
         {
             if (await this.context.Pharmacies.FirstOrDefaultAsync(p => p.Name == request.Name, cancellationToken) != null)
             {

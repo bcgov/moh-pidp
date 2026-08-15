@@ -59,10 +59,17 @@
 
   <div class="form-field">
     <label for="pharmaCareCode">PharmaCare Code (BC00000XXX)</label>
-    <input id="pharmaCareCode" type="text" formControlName="pharmacareCode" />
+    <input id="pharmaCareCode" type="text" formControlName="pharmaCareCode" maxlength="3" />
     <span class="helper-text">Enter the three digits for PharmaCare Code representing your pharmacy</span>
-    @if (form.get('pharmacareCode')?.invalid && form.get('pharmacareCode')?.touched) {
-    <div class="form-error">PharmaCare Code is required.</div>
+    @if (form.get('pharmaCareCode')?.invalid && form.get('pharmaCareCode')?.touched) {
+    <div class="form-error">
+      @if (form.get('pharmaCareCode')?.hasError('required')) {
+      PharmaCare Code is required.
+      }
+      @if (form.get('pharmaCareCode')?.hasError('minlength') || form.get('pharmaCareCode')?.hasError('maxlength')) {
+      PharmaCare Code must be exactly 3 characters.
+      }
+    </div>
     }
   </div>
 

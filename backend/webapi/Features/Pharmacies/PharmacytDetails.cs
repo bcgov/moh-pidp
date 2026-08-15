@@ -1,7 +1,7 @@
 namespace Pidp.Features.Pharmacies;
 
 using Mapster;
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 using Pidp.Data;
 using Pidp.Models;
@@ -28,7 +28,7 @@ public class PharmacyDetails
 
     public class QueryHandler(PidpDbContext context) : IRequestHandler<Query, Model?>
     {
-        public async Task<Model?> Handle(Query request, CancellationToken cancellationToken)
+        public async ValueTask<Model?> Handle(Query request, CancellationToken cancellationToken)
         {
             var canAccess = await context.PharmacyPartyRoles
                 .AnyAsync(role => role.PartyId == request.PartyId && role.PharmacyId == request.PharmacyId, cancellationToken);

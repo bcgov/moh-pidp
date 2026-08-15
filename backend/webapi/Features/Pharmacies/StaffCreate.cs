@@ -1,6 +1,6 @@
 namespace Pidp.Features.Pharmacies;
 
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
 using Pidp.Data;
@@ -30,7 +30,7 @@ public class StaffCreate
             this.bcProviderService = bcProviderService;
         }
 
-        public async Task Handle(Command request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
             var enrolment = await this.context.PharmacyEnrolments
                 .SingleOrDefaultAsync(enrolment => enrolment.Token == request.Token, cancellationToken);
@@ -82,6 +82,7 @@ public class StaffCreate
             }
 
             await this.bcProviderService.UpdatePharmStaffAttributes(request.PartyId, cancellationToken);
+            return Unit.Value;
         }
     }
 }

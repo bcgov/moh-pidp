@@ -1,6 +1,6 @@
 namespace Pidp.Features.Pharmacies;
 
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 using Pidp.Data;
 using Pidp.Models;
@@ -25,7 +25,7 @@ public class StaffDetails
 
     public class QueryHandler(PidpDbContext context) : IRequestHandler<Query, Model>
     {
-        public async Task<Model> Handle(Query request, CancellationToken cancellationToken)
+        public async ValueTask<Model> Handle(Query request, CancellationToken cancellationToken)
         {
 
             var role = await context.PharmacyPartyRoles

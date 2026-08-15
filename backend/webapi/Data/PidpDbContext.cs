@@ -1,6 +1,6 @@
 namespace Pidp.Data;
 
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
