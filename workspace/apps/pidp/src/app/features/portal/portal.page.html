@@ -10,7 +10,7 @@
     <div class="card-grid">
       <div
         class="card"
-        (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))"
+        tabindex="0" (keydown.enter)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))" (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))"
         (keyup)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))">
         <img
           height="238"
@@ -21,13 +21,13 @@
           <div class="card-content">
             <p class="card-header">Get Access</p>
             <p>Healthcare system access for myself</p>
-            <a> <fa-icon [icon]="faBookmark"></fa-icon> Read More </a>
+            <a aria-label="link"> <fa-icon [icon]="faBookmark"></fa-icon> Read More </a>
           </div>
         </div>
 
         <div
           class="card"
-          (click)="navigateTo(OrganizationInfoRoutes.routePath(OrganizationInfoRoutes.ENDORSEMENTS))"
+          tabindex="0" (keydown.enter)="navigateTo(OrganizationInfoRoutes.routePath(OrganizationInfoRoutes.ENDORSEMENTS))" (click)="navigateTo(OrganizationInfoRoutes.routePath(OrganizationInfoRoutes.ENDORSEMENTS))"
           (keyup)="navigateTo(OrganizationInfoRoutes.routePath(OrganizationInfoRoutes.ENDORSEMENTS))">
           <img
             height="253"
@@ -50,7 +50,7 @@
               <p>Healthcare system access for others</p>
               <div class="card-footer">
                 <span class="content-with-alert"
-                  ><a> <fa-icon [icon]="faBookmark"></fa-icon>Read More </a></span
+                  ><a aria-label="link"> <fa-icon [icon]="faBookmark"></fa-icon>Read More </a></span
                   >
                 </div>
               </div>
@@ -62,7 +62,7 @@
           @if (showBackToTopButton) {
             <button
               class="back-to-top"
-              (click)="scrollToTop()">
+              tabindex="0" (keydown.enter)="scrollToTop()" (click)="scrollToTop()">
               <fa-icon [icon]="faArrowUp"></fa-icon>
             </button>
           }

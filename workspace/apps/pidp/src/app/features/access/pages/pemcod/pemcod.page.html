@@ -44,7 +44,7 @@
             <div class="smaller-text">
               <em
                 >Need help? Try this
-                <a uiAnchor [attr.href]="bcProviderTutorial">video tutorial</a>
+                <a uiAnchor [attr.href]="bcProviderTutorial" aria-label="link">video tutorial</a>
               </em>
             </div>
             <div class="stepper-buttons">
@@ -59,7 +59,7 @@
             <p class="guide-information">
               If you need help setting up your Multi-Factor Authentication
               (MFA), please
-              <a href="assets/documents/mfa.pdf" download>download this PDF</a>
+              <a href="assets/documents/mfa.pdf" download aria-label="link">download this PDF</a>
             </p>
 
             <div class="stepper-buttons">
@@ -98,13 +98,13 @@
                 color="primary"
                 aria-labelledby="navigate-to-pemcod"
                 [disabled]="pemcod$ | async"
-                (click)="navigateToPath()">
+                tabindex="0" (keydown.enter)="navigateToPath()" (click)="navigateToPath()">
                 Login to the Practitioner's eMCOD portal with your BCProvider
               </button>
             </div>
             <div class="stepper-buttons">
               <button mat-stroked-button matStepperPrevious>Back</button>
-              <button mat-stroked-button (click)="stepper.reset()">
+              <button mat-stroked-button tabindex="0" (keydown.enter)="stepper.reset()" (click)="stepper.reset()">
                 Reset
               </button>
             </div>
@@ -127,7 +127,7 @@
                   color="primary"
                   aria-labelledby="navigate-to-pemcod"
                   [disabled]="pemcod$ | async"
-                  (click)="navigateToPath()">
+                  tabindex="0" (keydown.enter)="navigateToPath()" (click)="navigateToPath()">
                   <fa-icon [icon]="faArrowRight"></fa-icon>
                 </button>
               </div>

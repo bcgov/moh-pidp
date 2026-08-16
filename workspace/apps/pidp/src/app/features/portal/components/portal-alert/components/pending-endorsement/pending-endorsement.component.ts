@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
   selector: 'app-pending-endorsement',
   template: `<p>
     ACTION REQUIRED:
-    <span (click)="onClick()">Click here</span>
+    <span tabindex="0" (keydown.enter)="onClick()" (click)="onClick()">Click here</span>
     to complete endorsement process
   </p>`,
   styles: [

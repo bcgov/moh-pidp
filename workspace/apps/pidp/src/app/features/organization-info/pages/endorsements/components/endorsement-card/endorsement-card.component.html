@@ -35,7 +35,7 @@
           class="cancel"
           mat-stroked-button
           type="button"
-          (click)="cancelClick.emit(id)">
+          tabindex="0" (keydown.enter)="cancelClick.emit(id)" (click)="cancelClick.emit(id)">
           Cancel
         </button>
       }
@@ -44,7 +44,7 @@
           class="approve"
           mat-stroked-button
           type="button"
-          (click)="approveClick.emit(id)">
+          tabindex="0" (keydown.enter)="approveClick.emit(id)" (click)="approveClick.emit(id)">
           Approve
         </button>
       }

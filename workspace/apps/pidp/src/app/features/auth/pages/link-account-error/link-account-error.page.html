@@ -5,7 +5,7 @@
       mat-icon-button
       matTooltip="Logout"
       aria-label="logout"
-      (click)="onLogout()">
+      tabindex="0" (keydown.enter)="onLogout()" (click)="onLogout()">
       <mat-icon>logout</mat-icon>
     </button>
   </div>
@@ -46,7 +46,7 @@
                 mat-flat-button
                 type="button"
                 color="primary"
-                (click)="onLogout()">
+                tabindex="0" (keydown.enter)="onLogout()" (click)="onLogout()">
                 Click here
               </button>
             </span>
@@ -54,7 +54,7 @@
         } @else {
           <div class="button-container">
             <span>
-              <button mat-flat-button type="button" color="primary" (click)="onBack()">
+              <button mat-flat-button type="button" color="primary" tabindex="0" (keydown.enter)="onBack()" (click)="onBack()">
                 Back to OneHealthID Service
               </button>
             </span>
@@ -89,9 +89,9 @@
         We apologize, but both accounts you are trying to link already exist in
         the OneHealthID system and so this request will require manual merging.
         Contact our support desk at
-        <a uiAnchor scheme="mailto" [attr.href]="providerIdentitySupport"></a> or
+        <a uiAnchor scheme="mailto" [attr.href]="providerIdentitySupport" aria-label="link"></a> or
         by phone at
-        <a uiAnchor scheme="tel" [attr.href]="additionalSupportPhone"></a>.<br />
+        <a uiAnchor scheme="tel" [attr.href]="additionalSupportPhone" aria-label="link"></a>.<br />
         Please mention that this is an account linking merge request.
       </p>
     </div>
@@ -119,12 +119,12 @@
       <ul>
         <li>
           By email at
-          <a uiAnchor scheme="mailto" [attr.href]="providerIdentitySupport"></a>
+          <a uiAnchor scheme="mailto" [attr.href]="providerIdentitySupport" aria-label="link"></a>
         </li>
 
         <li>
           By phone at
-          <a uiAnchor scheme="tel" [attr.href]="additionalSupportPhone"></a>
+          <a uiAnchor scheme="tel" [attr.href]="additionalSupportPhone" aria-label="link"></a>
         </li>
       </ul>
     </div>

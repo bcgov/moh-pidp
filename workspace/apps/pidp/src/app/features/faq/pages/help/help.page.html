@@ -94,7 +94,7 @@
                   and is aligned to policy.<br />
                   The BCProvider credential is created during the enrolment process<br />
                   <a [href]="applicationUrl"
-                    >https://healthprovideridentityportal.gov.bc.ca/auth/login</a
+                     aria-label="link">https://healthprovideridentityportal.gov.bc.ca/auth/login</a
                     >
                   </p>
                 </mat-expansion-panel>
@@ -143,14 +143,14 @@
                         uiAnchor
                         scheme="url"
                         href="https://www2.gov.bc.ca/gov/content/governments/government-id/bc-services-card"
-                        >https://www2.gov.bc.ca/gov/content/governments/government-id/bc-services-card</a
+                         aria-label="link">https://www2.gov.bc.ca/gov/content/governments/government-id/bc-services-card</a
                         ><br />
                         PLR.
                         <a
                           uiAnchor
                           scheme="url"
                           href="https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/system-access/provider-location-registry-plr"
-                          >https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/system-access/provider-location-registry-plr</a
+                           aria-label="link">https://www2.gov.bc.ca/gov/content/health/practitioner-professional-resources/system-access/provider-location-registry-plr</a
                           >
                         </p>
                       </mat-expansion-panel>
@@ -186,13 +186,13 @@
                                 uiAnchor
                                 scheme="url"
                                 href="https://www.microsoft.com/en-ca/security/mobile-authenticator-app"
-                                >https://www.microsoft.com/en-ca/security/mobile-authenticator-app</a
+                                 aria-label="link">https://www.microsoft.com/en-ca/security/mobile-authenticator-app</a
                                 >
                               </li>
                               <li>
                                 OneHealthID Service. Enrolment process tool FAQ at<br />
                                 <a [href]="applicationUrl"
-                                  >https://healthprovideridentityportal.gov.bc.ca/auth/login</a
+                                   aria-label="link">https://healthprovideridentityportal.gov.bc.ca/auth/login</a
                                   >
                                 </li>
                               </ul>
@@ -212,7 +212,7 @@
                                 </mat-expansion-panel-header>
                                 <p>
                                   View instructions to setup Multi-factor authentication
-                                  <a class="mfa-link" (click)="navigateToMfaPage()">here</a>.
+                                  <a class="mfa-link" tabindex="0" (keydown.enter)="navigateToMfaPage()" (click)="navigateToMfaPage()" aria-label="link">here</a>.
                                 </p>
                               </mat-expansion-panel>
                             </div>
@@ -300,7 +300,7 @@
                                         class="icon-call"
                                         src="/assets/images/icon-call.svg"
                                         alt="Illustration of a call icon" /><a href="tel:250-448-1262"
-                                        >250-448-1262</a
+                                         aria-label="link">250-448-1262</a
                                         >
                                       </p>
                                     </div>
@@ -308,7 +308,7 @@
                                   <div class="links-section first-column">
                                     <div
                                       class="link-container"
-                                      (click)="onClickSendEmail('mailto:OneHealthID@gov.bc.ca')"
+                                      tabindex="0" (keydown.enter)="onClickSendEmail('mailto:OneHealthID@gov.bc.ca')" (click)="onClickSendEmail('mailto:OneHealthID@gov.bc.ca')"
                                       (keyup)="onClickSendEmail('mailto:OneHealthID@gov.bc.ca')">
                                       <img
                                         class="icon-question"
@@ -318,7 +318,7 @@
                                       </div>
                                       <div
                                         class="link-container"
-                                        (click)="onClickSendEmail('mailto:hlth.registriesadmin@gov.bc.ca')"
+                                        tabindex="0" (keydown.enter)="onClickSendEmail('mailto:hlth.registriesadmin@gov.bc.ca')" (click)="onClickSendEmail('mailto:hlth.registriesadmin@gov.bc.ca')"
                                         (keyup)="onClickSendEmail('mailto:hlth.registriesadmin@gov.bc.caa')">
                                         <img
                                           class="icon-question"
@@ -331,7 +331,7 @@
                                       <div class="links-section first-column">
                                         <div
                                           class="link-container"
-                                          (click)="onClickSendEmail('mailto:satransformation@gov.bc.ca')"
+                                          tabindex="0" (keydown.enter)="onClickSendEmail('mailto:satransformation@gov.bc.ca')" (click)="onClickSendEmail('mailto:satransformation@gov.bc.ca')"
                                           (keyup)="onClickSendEmail('mailto:satransformation@gov.bc.ca')">
                                           <img
                                             class="icon-question"
@@ -341,7 +341,7 @@
                                           </div>
                                           <div
                                             class="link-container"
-                                            (click)="onClickSendEmail('mailto:support@driver-fitness.com')"
+                                            tabindex="0" (keydown.enter)="onClickSendEmail('mailto:support@driver-fitness.com')" (click)="onClickSendEmail('mailto:support@driver-fitness.com')"
                                             (keyup)="onClickSendEmail('mailto:support@driver-fitness.com')">
                                             <img
                                               class="icon-question"
@@ -354,7 +354,7 @@
                                           <div class="links-section first-column">
                                             <div
                                               class="link-container"
-                                              (click)="onClickSendEmail('mailto:securemessagingsupport@fraserhealth.ca')"
+                                              tabindex="0" (keydown.enter)="onClickSendEmail('mailto:securemessagingsupport@fraserhealth.ca')" (click)="onClickSendEmail('mailto:securemessagingsupport@fraserhealth.ca')"
                                               (keyup)="onClickSendEmail('mailto:securemessagingsupport@fraserhealth.ca')">
                                               <img
                                                 class="icon-question"
@@ -369,7 +369,7 @@
                                             @if (showBackToTopButton) {
                                               <button
                                                 class="back-to-top"
-                                                (click)="scrollToTop()">
+                                                tabindex="0" (keydown.enter)="scrollToTop()" (click)="scrollToTop()">
                                                 <fa-icon [icon]="faArrowUp"></fa-icon>
                                               </button>
                                             }

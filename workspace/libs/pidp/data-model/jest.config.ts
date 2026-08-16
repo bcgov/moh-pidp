@@ -1,4 +1,4 @@
-/* eslint-disable */
+ 
 export default {
   displayName: 'pidp-data-model',
   preset: '../../../jest.preset.js',

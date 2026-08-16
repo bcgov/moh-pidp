@@ -1,4 +1,4 @@
-/* eslint-disable */
+ 
 export default {
   displayName: 'shared-data-access',
   preset: '../../../jest.preset.js',

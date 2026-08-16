@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
@@ -14,9 +14,9 @@ import {
   providedIn: 'root',
 })
 export class PharmacyResource {
-  private readonly apiEndpoint = '/api/pharmacies';
+  private readonly http = inject(HttpClient);
 
-  public constructor(private readonly http: HttpClient) {}
+  private readonly apiEndpoint = '/api/pharmacies';
 
   public getPharmacyAdminProfile(): Observable<PharmacyProfile> {
     return this.http.get<PharmacyProfile>('/api/pharmacies/profile');

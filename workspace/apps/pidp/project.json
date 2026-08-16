@@ -9,6 +9,7 @@
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
       "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/apps/pidp",
         "index": "apps/pidp/src/index.html",
@@ -58,11 +59,16 @@
           "sourceMap": true,
           "namedChunks": true
         }
-      },
-      "defaultConfiguration": "production"
+      }
     },
     "serve": {
       "executor": "@angular-devkit/build-angular:dev-server",
+      "defaultConfiguration": "development",
+      "continuous": true,
+      "options": {
+        "port": 4200,
+        "proxyConfig": "apps/pidp/proxy.conf.json"
+      },
       "configurations": {
         "production": {
           "buildTarget": "pidp:build:production"
@@ -70,13 +76,7 @@
         "development": {
           "buildTarget": "pidp:build:development"
         }
-      },
-      "defaultConfiguration": "development",
-      "options": {
-        "port": 4200,
-        "proxyConfig": "apps/pidp/proxy.conf.json"
-      },
-      "continuous": true
+      }
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",

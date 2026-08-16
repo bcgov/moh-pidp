@@ -8,7 +8,7 @@
         type="button"
         color="primary"
         [disabled]="showAddressLineFields"
-        (click)="showManualAddress()">
+        tabindex="0" (keydown.enter)="showManualAddress()" (click)="showManualAddress()">
         <mat-icon>add</mat-icon>
         Add Address Manually
       </button>

@@ -1,7 +1,7 @@
 <mat-toolbar [class.theme-light]="theme === 'light'">
   @if (allowMobileToggle && (mobileToggleBreakpoint$ | async)) {
     <span>
-      <button mat-icon-button aria-label="open" (click)="onOpenMenu()">
+      <button mat-icon-button aria-label="open" tabindex="0" (keydown.enter)="onOpenMenu()" (click)="onOpenMenu()">
         <mat-icon>menu</mat-icon>
       </button>
     </span>
@@ -23,7 +23,7 @@
         mat-icon-button
         matTooltip="Logout"
         aria-label="logout"
-        (click)="onLogout()">
+        tabindex="0" (keydown.enter)="onLogout()" (click)="onLogout()">
         <mat-icon>logout</mat-icon>
       </button>
     </span>

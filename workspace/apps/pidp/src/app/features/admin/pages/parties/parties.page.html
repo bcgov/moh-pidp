@@ -11,7 +11,7 @@
       mat-stroked-button
       type="button"
       color="warn"
-      (click)="onDeleteParties()">
+      tabindex="0" (keydown.enter)="onDeleteParties()" (click)="onDeleteParties()">
       Delete all
     </button>
   }
@@ -66,7 +66,7 @@
                 type="button"
                 color="warn"
                 class="unlink-button"
-                (click)="onUnlinkCredential(element.id, cred)">
+                tabindex="0" (keydown.enter)="onUnlinkCredential(element.id, cred)" (click)="onUnlinkCredential(element.id, cred)">
                 <mat-icon class="delete-icon">link_off</mat-icon>
               </button>
             }
@@ -80,7 +80,7 @@
     <ng-container matColumnDef="delete">
       <th *matHeaderCellDef scope="col" mat-header-cell></th>
       <td *matCellDef="let element" mat-cell>
-        <mat-icon class="delete" (click)="onDeleteParty(element.id)"
+        <mat-icon class="delete" tabindex="0" (keydown.enter)="onDeleteParty(element.id)" (click)="onDeleteParty(element.id)"
           >delete</mat-icon
           >
         </td>

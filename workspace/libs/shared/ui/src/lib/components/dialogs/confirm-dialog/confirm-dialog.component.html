@@ -76,7 +76,7 @@
         id="submit"
         mat-flat-button
         [color]="options.actionType"
-        (click)="onConfirm()">
+        tabindex="0" (keydown.enter)="onConfirm()" (click)="onConfirm()">
         {{ options.actionText }}
       </button>
     }
@@ -86,7 +86,7 @@
     @if (options.actionLink) {
       <a
         uiAnchor
-        [attr.href]="options.actionLink.href">
+        [attr.href]="options.actionLink.href" aria-label="link">
         {{ options.actionLink.text }}
       </a>
     }

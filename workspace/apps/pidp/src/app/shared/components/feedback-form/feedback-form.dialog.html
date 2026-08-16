@@ -4,7 +4,7 @@
       <button
         class="icon-button"
         aria-label="Close"
-        (click)="onCloseClick($event)">
+        tabindex="0" (keydown.enter)="onCloseClick($event)" (click)="onCloseClick($event)">
         <mat-icon class="mat-icon"> close </mat-icon>
       </button>
     </div>
@@ -39,7 +39,7 @@
                   <button
                     class="icon-button"
                     aria-label="Take Screenshot"
-                    (click)="takeScreenshot($event)">
+                    tabindex="0" (keydown.enter)="takeScreenshot($event)" (click)="takeScreenshot($event)">
                     <img
                       src="assets/images/icons/icon-screenshot.svg"
                       alt="Screenshot" />
@@ -50,7 +50,7 @@
                     <button
                       class="icon-button"
                       aria-label="Take Screenshot"
-                      (click)="uploadFile($event)">
+                      tabindex="0" (keydown.enter)="uploadFile($event)" (click)="uploadFile($event)">
                       <img
                         src="assets/images/icons/icon-file-attach.svg"
                         alt="File Upload" />
@@ -94,7 +94,7 @@
                       type="submit"
                       color="primary"
                       [disabled]="disableSend"
-                      (click)="sendFeedback($event)">
+                      tabindex="0" (keydown.enter)="sendFeedback($event)" (click)="sendFeedback($event)">
                       Send
                     </button>
                   </div>

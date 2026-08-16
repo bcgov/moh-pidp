@@ -99,7 +99,7 @@
             mat-stroked-button
             type="button"
             color="primary"
-            (click)="onBack()">
+            tabindex="0" (keydown.enter)="onBack()" (click)="onBack()">
             Home
           </button>
         </span>

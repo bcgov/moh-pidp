@@ -7,7 +7,7 @@
             <p>
                 Your request for access to the Provincial Client Registry could not be processed at this time. If this
                 issue persists, contact
-                <a [attr.href]="'mailto:' + registriesConnectionsEmail">{{ registriesConnectionsEmail }}</a>
+                <a [attr.href]="'mailto:' + registriesConnectionsEmail" aria-label="link">{{ registriesConnectionsEmail }}</a>
                 for assistance.
             </p>
         </section>
@@ -36,7 +36,7 @@
                     group:
                 </p>
                 <p>
-                    <a [attr.href]="'mailto:' + registriesConnectionsEmail">{{ registriesConnectionsEmail }}</a>
+                    <a [attr.href]="'mailto:' + registriesConnectionsEmail" aria-label="link">{{ registriesConnectionsEmail }}</a>
                 </p>
             </div>
         </section>
@@ -63,7 +63,7 @@
                         </div>
                         <div class="smaller-text">
                             <em>Need help? Try this
-                                <a uiAnchor [attr.href]="bcProviderTutorial">video tutorial</a>
+                                <a uiAnchor [attr.href]="bcProviderTutorial" aria-label="link">video tutorial</a>
                             </em>
                         </div>
                         <div class="stepper-buttons">
@@ -78,7 +78,7 @@
                         <p class="guide-information">
                             If you need help setting up your Multi-Factor Authentication
                             (MFA), please
-                            <a href="assets/documents/mfa.pdf" download>download this PDF</a>
+                            <a href="assets/documents/mfa.pdf" download aria-label="link">download this PDF</a>
                         </p>
 
                         <div class="stepper-buttons">
@@ -99,7 +99,7 @@
                             </p>
                             <button mat-flat-button type="button" color="primary"
                                 aria-labelledby="request-hcim-web-pcr-access" [disabled]="getAccessDisabled"
-                                (click)="onRequestAccess()">
+                                tabindex="0" (keydown.enter)="onRequestAccess()" (click)="onRequestAccess()">
                                 Get Access
                             </button>
                         </div>
@@ -129,13 +129,13 @@
                             }
                             <button mat-flat-button type="button" color="primary"
                                 aria-labelledby="navigate-to-hcim-web-pcr" [disabled]="hcimWebPcr$ | async"
-                                (click)="navigateToPath()">
+                                tabindex="0" (keydown.enter)="navigateToPath()" (click)="navigateToPath()">
                                 Login to the Provincial Client Registry with your BCProvider
                             </button>
                         </div>
                         <div class="stepper-buttons">
                             <button mat-stroked-button matStepperPrevious>Back</button>
-                            <button mat-stroked-button (click)="stepper.reset()">Reset</button>
+                            <button mat-stroked-button tabindex="0" (keydown.enter)="stepper.reset()" (click)="stepper.reset()">Reset</button>
                         </div>
                     </mat-step>
                 </mat-stepper>
@@ -150,7 +150,7 @@
                         <div class="card-footer auth-card-footer">
                             <button mat-flat-button uiPageFooterAction type="button" color="primary"
                                 aria-labelledby="navigate-to-hcim-web-pcr" [disabled]="hcimWebPcr$ | async"
-                                (click)="navigateToPath()">
+                                tabindex="0" (keydown.enter)="navigateToPath()" (click)="navigateToPath()">
                                 Login
                             </button>
                         </div>

@@ -9,7 +9,7 @@
           <button
             uiTextButton
             [disabled]="isLastItem"
-            (click)="isFirstItem ? onBack() : navigateTo(breadcrumb.path)">
+            tabindex="0" (keydown.enter)="isFirstItem ? onBack() : navigateTo(breadcrumb.path)" (click)="isFirstItem ? onBack() : navigateTo(breadcrumb.path)">
             @if (isFirstItem) {
               <img
                 src="/assets/images/icons/icon-home.svg"

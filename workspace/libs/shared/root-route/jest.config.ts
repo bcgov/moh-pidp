@@ -1,4 +1,4 @@
-/* eslint-disable */
+ 
 export default {
   displayName: 'shared-root-route',
   preset: '../../../jest.preset.js',

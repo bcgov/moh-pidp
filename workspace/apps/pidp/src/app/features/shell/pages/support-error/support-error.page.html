@@ -7,17 +7,17 @@
   <ul>
     <li>
       By email at
-      <a uiAnchor scheme="mailto" [attr.href]="providerIdentitySupport"></a>
+      <a uiAnchor scheme="mailto" [attr.href]="providerIdentitySupport" aria-label="link"></a>
     </li>
 
     <li>
       By phone at
-      <a uiAnchor scheme="tel" [attr.href]="additionalSupportPhone"></a>
+      <a uiAnchor scheme="tel" [attr.href]="additionalSupportPhone" aria-label="link"></a>
     </li>
   </ul>
 
   <span>
-    <button mat-flat-button type="button" color="primary" (click)="onBack()">
+    <button mat-flat-button type="button" color="primary" tabindex="0" (keydown.enter)="onBack()" (click)="onBack()">
       Back to OneHealthID Service
     </button>
   </span>

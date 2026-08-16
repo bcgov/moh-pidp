@@ -17,7 +17,7 @@
           <p>
             If you have any additional questions contact the FH mHealth team via
             email:
-            <a uiAnchor scheme="mailto" [attr.href]="msTeamsSupportEmail"></a>
+            <a uiAnchor scheme="mailto" [attr.href]="msTeamsSupportEmail" aria-label="link"></a>
           </p>
         </section>
       } @else {
@@ -120,7 +120,7 @@
                     type="button"
                     color="primary"
                     [disabled]="!clinicId"
-                    (click)="onRequestAccess()">
+                    tabindex="0" (keydown.enter)="onRequestAccess()" (click)="onRequestAccess()">
                     Next
                   </button>
                 }

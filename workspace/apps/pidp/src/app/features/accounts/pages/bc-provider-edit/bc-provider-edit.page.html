@@ -26,7 +26,7 @@
             <fa-icon
               class="fa-1.5x"
               [icon]="faCircleQuestion"
-            (click)="toggleTooltip('password')"></fa-icon>
+            tabindex="0" (keydown.enter)="toggleTooltip('password')" (click)="toggleTooltip('password')"></fa-icon>
           </div>
           <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
             <h1><strong>Set new password</strong></h1>
@@ -94,7 +94,7 @@
                       ><fa-icon
                       class="fa-1.5x"
                       [icon]="faCircleQuestion"
-                    (click)="toggleTooltip('mfa')"></fa-icon>
+                    tabindex="0" (keydown.enter)="toggleTooltip('mfa')" (click)="toggleTooltip('mfa')"></fa-icon>
                   </div>
                   <h1>
                     <strong>Reset your multi-factor authentication (MFA)</strong>
@@ -127,7 +127,7 @@
                               type="button"
                               [ngClass]="{ 'disabled': (identityProvider$ | async) !== IdentityProvider.BCSC }"
                               [disabled]="(identityProvider$ | async) !== IdentityProvider.BCSC"
-                              (click)="onResetMfa()">
+                              tabindex="0" (keydown.enter)="onResetMfa()" (click)="onResetMfa()">
                               Reset my MFA<img
                               src="/assets/images/icons/icon-right-circle.svg"
                               alt="reset-mfa-right" />

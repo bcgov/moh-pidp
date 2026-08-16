@@ -24,7 +24,7 @@
           </ng-container>
           <ng-container uiAlertActions>
             <span>
-              <a mat-stroked-button uiAnchor [attr.href]="hcimWebUrl">
+              <a mat-stroked-button uiAnchor [attr.href]="hcimWebUrl" aria-label="link">
                 Login to HCIMWeb
               </a>
             </span>
@@ -47,7 +47,7 @@
           </li>
           <li>
             Instead, you will login directly through
-            <a uiAnchor [attr.href]="hcimWebUrl">this link</a>, using your
+            <a uiAnchor [attr.href]="hcimWebUrl" aria-label="link">this link</a>, using your
             organization credential (the same credentials used to access your
             workstation).
           </li>
@@ -70,7 +70,7 @@
             <p>
               If you have forgotten your password, or are unsure of it, follow
               this
-              <a uiAnchor [attr.href]="healthNetBcPasswordResetUrl">link</a>
+              <a uiAnchor [attr.href]="healthNetBcPasswordResetUrl" aria-label="link">link</a>
               to reset it before you start this process.
             </p>
             <p>
@@ -79,12 +79,12 @@
               <a
                 uiAnchor
                 scheme="mailto"
-              [attr.href]="healthRegistriesAdminEmail"></a>
+              [attr.href]="healthRegistriesAdminEmail" aria-label="link"></a>
               or
               <a
                 uiAnchor
                 scheme="tel"
-                [attr.href]="healthRegistriesAdminPhone"></a
+                [attr.href]="healthRegistriesAdminPhone" aria-label="link"></a
                 >.
               </p>
             </ng-container>
@@ -103,9 +103,9 @@
                 <a
                   uiAnchor
                   scheme="mailto"
-                [attr.href]="healthNetBcHelpDeskEmail"></a>
+                [attr.href]="healthNetBcHelpDeskEmail" aria-label="link"></a>
                 or
-                <a uiAnchor scheme="tel" [attr.href]="healthNetBcHelpDeskPhone"></a
+                <a uiAnchor scheme="tel" [attr.href]="healthNetBcHelpDeskPhone" aria-label="link"></a
                   >.
                 </p>
               </ng-container>
@@ -124,9 +124,9 @@
                   <a
                     uiAnchor
                     scheme="mailto"
-                  [attr.href]="healthNetBcHelpDeskEmail"></a>
+                  [attr.href]="healthNetBcHelpDeskEmail" aria-label="link"></a>
                   or
-                  <a uiAnchor scheme="tel" [attr.href]="healthNetBcHelpDeskPhone"></a
+                  <a uiAnchor scheme="tel" [attr.href]="healthNetBcHelpDeskPhone" aria-label="link"></a
                     >.
                   </p>
                 </ng-container>
@@ -145,9 +145,9 @@
                     <a
                       uiAnchor
                       scheme="mailto"
-                    [attr.href]="healthNetBcHelpDeskEmail"></a>
+                    [attr.href]="healthNetBcHelpDeskEmail" aria-label="link"></a>
                     or
-                    <a uiAnchor scheme="tel" [attr.href]="healthNetBcHelpDeskPhone"></a
+                    <a uiAnchor scheme="tel" [attr.href]="healthNetBcHelpDeskPhone" aria-label="link"></a
                       >.
                     </p>
                   </ng-container>
@@ -173,7 +173,7 @@
                     <ng-container uiPageSectionSubheaderDesc>
                       If you have forgotten your password, or are unsure of it, follow
                       <a uiAnchor [attr.href]="healthNetBcPasswordResetUrl"
-                        >this link</a
+                         aria-label="link">this link</a
                         >
                         to reset it before you start this process.
                       </ng-container>
@@ -188,7 +188,7 @@
                         <mat-error>Required</mat-error>
                       </mat-form-field>
                       <small>
-                        <a uiAnchor [attr.href]="healthNetBcPasswordResetUrl">
+                        <a uiAnchor [attr.href]="healthNetBcPasswordResetUrl" aria-label="link">
                           Have you forgotten your password?
                         </a>
                       </small>

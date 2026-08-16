@@ -47,7 +47,7 @@
                 [class.disabled]="!isActive"
                 [attr.aria-disabled]="!isActive"
                 [tabindex]="!isActive ? -1 : 0"
-                >{{ cardData.linkText }}</a
+                 aria-label="link">{{ cardData.linkText }}</a
               >
             }
           </div>
@@ -75,7 +75,7 @@
               <button
                 class="btn"
                 [disabled]="inputField.invalid"
-                (click)="onContinue(inputField.value)">
+                tabindex="0" (keydown.enter)="onContinue(inputField.value)" (click)="onContinue(inputField.value)">
                 {{ cardData.buttonText }}
               </button>
             </div>
@@ -107,7 +107,7 @@
               <button
                 class="btn btn-continue"
                 [disabled]="!isActive"
-                (click)="onContinue(routePath)">
+                tabindex="0" (keydown.enter)="onContinue(routePath)" (click)="onContinue(routePath)">
                 {{ cardData.buttonText }}
               </button>
             }

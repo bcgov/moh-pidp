@@ -19,7 +19,7 @@
           <p>
             If you have any additional questions contact the FH mHealth team via
             email:
-            <a uiAnchor scheme="mailto" [attr.href]="msTeamsSupportEmail"></a>
+            <a uiAnchor scheme="mailto" [attr.href]="msTeamsSupportEmail" aria-label="link"></a>
           </p>
           <section class="endorsement-section">
             <header>
@@ -97,7 +97,7 @@
                 uiPageFooterAction
                 type="button"
                 color="primary"
-                (click)="onBack()">
+                tabindex="0" (keydown.enter)="onBack()" (click)="onBack()">
                 Back
               </button>
             }
@@ -108,7 +108,7 @@
                 uiPageFooterAction
                 type="button"
                 color="primary"
-                (click)="onNext()">
+                tabindex="0" (keydown.enter)="onNext()" (click)="onNext()">
                 {{ currentPage === 0 ? 'Next' : 'I Accept'}}
               </button>
             }

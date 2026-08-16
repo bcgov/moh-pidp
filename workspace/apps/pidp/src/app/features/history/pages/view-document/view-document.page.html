@@ -14,7 +14,7 @@
       uiPageFooterAction
       color="primary"
       type="button"
-      (click)="onBack()">
+      tabindex="0" (keydown.enter)="onBack()" (click)="onBack()">
       Back
     </button>
   </ui-page-footer>

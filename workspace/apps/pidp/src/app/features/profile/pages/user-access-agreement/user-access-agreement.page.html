@@ -6,7 +6,7 @@
         <p>
           Your acceptance of the agreement could not be processed at this time.
           If this issue persists, contact
-          <a uiAnchor scheme="mailto" [attr.href]="specialAuthoritySupportEmail">{{specialAuthoritySupportEmail}}</a>
+          <a uiAnchor scheme="mailto" [attr.href]="specialAuthoritySupportEmail" aria-label="link">{{specialAuthoritySupportEmail}}</a>
           for assistance.
         </p>
       </ng-container>
@@ -26,11 +26,11 @@
     <div class="button-container">
       @if (completed) {
       <button class="back-button" mat-stroked-button uiPageFooterAction color="primary" type="button"
-        (click)="onBack()">
+        tabindex="0" (keydown.enter)="onBack()" (click)="onBack()">
         Home
       </button>
       } @else {
-      <button mat-flat-button uiPageFooterAction color="primary" type="button" (click)="onAcceptAgreement()">
+      <button mat-flat-button uiPageFooterAction color="primary" type="button" tabindex="0" (keydown.enter)="onAcceptAgreement()" (click)="onAcceptAgreement()">
         Accept Agreement
       </button>
       }

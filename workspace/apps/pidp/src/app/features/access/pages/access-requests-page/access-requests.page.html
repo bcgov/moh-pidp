@@ -27,7 +27,7 @@
           type="button"
           mat-flat-button
           color="primary"
-          (click)="search(filter.value)">
+          tabindex="0" (keydown.enter)="search(filter.value)" (click)="search(filter.value)">
           Search
         </button>
       </div>
@@ -49,7 +49,7 @@
       @if (showBackToTopButton) {
         <button
           class="back-to-top"
-          (click)="scrollToTop()">
+          tabindex="0" (keydown.enter)="scrollToTop()" (click)="scrollToTop()">
           <fa-icon [icon]="faArrowUp"></fa-icon>
         </button>
       }

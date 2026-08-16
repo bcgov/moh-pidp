@@ -13,7 +13,7 @@
           <p>
             Your request for access to the Provider Reporting Portal could not be
             processed at this time. If this issue persists, contact
-            <a uiAnchor scheme="mailto" [href]="">blank</a>
+            <a uiAnchor scheme="mailto" [href]="" aria-label="link">blank</a>
             for assistance.
           </p>
         </ng-container>
@@ -62,7 +62,7 @@
             uiPageFooterAction
             type="button"
             color="primary"
-            (click)="onRequestAccess()">
+            tabindex="0" (keydown.enter)="onRequestAccess()" (click)="onRequestAccess()">
             Next
           </button>
         }

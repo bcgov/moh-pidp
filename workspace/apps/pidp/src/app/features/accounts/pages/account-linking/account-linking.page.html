@@ -62,7 +62,7 @@
           }
           <button
             [class.instructions-text]="!showInstructions"
-            (click)="toggleInstructions()">
+            tabindex="0" (keydown.enter)="toggleInstructions()" (click)="toggleInstructions()">
             {{!showInstructions ? 'Instructions' : 'Back'}}
           </button>
         </div>
@@ -78,7 +78,7 @@
                   #tooltip="matTooltip"
                   matTooltip="Only one BCSC account can be linked to your profile."
                   aria-label="Button that displays a tooltip when focused or hovered over"
-                  (click)="tooltip.show()">
+                  tabindex="0" (keydown.enter)="tooltip.show()" (click)="tooltip.show()">
                   <img
                     class="lock-icon"
                     data-bs-toggle="modal"
@@ -101,15 +101,15 @@
                 } @else {
                   @if (!hasCredential(IdentityProvider.IDIR)) {
                     <a
-                      (click)="onLinkAccount(IdentityProvider.BCSC)"
-                      >Link Account</a
+                      tabindex="0" (keydown.enter)="onLinkAccount(IdentityProvider.BCSC)" (click)="onLinkAccount(IdentityProvider.BCSC)"
+                       aria-label="link">Link Account</a
                       >
                   }
                 }
               </div>
               <div
                 class="bc-provider card-styles card-hover"
-                (click)="navigateTo()"
+                tabindex="0" (keydown.enter)="navigateTo()" (click)="navigateTo()"
                 (keyup)="navigateTo()">
                 <div class="card-header-icon">
                   <div class="card-icon">
@@ -131,8 +131,8 @@
                     } @else {
                       @if (hasCredential(IdentityProvider.BCSC)) {
                         <a
-                          (click)="onPageNavigate([AccountRoutes.routePath(AccountRoutes.BC_PROVIDER_APPLICATION)])"
-                          >Link Account</a
+                          tabindex="0" (keydown.enter)="onPageNavigate([AccountRoutes.routePath(AccountRoutes.BC_PROVIDER_APPLICATION)])" (click)="onPageNavigate([AccountRoutes.routePath(AccountRoutes.BC_PROVIDER_APPLICATION)])"
+                           aria-label="link">Link Account</a
                           >
                       }
                     }
@@ -142,7 +142,7 @@
                   <div
                     class="health-authority card-styles"
                     [ngClass]="{ 'card-hover': !hasCredential(IdentityProvider.PHSA) }"
-                    (click)="!hasCredential(IdentityProvider.PHSA) && onLinkAccount(IdentityProvider.PHSA)"
+                    tabindex="0" (keydown.enter)="!hasCredential(IdentityProvider.PHSA) && onLinkAccount(IdentityProvider.PHSA)" (click)="!hasCredential(IdentityProvider.PHSA) && onLinkAccount(IdentityProvider.PHSA)"
                     (keyup)="!hasCredential(IdentityProvider.PHSA) && onLinkAccount(IdentityProvider.PHSA)">
                     <div class="card-header-icon">
                       <div class="card-icon">
@@ -167,8 +167,8 @@
                         } @else {
                           @if (!hasCredential(IdentityProvider.IDIR)) {
                             <a
-                              (click)="onLinkAccount(IdentityProvider.PHSA)"
-                              >Link Account</a
+                              tabindex="0" (keydown.enter)="onLinkAccount(IdentityProvider.PHSA)" (click)="onLinkAccount(IdentityProvider.PHSA)"
+                               aria-label="link">Link Account</a
                               >
                           }
                         }

@@ -16,7 +16,7 @@
             <a
               uiAnchor
               scheme="mailto"
-              [attr.href]="infantRsvEformsSupportEmail"></a>
+              [attr.href]="infantRsvEformsSupportEmail" aria-label="link"></a>
             for assistance.
           </p>
         </ng-container>
@@ -51,7 +51,7 @@
           </p>
           <p>
             Follow this link to Infant RSV Immunization Request eForm:<br />
-            <a uiAnchor [attr.href]="infantRsvEformsUrl"></a>
+            <a uiAnchor [attr.href]="infantRsvEformsUrl" aria-label="link"></a>
           </p>
           <p>
             You will need to visit this link each time you want to submit an
@@ -81,7 +81,7 @@
           uiPageFooterAction
           type="button"
           color="primary"
-          (click)="onRequestAccess()">
+          tabindex="0" (keydown.enter)="onRequestAccess()" (click)="onRequestAccess()">
           Next
         </button>
       }
