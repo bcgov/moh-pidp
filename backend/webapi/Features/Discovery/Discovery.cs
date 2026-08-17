@@ -52,12 +52,12 @@ public class Discovery
 
         public async Task<Model> HandleAsync(Query query)
         {
-            var idpId = query.User.GetIdpId()?.ToLowerInvariant();
+            var idpId = query.User.GetIdpId()?.ToLower();
 
             var data = await this.context.Credentials
                 .Where(credential => credential.UserId == query.User.GetUserId()
                     || (credential.IdentityProvider == query.User.GetIdentityProvider()
-                        && credential.IdpId.Equals(idpId, StringComparison.InvariantCultureIgnoreCase)))
+                        && credential.IdpId.ToLower() == idpId))
                 .Select(credential => new
                 {
                     Credential = credential,

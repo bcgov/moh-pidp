@@ -74,7 +74,7 @@ public class Create
             var existingCredential = await this.context.Credentials
                 .Where(credential => credential.UserId == userId
                     || (credential.IdentityProvider == userIdentityProvider
-                        && credential.IdpId.Equals(userIdpId, StringComparison.InvariantCultureIgnoreCase)))
+                        && credential.IdpId!.ToLower() == userIdpId.ToLower()))
                 .SingleOrDefaultAsync();
 
             if (existingCredential != null)

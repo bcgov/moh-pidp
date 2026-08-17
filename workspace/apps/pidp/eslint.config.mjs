@@ -69,7 +69,8 @@ export default [
   {
     files: ['**/*.html'],
     rules: {
-      '@angular-eslint/template/label-has-associated-control': 'warn'
+      '@angular-eslint/template/label-has-associated-control': 'warn',
+      '@angular-eslint/template/elements-content': 'off'
     }
   }
 ];

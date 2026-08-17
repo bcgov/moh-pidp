@@ -60,7 +60,7 @@ public class BCProviderInvite
                 {
                     EmailIsVerified = party.EmailIsVerified(command.Email),
                     ExistingAccountPartyId = this.context.InvitedEntraAccounts
-                        .Where(account => account.InvitedUserPrincipalName.Equals(command.Email, StringComparison.InvariantCultureIgnoreCase))
+                        .Where(account => account.InvitedUserPrincipalName.ToLower() == command.Email.ToLower())
                         .Select(account => (int?)account.PartyId)
                         .SingleOrDefault()
                 })
