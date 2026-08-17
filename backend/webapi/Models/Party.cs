@@ -1,4 +1,4 @@
-namespace Pidp.Models;
+﻿namespace Pidp.Models;
 
 using EntityFrameworkCore.Projectables;
 using Microsoft.EntityFrameworkCore;
@@ -82,7 +82,7 @@ public class Party : BaseAuditable
     [Projectable]
     public bool EmailIsVerified(string email) => this.VerifiedEmails
         .Any(verifiedEmail => verifiedEmail.IsVerified
-            && verifiedEmail.Email.ToLower() == email.ToLower());
+            && verifiedEmail.Email.Equals(email, StringComparison.InvariantCultureIgnoreCase));
 
     /// <summary>
     /// The "primary" Credential of a Party is the a) BC Services Card Credential or b) the only non-BC Services Card Credential.

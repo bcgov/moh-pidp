@@ -86,7 +86,10 @@ public class PharmacyStaffDeactivationService(
                         var success = await this.bcProviderClient.UpdateUser(upn, userUpdate);
                         if (success)
                         {
-                            this.logger.LogInformation("Successfully set job title to '{jobTitle}' for user '{upn}'.", disabledJobTitle, upn);
+                            if (this.logger.IsEnabled(LogLevel.Information))
+                            {
+                                this.logger.LogInformation("Successfully set job title to '{JobTitle}' for user '{Upn}'.", disabledJobTitle, upn);
+                            }
                         }
                         else
                         {

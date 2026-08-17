@@ -12,7 +12,7 @@ using PidpTests.TestingExtensions;
 public class PidpAuthorizationServiceTests : InMemoryDbTest
 {
     [Fact]
-    public async void CheckPartyAccessibility_NoParty_NotFound()
+    public async Task CheckPartyAccessibility_NoParty_NotFound()
     {
         this.TestDb.HasAParty(party => party.Id = 1);
         var service = this.MockDependenciesFor<PidpAuthorizationService>();
@@ -23,7 +23,7 @@ public class PidpAuthorizationServiceTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void CheckPartyAccessibility_PartyExistsMatchingUserId_Success()
+    public async Task CheckPartyAccessibility_PartyExistsMatchingUserId_Success()
     {
         var party = this.TestDb.HasAParty();
         var user = A.Fake<ClaimsPrincipal>();
@@ -36,7 +36,7 @@ public class PidpAuthorizationServiceTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void CheckPartyAccessibility_PartyExistsNotMatchingUserId_Fail()
+    public async Task CheckPartyAccessibility_PartyExistsNotMatchingUserId_Fail()
     {
         var party = this.TestDb.HasAParty();
         var user = A.Fake<ClaimsPrincipal>();

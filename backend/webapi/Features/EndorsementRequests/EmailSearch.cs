@@ -1,4 +1,4 @@
-namespace Pidp.Features.EndorsementRequests;
+﻿namespace Pidp.Features.EndorsementRequests;
 
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +30,7 @@ public class EmailSearch
         public async Task<Model> HandleAsync(Query query)
         {
             var existingParties = await this.context.Parties
-                .Where(party => party.Email!.ToLower() == query.RecipientEmail.ToLower())
+                .Where(party => party.Email.Equals(query.RecipientEmail, StringComparison.InvariantCultureIgnoreCase))
                 .Select(party => party.DisplayFullName)
                 .ToListAsync();
 

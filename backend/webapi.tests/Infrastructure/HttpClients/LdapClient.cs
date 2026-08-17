@@ -14,7 +14,7 @@ public class LdapClientTests
     private const string BaseUrl = "http://www.example.com/";
 
     [Fact]
-    public async void HcimLoginAsync_SuccessfulHcimLogin_Authorized()
+    public async Task HcimLoginAsync_SuccessfulHcimLogin_Authorized()
     {
         var expectedRole = "AN HCIM ROLE";
         var ldapClient = CreateLdapClientWithMockedResponse(new LdapLoginResponse
@@ -36,7 +36,7 @@ public class LdapClientTests
     }
 
     [Fact]
-    public async void HcimLoginAsync_SuccessfulLoginNoRole_Unauthorized()
+    public async Task HcimLoginAsync_SuccessfulLoginNoRole_Unauthorized()
     {
         var ldapClient = CreateLdapClientWithMockedResponse(new LdapLoginResponse
         {
@@ -56,7 +56,7 @@ public class LdapClientTests
     }
 
     [Fact]
-    public async void HcimLoginAsync_UserDoesNotExist_AuthError()
+    public async Task HcimLoginAsync_UserDoesNotExist_AuthError()
     {
         var ldapClient = CreateLdapClientWithMockedResponse(new LdapLoginResponse());
 
@@ -71,7 +71,7 @@ public class LdapClientTests
     }
 
     [Fact]
-    public async void HcimLoginAsync_BadPassword_AuthErrorWithRemainingAttempts()
+    public async Task HcimLoginAsync_BadPassword_AuthErrorWithRemainingAttempts()
     {
         var expectedRemainingAttempts = 2;
         var ldapClient = CreateLdapClientWithMockedResponse(new LdapLoginResponse
@@ -93,7 +93,7 @@ public class LdapClientTests
     }
 
     [Fact]
-    public async void HcimLoginAsync_UserLocked_Locked()
+    public async Task HcimLoginAsync_UserLocked_Locked()
     {
         var ldapClient = CreateLdapClientWithMockedResponse(new LdapLoginResponse
         {
@@ -114,7 +114,7 @@ public class LdapClientTests
     }
 
     [Fact]
-    public async void HcimLoginAsync_ClientError_FailDomainResult()
+    public async Task HcimLoginAsync_ClientError_FailDomainResult()
     {
         var messageHandler = A.Fake<HttpMessageHandler>();
         A.CallTo(messageHandler)

@@ -1,4 +1,4 @@
-namespace Pidp.Features.Discovery;
+﻿namespace Pidp.Features.Discovery;
 
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
@@ -55,11 +55,9 @@ public class Discovery
             var idpId = query.User.GetIdpId()?.ToLowerInvariant();
 
             var data = await this.context.Credentials
-#pragma warning disable CA1304 // ToLower() is Locale Dependant
                 .Where(credential => credential.UserId == query.User.GetUserId()
                     || (credential.IdentityProvider == query.User.GetIdentityProvider()
-                        && credential.IdpId!.ToLower() == idpId))
-#pragma warning restore CA1304
+                        && credential.IdpId.Equals(idpId, StringComparison.InvariantCultureIgnoreCase)))
                 .Select(credential => new
                 {
                     Credential = credential,

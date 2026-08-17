@@ -86,10 +86,18 @@ public class RabbitMqConsumerHostedService(
         await _channel.BasicConsumeAsync(queue: queueName, autoAck: false, consumer: consumer, cancellationToken: stoppingToken);
     }
 
-    public override async Task StopAsync(CancellationToken stoppingToken)
+    public override async Task StopAsync(CancellationToken cancellationToken)
     {
-        if (_channel is not null) await _channel.CloseAsync(cancellationToken: stoppingToken);
-        if (_connection is not null) await _connection.CloseAsync(cancellationToken: stoppingToken);
-        await base.StopAsync(stoppingToken);
+        if (_channel is not null)
+        {
+            await _channel.CloseAsync(cancellationToken: cancellationToken);
+        }
+
+        if (_connection is not null)
+        {
+            await _connection.CloseAsync(cancellationToken: cancellationToken);
+        }
+
+        await base.StopAsync(cancellationToken);
     }
 }

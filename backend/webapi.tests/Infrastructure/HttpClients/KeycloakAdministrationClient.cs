@@ -14,7 +14,7 @@ public class KeycloakAdministrationClientTests
     private const string BaseUrl = "http://www.example.com/";
 
     [Fact]
-    public async void AssignClientRole_HapyPath_Success()
+    public async Task AssignClientRole_HapyPath_Success()
     {
         var userId = Guid.NewGuid();
         var client = new Client
@@ -57,7 +57,7 @@ public class KeycloakAdministrationClientTests
     }
 
     [Fact]
-    public async void AssignAccessRoles_HapyPath_Success()
+    public async Task AssignAccessRoles_HapyPath_Success()
     {
         var userId = Guid.NewGuid();
         var client = new Client
@@ -90,7 +90,6 @@ public class KeycloakAdministrationClientTests
         A.CallTo(messageHandler)
             .InvokingSendAsyncWith(HttpMethod.Post, BaseUrl + $"users/{userId}/role-mappings/clients/{client.Id}")
             .MustHaveHappenedOnceExactly();
-
         Assert.NotNull(capturedMessageContent);
         var sentRoles = JsonSerializer.Deserialize<IEnumerable<Role>>(capturedMessageContent!, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
         Assert.Single(sentRoles);

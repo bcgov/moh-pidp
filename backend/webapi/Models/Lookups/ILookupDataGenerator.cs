@@ -1,6 +1,6 @@
-namespace Pidp.Models.Lookups;
+﻿namespace Pidp.Models.Lookups;
 
 public interface ILookupDataGenerator<T>
 {
-    IEnumerable<T> Generate();
+    public IEnumerable<T> Generate();
 }

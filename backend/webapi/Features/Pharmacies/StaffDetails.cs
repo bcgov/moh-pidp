@@ -40,7 +40,7 @@ public class StaffDetails
                 })
                 .SingleOrDefaultAsync(cancellationToken);
 
-            var m = new Model
+            return new Model
             {
                 PartyId = role.PartyId,
                 FullName = role.FullName,
@@ -48,7 +48,6 @@ public class StaffDetails
                 EffectiveStartDate = role.EffectiveStartDate.HasValue ? DateTime.SpecifyKind(role.EffectiveStartDate.Value, DateTimeKind.Unspecified) : DateTime.MinValue,
                 EffectiveEndDate = role.EffectiveEndDate.HasValue ? DateTime.SpecifyKind(role.EffectiveEndDate.Value, DateTimeKind.Unspecified) : DateTime.MinValue
             };
-            return m;
         }
     }
 }

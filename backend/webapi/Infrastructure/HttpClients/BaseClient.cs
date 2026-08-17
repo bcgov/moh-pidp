@@ -149,12 +149,6 @@ public class BaseClient
 
             if (!response.IsSuccessStatusCode)
             {
-                // TODO: retryable status codes?
-                // if (RetryableStatusCodes.Contains(response.StatusCode))
-                // {
-                //     ???
-                // }
-
                 var responseMessage = response.Content != null
                     ? await response.Content.ReadAsStringAsync(cancellationToken)
                     : "";

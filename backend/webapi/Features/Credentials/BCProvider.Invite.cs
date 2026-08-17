@@ -1,4 +1,4 @@
-namespace Pidp.Features.Credentials;
+﻿namespace Pidp.Features.Credentials;
 
 using DomainResults.Common;
 using FluentValidation;
@@ -60,7 +60,7 @@ public class BCProviderInvite
                 {
                     EmailIsVerified = party.EmailIsVerified(command.Email),
                     ExistingAccountPartyId = this.context.InvitedEntraAccounts
-                        .Where(account => account.InvitedUserPrincipalName.ToLower() == command.Email.ToLower())
+                        .Where(account => account.InvitedUserPrincipalName.Equals(command.Email, StringComparison.InvariantCultureIgnoreCase))
                         .Select(account => (int?)account.PartyId)
                         .SingleOrDefault()
                 })

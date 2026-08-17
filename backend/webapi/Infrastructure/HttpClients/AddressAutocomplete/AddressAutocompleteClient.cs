@@ -18,7 +18,7 @@ public class AddressAutocompleteClient(
 
         if (!result.IsSuccess)
         {
-            // this.Logger.LogError($"Error when retrieving AddressAutocompleteFindResponse results for SearchTerm = {searchTerm}. {message}");
+
             return [];
         }
 
@@ -36,7 +36,7 @@ public class AddressAutocompleteClient(
 
         if (!result.IsSuccess)
         {
-            // this.Logger.LogError($"Error when retrieving AddressAutocompleteRetrieveResponse results for Id = {id}. {message}");
+
             return [];
         }
 

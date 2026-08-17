@@ -1,4 +1,4 @@
-namespace Pidp.Features.Credentials;
+﻿namespace Pidp.Features.Credentials;
 
 using DomainResults.Common;
 using FluentValidation;
@@ -71,14 +71,11 @@ public class Create
                 this.logger.LogTicketExpired(ticket.Id);
                 return DomainResult.Failed<int>();
             }
-
-#pragma warning disable CA1304 // ToLower() is Locale Dependant
             var existingCredential = await this.context.Credentials
                 .Where(credential => credential.UserId == userId
                     || (credential.IdentityProvider == userIdentityProvider
-                        && credential.IdpId!.ToLower() == userIdpId.ToLower()))
+                        && credential.IdpId.Equals(userIdpId, StringComparison.InvariantCultureIgnoreCase)))
                 .SingleOrDefaultAsync();
-#pragma warning restore CA1304
 
             if (existingCredential != null)
             {

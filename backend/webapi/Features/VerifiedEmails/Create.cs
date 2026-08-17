@@ -1,4 +1,4 @@
-namespace Pidp.Features.VerifiedEmails;
+﻿namespace Pidp.Features.VerifiedEmails;
 
 using FluentValidation;
 using Flurl;
@@ -48,7 +48,7 @@ public class Create
         {
             var verifiedEmail = await this.context.VerifiedEmails
                 .Where(verifiedEmail => verifiedEmail.PartyId == command.PartyId
-                    && verifiedEmail.Email.ToLower() == command.Email.ToLower())
+                    && verifiedEmail.Email.Equals(command.Email, StringComparison.InvariantCultureIgnoreCase))
                 .SingleOrDefaultAsync();
 
             if (verifiedEmail == null)

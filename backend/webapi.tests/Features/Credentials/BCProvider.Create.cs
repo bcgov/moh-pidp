@@ -18,7 +18,7 @@ public class BcProviderCreateTests : InMemoryDbTest
 {
     [Theory]
     [MemberData(nameof(LicenceTestCases))]
-    public async void CreateBCProvider_VaryingLicenceStatus_ProviderCreatedMatchingFlags(PlrStandingsDigest plrStanding, bool expectedMd, bool expectedRnp)
+    public async Task CreateBCProvider_VaryingLicenceStatus_ProviderCreatedMatchingFlags(PlrStandingsDigest plrStanding, bool expectedMd, bool expectedRnp)
     {
         var expectedPassword = "p4ssw@rD";
         var expectedHpdid = "AnHpdid1123123";
@@ -80,7 +80,7 @@ public class BcProviderCreateTests : InMemoryDbTest
         Assert.Equal(party.FirstName, capturedNewKeycloakUser.FirstName);
         Assert.Equal(party.LastName, capturedNewKeycloakUser.LastName);
 
-        Assert.Single(party.Credentials.Where(credential => credential.IdentityProvider == IdentityProviders.BCProvider));
+        Assert.Single(party.Credentials, credential => credential.IdentityProvider == IdentityProviders.BCProvider);
         Assert.Equal(expectedNewUserId, party.Credentials.Single(credential => credential.IdentityProvider == IdentityProviders.BCProvider).UserId);
     }
 

@@ -168,7 +168,7 @@ public class Startup(IConfiguration configuration)
             app.UseHsts();
         }
 
-        // app.UseHttpsRedirection();
+
 
         app.Use(async (context, next) =>
         {

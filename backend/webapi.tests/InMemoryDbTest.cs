@@ -2,7 +2,7 @@ namespace PidpTests;
 
 using FakeItEasy;
 using FakeItEasy.Sdk;
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
 using System.Reflection;
