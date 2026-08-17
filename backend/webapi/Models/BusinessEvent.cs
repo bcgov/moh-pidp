@@ -69,6 +69,47 @@ public class LicenceStatusRoleUnassigned : PartyBusinessEvent
     }
 }
 
+public class AccessRequestRevoked : PartyBusinessEvent
+{
+    public static AccessRequestRevoked Create(int partyId, AccessTypeCode accessTypeCode, MohKeycloakEnrolment? enrolment, string? cpn, IEnumerable<Guid> userIds, string reason, string? trigger, Instant recordedOn)
+    {
+        return new AccessRequestRevoked
+        {
+            PartyId = partyId,
+            Description = $"Party's {accessTypeCode} Access Request was deleted and {FormatRoles(enrolment)} unassigned."
+                + $" Reason: {reason}."
+                + $" Trigger: {trigger ?? "not recorded"}."
+                + $" CPN: {cpn ?? "none (endorsement-based access)"}."
+                + $" Keycloak User Ids: {FormatUserIds(userIds)}.",
+            Severity = LogLevel.Information,
+            RecordedOn = recordedOn
+        };
+    }
+
+    public static AccessRequestRevoked CreateFailure(int partyId, AccessTypeCode accessTypeCode, MohKeycloakEnrolment? enrolment, string? cpn, IEnumerable<Guid> userIds, string reason, string? trigger, Instant recordedOn)
+    {
+        return new AccessRequestRevoked
+        {
+            PartyId = partyId,
+            Description = $"Party was no longer entitled to their {accessTypeCode} Access Request but {FormatRoles(enrolment)} could not be unassigned; the Access Request was left in place to be retried."
+                + $" Reason: {reason}."
+                + $" Trigger: {trigger ?? "not recorded"}."
+                + $" CPN: {cpn ?? "none (endorsement-based access)"}."
+                + $" Keycloak User Ids: {FormatUserIds(userIds)}.",
+            Severity = LogLevel.Error,
+            RecordedOn = recordedOn
+        };
+    }
+
+    private static string FormatRoles(MohKeycloakEnrolment? enrolment) => enrolment == null
+        ? "no associated Keycloak role was"
+        : $"the {string.Join(", ", enrolment.AccessRoles)} role(s) in Client {enrolment.ClientId} were";
+
+    private static string FormatUserIds(IEnumerable<Guid> userIds) => userIds.Any()
+        ? string.Join(", ", userIds)
+        : "none";
+}
+
 public class BCProviderPasswordReset : PartyBusinessEvent
 {
     public static BCProviderPasswordReset Create(int partyId, string userPrincipalName, Instant recordedOn)

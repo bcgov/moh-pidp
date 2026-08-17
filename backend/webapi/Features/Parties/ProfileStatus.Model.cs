@@ -263,10 +263,8 @@ public partial class ProfileStatus
                     // The Keycloak role is only ever granted to a BC Services Card credential,
                     // so a Party without one can never complete this enrolment.
                     { HasBCServicesCardCredential: false } or { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
-                    _ when InfantRsvEforms.IsEligible(profile.PartyPlrStanding) ||
-                        profile.EndorsementPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding ||
-                        profile.EndorsementPlrStanding.With(IdentifierType.Nurse).HasGoodStanding ||
-                        profile.EndorsementPlrStanding.With(IdentifierType.Midwife).HasGoodStanding => StatusCode.Incomplete,
+                    _ when InfantRsvEforms.IsEligible(profile.PartyPlrStanding)
+                        || InfantRsvEforms.IsEligibleByEndorsement(profile.EndorsementPlrStanding) => StatusCode.Incomplete,
                     _ => StatusCode.Locked
                 };
             }

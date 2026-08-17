@@ -24,6 +24,13 @@ public class InfantRsvEforms
             .HasGoodStanding || partyPlrStanding.IsCpsPostgrad;
     }
 
+    public static bool IsEligibleByEndorsement(PlrStandingsDigest endorsementPlrStanding)
+    {
+        return endorsementPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding
+            || endorsementPlrStanding.With(IdentifierType.Nurse).HasGoodStanding
+            || endorsementPlrStanding.With(IdentifierType.Midwife).HasGoodStanding;
+    }
+
     public class Command : ICommand<IDomainResult>
     {
         public int PartyId { get; set; }
@@ -81,9 +88,7 @@ public class InfantRsvEforms
 
                 var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
 
-                if (!endorsementPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding &&
-                    !endorsementPlrStanding.With(IdentifierType.Nurse).HasGoodStanding &&
-                    !endorsementPlrStanding.With(IdentifierType.Midwife).HasGoodStanding)
+                if (!IsEligibleByEndorsement(endorsementPlrStanding))
                 {
                     this.logger.LogAccessRequestDenied(command.PartyId);
                     return DomainResult.Failed();

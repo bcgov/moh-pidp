@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Pidp.Data;
 using Pidp.Extensions;
+using Pidp.Features.AccessRequests;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Plr;
@@ -11,12 +12,14 @@ using Pidp.Models.DomainEvents;
 
 public sealed class PlrStatusUpdateService(
     IBCProviderClient bcProviderClient,
+    IInfantRsvEformsRevocationService rsvRevocationService,
     IPlrClient plrClient,
     ILogger<PlrStatusUpdateService> logger,
     PidpDbContext context,
     PidpConfiguration config) : IPlrStatusUpdateService
 {
     private readonly IBCProviderClient bcProviderClient = bcProviderClient;
+    private readonly IInfantRsvEformsRevocationService rsvRevocationService = rsvRevocationService;
     private readonly IPlrClient plrClient = plrClient;
     private readonly ILogger<PlrStatusUpdateService> logger = logger;
     private readonly PidpDbContext context = context;
@@ -63,7 +66,10 @@ public sealed class PlrStatusUpdateService(
             party.DomainEvents.Add(new EndorsementStandingUpdated(relation.PartyId));
         }
 
-        if (party.Upns.Any())
+        // Every status change is now queued, not just those that flip good standing, so this block
+        // gates itself on the flip it has always depended on.
+        if (party.Upns.Any()
+            && !status.IsGoodStandingUnchanged())
         {
             var bcProviderAttributes = new BCProviderAttributes(this.clientId);
 
@@ -103,6 +109,20 @@ public sealed class PlrStatusUpdateService(
             }
         }
 
+        // Runs on every status change: RSV eligibility includes CPS postgrads, whose transitions
+        // do not necessarily move the good-standing flag.
+        try
+        {
+            await this.rsvRevocationService.RevokeIfIneligibleAsync(party.Id, status, stoppingToken);
+        }
+        catch (Exception e) when (e is not OperationCanceledException)
+        {
+            // A revocation that always threw would never be acked, blocking the head of the queue
+            // and stalling every other consumer. Failing to revoke leaves today's behaviour intact;
+            // stalling the pipeline does not. The service stages nothing before it can throw.
+            this.logger.LogRevocationFailed(party.Id, e);
+        }
+
         await this.context.SaveChangesAsync(stoppingToken);
 
         this.logger.LogStatusUpdateProcessed(status.Id);
@@ -117,4 +137,7 @@ public static partial class PlrStatusUpdateServiceLoggingExtensions
 
     [LoggerMessage(2, LogLevel.Information, "Status update {statusId} has been proccessed.")]
     public static partial void LogStatusUpdateProcessed(this ILogger<PlrStatusUpdateService> logger, int statusId);
+
+    [LoggerMessage(3, LogLevel.Error, "Unhandled exception while re-evaluating Infant RSV eForms eligibility for Party {partyId}. The rest of the status update was processed.")]
+    public static partial void LogRevocationFailed(this ILogger<PlrStatusUpdateService> logger, int partyId, Exception e);
 }

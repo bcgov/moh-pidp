@@ -18,6 +18,7 @@ using System.Text.Json;
 using Pidp.Data;
 using Pidp.Extensions;
 using Pidp.Features;
+using Pidp.Features.AccessRequests;
 using Pidp.Infrastructure;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HealthChecks;
@@ -42,6 +43,7 @@ public class Startup(IConfiguration configuration)
             .AddRabbitMQ(config)
             .AddMediatR(opt => opt.RegisterServicesFromAssemblyContaining<Startup>())
             .AddScoped<IEmailService, EmailService>()
+            .AddScoped<IInfantRsvEformsRevocationService, InfantRsvEformsRevocationService>()
             .AddScoped<IPidpAuthorizationService, PidpAuthorizationService>()
             .AddScoped<IPlrStatusUpdateService, PlrStatusUpdateService>()
             .AddSingleton<IClock>(SystemClock.Instance)

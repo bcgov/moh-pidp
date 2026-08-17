@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Pidp.Data;
 using Pidp.Extensions;
+using Pidp.Features.AccessRequests;
 using static Pidp.Features.CommonHandlers.UpdateBcProviderAttributesConsumer;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
@@ -57,4 +58,17 @@ public class UpdateBCProviderAfterEndorsementStandingUpdated(
 
         await this.bus.Publish(new UpdateBcProviderAttributes(party.Upn, attributes.AsAdditionalData()), cancellationToken);
     }
+}
+
+/// <summary>
+/// An MOA holds the Infant RSV eForms card on the strength of their endorsements, so losing the
+/// last endorser in good standing must take the role away again.
+/// </summary>
+public class RevokeInfantRsvEformsAfterEndorsementStandingUpdated(
+    IInfantRsvEformsRevocationService revocationService) : INotificationHandler<EndorsementStandingUpdated>
+{
+    private readonly IInfantRsvEformsRevocationService revocationService = revocationService;
+
+    public async Task Handle(EndorsementStandingUpdated notification, CancellationToken cancellationToken)
+        => await this.revocationService.RevokeIfIneligibleAsync(notification.PartyId, cancellationToken: cancellationToken);
 }
