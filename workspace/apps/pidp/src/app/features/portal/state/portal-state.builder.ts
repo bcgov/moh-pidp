@@ -138,8 +138,7 @@ export class AccessStateBuilder {
         () => [new ImmsBCEformsPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
-        this.insertSection('infantRsvEforms', profileStatus) &&
-          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        this.insertSection('infantRsvEforms', profileStatus),
         () => [new InfantRsvEformsPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
@@ -291,8 +290,7 @@ export class PortalStateBuilder {
         () => [new ImmsBCEformsPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.insertSection('infantRsvEforms', profileStatus) &&
-          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        this.insertSection('infantRsvEforms', profileStatus),
         () => [new InfantRsvEformsPortalSection(profileStatus, this.router)],
       ),
     ];
