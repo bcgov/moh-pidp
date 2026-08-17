@@ -15,6 +15,11 @@ public class InMemoryDbTest : IDisposable
     protected PidpDbContext TestDb { get; }
     protected List<IDomainEvent> PublishedEvents { get; } = new();
 
+    static InMemoryDbTest()
+    {
+        Pidp.Infrastructure.MapsterSetup.Configure();
+    }
+
     protected InMemoryDbTest()
     {
         var options = new DbContextOptionsBuilder<PidpDbContext>()
