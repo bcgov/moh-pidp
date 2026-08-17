@@ -66,8 +66,10 @@ public class InfantRsvEforms
                 || dto.Email == null)
             {
                 this.logger.LogAccessRequestDenied(command.PartyId);
+
                 this.context.BusinessEvents.Add(AccessRequestFailed.Create(command.PartyId, AccessTypeCode.InfantRsvEforms.ToString(), this.clock.GetCurrentInstant()));
                 await this.context.SaveChangesAsync();
+                
                 return DomainResult.Failed();
             }
 
