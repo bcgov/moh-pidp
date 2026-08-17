@@ -1,23 +1,19 @@
 namespace Pidp;
 
+using System.Reflection;
+using System.Text.Json;
+using System.Threading.RateLimiting;
 using FluentValidation;
 using HealthChecks.ApplicationStatus.DependencyInjection;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using NodaTime;
 using NodaTime.Serialization.SystemTextJson;
-using Serilog;
-using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
-using Swashbuckle.AspNetCore.Filters;
-using System.Reflection;
-using System.Text.Json;
-using System.Threading.RateLimiting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.RateLimiting;
-
 using Pidp.Data;
 using Pidp.Extensions;
 using Pidp.Features;
@@ -25,8 +21,11 @@ using Pidp.Infrastructure;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HealthChecks;
 using Pidp.Infrastructure.HttpClients;
-using Pidp.Infrastructure.Services;
 using Pidp.Infrastructure.Queue;
+using Pidp.Infrastructure.Services;
+using Serilog;
+using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
+using Swashbuckle.AspNetCore.Filters;
 
 public class Startup(IConfiguration configuration)
 {
@@ -79,7 +78,7 @@ public class Startup(IConfiguration configuration)
                         QueueLimit = 10
                     }));
         });
-        
+
         services
             .AddHostedService<PlrStatusUpdateSchedulingService>()
             .AddHttpClients(config)
@@ -160,13 +159,16 @@ public class Startup(IConfiguration configuration)
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
+
+            app.UseSwagger();
+            app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v1/swagger.json", "PIdP Web API"));
         }
         else
         {
             app.UseHsts();
         }
 
-        app.UseHttpsRedirection();
+        // app.UseHttpsRedirection();
 
         app.Use(async (context, next) =>
         {
@@ -176,9 +178,6 @@ public class Startup(IConfiguration configuration)
             await next();
         });
 
-        app.UseSwagger();
-        app.UseSwaggerUI(options => options.SwaggerEndpoint("/swagger/v1/swagger.json", "PIdP Web API"));
-
         app.UseSerilogRequestLogging(options => options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
         {
             var userId = httpContext.User.GetUserId();
@@ -187,6 +186,7 @@ public class Startup(IConfiguration configuration)
                 diagnosticContext.Set("User", userId);
             }
         });
+
         app.UseRouting();
         app.UseCors("CorsPolicy");
         app.UseCookiePolicy();
