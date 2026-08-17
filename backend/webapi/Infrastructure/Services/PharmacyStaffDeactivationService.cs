@@ -39,58 +39,67 @@ public class PharmacyStaffDeactivationService(
 
         foreach (var partyId in partiesWithExpiredRoles)
         {
-            try
+            await this.ProcessPartyDeactivationAsync(partyId, yesterdayStart, yesterdayEnd, cancellationToken);
+        }
+
+        this.logger.LogInformation("Finished daily pharmacy staff deactivation task.");
+    }
+
+    private async Task ProcessPartyDeactivationAsync(int partyId, DateTime yesterdayStart, DateTime yesterdayEnd, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var allRoles = await this.context.PharmacyPartyRoles
+                .Where(r => r.PartyId == partyId)
+                .ToListAsync(cancellationToken);
+
+            var roleEndedYesterday = allRoles.FirstOrDefault(r => r.EffectiveEndDate >= yesterdayStart && r.EffectiveEndDate < yesterdayEnd);
+            if (roleEndedYesterday == null)
             {
-                var allRoles = await this.context.PharmacyPartyRoles
-                    .Where(r => r.PartyId == partyId)
-                    .ToListAsync(cancellationToken);
+                return;
+            }
 
-                var roleEndedYesterday = allRoles.FirstOrDefault(r => r.EffectiveEndDate >= yesterdayStart && r.EffectiveEndDate < yesterdayEnd);
-                if (roleEndedYesterday == null)
+            bool shouldDisable = allRoles.All(r => r.Id == roleEndedYesterday.Id || r.EffectiveEndDate != null && r.EffectiveEndDate < yesterdayEnd);
+
+            if (!shouldDisable)
+            {
+                return;
+            }
+
+            var upn = await this.context.Credentials
+                .Where(c => c.PartyId == partyId && c.IdentityProvider == IdentityProviders.BCProvider)
+                .Select(c => c.IdpId)
+                .FirstOrDefaultAsync(cancellationToken);
+
+            if (string.IsNullOrEmpty(upn))
+            {
+                return;
+            }
+
+            var dateStr = roleEndedYesterday.EffectiveEndDate!.Value.ToString("yyyyMMdd");
+            var disabledJobTitle = $"disabled (onehealthid,immsbc,{roleEndedYesterday.PharmacyId},{dateStr})";
+
+            var userUpdate = new User
+            {
+                JobTitle = disabledJobTitle
+            };
+
+            var success = await this.bcProviderClient.UpdateUser(upn, userUpdate);
+            if (success)
+            {
+                if (this.logger.IsEnabled(LogLevel.Information))
                 {
-                    continue;
-                }
-
-                bool shouldDisable = allRoles.All(r => r.Id == roleEndedYesterday.Id || r.EffectiveEndDate != null && r.EffectiveEndDate < yesterdayEnd);
-
-                if (shouldDisable)
-                {
-                    var upn = await this.context.Credentials
-                        .Where(c => c.PartyId == partyId && c.IdentityProvider == IdentityProviders.BCProvider)
-                        .Select(c => c.IdpId)
-                        .FirstOrDefaultAsync(cancellationToken);
-
-                    if (!string.IsNullOrEmpty(upn))
-                    {
-                        var dateStr = roleEndedYesterday.EffectiveEndDate.Value.ToString("yyyyMMdd");
-                        var disabledJobTitle = $"disabled (onehealthid,immsbc,{roleEndedYesterday.PharmacyId},{dateStr})";
-
-                        var userUpdate = new User
-                        {
-                            JobTitle = disabledJobTitle
-                        };
-
-                        var success = await this.bcProviderClient.UpdateUser(upn, userUpdate);
-                        if (success)
-                        {
-                            if (this.logger.IsEnabled(LogLevel.Information))
-                            {
-                                this.logger.LogInformation("Successfully set job title to '{JobTitle}' for user '{Upn}'.", disabledJobTitle, upn);
-                            }
-                        }
-                        else
-                        {
-                            this.logger.LogError("Failed to update job title for user '{Upn}'.", upn);
-                        }
-                    }
-
-                    Thread.Sleep(5 * 1000);
+                    this.logger.LogInformation("Successfully set job title to '{JobTitle}' for user '{Upn}'.", disabledJobTitle, upn);
                 }
             }
-            catch (Exception ex)
+            else
             {
-                this.logger.LogError(ex, "Error processing deactivation for PartyId {PartyId}.", partyId);
+                this.logger.LogError("Failed to update job title for user '{Upn}'.", upn);
             }
+        }
+        catch (Exception ex)
+        {
+            this.logger.LogError(ex, "Error processing deactivation for PartyId {PartyId}.", partyId);
         }
 
         this.logger.LogInformation("Finished daily pharmacy staff deactivation task.");
