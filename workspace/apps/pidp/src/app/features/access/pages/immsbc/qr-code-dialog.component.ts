@@ -28,7 +28,7 @@ import { QRCodeComponent } from 'angularx-qrcode';
   imports: [MatDialogModule, MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule, QRCodeComponent]
 })
 export class QrCodeDialogComponent {
-  data = inject<{
+  public data = inject<{
     link: string;
     pharmacyName: string;
     role: string;

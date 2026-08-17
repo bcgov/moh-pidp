@@ -23,9 +23,10 @@
         <div
           class="field country"
           [class]="getFormControlOrder('countryCode')">
-          <label id="address-form-street-country">Country</label>
+          <label for="address-country" id="address-form-street-country">Country</label>
           <mat-form-field>
             <mat-select
+              id="address-country"
               formControlName="countryCode"
               aria-labelledby="address-form-street-country"
               [required]="isRequired('countryCode')">
@@ -43,9 +44,10 @@
         <div
           class="field province"
           [class]="getFormControlOrder('provinceCode')">
-          <label id="address-form-street-province">{{ provinceLabel }}</label>
+          <label for="address-province" id="address-form-street-province">{{ provinceLabel }}</label>
           <mat-form-field>
             <mat-select
+              id="address-province"
               formControlName="provinceCode"
               aria-labelledby="address-form-street-province"
               [required]="isRequired('provinceCode')">
@@ -64,9 +66,10 @@
         <div
           class="field street"
           [class]="getFormControlOrder('street')">
-          <label id="address-form-street-label">Street Address</label>
+          <label for="address-street" id="address-form-street-label">Street Address</label>
           <mat-form-field>
             <input
+              id="address-street"
               matInput
               formControlName="street"
               aria-labelledby="address-form-street-label"
@@ -79,9 +82,10 @@
           <div
             class="field city"
             [class]="getFormControlOrder('city')">
-            <label id="address-form-street-city">City</label>
+            <label for="address-city" id="address-form-street-city">City</label>
             <mat-form-field>
               <input
+                id="address-city"
                 matInput
                 formControlName="city"
                 aria-labelledby="address-form-street-city"
@@ -94,9 +98,10 @@
             <div
               class="field postal"
               [class]="getFormControlOrder('postal')">
-              <label id="address-form-street-postal">{{ postalLabel }}</label>
+              <label for="address-postal" id="address-form-street-postal">{{ postalLabel }}</label>
               <mat-form-field>
                 <input
+                  id="address-postal"
                   matInput
                   formControlName="postal"
                   aria-labelledby="address-form-street-postal"

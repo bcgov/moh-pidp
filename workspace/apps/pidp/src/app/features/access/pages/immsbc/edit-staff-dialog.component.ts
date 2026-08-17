@@ -104,7 +104,7 @@ export interface EditStaffDialogData {
 export class EditStaffDialogComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly dialogRef = inject<MatDialogRef<EditStaffDialogComponent>>(MatDialogRef);
-  data = inject<EditStaffDialogData>(MAT_DIALOG_DATA);
+  public data = inject<EditStaffDialogData>(MAT_DIALOG_DATA);
   private readonly pharmacyResource = inject(PharmacyResource);
 
   public form: FormGroup;

@@ -368,6 +368,7 @@ export class EndorsementsPage
           .emailSearch(partyId, this.formState.json.recipientEmail)
           .pipe(
             switchMap((response: EndorsementEmailSearch) => {
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               data.data!.content = response.recipientName
                 ? `An existing user has registered ${this.formState.json?.recipientEmail}. Please confirm you are wanting an endorsement with <p class='p-0 m-0' style='color: #036;font-size:1.2rem;'><b>${response.recipientName}</b></p>`
                 : `You are about to <b>request</b> an endorsement to<p class='p-0 m-0' style='color: #036;font-size:1.2rem;'><b>${this.formState.json?.recipientEmail}</b></p>would you like to proceed?`;

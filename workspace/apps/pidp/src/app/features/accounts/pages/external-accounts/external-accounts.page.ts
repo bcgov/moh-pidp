@@ -293,6 +293,7 @@ export class ExternalAccountsPage implements OnInit {
       switchMap(() =>
         this.resource.getInvitedExternalAccounts(this.partyService.partyId),
       ),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       catchError((err: any) => {
         this.toastService.openErrorToast('Failed to load external accounts.');
         console.error(err);

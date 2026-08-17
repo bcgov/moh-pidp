@@ -77,6 +77,7 @@ export class PartiesPage implements OnInit {
       .subscribe();
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public onUnlinkCredential(partyId: number, credential: any): void {
     if (credential.identityProvider === 'bcprovider') {
       const data: DialogOptions = {

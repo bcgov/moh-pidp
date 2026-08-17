@@ -106,6 +106,7 @@ export class PharmacyStaffManagementComponent implements OnInit {
         filter((confirmed: boolean) => confirmed),
         exhaustMap(() =>
           this.resource.deleteStaff(this.pharmacyId, staff.partyId).pipe(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             catchError((error: any) => {
               const firstLine = (error.error as string).split('\n')[0];
               const errorData: DialogOptions = {
@@ -152,6 +153,7 @@ export class PharmacyStaffManagementComponent implements OnInit {
         filter((confirmed: boolean) => confirmed),
         exhaustMap(() =>
           this.resource.updateStaff(this.pharmacyId, staff.partyId, payload).pipe(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             catchError((error: any) => {
               const errorMsg = error.error ? error.error.toString().split('\n')[0] : 'An unexpected error occurred.';
               const errorData: DialogOptions = {

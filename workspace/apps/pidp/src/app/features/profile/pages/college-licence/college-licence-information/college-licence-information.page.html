@@ -60,7 +60,7 @@
                   @switch (certification.statusCode) {
                     @case ('ACTIVE') {
                       <div class="status-active">
-                        <label>Status Code:</label>
+                        <span class="status-label">Status Code:</span>
                         <span>Active</span>
                         <img
                           src="/assets/images/icons/icon-check-circle.svg"
@@ -69,7 +69,7 @@
                       }
                       @default {
                         <div class="status-non-active">
-                          <label>Status Code:</label>
+                          <span class="status-label">Status Code:</span>
                           <span>{{ certification.statusCode }}</span>
                         </div>
                       }

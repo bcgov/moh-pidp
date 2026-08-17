@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 
 import { NAVIGATOR } from '@bcgov/shared/utils';
 
@@ -7,7 +7,7 @@ import { NAVIGATOR } from '@bcgov/shared/utils';
   providedIn: 'root',
 })
 export class ErrorService {
-  public constructor(@Inject(NAVIGATOR) private navigator: Navigator) {}
+  private navigator = inject<Navigator>(NAVIGATOR);
 
   /**
    * @description
