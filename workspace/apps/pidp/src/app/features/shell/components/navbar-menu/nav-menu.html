@@ -36,7 +36,7 @@
       <span class="span-text">OneHealthID</span></a
       >
       <div class="main-menu">
-        <a class="main-menu-item" aria-label="link">
+        <a class="main-menu-item">
           <div class="dropdown">
             <span class="content-with-alert"
               >@if (alerts?.includes(AlertCode.TRANSIENT_ERROR) || alerts?.includes(AlertCode.PLR_BAD_STANDING)) {
@@ -44,16 +44,16 @@
                 class="fa-duotone"
                 [icon]="faBell"></fa-icon
                 >
-                }<a class="dropdown-profile" aria-label="link">Profile</a></span
+                }<a class="dropdown-profile">Profile</a></span
                 >
                 <div class="dropdown-content">
                   <a
                     class="dropdown-links"
                     tabindex="0" (keydown.enter)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO))" (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO))"
-                     aria-label="link">Personal Information</a
+                    >Personal Information</a
                     >
                     <a class="dropdown-links" tabindex="0" (keydown.enter)="navigateTo(collegeRoute)" (click)="navigateTo(collegeRoute)"
-                       aria-label="link">College License@if (alerts?.includes(AlertCode.TRANSIENT_ERROR) || alerts?.includes(AlertCode.PLR_BAD_STANDING)) {
+                      >College License@if (alerts?.includes(AlertCode.TRANSIENT_ERROR) || alerts?.includes(AlertCode.PLR_BAD_STANDING)) {
                       <fa-icon
                         class="fa-duotone"
                         [icon]="faBell"></fa-icon
@@ -62,68 +62,68 @@
                       <a
                         class="dropdown-links"
                         tabindex="0" (keydown.enter)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT))" (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT))"
-                         aria-label="link">Use Policy Agreement</a
+                        >Use Policy Agreement</a
                         >
                         <a
                           class="dropdown-links"
                           tabindex="0" (keydown.enter)="navigateTo(HistoryRoutes.routePath(HistoryRoutes.TRANSACTIONS))" (click)="navigateTo(HistoryRoutes.routePath(HistoryRoutes.TRANSACTIONS))"
-                           aria-label="link">History</a
+                          >History</a
                           >
                         </div>
                       </div>
                     </a>
-                    <a class="main-menu-item" aria-label="link">
+                    <a class="main-menu-item">
                       <div class="dropdown">
                         <span class="content-with-alert">
                           <a
                             class="dropdown-accounts"
                             tabindex="0" (keydown.enter)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))" (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))"
-                             aria-label="link">Access</a
+                            >Access</a
                             >
                           </span>
                         </div>
                       </a>
-                      <a class="main-menu-item" aria-label="link">
+                      <a class="main-menu-item">
                         <div class="dropdown">
                           <span class="content-with-alert">
-                            <a class="dropdown-accounts" aria-label="link">Account</a></span
+                            <a class="dropdown-accounts">Account</a></span
                             >
                             <div class="dropdown-content">
                               <a
                                 class="dropdown-links"
                                 tabindex="0" (keydown.enter)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.ACCOUNT_LINKING))" (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.ACCOUNT_LINKING))"
-                                 aria-label="link">Account Linking</a
+                                >Account Linking</a
                                 >
                                 @if (featureFlag()) {
                                   <a
                                     class="dropdown-links"
                                     tabindex="0" (keydown.enter)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.EXTERNAL_ACCOUNTS))" (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.EXTERNAL_ACCOUNTS))"
-                                     aria-label="link">External Account</a
+                                    >External Account</a
                                     >
                                   }
                                   @if (hasCredential(IdentityProvider.BC_PROVIDER)) {
                                     <a
                                       class="dropdown-links"
                                       tabindex="0" (keydown.enter)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_EDIT))" (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_EDIT))"
-                                       aria-label="link">Password and MFA Reset</a
+                                      >Password and MFA Reset</a
                                       >
                                     } @else {
                                       <a
                                         class="dropdown-links"
                                         tabindex="0" (keydown.enter)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_APPLICATION))" (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_APPLICATION))"
-                                         aria-label="link">BCProvider Account</a
+                                        >BCProvider Account</a
                                         >
                                       }
                                     </div>
                                   </div>
                                 </a>
-                                <a class="main-menu-item" aria-label="link">
+                                <a class="main-menu-item">
                                   <div class="dropdown">
                                     <span class="content-with-alert">
                                       <a
                                         class="dropdown-accounts"
                                         tabindex="0" (keydown.enter)="navigateTo(FaqRoutes.BASE_PATH)" (click)="navigateTo(FaqRoutes.BASE_PATH)"
-                                         aria-label="link">Help</a
+                                        >Help</a
                                         >
                                       </span>
                                     </div>
@@ -166,61 +166,61 @@
                                       <a
                                         class="sidenav-menu-item"
                                         tabindex="0" (keydown.enter)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO))" (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.PERSONAL_INFO))"
-                                         aria-label="link">Personal Information</a
+                                        >Personal Information</a
                                         >
                                         <a class="sidenav-menu-item" tabindex="0" (keydown.enter)="navigateTo(collegeRoute)" (click)="navigateTo(collegeRoute)"
-                                           aria-label="link">College License</a
+                                          >College License</a
                                           >
                                           <span
                                           [ngClass]="{'menu-list-notification-dot': alerts?.includes(AlertCode.TRANSIENT_ERROR) || alerts?.includes(AlertCode.PLR_BAD_STANDING)}"></span>
                                           <a
                                             class="sidenav-menu-item"
                                             tabindex="0" (keydown.enter)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT))" (click)="navigateTo(ProfileRoutes.routePath(ProfileRoutes.USER_ACCESS_AGREEMENT))"
-                                             aria-label="link">Use Policy Agreement</a
+                                            >Use Policy Agreement</a
                                             >
                                             <a
                                               class="sidenav-menu-item"
                                               tabindex="0" (keydown.enter)="navigateTo(HistoryRoutes.routePath(HistoryRoutes.TRANSACTIONS))" (click)="navigateTo(HistoryRoutes.routePath(HistoryRoutes.TRANSACTIONS))"
-                                               aria-label="link">History</a
+                                              >History</a
                                               >
                                               <a
                                                 class="sidenav-menu-item"
                                                 tabindex="0" (keydown.enter)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))" (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))"
-                                                 aria-label="link">Access</a
+                                                >Access</a
                                                 >
                                                 <a
                                                   class="sidenav-menu-item"
                                                   tabindex="0" (keydown.enter)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.ACCOUNT_LINKING))" (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.ACCOUNT_LINKING))"
-                                                   aria-label="link">Account Linking</a
+                                                  >Account Linking</a
                                                   >
                                                   @if (featureFlag()) {
                                                     <a
                                                       class="sidenav-menu-item"
                                                       tabindex="0" (keydown.enter)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.EXTERNAL_ACCOUNTS))" (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.EXTERNAL_ACCOUNTS))"
-                                                       aria-label="link">External Account</a
+                                                      >External Account</a
                                                       >
                                                     }
                                                     @if (hasCredential(IdentityProvider.BC_PROVIDER)) {
                                                       <a
                                                         class="sidenav-menu-item"
                                                         tabindex="0" (keydown.enter)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_EDIT))" (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_EDIT))"
-                                                         aria-label="link">Password and MFA Reset</a
+                                                        >Password and MFA Reset</a
                                                         >
                                                       } @else {
                                                         <a
                                                           class="sidenav-menu-item"
                                                           tabindex="0" (keydown.enter)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_APPLICATION))" (click)="navigateTo(AccountsRoutes.routePath(AccountsRoutes.BC_PROVIDER_APPLICATION))"
-                                                           aria-label="link">BCProvider Account</a
+                                                          >BCProvider Account</a
                                                           >
                                                         }
                                                         <a class="sidenav-menu-item" tabindex="0" (keydown.enter)="navigateTo(FaqRoutes.BASE_PATH)" (click)="navigateTo(FaqRoutes.BASE_PATH)"
-                                                           aria-label="link">Help</a
+                                                          >Help</a
                                                           >
                                                           @if (isLogoutMenuItemVisible) {
                                                             <a
                                                               class="sidenav-menu-item"
                                                               routerLinkActive="sidenav-menu-item-active"
-                                                              tabindex="0" (keydown.enter)="onLogout()" (click)="onLogout()" aria-label="link">
+                                                              tabindex="0" (keydown.enter)="onLogout()" (click)="onLogout()">
                                                               Sign Out</a
                                                               >
                                                             }

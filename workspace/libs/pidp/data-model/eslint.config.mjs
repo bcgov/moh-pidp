@@ -1,10 +1,11 @@
 import { FlatCompat } from '@eslint/eslintrc';
 import js from '@eslint/js';
 import nx from '@nx/eslint-plugin';
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import baseConfig from '../../../eslint.config.mjs';
+import { sharedAngularRules } from '../../../eslint.rules.mjs';
 
 const compat = new FlatCompat({
   baseDirectory: dirname(fileURLToPath(import.meta.url)),
@@ -23,23 +24,7 @@ export default [
       files: ['**/*.ts'],
       rules: {
         ...config.rules,
-        '@angular-eslint/directive-selector': [
-          'error',
-          {
-            type: 'attribute',
-            prefix: 'pidp',
-            style: 'camelCase',
-          },
-        ],
-        '@angular-eslint/component-selector': [
-          'error',
-          {
-            type: 'element',
-            prefix: 'pidp',
-            style: 'kebab-case',
-          },
-        ],
-        '@angular-eslint/prefer-inject': 'warn',
+        ...sharedAngularRules('pidp'),
       },
     })),
   ...nx.configs['flat/angular-template'],

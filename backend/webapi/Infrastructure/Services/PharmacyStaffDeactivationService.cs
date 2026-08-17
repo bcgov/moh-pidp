@@ -51,20 +51,7 @@ public class PharmacyStaffDeactivationService(
                     continue;
                 }
 
-                bool shouldDisable = true;
-                foreach (var role in allRoles)
-                {
-                    if (role.Id == roleEndedYesterday.Id)
-                    {
-                        continue;
-                    }
-
-                    if (role.EffectiveEndDate == null || role.EffectiveEndDate >= yesterdayEnd)
-                    {
-                        shouldDisable = false;
-                        break;
-                    }
-                }
+                bool shouldDisable = allRoles.All(r => r.Id == roleEndedYesterday.Id || r.EffectiveEndDate != null && r.EffectiveEndDate < yesterdayEnd);
 
                 if (shouldDisable)
                 {
@@ -93,7 +80,7 @@ public class PharmacyStaffDeactivationService(
                         }
                         else
                         {
-                            this.logger.LogError("Failed to update job title for user '{upn}'.", upn);
+                            this.logger.LogError("Failed to update job title for user '{Upn}'.", upn);
                         }
                     }
 
@@ -102,7 +89,7 @@ public class PharmacyStaffDeactivationService(
             }
             catch (Exception ex)
             {
-                this.logger.LogError(ex, "Error processing deactivation for PartyId {partyId}.", partyId);
+                this.logger.LogError(ex, "Error processing deactivation for PartyId {PartyId}.", partyId);
             }
         }
 

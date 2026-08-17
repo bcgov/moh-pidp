@@ -102,7 +102,7 @@
                   @if (!hasCredential(IdentityProvider.IDIR)) {
                     <a
                       tabindex="0" (keydown.enter)="onLinkAccount(IdentityProvider.BCSC)" (click)="onLinkAccount(IdentityProvider.BCSC)"
-                       aria-label="link">Link Account</a
+                      >Link Account</a
                       >
                   }
                 }
@@ -132,7 +132,7 @@
                       @if (hasCredential(IdentityProvider.BCSC)) {
                         <a
                           tabindex="0" (keydown.enter)="onPageNavigate([AccountRoutes.routePath(AccountRoutes.BC_PROVIDER_APPLICATION)])" (click)="onPageNavigate([AccountRoutes.routePath(AccountRoutes.BC_PROVIDER_APPLICATION)])"
-                           aria-label="link">Link Account</a
+                          >Link Account</a
                           >
                       }
                     }
@@ -168,7 +168,7 @@
                           @if (!hasCredential(IdentityProvider.IDIR)) {
                             <a
                               tabindex="0" (keydown.enter)="onLinkAccount(IdentityProvider.PHSA)" (click)="onLinkAccount(IdentityProvider.PHSA)"
-                               aria-label="link">Link Account</a
+                              >Link Account</a
                               >
                           }
                         }

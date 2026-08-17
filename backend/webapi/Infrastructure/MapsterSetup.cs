@@ -32,7 +32,7 @@ public static class MapsterSetup
 
         // Features.Endorsements
         TypeAdapterConfig<MSTeamsClinic, MSTeamsPrivacyOfficers.Model>.NewConfig()
-            .Map(dest => dest.FullName, src => src.PrivacyOfficer!.FirstName + " " + src.PrivacyOfficer.LastName)
+            .Map(dest => dest.FullName, src => src.PrivacyOfficer.FirstName + " " + src.PrivacyOfficer.LastName)
             .Map(dest => dest.ClinicId, src => src.Id)
             .Map(dest => dest.ClinicName, src => src.Name)
             .Map(dest => dest.ClinicAddress, src => src.Address);
@@ -52,10 +52,8 @@ public static class MapsterSetup
             .Map(dest => dest.AlreadyEnroled, src => src.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.MSTeamsPrivacyOfficer));
 
         TypeAdapterConfig<MSTeamsClinic, MSTeamsClinicMember.CommandHandler.ClinicDto>.NewConfig()
-            .Map(dest => dest.PrivacyOfficerName, src => src.PrivacyOfficer!.FirstName + " " + src.PrivacyOfficer.LastName);
+            .Map(dest => dest.PrivacyOfficerName, src => src.PrivacyOfficer.FirstName + " " + src.PrivacyOfficer.LastName);
             
-        // Mapster handles 1-to-1 matching automatically, so we don't need empty configs for 
         // MSTeamsClinicAddress, LicenceDeclaration, etc., unless there are custom mappings.
-        // TypeAdapterConfig.GlobalSettings.Default.PreserveReference(true);
     }
 }

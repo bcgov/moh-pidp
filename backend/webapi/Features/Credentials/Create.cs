@@ -1,4 +1,4 @@
-﻿namespace Pidp.Features.Credentials;
+namespace Pidp.Features.Credentials;
 
 using DomainResults.Common;
 using FluentValidation;
@@ -208,12 +208,12 @@ public class Create
 
                 foreach (var credential in party.Credentials)
                 {
-                    await this.bus.PublishAsync(UpdateKeycloakAttributes.FromUpdateAction(credential.UserId, user => user.SetOpId(party.OpId!)), cancellationToken);
+                    await this.bus.PublishAsync(UpdateKeycloakAttributes.FromUpdateAction(credential.UserId, user => user.SetOpId(party.OpId)), cancellationToken);
                 }
             }
             else
             {
-                await this.bus.PublishAsync(UpdateKeycloakAttributes.FromUpdateAction(newCredential.UserId, user => user.SetOpId(party.OpId!)), cancellationToken);
+                await this.bus.PublishAsync(UpdateKeycloakAttributes.FromUpdateAction(newCredential.UserId, user => user.SetOpId(party.OpId)), cancellationToken);
             }
         }
     }
@@ -234,7 +234,7 @@ public class Create
                 })
                 .SingleAsync(cancellationToken);
 
-            await this.bus.PublishAsync(UpdateKeycloakAttributes.FromUpdateAction(notification.Credential.UserId, user => user.SetPidpEmail(attributes.Email!).SetPidpPhone(attributes.Phone!)), cancellationToken);
+            await this.bus.PublishAsync(UpdateKeycloakAttributes.FromUpdateAction(notification.Credential.UserId, user => user.SetPidpEmail(attributes.Email).SetPidpPhone(attributes.Phone)), cancellationToken);
         }
     }
 

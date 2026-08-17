@@ -11,9 +11,9 @@ public class CredentialDelete
 {
     public class Command : ICommand<IDomainResult>
     {
-        public int PartyId { get; set; }
-        public int CredentialId { get; set; }
-        public bool DeleteFromBcProvider { get; set; }
+        public required int PartyId { get; set; }
+        public required int CredentialId { get; set; }
+        public required bool DeleteFromBcProvider { get; set; }
     }
 
     public class CommandHandler(
@@ -33,15 +33,12 @@ public class CredentialDelete
                 return DomainResult.Failed();
             }
 
-            if (command.DeleteFromBcProvider && credential.IdentityProvider == IdentityProviders.BCProvider)
+            if (command.DeleteFromBcProvider && credential.IdentityProvider == IdentityProviders.BCProvider && !string.IsNullOrEmpty(credential.IdpId))
             {
-                if (!string.IsNullOrEmpty(credential.IdpId))
+                var success = await this.bcProviderClient.DeleteBCProviderAccount(credential.IdpId);
+                if (!success)
                 {
-                    var success = await this.bcProviderClient.DeleteBCProviderAccount(credential.IdpId);
-                    if (!success)
-                    {
-                        return DomainResult.Failed("Failed to delete account from BC Provider Active Directory.");
-                    }
+                    return DomainResult.Failed("Failed to delete account from BC Provider Active Directory.");
                 }
             }
 

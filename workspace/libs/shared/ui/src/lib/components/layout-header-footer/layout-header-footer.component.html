@@ -1,7 +1,7 @@
 <div class="page-container" uiPidpInjectViewportCss>
   <header>
     <div class="banner">
-      <a class="logo-link" href="/" tabindex="0" (keydown.enter)="navigateToRoot(); $event.preventDefault()" (click)="navigateToRoot(); $event.preventDefault()" aria-label="link">
+      <a class="logo-link" href="/" tabindex="0" (keydown.enter)="navigateToRoot(); $event.preventDefault()" (click)="navigateToRoot(); $event.preventDefault()">
         @if (isMobile) {
         <img class="logo-mobile" loading="lazy" src="../assets/images/logo.svg" alt="BC Government Home" />
         }
@@ -27,19 +27,19 @@
           <button class="text-button" tabindex="0" (keydown.enter)="navigateToRoot()" (click)="navigateToRoot()">Home</button>
         </li>
         <li>
-          <a href="https://www2.gov.bc.ca/gov/content/home/disclaimer" aria-label="link">Disclaimer</a>
+          <a href="https://www2.gov.bc.ca/gov/content/home/disclaimer">Disclaimer</a>
         </li>
         <li>
-          <a href="https://www2.gov.bc.ca/gov/content/home/privacy" aria-label="link">Privacy</a>
+          <a href="https://www2.gov.bc.ca/gov/content/home/privacy">Privacy</a>
         </li>
         <li>
-          <a href="https://www2.gov.bc.ca/gov/content/home/accessibility" aria-label="link">Accessibility</a>
+          <a href="https://www2.gov.bc.ca/gov/content/home/accessibility">Accessibility</a>
         </li>
         <li>
-          <a href="https://www2.gov.bc.ca/gov/content/home/copyright" aria-label="link">Copyright</a>
+          <a href="https://www2.gov.bc.ca/gov/content/home/copyright">Copyright</a>
         </li>
         <li>
-          <a uiAnchor scheme="mailto" [href]="emailSupport" aria-label="link">Contact Us</a>
+          <a uiAnchor scheme="mailto" [href]="emailSupport">Contact Us</a>
         </li>
       </ul>
     </div>

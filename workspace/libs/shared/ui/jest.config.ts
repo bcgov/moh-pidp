@@ -13,7 +13,7 @@ export default {
       'jest-preset-angular',
       {
         tsconfig: '<rootDir>/tsconfig.spec.json',
-        stringifyContentPathRegex: '\\.(html|svg)$',
+        stringifyContentPathRegex: String.raw`\.(html|svg)$`,
       },
     ],
   },
