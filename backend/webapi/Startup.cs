@@ -41,20 +41,11 @@ public class Startup(IConfiguration configuration)
         {
             options.AddPolicy("CorsPolicy", builder =>
             {
-                if (!string.IsNullOrWhiteSpace(config.CorsAllowedOrigins))
-                {
-                    var origins = config.CorsAllowedOrigins.Split(',').Select(o => o.Trim()).ToArray();
-                    builder.WithOrigins(origins)
-                           .AllowAnyMethod()
-                           .AllowAnyHeader()
-                           .AllowCredentials();
-                }
-                else
-                {
-                    builder.AllowAnyOrigin()
-                           .AllowAnyMethod()
-                           .AllowAnyHeader();
-                }
+                var origins = config.CorsAllowedOrigins.Split(',').Select(o => o.Trim()).ToArray();
+                builder.WithOrigins(origins)
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials();
             });
         });
 
@@ -167,16 +158,6 @@ public class Startup(IConfiguration configuration)
         {
             app.UseHsts();
         }
-
-
-
-        app.Use(async (context, next) =>
-        {
-            context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
-            context.Response.Headers.Append("X-Frame-Options", "DENY");
-            context.Response.Headers.Append("Content-Security-Policy", "default-src 'self'");
-            await next();
-        });
 
         app.UseSerilogRequestLogging(options => options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
         {

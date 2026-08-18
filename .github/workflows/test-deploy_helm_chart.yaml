@@ -65,4 +65,4 @@ jobs:
           helm dependency update charts/pidp
   
           echo installing helm chart...
-          helm upgrade --wait --values ./deploy/test_values.yaml --namespace f088b1-test test charts/pidp --debug 
+          helm upgrade --wait --values ./deploy/test_values.yaml --namespace f088b1-test test charts/pidp --debug --set webapi.migrations.enabled=false --set plr-intake.migrations.enabled=false
