@@ -12,4 +12,4 @@ const compat = new FlatCompat({
   recommendedConfig: js.configs.recommended,
 });
 
-export default createSharedLibraryConfig(baseConfig, nx, compat, 'libs/shared/root-route/tsconfig.*?.json', 'root-route');
+export default createSharedLibraryConfig(baseConfig, nx, compat, 'libs/shared/root-route/tsconfig.*?.json', 'ui');

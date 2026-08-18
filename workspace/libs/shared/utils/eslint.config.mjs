@@ -12,4 +12,4 @@ const compat = new FlatCompat({
   recommendedConfig: js.configs.recommended,
 });
 
-export default createSharedLibraryConfig(baseConfig, nx, compat, 'libs/shared/utils/tsconfig.*?.json', 'utils');
+export default createSharedLibraryConfig(baseConfig, nx, compat, 'libs/shared/utils/tsconfig.*?.json', 'workspace');
