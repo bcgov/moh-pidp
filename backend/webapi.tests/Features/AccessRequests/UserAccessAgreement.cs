@@ -11,7 +11,7 @@ using NodaTime;
 public class UserAccessAgreementTests : InMemoryDbTest
 {
     [Fact]
-    public async void AcceptUserAccessAgreement_Accepted()
+    public async Task AcceptUserAccessAgreement_Accepted()
     {
         var party = this.TestDb.HasAParty(party =>
         {
@@ -33,7 +33,7 @@ public class UserAccessAgreementTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void AcceptUserAccessAgreement_HasAlreadyAccepted()
+    public async Task AcceptUserAccessAgreement_HasAlreadyAccepted()
     {
         var party = this.TestDb.HasAParty(party =>
         {

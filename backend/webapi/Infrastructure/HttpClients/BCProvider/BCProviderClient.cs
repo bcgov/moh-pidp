@@ -179,6 +179,20 @@ public partial class BCProviderClient(
         }
     }
 
+    public async Task<bool> DeleteBCProviderAccount(string userPrincipalName)
+    {
+        try
+        {
+            await this.client.Users[userPrincipalName].DeleteAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            this.logger.LogError(ex, "Failed to delete BC Provider user {userPrincipalName}.", userPrincipalName);
+            return false;
+        }
+    }
+
     public async Task<bool> RemoveAuthMethods(string userPrincipalName)
     {
         var allMethodsDeleted = false;

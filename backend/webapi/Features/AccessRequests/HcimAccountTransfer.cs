@@ -12,6 +12,7 @@ using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Ldap;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.Services;
+using Pidp.Models;
 using Pidp.Models.Lookups;
 
 public class HcimAccountTransfer
@@ -83,6 +84,8 @@ public class HcimAccountTransfer
                 || !dto.DemographicsComplete)
             {
                 this.logger.LogAccessRequestDenied();
+                this.context.BusinessEvents.Add(AccessRequestFailed.Create(command.PartyId, AccessTypeCode.HcimAccountTransfer.ToString(), this.clock.GetCurrentInstant()));
+                await this.context.SaveChangesAsync();
                 return DomainResult.Failed<Model>();
             }
 
@@ -112,6 +115,8 @@ public class HcimAccountTransfer
                 RequestedOn = this.clock.GetCurrentInstant(),
                 LdapUsername = command.LdapUsername
             });
+
+            this.context.BusinessEvents.Add(AccessRequestSubmitted.Create(command.PartyId, AccessTypeCode.HcimAccountTransfer.ToString(), this.clock.GetCurrentInstant()));
 
             await this.context.SaveChangesAsync();
 

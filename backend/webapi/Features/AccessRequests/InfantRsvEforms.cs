@@ -65,8 +65,7 @@ public class InfantRsvEforms
             if (dto.AlreadyEnroled
                 || dto.Email == null)
             {
-                this.logger.LogAccessRequestDenied(command.PartyId);
-                return DomainResult.Failed();
+                return await this.DenyAccess(command.PartyId);
             }
 
             if (dto.Cpn == null)
@@ -81,16 +80,14 @@ public class InfantRsvEforms
                 if (!endorsementPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding &&
                     !endorsementPlrStanding.With(IdentifierType.Nurse).HasGoodStanding)
                 {
-                    this.logger.LogAccessRequestDenied(command.PartyId);
-                    return DomainResult.Failed();
+                    return await this.DenyAccess(command.PartyId);
                 }
             }
             else
             {
                 if (!IsEligible(await this.plrClient.GetStandingsDigestAsync(dto.Cpn)))
                 {
-                    this.logger.LogAccessRequestDenied(command.PartyId);
-                    return DomainResult.Failed();
+                    return await this.DenyAccess(command.PartyId);
                 }
             }
 
@@ -109,9 +106,19 @@ public class InfantRsvEforms
                 RequestedOn = this.clock.GetCurrentInstant()
             });
 
+            this.context.BusinessEvents.Add(AccessRequestSubmitted.Create(command.PartyId, AccessTypeCode.InfantRsvEforms.ToString(), this.clock.GetCurrentInstant()));
+
             await this.context.SaveChangesAsync();
 
             return DomainResult.Success();
+        }
+
+        private async Task<IDomainResult> DenyAccess(int partyId)
+        {
+            this.logger.LogAccessRequestDenied(partyId);
+            this.context.BusinessEvents.Add(AccessRequestFailed.Create(partyId, AccessTypeCode.InfantRsvEforms.ToString(), this.clock.GetCurrentInstant()));
+            await this.context.SaveChangesAsync();
+            return DomainResult.Failed();
         }
     }
 }

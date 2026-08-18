@@ -31,7 +31,7 @@ public class AssertThatTests
         {
             AssertThat.CollectionsAreEquivalent(collection1, collection2, predicate);
 
-            Assert.True(false, "Assertions passed when they should have failed");
+            Assert.Fail("Assertions passed when they should have failed");
         }
         catch (Exception e) when (e is EqualException or NotEqualException or EmptyException) { }
     }

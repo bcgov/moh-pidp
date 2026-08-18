@@ -1,7 +1,7 @@
 <div class="page-container" uiPidpInjectViewportCss>
   <header>
     <div class="banner">
-      <a class="logo-link" href="/" (click)="navigateToRoot(); $event.preventDefault()">
+      <a class="logo-link" href="/" tabindex="0" (keydown.enter)="navigateToRoot(); $event.preventDefault()" (click)="navigateToRoot(); $event.preventDefault()">
         @if (isMobile) {
         <img class="logo-mobile" loading="lazy" src="../assets/images/logo.svg" alt="BC Government Home" />
         }
@@ -24,7 +24,7 @@
     <div class="footer-container">
       <ul>
         <li>
-          <button class="text-button" (click)="navigateToRoot()">Home</button>
+          <button class="text-button" tabindex="0" (keydown.enter)="navigateToRoot()" (click)="navigateToRoot()">Home</button>
         </li>
         <li>
           <a href="https://www2.gov.bc.ca/gov/content/home/disclaimer">Disclaimer</a>

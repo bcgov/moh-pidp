@@ -1,8 +1,8 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  Inject,
   OnInit,
+  inject,
 } from '@angular/core';
 
 import {
@@ -34,18 +34,12 @@ interface SupportProps {
   ],
 })
 export class GetSupportComponent implements OnInit {
-  public providedSupport: SupportProps[];
-  public providerIdentitySupport: string;
-  public additionalSupportPhone: string;
+  private config = inject<AppConfig>(APP_CONFIG);
+  private permissionsService = inject(PermissionsService);
 
-  public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
-    private permissionsService: PermissionsService,
-  ) {
-    this.providedSupport = [];
-    this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
-    this.additionalSupportPhone = this.config.phones.additionalSupport;
-  }
+  public providedSupport: SupportProps[] = [];
+  public providerIdentitySupport = this.config.emails.providerIdentitySupport;
+  public additionalSupportPhone = this.config.phones.additionalSupport;
 
   public ngOnInit(): void {
     this.setupSupport();

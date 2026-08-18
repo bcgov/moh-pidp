@@ -10,7 +10,7 @@ using PidpTests.TestingExtensions;
 public class MSTeamsPrivacyOfficersTests : InMemoryDbTest
 {
     [Fact]
-    public async void Get_WithNoEndorsements_EmptyList()
+    public async Task Get_WithNoEndorsements_EmptyList()
     {
         var party = this.TestDb.HasAParty();
         var handler = this.MockDependenciesFor<QueryHandler>();
@@ -23,7 +23,7 @@ public class MSTeamsPrivacyOfficersTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void Get_WithEndorsementNoPrivacyOfficer_EmptyList()
+    public async Task Get_WithEndorsementNoPrivacyOfficer_EmptyList()
     {
         var party = this.TestDb.HasAParty();
         var party2 = this.TestDb.HasAParty();
@@ -46,7 +46,7 @@ public class MSTeamsPrivacyOfficersTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void Get_WithEndorsementsPrivacyOfficerEnrolmentNoClinic_EmptyList()
+    public async Task Get_WithEndorsementsPrivacyOfficerEnrolmentNoClinic_EmptyList()
     {
         var party = this.TestDb.HasAParty();
         var party2 = this.TestDb.HasAParty(party => party.AccessRequests = new[] { new AccessRequest { AccessTypeCode = AccessTypeCode.MSTeamsPrivacyOfficer } });
@@ -69,7 +69,7 @@ public class MSTeamsPrivacyOfficersTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void Get_WithEndorsementsPrivacyOfficers_List()
+    public async Task Get_WithEndorsementsPrivacyOfficers_List()
     {
         var party = this.TestDb.HasAParty();
 

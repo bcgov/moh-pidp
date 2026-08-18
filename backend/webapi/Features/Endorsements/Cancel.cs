@@ -57,6 +57,7 @@ public class Cancel
             }
 
             endorsement.Active = false;
+            this.context.BusinessEvents.Add(EndorsementCancelled.Create(command.PartyId, command.EndorsementId, this.clock.GetCurrentInstant()));
             await this.context.SaveChangesAsync(); // This double Save is deliberate; we need to persist changes to the Endorsement Relationships in the database before we can calculate the EndorserData in the Domain Events.
 
             // TODO: We don't actually need the whole Party, just the Id, PrimaryUserId and Cpn.

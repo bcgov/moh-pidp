@@ -1,11 +1,12 @@
 namespace Pidp.Features.Pharmacies;
 
 using FluentValidation;
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 using Pidp.Data;
 using Pidp.Models;
 using Pidp.Models.Lookups;
+using NodaTime;
 
 public class PharmacyUpdate
 {
@@ -22,9 +23,9 @@ public class PharmacyUpdate
         public int RequestingPartyId { get; set; } = 0;
     }
 
-    public class CommandHandler(PidpDbContext context) : IRequestHandler<Command>
+    public class CommandHandler(IClock clock, PidpDbContext context) : IRequestHandler<Command>
     {
-        public async Task Handle(Command request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
             var partyIsAdmin = await context.PharmacyPartyRoles
                 .AnyAsync(role => role.PartyId == request.RequestingPartyId
@@ -34,7 +35,7 @@ public class PharmacyUpdate
 
             if (!partyIsAdmin)
             {
-                throw new AccessViolationException("User is not an admin of this pharmacy.");
+                throw new InvalidOperationException("User is not an admin of this pharmacy.");
             }
 
             var pharmacy = await context.Pharmacies.FindAsync(new object[] { request.PharmacyId }, cancellationToken);
@@ -45,8 +46,10 @@ public class PharmacyUpdate
             }
 
             context.Entry(pharmacy).CurrentValues.SetValues(request);
+            context.BusinessEvents.Add(PharmacyUpdated.Create(request.RequestingPartyId, pharmacy.Name, clock.GetCurrentInstant()));
 
             await context.SaveChangesAsync(cancellationToken);
+            return Unit.Value;
         }
     }
 }

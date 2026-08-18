@@ -4,7 +4,7 @@
   [routerLinkActiveOptions]="routeMenuItem.linkActiveOptions"
   [fragment]="routeMenuItem.extras.fragment"
   [class]="routeMenuItem.getOptions()"
-  (click)="onRoute(routeMenuItem)">
+  tabindex="0" (keydown.enter)="onRoute(routeMenuItem)" (click)="onRoute(routeMenuItem)">
   @if ({
     isDesktop: isDesktopAndUpBreakpoint$ | async
     }; as breakpoint) {

@@ -12,7 +12,7 @@
           class="link"
           uiAnchor
           scheme="url"
-          (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))">
+          tabindex="0" (keydown.enter)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))" (click)="navigateTo(AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS))">
           Access to Systems</a
           >.
         </p>
@@ -423,7 +423,7 @@
                                                                                                                       @if (showBackToTopButton) {
                                                                                                                         <button
                                                                                                                           class="back-to-top"
-                                                                                                                          (click)="scrollToTop()">
+                                                                                                                          tabindex="0" (keydown.enter)="scrollToTop()" (click)="scrollToTop()">
                                                                                                                           <fa-icon [icon]="faArrowUp"></fa-icon>
                                                                                                                         </button>
                                                                                                                       }

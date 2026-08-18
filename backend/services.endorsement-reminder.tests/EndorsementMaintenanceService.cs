@@ -15,7 +15,7 @@ public class EndorsementMaintenanceServiceTests : InMemoryDbTest
 {
     [Theory]
     [MemberData(nameof(ExpiryScheduleTestCases))]
-    public async void EndorsementMainenanceService_ExpireOldEndorsementRequestsAsync_ShouldNotSendDuplicateEmails(EndorsementRequestStatus status, Instant statusDate, Instant scheduleDate, bool expectedExpired)
+    public async Task EndorsementMainenanceService_ExpireOldEndorsementRequestsAsync_ShouldNotSendDuplicateEmails(EndorsementRequestStatus status, Instant statusDate, Instant scheduleDate, bool expectedExpired)
     {
         var requestingParty = this.TestDb.HasAParty();
         requestingParty.Email = "requesting@email.com";
@@ -59,7 +59,7 @@ public class EndorsementMaintenanceServiceTests : InMemoryDbTest
 
     [Theory]
     [MemberData(nameof(ScheduleTestCases))]
-    public async void EndorsementMaintenanceService_SendReminderEmailsAsync_SendsEmailsOnSchedule(EndorsementRequestStatus status, Instant statusDate, Instant scheduleDate, bool emailExpected)
+    public async Task EndorsementMaintenanceService_SendReminderEmailsAsync_SendsEmailsOnSchedule(EndorsementRequestStatus status, Instant statusDate, Instant scheduleDate, bool emailExpected)
     {
         var requestingParty = this.TestDb.HasAParty();
         requestingParty.Email = "requesting@email.com";
@@ -122,7 +122,7 @@ public class EndorsementMaintenanceServiceTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void EndorsementMainenanceService_SendReminderEmailsAsync_ShouldNotSendDuplicateEmails()
+    public async Task EndorsementMainenanceService_SendReminderEmailsAsync_ShouldNotSendDuplicateEmails()
     {
         var now = SystemClock.Instance.GetCurrentInstant();
         var requestingParty = this.TestDb.HasAParty();
@@ -163,7 +163,7 @@ public class EndorsementMaintenanceServiceTests : InMemoryDbTest
 
     [Fact]
     // If a 7 day old Endorsment Request is between two users currently in an Active Endorsement, they should not get an email
-    public async void EndorsementMaintenanceService_SendReminderEmailsAsync_ShouldNotSendIfAlreadyEndorsed()
+    public async Task EndorsementMaintenanceService_SendReminderEmailsAsync_ShouldNotSendIfAlreadyEndorsed()
     {
         var now = SystemClock.Instance.GetCurrentInstant();
         var requestingParty = this.TestDb.HasAParty();

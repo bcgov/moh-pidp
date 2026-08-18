@@ -72,6 +72,8 @@ public class SAEforms
                 || !IsEligible(await this.plrClient.GetStandingsDigestAsync(dto.Cpn)))
             {
                 this.logger.LogAccessRequestDenied();
+                this.context.BusinessEvents.Add(AccessRequestFailed.Create(command.PartyId, AccessTypeCode.SAEforms.ToString(), this.clock.GetCurrentInstant()));
+                await this.context.SaveChangesAsync();
                 return DomainResult.Failed();
             }
 
@@ -89,6 +91,8 @@ public class SAEforms
                 AccessTypeCode = AccessTypeCode.SAEforms,
                 RequestedOn = this.clock.GetCurrentInstant()
             });
+
+            this.context.BusinessEvents.Add(AccessRequestSubmitted.Create(command.PartyId, AccessTypeCode.SAEforms.ToString(), this.clock.GetCurrentInstant()));
 
             await this.context.SaveChangesAsync();
 

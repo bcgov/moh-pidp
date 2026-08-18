@@ -38,12 +38,12 @@
             mat-flat-button
             type="button"
             color="primary"
-            (click)="onUplift()">
+            tabindex="0" (keydown.enter)="onUplift()" (click)="onUplift()">
             Start uplift
             <img src="/assets/images/icons/icon-vector.svg" alt="vector" />
           </button>
 
-          <a (click)="showInstructions = !showInstructions"
+          <a tabindex="0" (keydown.enter)="showInstructions = !showInstructions" (click)="showInstructions = !showInstructions"
             ><u>Instructions</u></a
             >
           </div>
@@ -105,7 +105,7 @@
                     mat-stroked-button
                     type="button"
                     color="primary"
-                    (click)="setLayout('createAccount')">
+                    tabindex="0" (keydown.enter)="setLayout('createAccount')" (click)="setLayout('createAccount')">
                     First time setup
                   </button>
                 </div>
@@ -172,16 +172,17 @@
                   ngSrc="/assets/images/bcprovider-account-1000x1103.webp"
                   width="1000"
                   height="1103"
-                  priority />
+                  priority  alt=""/>
                 </div>
                 <h2>Create an account</h2>
                 <div class="form-content">
                   <div class="field">
-                    <label id="bc-provider-application-password"
+                    <label for="bcp-password" id="bc-provider-application-password"
                       >Choose a password</label
                       >
                       <mat-form-field>
                         <input
+                          id="bcp-password"
                           matInput
                           formControlName="password"
                           type="password"
@@ -190,11 +191,12 @@
                         </mat-form-field>
                       </div>
                       <div class="field">
-                        <label id="bc-provider-application-confirm-password"
+                        <label for="bcp-confirm-password" id="bc-provider-application-confirm-password"
                           >Confirm password</label
                           >
                           <mat-form-field>
                             <input
+                              id="bcp-confirm-password"
                               matInput
                               formControlName="confirmPassword"
                               type="password"
@@ -212,7 +214,7 @@
                               mat-flat-button
                               type="submit"
                               color="primary"
-                              [disabled]="!isEnrolButtonEnabled">
+                              [disabled]="!isEnrolButtonEnabled || isSubmitting">
                               Enrol now
                             </button>
                           </div>
@@ -237,7 +239,7 @@
                             <source
                               type="image/png"
                               srcset="/assets/images/bcprovider-account-1000x1103.png" />
-                              <img title="woman" loading="lazy" aria-labelledby="" />
+                              <img title="woman" loading="lazy" aria-labelledby=""  alt=""/>
                             </picture>
 
                             @if (false) {
@@ -258,7 +260,7 @@
                           mat-stroked-button
                           type="button"
                           color="primary"
-                          (click)="onBack()">
+                          tabindex="0" (keydown.enter)="onBack()" (click)="onBack()">
                           Back
                         </button>
                       </section>

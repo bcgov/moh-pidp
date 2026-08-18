@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -34,7 +34,6 @@ export interface EditStaffDialogData {
             <mat-option [value]="PharmacyRole.Clinician">Clinician</mat-option>
             <mat-option [value]="PharmacyRole.Clerk">Clerk</mat-option>
             <mat-option [value]="PharmacyRole.Admin">Administrator</mat-option>
-            <mat-option [value]="PharmacyRole.Unknown">None</mat-option>
           </mat-select>
         </mat-form-field>
 
@@ -103,15 +102,15 @@ export interface EditStaffDialogData {
   ],
 })
 export class EditStaffDialogComponent implements OnInit {
+  private readonly fb = inject(FormBuilder);
+  private readonly dialogRef = inject<MatDialogRef<EditStaffDialogComponent>>(MatDialogRef);
+  public data = inject<EditStaffDialogData>(MAT_DIALOG_DATA);
+  private readonly pharmacyResource = inject(PharmacyResource);
+
   public form: FormGroup;
   public PharmacyRole = PharmacyRole;
 
-  public constructor(
-    private readonly fb: FormBuilder,
-    private readonly dialogRef: MatDialogRef<EditStaffDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: EditStaffDialogData,
-    private readonly pharmacyResource: PharmacyResource
-  ) {
+  public constructor() {
     this.form = this.fb.group({
       role: [this.data.staff.role],
       effectiveStartDate: [

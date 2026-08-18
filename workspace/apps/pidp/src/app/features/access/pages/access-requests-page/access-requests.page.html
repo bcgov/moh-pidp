@@ -8,7 +8,7 @@
     </p>
   </div>
   <div class="search-content">
-    <span>Total results: <b>{{ filteredAccessSections?.length }}</b></span>
+    <span>Total results: <b>{{ (accessSections$ | async)?.length ?? 0 }}</b></span>
     <div class="div-search">
       @if (showSearchIcon) {
         <fa-icon
@@ -27,13 +27,13 @@
           type="button"
           mat-flat-button
           color="primary"
-          (click)="search(filter.value)">
+          tabindex="0" (keydown.enter)="search(filter.value)" (click)="search(filter.value)">
           Search
         </button>
       </div>
     </div>
 
-    @for (section of filteredAccessSections; track section) {
+    @for (section of accessSections$ | async; track section) {
       <app-access-request-card
         class="card-container"
         [heading]="section.heading"
@@ -49,7 +49,7 @@
       @if (showBackToTopButton) {
         <button
           class="back-to-top"
-          (click)="scrollToTop()">
+          tabindex="0" (keydown.enter)="scrollToTop()" (click)="scrollToTop()">
           <fa-icon [icon]="faArrowUp"></fa-icon>
         </button>
       }

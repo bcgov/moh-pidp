@@ -1,7 +1,6 @@
 namespace Pidp.Features.Admin;
 
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 
 using Pidp.Data;
@@ -17,17 +16,24 @@ public class PartyIndex
         public string? ProviderName { get; set; }
         public CollegeCode? ProviderCollegeCode { get; set; }
         public bool SAEformsAccessRequest { get; set; }
+        public List<CredentialModel> Credentials { get; set; } = [];
+
+        public class CredentialModel
+        {
+            public int Id { get; set; }
+            public string IdentityProvider { get; set; } = string.Empty;
+            public string? IdpId { get; set; }
+        }
     }
 
-    public class QueryHandler(IMapper mapper, PidpDbContext context) : IQueryHandler<Query, List<Model>>
+    public class QueryHandler(PidpDbContext context) : IQueryHandler<Query, List<Model>>
     {
-        private readonly IMapper mapper = mapper;
         private readonly PidpDbContext context = context;
 
         public async Task<List<Model>> HandleAsync(Query query)
         {
             return await this.context.Parties
-                .ProjectTo<Model>(this.mapper.ConfigurationProvider)
+                .ProjectToType<Model>()
                 .ToListAsync();
         }
     }

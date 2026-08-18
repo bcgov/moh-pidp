@@ -1,8 +1,9 @@
 
+import { AsyncPipe } from '@angular/common';
 import { Component, HostListener, OnDestroy, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 
-import { Observable, Subject, map, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, combineLatest, map, takeUntil, tap } from 'rxjs';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
@@ -28,12 +29,13 @@ import { AccessRequestCardComponent } from '../../components/access-request-card
   templateUrl: './access-requests.page.html',
   styleUrls: ['./access-requests.page.scss'],
   imports: [
+    AsyncPipe,
     BreadcrumbComponent,
     FaIconComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
     AccessRequestCardComponent
-],
+  ],
 })
 export class AccessRequestsPage implements OnInit, OnDestroy {
   private readonly config = inject<AppConfig>(APP_CONFIG);
@@ -47,6 +49,8 @@ export class AccessRequestsPage implements OnInit, OnDestroy {
    * the portal.
    */
   public accessState$: Observable<AccessState>;
+  public accessSections$: Observable<IAccessSection[] | undefined>;
+  private readonly search$ = new BehaviorSubject<string>('');
 
   public faArrowUp = faArrowUp;
   public faMagnifyingGlass = faMagnifyingGlass;
@@ -55,7 +59,6 @@ export class AccessRequestsPage implements OnInit, OnDestroy {
   public showSearchIcon = true;
   public isMobile = true;
   public providerIdentitySupport: string;
-  public filteredAccessSections: IAccessSection[] | undefined = [];
   public breadcrumbsData: Array<{ title: string; path: string }> = [
     { title: 'Home', path: '' },
     { title: 'Access', path: '' },
@@ -66,7 +69,26 @@ export class AccessRequestsPage implements OnInit, OnDestroy {
     this.accessState$ = this.portalService.accessState$;
     this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
-    this.getCards();
+
+    this.accessSections$ = combineLatest([
+      this.accessState$.pipe(map((state) => state?.access)),
+      this.search$,
+    ]).pipe(
+      map(([access, searchText]) => {
+        if (!access) {
+          return access;
+        }
+        const filtered = searchText
+          ? access.filter(
+              (section) =>
+                section.heading.toLowerCase().includes(searchText.toLowerCase()) ||
+                section.description.toLowerCase().includes(searchText.toLowerCase()) ||
+                section.keyWords?.includes(searchText.toLowerCase()),
+            )
+          : access;
+        return [...filtered].sort((a, b) => a.heading.localeCompare(b.heading));
+      })
+    );
   }
 
   @HostListener('window:scroll', [])
@@ -84,27 +106,14 @@ export class AccessRequestsPage implements OnInit, OnDestroy {
   }
 
   public search(text: string): void {
-    if (!text) {
-      this.getCards();
-      return;
-    }
-    text = text.trim();
-    this.accessState$
-      .pipe(map((state) => state?.access))
-      .subscribe((access) => {
-        this.filteredAccessSections = access?.filter(
-          (section) =>
-            section.heading.toLowerCase().includes(text.toLowerCase()) ||
-            section.description.toLowerCase().includes(text.toLowerCase()) ||
-            section.keyWords?.includes(text.toLocaleLowerCase()),
-        );
-      });
+    this.search$.next(text.trim());
   }
 
   public onSearch(event: Event): void {
-    this.showSearchIcon = (event.target as HTMLInputElement).value === '';
+    const value = (event.target as HTMLInputElement).value;
+    this.showSearchIcon = value === '';
     if (this.showSearchIcon) {
-      this.getCards();
+      this.search$.next('');
     }
   }
 
@@ -125,19 +134,5 @@ export class AccessRequestsPage implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  private getCards(): void {
-    this.accessState$
-      .pipe(
-        map((state) => state?.access),
-        takeUntil(this.destroy$),
-      )
-      .subscribe((access) => {
-        this.filteredAccessSections = access;
-        this.filteredAccessSections?.sort((a, b) =>
-          a.heading.localeCompare(b.heading),
-        );
-      });
   }
 }

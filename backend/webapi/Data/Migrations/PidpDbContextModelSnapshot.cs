@@ -26107,6 +26107,38 @@ namespace Pidp.Data.Migrations
                     b.HasDiscriminator().HasValue("MSTeamsClinicAddress");
                 });
 
+            modelBuilder.Entity("Pidp.Models.AccessRequestFailed", b =>
+                {
+                    b.HasBaseType("Pidp.Models.BusinessEvent");
+
+                    b.Property<int>("PartyId")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("integer")
+                        .HasColumnName("PartyId");
+
+                    b.HasIndex("PartyId");
+
+                    b.ToTable("BusinessEvent");
+
+                    b.HasDiscriminator().HasValue("AccessRequestFailed");
+                });
+
+            modelBuilder.Entity("Pidp.Models.AccessRequestSubmitted", b =>
+                {
+                    b.HasBaseType("Pidp.Models.BusinessEvent");
+
+                    b.Property<int>("PartyId")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("integer")
+                        .HasColumnName("PartyId");
+
+                    b.HasIndex("PartyId");
+
+                    b.ToTable("BusinessEvent");
+
+                    b.HasDiscriminator().HasValue("AccessRequestSubmitted");
+                });
+
             modelBuilder.Entity("Pidp.Models.AccountLinkingFailure", b =>
                 {
                     b.HasBaseType("Pidp.Models.BusinessEvent");
@@ -26180,6 +26212,86 @@ namespace Pidp.Data.Migrations
                     b.HasDiscriminator().HasValue("CollegeLicenceSearchError");
                 });
 
+            modelBuilder.Entity("Pidp.Models.DemographicsUpdated", b =>
+                {
+                    b.HasBaseType("Pidp.Models.BusinessEvent");
+
+                    b.Property<int>("PartyId")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("integer")
+                        .HasColumnName("PartyId");
+
+                    b.HasIndex("PartyId");
+
+                    b.ToTable("BusinessEvent");
+
+                    b.HasDiscriminator().HasValue("DemographicsUpdated");
+                });
+
+            modelBuilder.Entity("Pidp.Models.EndorsementApproved", b =>
+                {
+                    b.HasBaseType("Pidp.Models.BusinessEvent");
+
+                    b.Property<int>("PartyId")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("integer")
+                        .HasColumnName("PartyId");
+
+                    b.HasIndex("PartyId");
+
+                    b.ToTable("BusinessEvent");
+
+                    b.HasDiscriminator().HasValue("EndorsementApproved");
+                });
+
+            modelBuilder.Entity("Pidp.Models.EndorsementCancelled", b =>
+                {
+                    b.HasBaseType("Pidp.Models.BusinessEvent");
+
+                    b.Property<int>("PartyId")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("integer")
+                        .HasColumnName("PartyId");
+
+                    b.HasIndex("PartyId");
+
+                    b.ToTable("BusinessEvent");
+
+                    b.HasDiscriminator().HasValue("EndorsementCancelled");
+                });
+
+            modelBuilder.Entity("Pidp.Models.EndorsementDenied", b =>
+                {
+                    b.HasBaseType("Pidp.Models.BusinessEvent");
+
+                    b.Property<int>("PartyId")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("integer")
+                        .HasColumnName("PartyId");
+
+                    b.HasIndex("PartyId");
+
+                    b.ToTable("BusinessEvent");
+
+                    b.HasDiscriminator().HasValue("EndorsementDenied");
+                });
+
+            modelBuilder.Entity("Pidp.Models.EndorsementRequestCreated", b =>
+                {
+                    b.HasBaseType("Pidp.Models.BusinessEvent");
+
+                    b.Property<int>("PartyId")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("integer")
+                        .HasColumnName("PartyId");
+
+                    b.HasIndex("PartyId");
+
+                    b.ToTable("BusinessEvent");
+
+                    b.HasDiscriminator().HasValue("EndorsementRequestCreated");
+                });
+
             modelBuilder.Entity("Pidp.Models.LicenceStatusRoleAssigned", b =>
                 {
                     b.HasBaseType("Pidp.Models.BusinessEvent");
@@ -26226,6 +26338,70 @@ namespace Pidp.Data.Migrations
                     b.ToTable("BusinessEvent");
 
                     b.HasDiscriminator().HasValue("PartyNotInPlr");
+                });
+
+            modelBuilder.Entity("Pidp.Models.PharmacyAdded", b =>
+                {
+                    b.HasBaseType("Pidp.Models.BusinessEvent");
+
+                    b.Property<int>("PartyId")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("integer")
+                        .HasColumnName("PartyId");
+
+                    b.HasIndex("PartyId");
+
+                    b.ToTable("BusinessEvent");
+
+                    b.HasDiscriminator().HasValue("PharmacyAdded");
+                });
+
+            modelBuilder.Entity("Pidp.Models.PharmacyStaffChanged", b =>
+                {
+                    b.HasBaseType("Pidp.Models.BusinessEvent");
+
+                    b.Property<int>("PartyId")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("integer")
+                        .HasColumnName("PartyId");
+
+                    b.HasIndex("PartyId");
+
+                    b.ToTable("BusinessEvent");
+
+                    b.HasDiscriminator().HasValue("PharmacyStaffChanged");
+                });
+
+            modelBuilder.Entity("Pidp.Models.PharmacyUpdated", b =>
+                {
+                    b.HasBaseType("Pidp.Models.BusinessEvent");
+
+                    b.Property<int>("PartyId")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("integer")
+                        .HasColumnName("PartyId");
+
+                    b.HasIndex("PartyId");
+
+                    b.ToTable("BusinessEvent");
+
+                    b.HasDiscriminator().HasValue("PharmacyUpdated");
+                });
+
+            modelBuilder.Entity("Pidp.Models.PlrStatusUpdated", b =>
+                {
+                    b.HasBaseType("Pidp.Models.BusinessEvent");
+
+                    b.Property<int>("PartyId")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("integer")
+                        .HasColumnName("PartyId");
+
+                    b.HasIndex("PartyId");
+
+                    b.ToTable("BusinessEvent");
+
+                    b.HasDiscriminator().HasValue("PlrStatusUpdated");
                 });
 
             modelBuilder.Entity("Pidp.Models.AccessRequest", b =>
@@ -26473,6 +26649,28 @@ namespace Pidp.Data.Migrations
                     b.Navigation("Clinic");
                 });
 
+            modelBuilder.Entity("Pidp.Models.AccessRequestFailed", b =>
+                {
+                    b.HasOne("Pidp.Models.Party", "Party")
+                        .WithMany()
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Party");
+                });
+
+            modelBuilder.Entity("Pidp.Models.AccessRequestSubmitted", b =>
+                {
+                    b.HasOne("Pidp.Models.Party", "Party")
+                        .WithMany()
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Party");
+                });
+
             modelBuilder.Entity("Pidp.Models.AccountLinkingFailure", b =>
                 {
                     b.HasOne("Pidp.Models.Party", "Party")
@@ -26517,6 +26715,61 @@ namespace Pidp.Data.Migrations
                     b.Navigation("Party");
                 });
 
+            modelBuilder.Entity("Pidp.Models.DemographicsUpdated", b =>
+                {
+                    b.HasOne("Pidp.Models.Party", "Party")
+                        .WithMany()
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Party");
+                });
+
+            modelBuilder.Entity("Pidp.Models.EndorsementApproved", b =>
+                {
+                    b.HasOne("Pidp.Models.Party", "Party")
+                        .WithMany()
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Party");
+                });
+
+            modelBuilder.Entity("Pidp.Models.EndorsementCancelled", b =>
+                {
+                    b.HasOne("Pidp.Models.Party", "Party")
+                        .WithMany()
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Party");
+                });
+
+            modelBuilder.Entity("Pidp.Models.EndorsementDenied", b =>
+                {
+                    b.HasOne("Pidp.Models.Party", "Party")
+                        .WithMany()
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Party");
+                });
+
+            modelBuilder.Entity("Pidp.Models.EndorsementRequestCreated", b =>
+                {
+                    b.HasOne("Pidp.Models.Party", "Party")
+                        .WithMany()
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Party");
+                });
+
             modelBuilder.Entity("Pidp.Models.LicenceStatusRoleAssigned", b =>
                 {
                     b.HasOne("Pidp.Models.Party", "Party")
@@ -26540,6 +26793,50 @@ namespace Pidp.Data.Migrations
                 });
 
             modelBuilder.Entity("Pidp.Models.PartyNotInPlr", b =>
+                {
+                    b.HasOne("Pidp.Models.Party", "Party")
+                        .WithMany()
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Party");
+                });
+
+            modelBuilder.Entity("Pidp.Models.PharmacyAdded", b =>
+                {
+                    b.HasOne("Pidp.Models.Party", "Party")
+                        .WithMany()
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Party");
+                });
+
+            modelBuilder.Entity("Pidp.Models.PharmacyStaffChanged", b =>
+                {
+                    b.HasOne("Pidp.Models.Party", "Party")
+                        .WithMany()
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Party");
+                });
+
+            modelBuilder.Entity("Pidp.Models.PharmacyUpdated", b =>
+                {
+                    b.HasOne("Pidp.Models.Party", "Party")
+                        .WithMany()
+                        .HasForeignKey("PartyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Party");
+                });
+
+            modelBuilder.Entity("Pidp.Models.PlrStatusUpdated", b =>
                 {
                     b.HasOne("Pidp.Models.Party", "Party")
                         .WithMany()

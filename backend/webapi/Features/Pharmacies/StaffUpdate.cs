@@ -1,8 +1,10 @@
 namespace Pidp.Features.Pharmacies;
 
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
+using NodaTime;
 using Pidp.Data;
+using Pidp.Infrastructure.Services;
 using Pidp.Models;
 using Pidp.Models.Lookups;
 
@@ -18,9 +20,9 @@ public class StaffUpdate
         public int RequestingPartyId { get; set; } = 0;
     }
 
-    public class CommandHandler(PidpDbContext context) : IRequestHandler<Command>
+    public class CommandHandler(IClock clock, PidpDbContext context, IBCProviderService bcProviderService) : IRequestHandler<Command>
     {
-        public async Task Handle(Command request, CancellationToken cancellationToken)
+        public async ValueTask<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
             var requestingPartyIsAdmin = await context.PharmacyPartyRoles
                 .AnyAsync(role => role.PartyId == request.RequestingPartyId
@@ -47,7 +49,17 @@ public class StaffUpdate
             staffRole.EffectiveStartDate = request.EffectiveStartDate?.ToUniversalTime();
             staffRole.EffectiveEndDate = request.EffectiveEndDate?.ToUniversalTime();
 
+            var pharmacyName = await context.Pharmacies
+                .Where(p => p.Id == request.PharmacyId)
+                .Select(p => p.Name)
+                .SingleOrDefaultAsync(cancellationToken) ?? string.Empty;
+
+            context.BusinessEvents.Add(PharmacyStaffChanged.Create(request.RequestingPartyId, pharmacyName, clock.GetCurrentInstant()));
+
             await context.SaveChangesAsync(cancellationToken);
+
+            await bcProviderService.UpdatePharmStaffAttributes(request.PartyId, cancellationToken);
+            return Unit.Value;
         }
     }
 }

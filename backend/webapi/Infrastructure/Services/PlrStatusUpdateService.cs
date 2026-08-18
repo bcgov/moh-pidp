@@ -7,16 +7,20 @@ using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Plr;
+using Pidp.Models;
 using Pidp.Models.DomainEvents;
+using NodaTime;
 
 public sealed class PlrStatusUpdateService(
     IBCProviderClient bcProviderClient,
+    IClock clock,
     IPlrClient plrClient,
     ILogger<PlrStatusUpdateService> logger,
     PidpDbContext context,
     PidpConfiguration config) : IPlrStatusUpdateService
 {
     private readonly IBCProviderClient bcProviderClient = bcProviderClient;
+    private readonly IClock clock = clock;
     private readonly IPlrClient plrClient = plrClient;
     private readonly ILogger<PlrStatusUpdateService> logger = logger;
     private readonly PidpDbContext context = context;
@@ -102,6 +106,8 @@ public sealed class PlrStatusUpdateService(
                 await this.bcProviderClient.UpdateAttributes(upn, bcProviderAttributes.AsAdditionalData());
             }
         }
+
+        this.context.BusinessEvents.Add(PlrStatusUpdated.Create(party.Id, status.ProviderRoleType ?? string.Empty, this.clock.GetCurrentInstant()));
 
         await this.context.SaveChangesAsync(stoppingToken);
 

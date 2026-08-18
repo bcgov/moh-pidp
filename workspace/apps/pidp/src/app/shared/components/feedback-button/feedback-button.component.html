@@ -1,6 +1,6 @@
 <div class="container-box container" uiPidpInjectViewportCss>
   <div [ngClass]="buttonClass">
-    <button class="mid-right-button" (click)="openDialog()">
+    <button class="mid-right-button" tabindex="0" (keydown.enter)="openDialog()" (click)="openDialog()">
       <img
         class="img"
         src="/assets/images/feedback-button-logo.svg"

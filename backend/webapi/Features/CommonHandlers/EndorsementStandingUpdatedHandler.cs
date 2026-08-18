@@ -1,29 +1,29 @@
 namespace Pidp.Features.CommonHandlers;
 
-using MassTransit;
-using MediatR;
+using Mediator;
+using Pidp.Infrastructure.Queue;
 using Microsoft.EntityFrameworkCore;
 
 using Pidp.Data;
 using Pidp.Extensions;
-using static Pidp.Features.CommonHandlers.UpdateBcProviderAttributesConsumer;
+using static Pidp.Features.CommonHandlers.UpdateBcProviderAttributesHandler;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models.DomainEvents;
 
 public class UpdateBCProviderAfterEndorsementStandingUpdated(
-    IBus bus,
+    IRabbitMqPublisher bus,
     IPlrClient plrClient,
     PidpDbContext context,
     PidpConfiguration config) : INotificationHandler<EndorsementStandingUpdated>
 {
-    private readonly IBus bus = bus;
+    private readonly IRabbitMqPublisher bus = bus;
     private readonly IPlrClient plrClient = plrClient;
     private readonly PidpDbContext context = context;
     private readonly string clientId = config.BCProviderClient.ClientId;
 
-    public async Task Handle(EndorsementStandingUpdated notification, CancellationToken cancellationToken)
+    public async ValueTask Handle(EndorsementStandingUpdated notification, CancellationToken cancellationToken)
     {
         var party = await this.context.Parties
             .Where(party => party.Id == notification.PartyId)
@@ -55,6 +55,6 @@ public class UpdateBCProviderAfterEndorsementStandingUpdated(
                 .With(BCProviderAttributes.EndorserDataEligibleIdentifierTypes)
                 .Cpns);
 
-        await this.bus.Publish(new UpdateBcProviderAttributes(party.Upn, attributes.AsAdditionalData()), cancellationToken);
+        await this.bus.PublishAsync(new UpdateBcProviderAttributes(party.Upn, attributes.AsAdditionalData()), cancellationToken);
     }
 }

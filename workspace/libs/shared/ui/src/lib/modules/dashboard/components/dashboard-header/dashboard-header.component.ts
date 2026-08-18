@@ -7,7 +7,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { Observable, combineLatest, distinctUntilChanged, map } from 'rxjs';
 
-import { NgProgressComponent } from 'ngx-progressbar';
+import { NgProgressbar } from 'ngx-progressbar';
 
 import { BcGovLogoComponent } from '../../../../components/bc-gov-logo/bc-gov-logo.component';
 import { ViewportService } from '../../../../services/viewport.service';
@@ -24,7 +24,7 @@ import { DashboardHeaderTheme } from '../../models/dashboard-header-config.model
     MatIconModule,
     BcGovLogoComponent,
     MatTooltipModule,
-    NgProgressComponent,
+    NgProgressbar,
     AsyncPipe
 ],
 })

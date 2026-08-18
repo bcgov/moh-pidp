@@ -35,6 +35,9 @@ jobs:
           echo current installed helm releases
           helm list --namespace f088b1-dev
 
+          echo updating helm chart dependencies...
+          helm dependency update charts/pidp
+  
           echo installing helm chart...
           helm upgrade --wait --values ./deploy/dev_values.yaml --namespace f088b1-dev dev charts/pidp --debug
   
@@ -60,6 +63,9 @@ jobs:
           oc project f088b1-dev
           helm list --namespace f088b1-dev
 
+          echo updating helm chart dependencies...
+          helm dependency update charts/pidp
+  
           echo installing helm chart...
           helm upgrade --wait --values ./deploy/dev_values.yaml --namespace f088b1-dev dev charts/pidp --debug
 

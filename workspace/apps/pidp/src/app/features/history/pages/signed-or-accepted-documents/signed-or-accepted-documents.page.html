@@ -29,7 +29,7 @@
       uiPageFooterAction
       color="primary"
       type="button"
-      (click)="onBack()">
+      tabindex="0" (keydown.enter)="onBack()" (click)="onBack()">
       Back Home
     </button>
   </ui-page-footer>
