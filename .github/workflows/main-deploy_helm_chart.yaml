@@ -35,6 +35,9 @@ jobs:
           echo current installed helm releases
           helm list --namespace f088b1-prod
   
+          echo updating helm chart dependencies...
+          helm dependency update charts/pidp
+  
           echo installing helm chart...
           helm upgrade --wait --values ./deploy/prod_values.yaml --namespace f088b1-prod prod charts/pidp --debug 
 
@@ -58,6 +61,9 @@ jobs:
         run: |
           echo current installed helm releases
           helm list --namespace f088b1-prod
+  
+          echo updating helm chart dependencies...
+          helm dependency update charts/pidp
   
           echo installing helm chart...
           helm upgrade --wait --values ./deploy/prod_values.yaml --namespace f088b1-prod prod charts/pidp --debug 

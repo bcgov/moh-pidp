@@ -35,6 +35,9 @@ jobs:
         run: |
           echo current installed helm releases
           helm list --namespace f088b1-test
+
+          echo updating helm chart dependencies...
+          helm dependency update charts/pidp
   
           echo installing helm chart...
           helm upgrade --wait --values ./deploy/demo_values.yaml --namespace f088b1-test demo charts/pidp --debug 

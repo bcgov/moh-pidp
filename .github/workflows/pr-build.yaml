@@ -276,7 +276,7 @@ jobs:
           helm list --namespace f088b1-dev
 
           echo building charts...
-          helm dependency build charts/pidp
+          helm dependency update charts/pidp
 
           echo installing helm chart...
           helm upgrade --install --wait --values ./deploy/pr_values.yaml --namespace f088b1-dev pr-${{ env.pr_number }} charts/pidp --debug --set global.image.tag=pr-${{ env.pr_number }}
