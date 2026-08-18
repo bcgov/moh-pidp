@@ -72,6 +72,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: AccessRoutes.NPDP_EFORMS,
+    loadChildren: (): Promise<Routes> =>
+      import('./pages/npdp-eforms/npdp-eforms-routing.routes').then(
+        (m) => m.routes,
+      ),
+  },
+  {
     path: AccessRoutes.PROVINCIAL_ATTACHMENT_SYSTEM,
     loadChildren: (): Promise<Routes> =>
       import(
