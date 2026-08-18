@@ -33,3 +33,26 @@ export const sharedTsRules = {
     },
   ],
 };
+
+export const createSharedLibraryConfig = (baseConfig, nx, compat, projectPath, prefix) => [
+  ...baseConfig,
+  ...nx.configs['flat/angular'],
+  ...compat
+    .config({
+      extends: [],
+      parserOptions: {
+        project: [projectPath],
+      },
+    })
+    .map((config) => ({
+      ...config,
+      files: ['**/*.ts'],
+      rules: {
+        ...config.rules,
+        ...sharedAngularRules(prefix),
+        ...sharedTsRules,
+        '@angular-eslint/prefer-standalone': 'off',
+      },
+    })),
+  ...nx.configs['flat/angular-template'],
+];
