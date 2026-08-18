@@ -1,4 +1,4 @@
-namespace Pidp.Features.AccessRequests;
+﻿namespace Pidp.Features.AccessRequests;
 
 using DomainResults.Common;
 using DomainResults.Mvc;
@@ -97,6 +97,15 @@ public class AccessRequestsController(IPidpAuthorizationService authorizationSer
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateInfantRsvEformsEnrolment([FromServices] ICommandHandler<InfantRsvEforms.Command, IDomainResult> handler,
                                                                     [FromRoute] InfantRsvEforms.Command command)
+        => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
+            .ToActionResult();
+
+    [HttpPost("npdp-eforms")]
+    [Authorize(Policy = Policies.HighAssuranceIdentityProvider)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateNpdpEformsEnrolment([FromServices] ICommandHandler<NpdpEforms.Command, IDomainResult> handler,
+                                                               [FromRoute] NpdpEforms.Command command)
         => await this.AuthorizePartyBeforeHandleAsync(command.PartyId, handler, command)
             .ToActionResult();
 

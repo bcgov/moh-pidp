@@ -13,7 +13,7 @@ using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using Pidp.Models.Lookups;
 
-public class InfantRsvEforms
+public class NpdpEforms
 {
     public static IdentifierType[] AllowedIdentifierTypes => [IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife];
 
@@ -60,7 +60,7 @@ public class InfantRsvEforms
                 .Where(party => party.Id == command.PartyId)
                 .Select(party => new
                 {
-                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.InfantRsvEforms),
+                    AlreadyEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.NpdpEforms),
                     UserIds = party.Credentials
                         .Where(credential => credential.IdentityProvider == IdentityProviders.BCServicesCard)
                         .Select(credential => credential.UserId),
@@ -105,7 +105,7 @@ public class InfantRsvEforms
 
             foreach (var userId in dto.UserIds)
             {
-                if (!await this.keycloakClient.AssignAccessRoles(userId, MohKeycloakEnrolment.InfantRsvEforms))
+                if (!await this.keycloakClient.AssignAccessRoles(userId, MohKeycloakEnrolment.NpdpEforms))
                 {
                     return DomainResult.Failed();
                 }
@@ -114,7 +114,7 @@ public class InfantRsvEforms
             this.context.AccessRequests.Add(new AccessRequest
             {
                 PartyId = command.PartyId,
-                AccessTypeCode = AccessTypeCode.InfantRsvEforms,
+                AccessTypeCode = AccessTypeCode.NpdpEforms,
                 RequestedOn = this.clock.GetCurrentInstant()
             });
 
@@ -125,8 +125,8 @@ public class InfantRsvEforms
     }
 }
 
-public static partial class InfantRsvEformsLoggingExtensions
+public static partial class NpdpEformsLoggingExtensions
 {
-    [LoggerMessage(1, LogLevel.Warning, "Infant RSV eForms Access Request for Party {partyId} denied; did not meet all prerequisites.")]
-    public static partial void LogAccessRequestDenied(this ILogger<InfantRsvEforms.CommandHandler> logger, int partyId);
+    [LoggerMessage(1, LogLevel.Warning, "NPDP eForms Access Request for Party {partyId} denied; did not meet all prerequisites.")]
+    public static partial void LogAccessRequestDenied(this ILogger<NpdpEforms.CommandHandler> logger, int partyId);
 }
