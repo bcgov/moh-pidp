@@ -85,6 +85,14 @@ public interface IKeycloakAdministrationClient
     Task<UserRepresentation?> GetUser(Guid userId);
 
     /// <summary>
+    /// Removes all the Access Roles of the given Enrolment from the User.
+    /// Returns true if the operation was successful.
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="enrolment"></param>
+    Task<bool> RemoveAccessRoles(Guid userId, MohKeycloakEnrolment enrolment);
+
+    /// <summary>
     /// Removes the given Client Role from the User.
     /// Returns true if the operation was successful.
     /// </summary>

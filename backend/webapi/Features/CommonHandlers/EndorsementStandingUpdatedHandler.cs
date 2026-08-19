@@ -1,4 +1,4 @@
-namespace Pidp.Features.CommonHandlers;
+﻿namespace Pidp.Features.CommonHandlers;
 
 using Mediator;
 using Pidp.Infrastructure.Queue;
@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Pidp.Data;
 using Pidp.Extensions;
+using Pidp.Features.AccessRequests;
 using static Pidp.Features.CommonHandlers.UpdateBcProviderAttributesHandler;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
@@ -56,5 +57,23 @@ public class UpdateBCProviderAfterEndorsementStandingUpdated(
                 .Cpns);
 
         await this.bus.PublishAsync(new UpdateBcProviderAttributes(party.Upn, attributes.AsAdditionalData()), cancellationToken);
+    }
+}
+
+/// <summary>
+/// An MOA holds their cards on the strength of their endorsements, so losing the last endorser in
+/// good standing must take the associated roles away again.
+/// </summary>
+public class RevokeAccessRequestsAfterEndorsementStandingUpdated(
+    IEnumerable<IAccessRequestRevocationPolicy> revocationPolicies) : INotificationHandler<EndorsementStandingUpdated>
+{
+    private readonly IEnumerable<IAccessRequestRevocationPolicy> revocationPolicies = revocationPolicies;
+
+    public async ValueTask Handle(EndorsementStandingUpdated notification, CancellationToken cancellationToken)
+    {
+        foreach (var policy in this.revocationPolicies)
+        {
+            await policy.RevokeIfIneligibleAsync(notification.PartyId, cancellationToken: cancellationToken);
+        }
     }
 }

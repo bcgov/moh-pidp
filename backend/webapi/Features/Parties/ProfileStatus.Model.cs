@@ -1,4 +1,4 @@
-namespace Pidp.Features.Parties;
+﻿namespace Pidp.Features.Parties;
 
 using Pidp.Features.AccessRequests;
 using Pidp.Infrastructure.HttpClients.Plr;
@@ -200,19 +200,6 @@ public partial class ProfileStatus
             protected override StatusCode Compute(ProfileData profile) => StatusCode.Incomplete;
         }
 
-        public class HcimAccountTransferSection : ProfileSection
-        {
-            internal override string SectionName => "hcimAccountTransfer";
-            public override string[] KeyWords => ["ha"];
-
-            protected override StatusCode Compute(ProfileData profile)
-            {
-                return profile.HasEnrolment(AccessTypeCode.HcimAccountTransfer)
-                    ? StatusCode.Complete
-                    : StatusCode.Incomplete;
-            }
-        }
-
         public class HcimWebPcrSection : ProfileSection
         {
             internal override string SectionName => "hcimWebPcr";
@@ -259,11 +246,32 @@ public partial class ProfileStatus
             {
                 return profile switch
                 {
-                    { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
                     _ when profile.HasEnrolment(AccessTypeCode.InfantRsvEforms) => StatusCode.Complete,
-                    _ when InfantRsvEforms.IsEligible(profile.PartyPlrStanding) ||
-                        profile.EndorsementPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding ||
-                        profile.EndorsementPlrStanding.With(IdentifierType.Nurse).HasGoodStanding => StatusCode.Incomplete,
+                    // The Keycloak role is only ever granted to a BC Services Card credential,
+                    // so a Party without one can never complete this enrolment.
+                    { HasBCServicesCardCredential: false } or { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
+                    _ when InfantRsvEforms.IsEligible(profile.PartyPlrStanding)
+                        || InfantRsvEforms.IsEligibleByEndorsement(profile.EndorsementPlrStanding) => StatusCode.Incomplete,
+                    _ => StatusCode.Locked
+                };
+            }
+        }
+
+        public class NpdpEformsSection : ProfileSection
+        {
+            internal override string SectionName => "npdpEforms";
+            public override string[] KeyWords => ["doctors", "nursing", "moa"];
+
+            protected override StatusCode Compute(ProfileData profile)
+            {
+                return profile switch
+                {
+                    _ when profile.HasEnrolment(AccessTypeCode.NpdpEforms) => StatusCode.Complete,
+                    // The Keycloak role is only ever granted to a BC Services Card credential,
+                    // so a Party without one can never complete this enrolment.
+                    { HasBCServicesCardCredential: false } or { UserIsHighAssuranceIdentity: false } => StatusCode.Locked,
+                    _ when NpdpEforms.IsEligible(profile.PartyPlrStanding)
+                        || NpdpEforms.IsEligibleByEndorsement(profile.EndorsementPlrStanding) => StatusCode.Incomplete,
                     _ => StatusCode.Locked
                 };
             }

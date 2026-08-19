@@ -1,4 +1,4 @@
-namespace Pidp.Features.Parties;
+﻿namespace Pidp.Features.Parties;
 
 using Mapster;
 using FluentValidation;
@@ -73,7 +73,6 @@ public partial class ProfileStatus
                     ProfileSection.Create<DriverFitnessSection>(data),
                     ProfileSection.Create<ExternalAccountsSection>(data),
                     ProfileSection.Create<HaloSection>(data),
-                    ProfileSection.Create<HcimAccountTransferSection>(data),
                     ProfileSection.Create<HcimWebPcrSection>(data),
                     ProfileSection.Create<ImmsBCEformsSection>(data),
                     ProfileSection.Create<ImmsBCSection>(data),
@@ -81,6 +80,7 @@ public partial class ProfileStatus
                     ProfileSection.Create<IvfSection>(data),
                     ProfileSection.Create<MSTeamsClinicMemberSection>(data),
                     ProfileSection.Create<MSTeamsPrivacyOfficerSection>(data),
+                    ProfileSection.Create<NpdpEformsSection>(data),
                     ProfileSection.Create<PemcodSection>(data),
                     ProfileSection.Create<ProviderReportingPortalSection>(data),
                     ProfileSection.Create<ProvincialAttachmentSystemSection>(data),

@@ -7,11 +7,11 @@ import { PartyService } from '@app/core/party/party.service';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { ProfileStatus } from '@app/features/portal/models/profile-status.model';
 
-import { HcimAccountTransferResource } from './hcim-account-transfer-resource.service';
+import { NpdpEformsResource } from './npdp-eforms-resource.service';
 
-export const hcimAccountTransferResolver: ResolveFn<StatusCode | null> = () => {
+export const npdpEformsResolver: ResolveFn<StatusCode | null> = () => {
   const partyService = inject(PartyService);
-  const resource = inject(HcimAccountTransferResource);
+  const resource = inject(NpdpEformsResource);
 
   if (!partyService.partyId) {
     return of(null);
@@ -23,7 +23,7 @@ export const hcimAccountTransferResolver: ResolveFn<StatusCode | null> = () => {
         return null;
       }
 
-      return profileStatus.status.hcimAccountTransfer.statusCode;
+      return profileStatus.status.npdpEforms.statusCode;
     }),
     catchError(() => of(null)),
   );

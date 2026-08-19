@@ -248,4 +248,26 @@ public class PlrStatusChangeLog
     public string? ProviderRoleType { get; set; }
     public string MspId { get; set; } = string.Empty;
 
+    // The Old* pair is only populated once plr-intake projects it; until then these
+    // deserialize as null and IsGoodStandingUnchanged() reports false.
+    public string? OldStatusCode { get; set; }
+    public string? OldStatusReasonCode { get; set; }
+    public string? NewStatusCode { get; set; }
+    public string? NewStatusReasonCode { get; set; }
+
+    /// <summary>
+    /// True when this change did not alter the Party's good standing. Used to skip work that
+    /// only depends on good standing, now that every status change is queued for processing.
+    /// Returns false when the previous status is unknown, so callers err towards doing the work.
+    /// </summary>
+    public bool IsGoodStandingUnchanged()
+    {
+        if (this.OldStatusCode == null && this.OldStatusReasonCode == null)
+        {
+            return false;
+        }
+
+        var previous = new PlrRecord { StatusCode = this.OldStatusCode, StatusReasonCode = this.OldStatusReasonCode };
+        return previous.IsGoodStanding() == this.IsGoodStanding;
+    }
 }
