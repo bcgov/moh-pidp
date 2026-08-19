@@ -62,6 +62,8 @@ spec:
               value: http://{{ $release }}-plr-intake:8080/api
             - name: ASPNETCORE_ENVIRONMENT
               value: {{ .Values.aspnetcore.environment }}
+            - name: CorsAllowedOrigins
+              value: {{ .Values.corsAllowedOrigins | quote }}
             - name: RabbitMQ__Password
               valueFrom:
                 secretKeyRef:

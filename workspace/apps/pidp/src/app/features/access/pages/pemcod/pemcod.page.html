@@ -98,13 +98,13 @@
                 color="primary"
                 aria-labelledby="navigate-to-pemcod"
                 [disabled]="pemcod$ | async"
-                (click)="navigateToPath()">
+                tabindex="0" (keydown.enter)="navigateToPath()" (click)="navigateToPath()">
                 Login to the Practitioner's eMCOD portal with your BCProvider
               </button>
             </div>
             <div class="stepper-buttons">
               <button mat-stroked-button matStepperPrevious>Back</button>
-              <button mat-stroked-button (click)="stepper.reset()">
+              <button mat-stroked-button tabindex="0" (keydown.enter)="stepper.reset()" (click)="stepper.reset()">
                 Reset
               </button>
             </div>
@@ -127,7 +127,7 @@
                   color="primary"
                   aria-labelledby="navigate-to-pemcod"
                   [disabled]="pemcod$ | async"
-                  (click)="navigateToPath()">
+                  tabindex="0" (keydown.enter)="navigateToPath()" (click)="navigateToPath()">
                   <fa-icon [icon]="faArrowRight"></fa-icon>
                 </button>
               </div>

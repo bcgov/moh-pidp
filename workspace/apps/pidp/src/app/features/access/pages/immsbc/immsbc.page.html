@@ -3,16 +3,10 @@
   <div class="content">
     <section class="intro">
       <div class="content-header">
-        <h1>Immunizations BC</h1>
-        <p>
-          Snowflakes tobogganing mistletoe reindeer gingerbread ornaments tinsel
-          wreath carolers eggnog chimney sleighbells sugarplums icicles
-          pinecones garland nutcracker peppermint stockings fireplace holly
-          candycanes blizzard mittens advent chestnuts winterberry poinsettia
-          frosty the snowman starlight ribbons giftwrap toboggan snowman frosty
-          cozy hearth cocoa marshmallows cinnamon nutmeg cranberries noel silent
-          night joyful tidings peace goodwill merriment festive celebration
-        </p>
+        <h1>ImmsBC</h1>
+        <p>All pharmacies providing publicly funded influenza vaccines are required to use ImmsBC to manage all aspects of the administration of flu and COVID-19 vaccines to British Columbians.
+ImmsBC is used for scheduling, managing appointments, entering vaccine records and inventory. Patients are able to see if your pharmacy provides influenza vaccines, COVID-19 vaccines or both vaccination types prior to booking.<br />
+For pharmacies that currently have access to ImmsBC, no action is required.</p>
       </div>
     </section>
     <section class="main">
@@ -90,13 +84,13 @@
                 color="primary"
                 aria-labelledby="navigate-to-immsbc"
                 [disabled]="immsbc$ | async"
-                (click)="navigateToPath()">
+                tabindex="0" (keydown.enter)="navigateToPath()" (click)="navigateToPath()">
                 Login to the ImmsBC portal with your BCProvider
               </button>
             </div>
             <div class="stepper-buttons">
               <button mat-stroked-button matStepperPrevious>Back</button>
-              <button mat-stroked-button (click)="stepper.reset()">
+              <button mat-stroked-button tabindex="0" (keydown.enter)="stepper.reset()" (click)="stepper.reset()">
                 Reset
               </button>
             </div>
@@ -105,14 +99,18 @@
       </div>
       <div class="card action-buttons-card">
         <div class="action-buttons-group">
-          <button mat-flat-button type="button" color="primary" class="action-button-large"
-            routerLink="/access/immsbc/create-pharmacy">
-            Add Pharmacy
-          </button> 
-          <button mat-flat-button type="button" color="primary" class="action-button-large"
-            routerLink="/access/immsbc/manage-pharmacy">
-            Manage Pharmacy
-          </button>
+          <div [matTooltip]="bcProviderStatusCode !== StatusCode.COMPLETED ? 'You must create a BCProvider Credential before adding or managing a pharmacy.' : ''">
+            <button mat-flat-button type="button" color="primary" class="action-button-large" style="width: 100%;"
+              routerLink="/access/immsbc/create-pharmacy" [disabled]="bcProviderStatusCode !== StatusCode.COMPLETED">
+              Add Pharmacy
+            </button> 
+          </div>
+          <div [matTooltip]="bcProviderStatusCode !== StatusCode.COMPLETED ? 'You must create a BCProvider Credential before adding or managing a pharmacy.' : ''">
+            <button mat-flat-button type="button" color="primary" class="action-button-large" style="width: 100%;"
+              routerLink="/access/immsbc/manage-pharmacy" [disabled]="bcProviderStatusCode !== StatusCode.COMPLETED">
+              Manage Pharmacy
+            </button>
+          </div>
         </div>
       </div>
       <div class="imms-button-container">
@@ -121,7 +119,7 @@
           <div class="card-container auth-card">
             <div class="card-footer auth-card-footer">
               <button mat-flat-button uiPageFooterAction type="submit" color="primary"
-                aria-labelledby="navigate-to-immsbc" [disabled]="immsbc$ | async" (click)="navigateToPath()">
+                aria-labelledby="navigate-to-immsbc" [disabled]="immsbc$ | async" tabindex="0" (keydown.enter)="navigateToPath()" (click)="navigateToPath()">
                 <fa-icon [icon]="faArrowRight"></fa-icon>
               </button>
             </div>

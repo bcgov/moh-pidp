@@ -2,7 +2,7 @@ import { LookupConfig } from '@app/modules/lookup/lookup.types';
 
 export class MockLookup {
   public static get(): LookupConfig {
-    /* eslint-disable */
+     
     // Export of /lookups response copied from PostMan:
     return {
       accessTypes: [],
@@ -388,6 +388,6 @@ export class MockLookup {
       organizations: [],
       healthAuthorities: [],
     };
-    /* eslint-enable */
+     
   }
 }

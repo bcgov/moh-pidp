@@ -74,7 +74,7 @@
           uiPageFooterAction
           type="button"
           color="primary"
-          (click)="onRequestAccess()">
+          tabindex="0" (keydown.enter)="onRequestAccess()" (click)="onRequestAccess()">
           Next
         </button>
       }

@@ -1,14 +1,13 @@
 namespace PidpTests.Infrastructure.HttpClients;
 
+using System.Net;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
-using System.Net;
-using Xunit;
-
 using Pidp.Infrastructure.HttpClients;
 using Pidp.Models;
 using Pidp.Models.Lookups;
 using PidpTests.TestingExtensions;
+using Xunit;
 
 public class BaseClientTests : BaseClient
 {
@@ -30,7 +29,7 @@ public class BaseClientTests : BaseClient
 
     [Theory]
     [MemberData(nameof(HttpMethodTestData))]
-    public async void SendCoreAsync_Success_SuccessResult(HttpMethod method)
+    public async Task SendCoreAsync_Success_SuccessResult(HttpMethod method)
     {
         var content = new StringContent("2");
         A.CallTo(this.MockedMessageHandler)
@@ -47,20 +46,19 @@ public class BaseClientTests : BaseClient
 
     [Theory]
     [MemberData(nameof(HttpMethodTestData))]
-    public async void SendCoreAsync_FailResponseCode_FailsWithNoExceptions(HttpMethod method)
+    public async Task SendCoreAsync_FailResponseCode_FailsWithNoExceptions(HttpMethod method)
     {
         A.CallTo(this.MockedMessageHandler)
             .InvokingSendAsyncWithAnything()
             .ReturnsAMessageWith(HttpStatusCode.InternalServerError);
 
         var result = await this.SendCoreAsync(method, TestUrl, null, default);
-
         Assert.False(result.IsSuccess);
     }
 
     [Theory]
     [MemberData(nameof(HttpMethodTestData))]
-    public async void SendCoreAsync_InternalError_FailsWithNoExceptions(HttpMethod method)
+    public async Task SendCoreAsync_InternalError_FailsWithNoExceptions(HttpMethod method)
     {
         A.CallTo(this.MockedMessageHandler)
             .InvokingSendAsyncWithAnything()
@@ -73,7 +71,7 @@ public class BaseClientTests : BaseClient
 
     [Theory]
     [MemberData(nameof(HttpMethodTestData))]
-    public async void SendCoreAsyncT_Success_SuccessResult(HttpMethod method)
+    public async Task SendCoreAsyncT_Success_SuccessResult(HttpMethod method)
     {
         var expectedCert = new PartyLicenceDeclaration
         {
@@ -85,7 +83,6 @@ public class BaseClientTests : BaseClient
             .ReturnsAMessageWith(HttpStatusCode.OK, expectedCert);
 
         var result = await this.SendCoreAsync<PartyLicenceDeclaration>(method, TestUrl, null, default);
-
         Assert.True(result.IsSuccess);
 
         var cert = result.Value;
@@ -95,7 +92,7 @@ public class BaseClientTests : BaseClient
 
     [Theory]
     [MemberData(nameof(HttpMethodTestData))]
-    public async void SendCoreAsyncT_FailResponseCode_FailsWithNoExceptions(HttpMethod method)
+    public async Task SendCoreAsyncT_FailResponseCode_FailsWithNoExceptions(HttpMethod method)
     {
         A.CallTo(this.MockedMessageHandler)
             .InvokingSendAsyncWithAnything()
@@ -108,7 +105,7 @@ public class BaseClientTests : BaseClient
 
     [Theory]
     [MemberData(nameof(HttpMethodTestData))]
-    public async void SendCoreAsyncT_InternalError_FailsWithNoExceptions(HttpMethod method)
+    public async Task SendCoreAsyncT_InternalError_FailsWithNoExceptions(HttpMethod method)
     {
         A.CallTo(this.MockedMessageHandler)
             .InvokingSendAsyncWithAnything()

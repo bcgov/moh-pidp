@@ -1,11 +1,9 @@
 namespace Pidp.Features.CommonHandlers;
 
-using MassTransit;
-
-using static Pidp.Features.CommonHandlers.UpdateKeycloakAttributesConsumer;
+using static Pidp.Features.CommonHandlers.UpdateKeycloakAttributesHandler;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 
-public class UpdateKeycloakAttributesConsumer(IKeycloakAdministrationClient client, ILogger<UpdateKeycloakAttributesConsumer> logger) : IConsumer<UpdateKeycloakAttributes>
+public class UpdateKeycloakAttributesHandler(IKeycloakAdministrationClient client, ILogger<UpdateKeycloakAttributesHandler> logger)
 {
     public class UpdateKeycloakAttributes(Guid userId, Dictionary<string, string[]> attributes)
     {
@@ -25,11 +23,10 @@ public class UpdateKeycloakAttributesConsumer(IKeycloakAdministrationClient clie
     }
 
     private readonly IKeycloakAdministrationClient client = client;
-    private readonly ILogger<UpdateKeycloakAttributesConsumer> logger = logger;
+    private readonly ILogger<UpdateKeycloakAttributesHandler> logger = logger;
 
-    public async Task Consume(ConsumeContext<UpdateKeycloakAttributes> context)
+    public async Task HandleAsync(UpdateKeycloakAttributes message)
     {
-        var message = context.Message;
         var userRep = await this.client.GetUser(message.UserId);
         if (userRep == null)
         {
@@ -47,11 +44,11 @@ public class UpdateKeycloakAttributesConsumer(IKeycloakAdministrationClient clie
     }
 }
 
-internal static partial class UpdateKeycloakAttributesConsumerLoggingExtensions
+internal static partial class UpdateKeycloakAttributesHandlerLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Error, "Error when GETing the User {userId} from Keycloak.")]
-    public static partial void LogGetKeycloakUserFailure(this ILogger<UpdateKeycloakAttributesConsumer> logger, Guid userId);
+    public static partial void LogGetKeycloakUserFailure(this ILogger<UpdateKeycloakAttributesHandler> logger, Guid userId);
 
     [LoggerMessage(2, LogLevel.Error, "Error when updating the Keycloak User {userId} with the attributes: {attributes}.")]
-    public static partial void LogUpdateKeycloakUserFailure(this ILogger<UpdateKeycloakAttributesConsumer> logger, Guid userId, Dictionary<string, string[]> attributes);
+    public static partial void LogUpdateKeycloakUserFailure(this ILogger<UpdateKeycloakAttributesHandler> logger, Guid userId, Dictionary<string, string[]> attributes);
 }

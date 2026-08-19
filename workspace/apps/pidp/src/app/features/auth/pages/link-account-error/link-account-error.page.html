@@ -5,7 +5,7 @@
       mat-icon-button
       matTooltip="Logout"
       aria-label="logout"
-      (click)="onLogout()">
+      tabindex="0" (keydown.enter)="onLogout()" (click)="onLogout()">
       <mat-icon>logout</mat-icon>
     </button>
   </div>
@@ -46,7 +46,7 @@
                 mat-flat-button
                 type="button"
                 color="primary"
-                (click)="onLogout()">
+                tabindex="0" (keydown.enter)="onLogout()" (click)="onLogout()">
                 Click here
               </button>
             </span>
@@ -54,7 +54,7 @@
         } @else {
           <div class="button-container">
             <span>
-              <button mat-flat-button type="button" color="primary" (click)="onBack()">
+              <button mat-flat-button type="button" color="primary" tabindex="0" (keydown.enter)="onBack()" (click)="onBack()">
                 Back to OneHealthID Service
               </button>
             </span>

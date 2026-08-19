@@ -53,6 +53,8 @@ public class UserAccessAgreement
             if (party.AlreadyEnrolled)
             {
                 this.logger.LogAgreementHasAlreadyBeenAccepted(command.PartyId);
+                this.context.BusinessEvents.Add(AccessRequestFailed.Create(command.PartyId, AccessTypeCode.UserAccessAgreement.ToString(), this.clock.GetCurrentInstant()));
+                await this.context.SaveChangesAsync();
                 return DomainResult.Failed();
             }
 
@@ -64,6 +66,8 @@ public class UserAccessAgreement
                 AccessTypeCode = AccessTypeCode.UserAccessAgreement,
                 RequestedOn = timestamp
             });
+
+            this.context.BusinessEvents.Add(AccessRequestSubmitted.Create(command.PartyId, AccessTypeCode.UserAccessAgreement.ToString(), timestamp));
 
             await this.context.SaveChangesAsync();
 

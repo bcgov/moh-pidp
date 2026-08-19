@@ -2,22 +2,20 @@ namespace PidpTests.Features.Parties;
 
 using FakeItEasy;
 using NodaTime;
-using Xunit;
-
-using static Pidp.Features.Parties.ProfileStatus;
-using static Pidp.Features.Parties.ProfileStatus.Model;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using Pidp.Models.Lookups;
-
 using PidpTests.TestingExtensions;
+using Xunit;
+using static Pidp.Features.Parties.ProfileStatus;
+using static Pidp.Features.Parties.ProfileStatus.Model;
 
 public class ProfileStatusProvincialAttachmentSystemTests : ProfileStatusTest
 {
     [Theory]
     [MemberData(nameof(PlrSuccessTestData))]
-    public async void HandleAsync_PasProviderRoleAuthorized_Incomplete(PlrStandingsDigest digest, PlrStandingsDigest aggregateDigest)
+    public async Task HandleAsync_PasProviderRoleAuthorized_Incomplete(PlrStandingsDigest digest, PlrStandingsDigest aggregateDigest)
     {
         var party = this.TestDb.Has(AParty.WithLicenceDeclared());
         this.TestDb.Has(new AccessRequest
@@ -55,7 +53,7 @@ public class ProfileStatusProvincialAttachmentSystemTests : ProfileStatusTest
 
     [Theory]
     [MemberData(nameof(PlrFailureTestData))]
-    public async void HandleAsync_PasProviderRoleUnauthorized_Locked(PlrStandingsDigest digest, PlrStandingsDigest aggregateDigest)
+    public async Task HandleAsync_PasProviderRoleUnauthorized_Locked(PlrStandingsDigest digest, PlrStandingsDigest aggregateDigest)
     {
         var party = this.TestDb.Has(AParty.WithLicenceDeclared());
         var client = A.Fake<IPlrClient>()

@@ -99,7 +99,7 @@
                             </p>
                             <button mat-flat-button type="button" color="primary"
                                 aria-labelledby="request-hcim-web-pcr-access" [disabled]="getAccessDisabled"
-                                (click)="onRequestAccess()">
+                                tabindex="0" (keydown.enter)="onRequestAccess()" (click)="onRequestAccess()">
                                 Get Access
                             </button>
                         </div>
@@ -129,13 +129,13 @@
                             }
                             <button mat-flat-button type="button" color="primary"
                                 aria-labelledby="navigate-to-hcim-web-pcr" [disabled]="hcimWebPcr$ | async"
-                                (click)="navigateToPath()">
+                                tabindex="0" (keydown.enter)="navigateToPath()" (click)="navigateToPath()">
                                 Login to the Provincial Client Registry with your BCProvider
                             </button>
                         </div>
                         <div class="stepper-buttons">
                             <button mat-stroked-button matStepperPrevious>Back</button>
-                            <button mat-stroked-button (click)="stepper.reset()">Reset</button>
+                            <button mat-stroked-button tabindex="0" (keydown.enter)="stepper.reset()" (click)="stepper.reset()">Reset</button>
                         </div>
                     </mat-step>
                 </mat-stepper>
@@ -150,7 +150,7 @@
                         <div class="card-footer auth-card-footer">
                             <button mat-flat-button uiPageFooterAction type="button" color="primary"
                                 aria-labelledby="navigate-to-hcim-web-pcr" [disabled]="hcimWebPcr$ | async"
-                                (click)="navigateToPath()">
+                                tabindex="0" (keydown.enter)="navigateToPath()" (click)="navigateToPath()">
                                 Login
                             </button>
                         </div>

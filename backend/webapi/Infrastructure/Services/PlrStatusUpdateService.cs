@@ -8,12 +8,15 @@ using Pidp.Features.AccessRequests;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Plr;
+using Pidp.Models;
 using Pidp.Models.DomainEvents;
+using NodaTime;
 using Pidp.Models.Lookups;
 
 public sealed class PlrStatusUpdateService(
     IBCProviderClient bcProviderClient,
     IEnumerable<IAccessRequestRevocationPolicy> revocationPolicies,
+    IClock clock,
     IPlrClient plrClient,
     ILogger<PlrStatusUpdateService> logger,
     PidpDbContext context,
@@ -21,6 +24,7 @@ public sealed class PlrStatusUpdateService(
 {
     private readonly IBCProviderClient bcProviderClient = bcProviderClient;
     private readonly IEnumerable<IAccessRequestRevocationPolicy> revocationPolicies = revocationPolicies;
+    private readonly IClock clock = clock;
     private readonly IPlrClient plrClient = plrClient;
     private readonly ILogger<PlrStatusUpdateService> logger = logger;
     private readonly PidpDbContext context = context;
@@ -127,6 +131,7 @@ public sealed class PlrStatusUpdateService(
                 this.logger.LogRevocationFailed(policy.AccessTypeCode, party.Id, e);
             }
         }
+        this.context.BusinessEvents.Add(PlrStatusUpdated.Create(party.Id, status.ProviderRoleType ?? string.Empty, this.clock.GetCurrentInstant()));
 
         await this.context.SaveChangesAsync(stoppingToken);
 

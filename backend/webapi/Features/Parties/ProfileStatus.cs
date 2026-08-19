@@ -1,7 +1,6 @@
 ﻿namespace Pidp.Features.Parties;
 
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
+using Mapster;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -45,11 +44,9 @@ public partial class ProfileStatus
     }
 
     public class QueryHandler(
-        IMapper mapper,
         IPlrClient plrClient,
         PidpDbContext context) : IQueryHandler<Query, Model>
     {
-        private readonly IMapper mapper = mapper;
         private readonly IPlrClient plrClient = plrClient;
         private readonly PidpDbContext context = context;
 
@@ -57,7 +54,7 @@ public partial class ProfileStatus
         {
             var data = await this.context.Parties
                 .Where(party => party.Id == query.Id)
-                .ProjectTo<ProfileData>(this.mapper.ConfigurationProvider)
+                .ProjectToType<ProfileData>()
                 .SingleAsync();
 
             await data.Finalize(this.context, this.plrClient, query.User);

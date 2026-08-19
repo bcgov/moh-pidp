@@ -25,7 +25,7 @@
       uiPageFooterAction
       color="primary"
       type="button"
-      (click)="onSubmit()">
+      tabindex="0" (keydown.enter)="onSubmit()" (click)="onSubmit()">
       Continue
     </button>
   </ui-page-footer>

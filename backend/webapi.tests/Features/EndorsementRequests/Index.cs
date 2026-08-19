@@ -13,7 +13,7 @@ using PidpTests.TestingExtensions;
 public class EndorsementRequestIndexTests : InMemoryDbTest
 {
     [Fact]
-    public async void Index_AsRequesterCreated_InList()
+    public async Task Index_AsRequesterCreated_InList()
     {
         var party = this.TestDb.HasAParty();
         var request = this.TestDb.Has(new EndorsementRequest
@@ -42,7 +42,7 @@ public class EndorsementRequestIndexTests : InMemoryDbTest
 
     [Theory]
     [MemberData(nameof(StatusCases))]
-    public async void Index_AsRequesterOrReciever_InList(EndorsementRequestStatus status)
+    public async Task Index_AsRequesterOrReciever_InList(EndorsementRequestStatus status)
     {
         var party = this.TestDb.HasAParty();
         var partyRecieving = this.TestDb.HasAParty(party =>

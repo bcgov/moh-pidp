@@ -1,4 +1,4 @@
-﻿namespace Pidp.Features.AccessRequests;
+﻿﻿namespace Pidp.Features.AccessRequests;
 
 using DomainResults.Common;
 using FluentValidation;
@@ -118,9 +118,19 @@ public class InfantRsvEforms
                 RequestedOn = this.clock.GetCurrentInstant()
             });
 
+            this.context.BusinessEvents.Add(AccessRequestSubmitted.Create(command.PartyId, AccessTypeCode.InfantRsvEforms.ToString(), this.clock.GetCurrentInstant()));
+
             await this.context.SaveChangesAsync();
 
             return DomainResult.Success();
+        }
+
+        private async Task<IDomainResult> DenyAccess(int partyId)
+        {
+            this.logger.LogAccessRequestDenied(partyId);
+            this.context.BusinessEvents.Add(AccessRequestFailed.Create(partyId, AccessTypeCode.InfantRsvEforms.ToString(), this.clock.GetCurrentInstant()));
+            await this.context.SaveChangesAsync();
+            return DomainResult.Failed();
         }
     }
 }

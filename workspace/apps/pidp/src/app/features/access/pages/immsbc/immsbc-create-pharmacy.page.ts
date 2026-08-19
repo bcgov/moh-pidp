@@ -5,11 +5,11 @@ import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { EMPTY, catchError } from 'rxjs';
-
 import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 import { AccessRoutes } from '@app/features/access/access.routes';
 import { PharmacyResource } from './pharmacy-resource.service';
+import { PharmacyFormComponent } from './pharmacy-form.component';
 
 @Component({
   selector: 'app-immsbc-create-pharmacy',
@@ -21,6 +21,7 @@ import { PharmacyResource } from './pharmacy-resource.service';
     InjectViewportCssClassDirective,
     BreadcrumbComponent,
     MatSnackBarModule,
+    PharmacyFormComponent,
   ],
   templateUrl: './immsbc-create-pharmacy.page.html',
   styleUrl: './immsbc-create-pharmacy.page.scss',
@@ -51,12 +52,11 @@ export class ImmsbcCreatePharmacyPage implements OnInit {
     this.form = this.fb.group({
       name: ['', Validators.required],
       address: ['', Validators.required],
-      postalCode: ['', Validators.required],
       phone: ['', Validators.required],
       fax: ['', Validators.required],
       managerName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      pharmacareCode: ['', Validators.required],
+      pharmaCareCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
       ackImmunizationScope: [false, Validators.requiredTrue],
       ackAccessToVaccines: [false, Validators.requiredTrue],
       ackPrivacy: [false, Validators.requiredTrue],
@@ -71,13 +71,11 @@ export class ImmsbcCreatePharmacyPage implements OnInit {
       return;
     }
 
-    console.log('Create Pharmacy - Form Value:', this.form.value);
-
     this.resource
       .createPharmacy(this.form.value)
       .pipe(
         catchError(() => {
-          this.snackBar.open('An error occurred while creating the pharmacy. Please try again.', 'Close', { duration: 5000 });
+          this.snackBar.open('An error occurred while creating the pharmacy. Please try again.', 'Close', { duration: 10000 });
           return EMPTY;
         }),
       )

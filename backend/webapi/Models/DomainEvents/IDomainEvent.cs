@@ -1,5 +1,5 @@
 namespace Pidp.Models.DomainEvents;
 
-using MediatR;
+using Mediator;
 
 public interface IDomainEvent : INotification { }

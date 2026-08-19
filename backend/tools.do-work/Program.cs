@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -9,7 +9,7 @@ using DoWork;
 using DoWork.Services.CredentialDeletionService;
 using Pidp;
 using Pidp.Data;
-// using Pidp.Infrastructure.HttpClients;
+
 
 await Host.CreateDefaultBuilder(args)
     .UseContentRoot(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!)
@@ -21,7 +21,7 @@ await Host.CreateDefaultBuilder(args)
             // .AddHttpClients(config)
             // .AddRateLimitedKeycloakClient(config)
             .AddSingleton<IClock>(SystemClock.Instance)
-            .AddMediatR(opt => opt.RegisterServicesFromAssemblyContaining<Startup>())
+            .AddMediator()
             .AddTransient<ICredentialDeletionService, CredentialDeletionService>()
             .AddTransient<IDoWorkService, DoWorkService>()
             .AddHostedService<HostedServiceWrapper>()

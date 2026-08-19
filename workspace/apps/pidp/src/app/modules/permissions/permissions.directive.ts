@@ -4,6 +4,7 @@ import {
   OnInit,
   TemplateRef,
   ViewContainerRef,
+  inject,
 } from '@angular/core';
 
 import { PermissionsService } from './permissions.service';
@@ -14,13 +15,11 @@ import { PermissionsService } from './permissions.service';
   standalone: true,
 })
 export class PermissionsDirective implements OnInit {
-  @Input() public permittedRoles!: string | string[];
+  private vcr = inject(ViewContainerRef);
+  private tpl = inject(TemplateRef<unknown>);
+  private permissionsService = inject(PermissionsService);
 
-  public constructor(
-    private vcr: ViewContainerRef,
-    private tpl: TemplateRef<unknown>,
-    private permissionsService: PermissionsService,
-  ) {}
+  @Input() public permittedRoles!: string | string[];
 
   public ngOnInit(): void {
     if (this.permissionsService.hasRole(this.permittedRoles)) {

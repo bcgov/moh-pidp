@@ -1,0 +1,121 @@
+@use 'pidp-variables' as pidp;
+
+.form-error {
+  color: red;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #666;
+    margin-bottom: 6px;
+  }
+
+  input {
+    height: 44px;
+    border: 1px solid #d9d9d9;
+    border-radius: 3px;
+    background: #fff;
+    padding: 0 12px;
+    font-size: 15px;
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+    color: #333;
+    transition:
+      border-color 0.15s ease,
+      box-shadow 0.15s ease;
+    width: 100%;
+    box-sizing: border-box;
+
+    &:focus {
+      outline: none;
+      border-color: #0078d4;
+      box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.15);
+    }
+
+    &.ng-invalid.ng-touched {
+      border-color: #d32f2f;
+    }
+
+    &[readonly] {
+      background-color: #f5f5f5;
+      color: #777;
+      cursor: not-allowed;
+      border-color: #e0e0e0;
+
+      &:focus {
+        border-color: #e0e0e0;
+        box-shadow: none;
+      }
+    }
+
+    &::placeholder {
+      color: #aaa;
+    }
+  }
+
+  .helper-text {
+    font-size: 13px;
+    color: #8a8a8a;
+    margin-top: 5px;
+    line-height: 1.4;
+  }
+}
+
+.acknowledgement-group {
+  padding: 20px 0;
+  border-bottom: 1px solid #f0f0f0;
+
+  &:first-child {
+    padding-top: 0;
+  }
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
+
+.ack-heading {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 12px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #555;
+  line-height: 1.5;
+
+  input[type='checkbox'] {
+    width: 16px;
+    height: 16px;
+    min-width: 16px;
+    margin-top: 2px;
+    cursor: pointer;
+    accent-color: pidp.$bcgov-color-primary;
+
+    &.ng-invalid.ng-touched {
+      outline: 2px solid #d32f2f;
+      outline-offset: 2px;
+    }
+  }
+
+  a {
+    color: #0078d4;
+    text-decoration: underline;
+  }
+}

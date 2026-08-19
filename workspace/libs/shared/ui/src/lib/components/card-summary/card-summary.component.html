@@ -25,7 +25,7 @@
             type="button"
             color="primary"
             [disabled]="actionDisabled"
-            (click)="onAction()">
+            tabindex="0" (keydown.enter)="onAction()" (click)="onAction()">
             {{ actionLabel }}
           </button>
         }

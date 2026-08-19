@@ -14,7 +14,7 @@ public class CommonEmailDomainsTests : InMemoryDbTest
     [InlineData("2@one.ca")]
     [InlineData("3@three.gov.bc.ca")]
     [InlineData("4@four.net")]
-    public async void FindCommonEmailDomains_SingleOccurrances_False(string email)
+    public async Task FindCommonEmailDomains_SingleOccurrances_False(string email)
     {
         this.TestDb.HasSome(new[]
         {
@@ -35,7 +35,7 @@ public class CommonEmailDomainsTests : InMemoryDbTest
     [InlineData("test1@one.com", DomainOperationStatus.NotFound)]
     [InlineData("test2@two.com", DomainOperationStatus.Success)]
     [InlineData("test3@three.com", DomainOperationStatus.Success)]
-    public async void FindCommonEmailDomains_TwoOrMoreOccurrances_True(string email, DomainOperationStatus expected)
+    public async Task FindCommonEmailDomains_TwoOrMoreOccurrances_True(string email, DomainOperationStatus expected)
     {
         this.TestDb.HasSome(new[]
         {
@@ -60,7 +60,7 @@ public class CommonEmailDomainsTests : InMemoryDbTest
     [InlineData("test3@TwO.COm", DomainOperationStatus.Success)]
     [InlineData("test4@three.com", DomainOperationStatus.Success)]
     [InlineData("test5@THREE.coM", DomainOperationStatus.Success)]
-    public async void FindCommonEmailDomains_DifferentCases_True(string email, DomainOperationStatus expected)
+    public async Task FindCommonEmailDomains_DifferentCases_True(string email, DomainOperationStatus expected)
     {
         this.TestDb.HasSome(new[]
         {
@@ -80,7 +80,7 @@ public class CommonEmailDomainsTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void FindCommonEmailDomains_DomainOnly_True()
+    public async Task FindCommonEmailDomains_DomainOnly_True()
     {
         this.TestDb.HasSome(new[]
         {

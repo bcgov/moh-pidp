@@ -3,23 +3,19 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { EMPTY, Observable, catchError, tap } from 'rxjs';
-
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTabsModule } from '@angular/material/tabs';
-
 import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
-
 import { AccessRoutes } from '@app/features/access/access.routes';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
-import { PillComponent } from '@app/shared/components/pill/pill.component';
-
 import { PharmacyResource } from './pharmacy-resource.service';
 import { PharmacyStaffManagementComponent } from './pharmacy-staff-management.component';
 import { Pharmacy, PharmacyRole, PharmacyProfile } from './pharmacy-staff.model';
+import { PharmacyFormComponent } from './pharmacy-form.component';
 
 @Component({
   selector: 'app-immsbc-manage-pharmacy',
@@ -37,7 +33,7 @@ import { Pharmacy, PharmacyRole, PharmacyProfile } from './pharmacy-staff.model'
     InjectViewportCssClassDirective,
     BreadcrumbComponent,
     PharmacyStaffManagementComponent,
-    PillComponent,
+    PharmacyFormComponent,
   ],
   templateUrl: './immsbc-manage-pharmacy.page.html',
   styleUrl: './immsbc-manage-pharmacy.page.scss',
@@ -67,9 +63,9 @@ export class ImmsbcManagePharmacyPage implements OnInit {
       address: ['', [Validators.required]],
       managerName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
-      phone: [''],
-      fax: [''],
-      pharmaCareCode: [''],
+      phone: ['', [Validators.required]],
+      fax: ['', [Validators.required]],
+      pharmaCareCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
     });
   }
 
@@ -101,6 +97,7 @@ export class ImmsbcManagePharmacyPage implements OnInit {
           this.detailsForm.markAsPristine();
           this.snackBar.open('Pharmacy details saved successfully!', 'Close', {
             duration: 3000,
+            panelClass: ['immsbc-manage-snackbar'],
           });
         });
     }

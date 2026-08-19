@@ -1,8 +1,7 @@
 namespace Pidp.Features.Pharmacies;
 
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using MediatR;
+using Mapster;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 
 using Pidp.Data;
@@ -32,19 +31,17 @@ public class Profile
     public class QueryHandler : IRequestHandler<Query, Model>
     {
         private readonly PidpDbContext context;
-        private readonly IMapper mapper;
 
-        public QueryHandler(PidpDbContext context, IMapper mapper)
+        public QueryHandler(PidpDbContext context)
         {
             this.context = context;
-            this.mapper = mapper;
         }
 
-        public async Task<Model> Handle(Query request, CancellationToken cancellationToken)
+        public async ValueTask<Model> Handle(Query request, CancellationToken cancellationToken)
         {
             var associations = await this.context.PharmacyPartyRoles
                 .Where(role => role.PartyId == request.PartyId)
-                .ProjectTo<Model.AssociationModel>(this.mapper.ConfigurationProvider)
+                .ProjectToType<Model.AssociationModel>()
                 .ToListAsync(cancellationToken);
 
             return new Model
@@ -55,8 +52,4 @@ public class Profile
         }
     }
 
-    public class ModelProjection : AutoMapper.Profile
-    {
-        public ModelProjection() => this.CreateMap<PharmacyPartyRole, Model.AssociationModel>();
-    }
 }

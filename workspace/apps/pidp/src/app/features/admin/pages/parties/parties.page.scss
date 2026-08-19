@@ -25,3 +25,40 @@ mat-icon {
     cursor: pointer;
   }
 }
+
+.credentials-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.credential-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.credential-type {
+  font-weight: 500;
+}
+
+.credential-id {
+  color: #666;
+  font-size: 0.85rem;
+}
+
+.unlink-button {
+  width: 32px !important;
+  height: 32px !important;
+  line-height: 32px !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  .delete-icon {
+    font-size: 18px !important;
+    width: 18px !important;
+    height: 18px !important;
+    color: palette.theme-palette(red);
+  }
+}

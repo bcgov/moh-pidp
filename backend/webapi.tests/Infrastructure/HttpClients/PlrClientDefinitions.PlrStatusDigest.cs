@@ -1,8 +1,7 @@
 namespace PidpTests.Infrastructure.HttpClients;
 
-using Xunit;
-
 using Pidp.Infrastructure.HttpClients.Plr;
+using Xunit;
 
 public class PlrStatusDigestTests
 {

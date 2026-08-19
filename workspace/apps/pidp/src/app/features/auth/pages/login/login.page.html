@@ -9,7 +9,7 @@
           <img
             ngSrc="/assets/images/login-image-giant-1920x1280.jpg"
             priority
-            fill />
+            fill  alt=""/>
           </div>
           <section class="welcome-section">
             <div class="welcome-section-container">
@@ -59,7 +59,7 @@
             <button
               mat-flat-button
               color="primary"
-              (click)="onLogin(IdentityProvider.IDIR)">
+              tabindex="0" (keydown.enter)="onLogin(IdentityProvider.IDIR)" (click)="onLogin(IdentityProvider.IDIR)">
               IDIR Login
             </button>
           </div>
@@ -74,7 +74,7 @@
           <button
             class="login-app-button"
             mat-stroked-button
-            (click)="onLogin(IdentityProvider.BCSC)">
+            tabindex="0" (keydown.enter)="onLogin(IdentityProvider.BCSC)" (click)="onLogin(IdentityProvider.BCSC)">
             Login with the BC Services Card app
           </button>
         </div>
@@ -92,7 +92,7 @@
               <button
                 class="other-login-button"
                 mat-icon-button
-                (click)="onShowOtherLoginOptions()">
+                tabindex="0" (keydown.enter)="onShowOtherLoginOptions()" (click)="onShowOtherLoginOptions()">
                 <i class="material-icons-outlined">{{otherLoginOptionsIcon}}</i>
               </button>
             </div>
@@ -105,13 +105,13 @@
               <button
                 class="login-button-secondary"
                 mat-stroked-button
-                (click)="onLogin(IdentityProvider.PHSA)">
+                tabindex="0" (keydown.enter)="onLogin(IdentityProvider.PHSA)" (click)="onLogin(IdentityProvider.PHSA)">
                 Health Authority ID
               </button>
               <button
                 class="login-button-secondary"
                 mat-stroked-button
-                (click)="onLogin(IdentityProvider.BC_PROVIDER)">
+                tabindex="0" (keydown.enter)="onLogin(IdentityProvider.BC_PROVIDER)" (click)="onLogin(IdentityProvider.BC_PROVIDER)">
                 BCProvider
               </button>
             </div>
@@ -121,7 +121,7 @@
                 <a
                   href="javascript:"
                   role="button"
-                  (click)="onLogin(IdentityProvider.IDIR)">
+                  tabindex="0" (keydown.enter)="onLogin(IdentityProvider.IDIR)" (click)="onLogin(IdentityProvider.IDIR)">
                   Login
                 </a>
               </small>

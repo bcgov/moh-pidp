@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -28,7 +28,12 @@ import { QRCodeComponent } from 'angularx-qrcode';
   imports: [MatDialogModule, MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule, QRCodeComponent]
 })
 export class QrCodeDialogComponent {
-  public constructor(@Inject(MAT_DIALOG_DATA) public data: { link: string; pharmacyName: string; role: string }) {}
+  public data = inject<{
+    link: string;
+    pharmacyName: string;
+    role: string;
+}>(MAT_DIALOG_DATA);
+
 
   public copyLink(link: string): void {
     navigator.clipboard.writeText(link);

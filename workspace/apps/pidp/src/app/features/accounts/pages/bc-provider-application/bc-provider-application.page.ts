@@ -112,6 +112,7 @@ export class BcProviderApplicationPage
   public password = '';
   public previousUrl = '';
   public showOverlayOnSubmit = false;
+  public isSubmitting = false;
   public errorMatcher = new CrossFieldErrorMatcher();
   public componentType = DialogBcproviderCreateComponent;
   public breadcrumbsData: Array<{ title: string; path: string }> = [
@@ -230,17 +231,20 @@ export class BcProviderApplicationPage
   protected performSubmission(): Observable<string | void> {
     const partyId = this.partyService.partyId;
     this.password = this.formState.password.value;
+    this.isSubmitting = true;
     this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
 
     return this.resource.createBcProviderAccount(partyId, this.password).pipe(
       tap((upn: string) => {
         this.username = upn;
         this.completed = true;
+        this.isSubmitting = false;
         this.loadingOverlayService.close();
         this.showSuccessDialog();
       }),
       catchError(() => {
         this.loadingOverlayService.close();
+        this.isSubmitting = false;
         this.showErrorCard = true;
         return '';
       }),
