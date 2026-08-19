@@ -73,6 +73,15 @@
     }
   </div>
 
+  <div class="form-field">
+    <label for="evidence">Evidence of Privacy Course Completion</label>
+    <input id="evidence" type="file" (change)="onFileChange($event)" accept=".docx,.pdf,.png,.jpg,.jpeg" />
+    <span class="helper-text">Please upload a screenshot of the CareConnect portal showing registration and completion of the privacy course, including the "Worksite ID" (max 5MB).</span>
+    @if (form.get('evidence')?.invalid && form.get('evidence')?.touched) {
+    <div class="form-error">Evidence document is required.</div>
+    }
+  </div>
+
   @if (showAcknowledgements) {
   <div class="acknowledgement-group">
     <h3 class="ack-heading">Immunization Scope</h3>

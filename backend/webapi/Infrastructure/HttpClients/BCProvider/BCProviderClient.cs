@@ -36,6 +36,27 @@ public partial class BCProviderClient(
         }
     }
 
+    public async Task<IDictionary<string, object>?> GetUserAttributes(string userPrincipalName, string[] attributeNames)
+    {
+        if (string.IsNullOrEmpty(userPrincipalName) || attributeNames == null || attributeNames.Length == 0)
+        {
+            return null;
+        }
+
+        try
+        {
+            var result = await this.client.Users[userPrincipalName]
+                .GetAsync(request => request.QueryParameters.Select = attributeNames);
+
+            return result?.AdditionalData;
+        }
+        catch
+        {
+            this.logger.LogGetAttributeFailure(userPrincipalName);
+            return null;
+        }
+    }
+
     public async Task<User?> CreateBCProviderAccount(NewUserRepresentation userRepresentation)
     {
         var userPrincipal = await this.CreateUniqueUserPrincipalName(userRepresentation.FirstName, userRepresentation.LastName);

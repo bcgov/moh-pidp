@@ -28,7 +28,7 @@ public class PharmaciesController(IMediator mediator, PidpDbContext context) : C
     [Authorize(Policy = Policies.BcscAuthentication)]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<int>> CreatePharmacy([FromBody] PharmacyCreate.Command command)
+    public async Task<ActionResult<int>> CreatePharmacy([FromForm] PharmacyCreate.Command command)
     {
         command.PartyId = this.User.GetPartyId(this.context);
         var newPharmacyId = await this.mediator.Send(command);
@@ -78,13 +78,10 @@ public class PharmaciesController(IMediator mediator, PidpDbContext context) : C
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> StaffCreate([FromRoute] string token)
+    public async Task<IActionResult> StaffCreate([FromRoute] string token, [FromBody] StaffCreate.Command command)
     {
-        var command = new StaffCreate.Command
-        {
-            Token = new Guid(token),
-            PartyId = this.User.GetPartyId(this.context)
-        };
+        command.Token = new Guid(token);
+        command.PartyId = this.User.GetPartyId(this.context);
         await this.mediator.Send(command);
         return this.NoContent();
     }

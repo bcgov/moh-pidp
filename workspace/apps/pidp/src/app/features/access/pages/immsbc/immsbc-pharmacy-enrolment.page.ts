@@ -9,6 +9,8 @@ import {
   PageComponent,
   PageHeaderComponent,
 } from '@bcgov/shared/ui';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { PartyService } from '@app/core/party/party.service';
 import Keycloak from 'keycloak-js';
 import { EMPTY, catchError } from 'rxjs';
@@ -23,6 +25,8 @@ import { PharmacyResource } from './pharmacy-resource.service';
     MatProgressBarModule,
     PageComponent,
     PageHeaderComponent,
+    ReactiveFormsModule,
+    MatButtonModule,
   ],
   templateUrl: './immsbc-pharmacy-enrolment.page.html',
 })
@@ -33,15 +37,19 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
   private readonly resource = inject(PharmacyResource);
   private readonly keycloak = inject(Keycloak);
   private readonly dialog = inject(MatDialog);
+  private readonly fb = inject(FormBuilder);
+
+  public form!: FormGroup;
+  public token: string | null = null;
 
   public title = 'Pharmacy Enrolment';
   public message = 'Processing your enrolment...';
   public isError = false;
 
   public ngOnInit(): void {
-    const token = this.route.snapshot.paramMap.get('token');
+    this.token = this.route.snapshot.paramMap.get('token');
 
-    if (!token) {
+    if (!this.token) {
       this.handleError(
         'No enrolment token provided. The link may be invalid or expired.',
       );
@@ -56,9 +64,25 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
       return; // Stop execution until user is logged in and redirected back
     }
 
-    // User is authenticated, proceed with enrolment
+    // User is authenticated, proceed with form setup
+    this.form = this.fb.group({
+      privacyTrainingAcknowledged: [false, Validators.requiredTrue]
+    });
+    
+    this.message = 'Please acknowledge the privacy and security training to proceed.';
+  }
+
+  public onSubmit(): void {
+    if (this.form.invalid || !this.token) {
+      this.form.markAllAsTouched();
+      return;
+    }
+    
+    this.message = 'Processing your enrolment...';
+    this.isError = false;
+
     this.resource
-      .enrolStaff(token)
+      .enrolStaff(this.token, { privacyTrainingAcknowledged: true })
       .pipe(
         catchError((error) => {
           const errorMessage = (error.error as string).split('\n')[0];

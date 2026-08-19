@@ -13,8 +13,11 @@ public class StaffCreate
 {
     public class Command : IRequest
     {
+        [System.Text.Json.Serialization.JsonIgnore]
         public Guid Token { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore]
         public int PartyId { get; set; }
+        public bool PrivacyTrainingAcknowledged { get; set; }
     }
 
     public class CommandHandler : IRequestHandler<Command>
@@ -40,6 +43,11 @@ public class StaffCreate
                 throw new KeyNotFoundException("Enrolment token not found or has already been used.");
             }
 
+            if (!request.PrivacyTrainingAcknowledged)
+            {
+                throw new InvalidOperationException("Privacy and security training must be acknowledged.");
+            }
+
             var now = this.clock.GetCurrentInstant().ToDateTimeUtc();
             if (enrolment.EffectiveEndDate < now)
             {
@@ -59,7 +67,8 @@ public class StaffCreate
                 PartyId = request.PartyId,
                 PharmacyId = enrolment.PharmacyId,
                 Role = enrolment.Role,
-                EffectiveStartDate = now
+                EffectiveStartDate = now,
+                PrivacyTrainingAckDate = now
             };
 
             this.context.PharmacyPartyRoles.Add(newRole);
