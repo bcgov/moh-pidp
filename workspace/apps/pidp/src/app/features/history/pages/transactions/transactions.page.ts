@@ -1,5 +1,5 @@
-import { AsyncPipe, NgFor, NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -22,32 +22,29 @@ import { TransactionsResource } from './transactions-resource.service';
   selector: 'app-transactions',
   templateUrl: './transactions.page.html',
   styleUrls: ['./transactions.page.scss'],
-  standalone: true,
   imports: [
     AsyncPipe,
     BreadcrumbComponent,
     FormatDatePipe,
     LookupCodePipe,
     MatButtonModule,
-    NgIf,
-    NgFor,
-    InjectViewportCssClassDirective,
-  ],
+    InjectViewportCssClassDirective
+],
 })
 export class TransactionsPage implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly resource = inject(TransactionsResource);
+  private readonly partyService = inject(PartyService);
+  private readonly logger = inject(LoggerService);
+
   public title: string;
   public transactions$!: Observable<Transaction[]>;
   public breadcrumbsData: Array<{ title: string; path: string }> = [
     { title: 'Home', path: '' },
     { title: 'History', path: '' },
   ];
-  public constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly resource: TransactionsResource,
-    private readonly partyService: PartyService,
-    private readonly logger: LoggerService,
-  ) {
+  public constructor() {
     this.title = this.route.snapshot.data.title;
   }
 

@@ -20,7 +20,8 @@ describe('AuthenticationGuard', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideAutoSpy(AuthenticationGuardService),
+      providers: [
+        provideAutoSpy(AuthenticationGuardService),
         provideAutoSpy(ActivatedRouteSnapshot),
         provideAutoSpy(RouterStateSnapshot),
       ],
@@ -78,7 +79,7 @@ describe('AuthenticationGuard', () => {
 
       when('the guard is called', () => {
         const result = TestBed.runInInjectionContext(() =>
-          AuthenticationGuard.canMatch(route, urlSegment),
+          AuthenticationGuard.canMatch(route, urlSegment, {} as any),
         );
         then('the user should access the route', () => {
           expect(result).toBeTruthy();

@@ -8,7 +8,7 @@ using PidpTests.TestingExtensions;
 public class PidpDbContextAuditTests : InMemoryDbTest
 {
     [Fact]
-    public async void SaveChangesAsync_Creation_SetsAudits()
+    public async Task SaveChangesAsync_Creation_SetsAudits()
     {
         var party = new Party();
         this.TestDb.Parties.Add(party);
@@ -22,7 +22,7 @@ public class PidpDbContextAuditTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void SaveChangesAsync_Update_UpdatesModified()
+    public async Task SaveChangesAsync_Update_UpdatesModified()
     {
         var party = this.TestDb.HasAParty();
         var initialCreated = party.Created;
@@ -36,7 +36,7 @@ public class PidpDbContextAuditTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void SaveChangesAsync_ManualAuditUpdate_ImmutableCreated()
+    public async Task SaveChangesAsync_ManualAuditUpdate_ImmutableCreated()
     {
         var party = this.TestDb.HasAParty();
         var initialCreated = party.Created;

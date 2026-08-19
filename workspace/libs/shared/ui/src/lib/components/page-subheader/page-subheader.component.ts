@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -9,8 +9,7 @@ import { IconType } from '../icon/icon.component';
   templateUrl: './page-subheader.component.html',
   styleUrls: ['./page-subheader.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [NgIf, MatIconModule],
+  imports: [MatIconModule],
 })
 export class PageSubheaderComponent {
   @Input() public icon?: string;

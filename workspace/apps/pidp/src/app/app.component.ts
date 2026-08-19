@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import {
   ActivatedRoute,
@@ -30,20 +30,19 @@ import { UtilsService } from '@core/services/utils.service';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  standalone: true,
   imports: [RouterOutlet],
 })
 export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly titleService = inject(Title);
+  private readonly routeStateService = inject(RouteStateService);
+  private readonly utilsService = inject(UtilsService);
+  private readonly router = inject(Router);
+  private readonly snowplowService = inject(SnowplowService);
+
   private readonly destroy$ = new Subject<void>();
 
-  public constructor(
-    private readonly activatedRoute: ActivatedRoute,
-    private readonly titleService: Title,
-    private readonly routeStateService: RouteStateService,
-    private readonly utilsService: UtilsService,
-    private readonly router: Router,
-    private readonly snowplowService: SnowplowService,
-  ) {
+  public constructor() {
     this.router.events.subscribe((evt) => {
       if (evt instanceof NavigationEnd) {
         this.snowplowService.trackPageView();

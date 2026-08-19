@@ -6,9 +6,27 @@ using System.Security.Claims;
 using System.Text.Json;
 
 using Pidp.Infrastructure.Auth;
+using Pidp.Data;
 
 public static class ClaimsPrincipalExtensions
 {
+    /// <summary>
+    /// Gets the PartyId from the user's claims.
+    /// </summary>
+    /// <param name="user"></param>
+    /// <returns>The user's PartyId, or 0 if not found.</returns>
+    public static int GetPartyId(this ClaimsPrincipal user, PidpDbContext context)
+    {
+        if (user == null)
+        {
+            return 0;
+        }
+
+        var username = user.FindFirstValue("preferred_username");
+        var partyId = context.Credentials.Where(c => c.IdpId == username).Select(c => c.PartyId).FirstOrDefault();
+        return partyId;
+    }
+
     private static readonly JsonSerializerOptions SerializationOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
 
     /// <summary>

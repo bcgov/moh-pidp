@@ -11,13 +11,15 @@
     </ui-page-section-subheader>
 
     <div class="row">
-      <div *ngFor="let document of documents" class="col-12">
-        <ui-card-summary
-          [heading]="document.title"
-          [actionLabel]="document.actionLabel"
-          [actionDisabled]="document.disabled"
+      @for (document of documents; track document) {
+        <div class="col-12">
+          <ui-card-summary
+            [heading]="document.title"
+            [actionLabel]="document.actionLabel"
+            [actionDisabled]="document.disabled"
           (action)="onViewDocument(document.type)"></ui-card-summary>
-      </div>
+        </div>
+      }
     </div>
   </ui-page-section>
 
@@ -27,7 +29,7 @@
       uiPageFooterAction
       color="primary"
       type="button"
-      (click)="onBack()">
+      tabindex="0" (keydown.enter)="onBack()" (click)="onBack()">
       Back Home
     </button>
   </ui-page-footer>

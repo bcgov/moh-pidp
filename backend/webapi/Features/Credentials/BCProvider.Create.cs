@@ -152,7 +152,6 @@ public class BCProviderCreate
                 PartyId = command.PartyId,
                 IdpId = createdUser.UserPrincipalName,
                 IdentityProvider = IdentityProviders.BCProvider,
-                DomainEvents = [new CollegeLicenceUpdated(command.PartyId)]
             });
 
             await this.context.SaveChangesAsync();

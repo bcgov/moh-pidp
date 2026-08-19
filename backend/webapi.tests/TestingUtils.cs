@@ -38,8 +38,8 @@ public static class TestData
 {
     public static IEnumerable<IdentifierType> AllIdentifierTypes => typeof(IdentifierType)
         .GetFields(BindingFlags.Public | BindingFlags.Static)
-        .Where(field => field.FieldType == typeof(IdentifierType))
-        .Select(field => (IdentifierType)field.GetValue(null)!);
+        .Where(f => f.FieldType == typeof(IdentifierType))
+        .Select(f => (IdentifierType)f.GetValue(null)!);
 
     public static IEnumerable<TEnum> AllValuesOf<TEnum>() where TEnum : Enum => (TEnum[])Enum.GetValues(typeof(TEnum));
 }

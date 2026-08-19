@@ -4,27 +4,29 @@
   [routerLinkActiveOptions]="routeMenuItem.linkActiveOptions"
   [fragment]="routeMenuItem.extras.fragment"
   [class]="routeMenuItem.getOptions()"
-  (click)="onRoute(routeMenuItem)">
-  <ng-container
-    *ngIf="{
-      isDesktop: isDesktopAndUpBreakpoint$ | async
-    } as breakpoint">
-    <mat-icon
-      *ngIf="showMenuItemIcons"
-      mat-list-icon
+  tabindex="0" (keydown.enter)="onRoute(routeMenuItem)" (click)="onRoute(routeMenuItem)">
+  @if ({
+    isDesktop: isDesktopAndUpBreakpoint$ | async
+    }; as breakpoint) {
+    @if (showMenuItemIcons) {
+      <mat-icon
+        mat-list-icon
       [class.center-sidenav-icon]="
         responsiveMenuItems && !breakpoint.isDesktop
       ">
-      {{ routeMenuItem.icon }}
-    </mat-icon>
+        {{ routeMenuItem.icon }}
+      </mat-icon>
+    }
     <a
       matLine
       [class.extend-content-width]="
         !responsiveMenuItems || breakpoint.isDesktop
       ">
-      <span *ngIf="!responsiveMenuItems || breakpoint.isDesktop">
-        {{ routeMenuItem.label }}
-      </span>
+      @if (!responsiveMenuItems || breakpoint.isDesktop) {
+        <span>
+          {{ routeMenuItem.label }}
+        </span>
+      }
     </a>
-  </ng-container>
+  }
 </mat-list-item>

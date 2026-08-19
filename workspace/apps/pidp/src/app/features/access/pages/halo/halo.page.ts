@@ -1,5 +1,5 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatStepperModule } from '@angular/material/stepper';
@@ -22,7 +22,6 @@ import { haloUrl } from './halo.constants';
 
 @Component({
   selector: 'app-halo',
-  standalone: true,
   imports: [
     CommonModule,
     MatButtonModule,
@@ -37,6 +36,9 @@ import { haloUrl } from './halo.constants';
   styleUrl: './halo.page.scss',
 })
 export class HaloPage {
+  private readonly discoveryResource = inject(DiscoveryResource);
+  private readonly partyService = inject(PartyService);
+
   public bcProvider$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     false,
   );
@@ -55,10 +57,7 @@ export class HaloPage {
     { title: 'Halo', path: '' },
   ];
 
-  public constructor(
-    private discoveryResource: DiscoveryResource,
-    private partyService: PartyService,
-  ) {
+  public constructor() {
     this.selectedIndex = -1;
     this.bcProviderTutorial = bcProviderTutorialLink;
     this.destination$ = this.discoveryResource.getDestination(

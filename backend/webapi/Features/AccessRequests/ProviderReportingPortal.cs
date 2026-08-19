@@ -58,6 +58,8 @@ public class ProviderReportingPortal
                    .HasGoodStanding)
             {
                 this.logger.LogAccessRequestDenied();
+                this.context.BusinessEvents.Add(AccessRequestFailed.Create(command.PartyId, AccessTypeCode.ProviderReportingPortal.ToString(), this.clock.GetCurrentInstant()));
+                await this.context.SaveChangesAsync();
                 return DomainResult.Failed();
             }
 
@@ -72,6 +74,8 @@ public class ProviderReportingPortal
                 AccessTypeCode = AccessTypeCode.ProviderReportingPortal,
                 RequestedOn = this.clock.GetCurrentInstant()
             });
+
+            this.context.BusinessEvents.Add(AccessRequestSubmitted.Create(command.PartyId, AccessTypeCode.ProviderReportingPortal.ToString(), this.clock.GetCurrentInstant()));
 
             await this.context.SaveChangesAsync();
 

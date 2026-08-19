@@ -59,10 +59,7 @@ describe('bcProviderEditResolver', () => {
 
       when('Resolver is called', () => {
         const result = TestBed.runInInjectionContext(() =>
-          bcProviderEditResolver(
-            activatedRouteSnapshot,
-            routerStateSnapshot,
-          ),
+          bcProviderEditResolver(activatedRouteSnapshot, routerStateSnapshot),
         );
 
         then('should return null', () => {
@@ -90,10 +87,7 @@ describe('bcProviderEditResolver', () => {
 
       when('Resolver is called', () => {
         const result = TestBed.runInInjectionContext(() =>
-          bcProviderEditResolver(
-            activatedRouteSnapshot,
-            routerStateSnapshot,
-          ),
+          bcProviderEditResolver(activatedRouteSnapshot, routerStateSnapshot),
         );
 
         then('should navigate to portal page', () => {
@@ -121,10 +115,7 @@ describe('bcProviderEditResolver', () => {
 
       when('Resolver is called', () => {
         const result = TestBed.runInInjectionContext(() =>
-          bcProviderEditResolver(
-            activatedRouteSnapshot,
-            routerStateSnapshot,
-          ),
+          bcProviderEditResolver(activatedRouteSnapshot, routerStateSnapshot),
         );
 
         then('should return true and access to the route', () => {

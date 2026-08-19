@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
@@ -9,7 +9,7 @@ import { PortalResource } from '@app/features/portal/portal-resource.service';
   providedIn: 'root',
 })
 export class HaloResource {
-  public constructor(private portalResource: PortalResource) {}
+  private portalResource = inject(PortalResource);
 
   public getProfileStatus(partyId: number): Observable<ProfileStatus | null> {
     return this.portalResource.getProfileStatus(partyId);

@@ -1,6 +1,6 @@
-import { NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault } from '@angular/common';
+
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormArray, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -41,7 +41,6 @@ import { msTeamsSupportEmail } from './ms-teams.constants';
   selector: 'app-ms-teams',
   templateUrl: './ms-teams-privacy-officer.page.html',
   styleUrls: ['./ms-teams-privacy-officer.page.scss'],
-  standalone: true,
   imports: [
     AddressFormComponent,
     AnchorDirective,
@@ -51,20 +50,25 @@ import { msTeamsSupportEmail } from './ms-teams.constants';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    NgIf,
-    NgSwitch,
-    NgSwitchCase,
-    NgSwitchDefault,
     PageFooterActionDirective,
     SafePipe,
     ReactiveFormsModule,
-    RouterLink,
-  ],
+    RouterLink
+],
 })
 export class MsTeamsPrivacyOfficerPage
   extends AbstractFormPage<MsTeamsPrivacyOfficerFormState>
   implements OnInit
 {
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly partyService = inject(PartyService);
+  private readonly resource = inject(MsTeamsPrivacyOfficerResource);
+  private readonly logger = inject(LoggerService);
+  private readonly utilsService = inject(UtilsService);
+  private readonly documentService = inject(DocumentService);
+  private readonly loadingOverlayService = inject(LoadingOverlayService);
+
   public completed: boolean | null;
   public msTeamsSupportEmail: string;
   public currentPage: number;
@@ -84,19 +88,13 @@ export class MsTeamsPrivacyOfficerPage
   // ui-page is handling this.
   public showOverlayOnSubmit = false;
 
-  public constructor(
-    dependenciesService: AbstractFormDependenciesService,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly partyService: PartyService,
-    private readonly resource: MsTeamsPrivacyOfficerResource,
-    private readonly logger: LoggerService,
-    private readonly utilsService: UtilsService,
-    private readonly documentService: DocumentService,
-    fb: FormBuilder,
-    private readonly loadingOverlayService: LoadingOverlayService,
-  ) {
+  public constructor() {
+    const dependenciesService = inject(AbstractFormDependenciesService);
+    const fb = inject(FormBuilder);
+
     super(dependenciesService);
+    const documentService = this.documentService;
+
     const routeData = this.route.snapshot.data;
     this.completed =
       routeData.msTeamsPrivacyOfficerStatusCode === StatusCode.COMPLETED;

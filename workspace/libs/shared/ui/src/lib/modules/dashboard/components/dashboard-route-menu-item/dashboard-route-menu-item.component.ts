@@ -1,11 +1,5 @@
-import { AsyncPipe, NgIf } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-} from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { RouterLink, RouterLinkActive } from '@angular/router';
@@ -20,15 +14,13 @@ import { DashboardRouteMenuItem } from '../../models/dashboard-menu-item.model';
   templateUrl: './dashboard-route-menu-item.component.html',
   styleUrls: ['./dashboard-route-menu-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     MatListModule,
     RouterLinkActive,
     RouterLink,
-    NgIf,
     MatIconModule,
-    AsyncPipe,
-  ],
+    AsyncPipe
+],
 })
 export class DashboardRouteMenuItemComponent {
   /**
@@ -55,7 +47,9 @@ export class DashboardRouteMenuItemComponent {
 
   public isDesktopAndUpBreakpoint$: Observable<boolean>;
 
-  public constructor(viewportService: ViewportService) {
+  public constructor() {
+    const viewportService = inject(ViewportService);
+
     this.route = new EventEmitter<DashboardRouteMenuItem>();
     this.isDesktopAndUpBreakpoint$ = viewportService.isDesktopAndUpBreakpoint$;
   }

@@ -1,14 +1,18 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class NavigationService {
+  private readonly router = inject(Router);
+
   private currentUrl!: string;
   private previousUrl: string;
 
-  public constructor(private readonly router: Router) {
+  public constructor() {
+    const router = this.router;
+
     this.previousUrl = this.router.url;
     router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {

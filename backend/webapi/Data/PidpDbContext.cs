@@ -1,6 +1,6 @@
 namespace Pidp.Data;
 
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
@@ -32,6 +32,9 @@ public class PidpDbContext(
     public DbSet<MSTeamsClinicMemberEnrolment> MSTeamsClinicMemberEnrolments { get; set; } = default!;
     public DbSet<PartyLicenceDeclaration> PartyLicenceDeclarations { get; set; } = default!;
     public DbSet<Party> Parties { get; set; } = default!;
+    public DbSet<Pharmacy> Pharmacies { get; set; } = default!;
+    public DbSet<PharmacyPartyRole> PharmacyPartyRoles { get; set; } = default!;
+    public DbSet<PharmacyEnrolment> PharmacyEnrolments { get; set; } = default!;
     public DbSet<VerifiedEmail> VerifiedEmails { get; set; } = default!;
 
     /// <summary>

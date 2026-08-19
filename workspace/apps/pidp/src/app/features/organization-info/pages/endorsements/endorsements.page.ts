@@ -1,6 +1,6 @@
-import { AsyncPipe, DatePipe, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe, DatePipe } from '@angular/common';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import {
   FormBuilder,
   FormControl,
@@ -81,7 +81,6 @@ export enum EndorsementType {
   selector: 'app-endorsements',
   templateUrl: './endorsements.page.html',
   styleUrls: ['./endorsements.page.scss'],
-  standalone: true,
   imports: [
     AsyncPipe,
     BreadcrumbComponent,
@@ -93,16 +92,23 @@ export enum EndorsementType {
     MatFormFieldModule,
     MatInputModule,
     MatTabsModule,
-    NgFor,
-    NgIf,
     PageFooterActionDirective,
-    ReactiveFormsModule,
-  ],
+    ReactiveFormsModule
+],
 })
 export class EndorsementsPage
   extends AbstractFormPage<EndorsementsFormState>
   implements OnInit
 {
+  private readonly route = inject(ActivatedRoute);
+  private readonly partyService = inject(PartyService);
+  private readonly resource = inject(EndorsementsResource);
+  private readonly logger = inject(LoggerService);
+  private readonly navigationService = inject(NavigationService);
+  private readonly lookupService = inject(LookupService);
+  private readonly utilsService = inject(UtilsService);
+  private readonly loadingOverlayService = inject(LoadingOverlayService);
+
   @ViewChild(FormGroupDirective) public formGroupDirective!: FormGroupDirective;
 
   public faUser = faUser;
@@ -119,19 +125,11 @@ export class EndorsementsPage
   public showOverlayOnSubmit = true;
   public isDialogOpen = false;
 
-  public constructor(
-    dependenciesService: AbstractFormDependenciesService,
-    private readonly route: ActivatedRoute,
-    private readonly partyService: PartyService,
-    private readonly resource: EndorsementsResource,
-    private readonly logger: LoggerService,
-    private readonly navigationService: NavigationService,
-    private readonly lookupService: LookupService,
-    viewportService: ViewportService,
-    private readonly utilsService: UtilsService,
-    fb: FormBuilder,
-    private readonly loadingOverlayService: LoadingOverlayService,
-  ) {
+  public constructor() {
+    const dependenciesService = inject(AbstractFormDependenciesService);
+    const viewportService = inject(ViewportService);
+    const fb = inject(FormBuilder);
+
     super(dependenciesService);
 
     const routeData = this.route.snapshot.data;
@@ -370,6 +368,7 @@ export class EndorsementsPage
           .emailSearch(partyId, this.formState.json.recipientEmail)
           .pipe(
             switchMap((response: EndorsementEmailSearch) => {
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
               data.data!.content = response.recipientName
                 ? `An existing user has registered ${this.formState.json?.recipientEmail}. Please confirm you are wanting an endorsement with <p class='p-0 m-0' style='color: #036;font-size:1.2rem;'><b>${response.recipientName}</b></p>`
                 : `You are about to <b>request</b> an endorsement to<p class='p-0 m-0' style='color: #036;font-size:1.2rem;'><b>${this.formState.json?.recipientEmail}</b></p>would you like to proceed?`;

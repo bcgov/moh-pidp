@@ -7,11 +7,10 @@ global:
     tag: main
   license_plate: f088b1
 
-
 database:
   autoCreate: false
   # databaseHost: dev-patroni
-# existingSecret: dev-patroni-secret
+  # existingSecret: dev-patroni-secret
 
 redis:
   enabled: false
@@ -21,9 +20,18 @@ redis:
 
 nginx:
   replicaCount: 3
+  image:
+    registry: image-registry.openshift-image-registry.svc:5000/f088b1-tools
+    repository: bitnami-nginx
+    tag: 1.31.1
+  metrics:
+    image:
+      registry: image-registry.openshift-image-registry.svc:5000/f088b1-tools
+      repository: bitnami-nginx-exporter
+      tag: 1.5.1
   fluentbit:
     enabled: true
-  
+
 frontend:
   replicaCount: 3
   settings:
@@ -35,11 +43,14 @@ webapi:
   replicaCount: 3
   aspnetcore:
     environment: Production
+  corsAllowedOrigins: "https://healthprovideridentityportal.gov.bc.ca"
   fluentbit:
     enabled: true
 
 plr-intake:
   replicaCount: 2
+  fluentbit:
+    enabled: true
 
 rabbitmq:
   autoCreate: true

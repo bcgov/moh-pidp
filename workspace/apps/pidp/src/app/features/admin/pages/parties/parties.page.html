@@ -6,15 +6,15 @@
   <p id="parties-table-description">
     <strong>List of users in OneHealthID Service.</strong>
   </p>
-  <ng-container *ngIf="environment !== production">
+  @if (environment !== production) {
     <button
       mat-stroked-button
       type="button"
       color="warn"
-      (click)="onDeleteParties()">
+      tabindex="0" (keydown.enter)="onDeleteParties()" (click)="onDeleteParties()">
       Delete all
     </button>
-  </ng-container>
+  }
 </div>
 
 <table
@@ -50,15 +50,43 @@
     </td>
   </ng-container>
 
-  <ng-container *ngIf="environment !== production" matColumnDef="delete">
-    <th *matHeaderCellDef scope="col" mat-header-cell></th>
+  <ng-container matColumnDef="credentials">
+    <th *matHeaderCellDef scope="col" mat-header-cell>Credentials</th>
     <td *matCellDef="let element" mat-cell>
-      <mat-icon class="delete" (click)="onDeleteParty(element.id)"
-        >delete</mat-icon
-      >
+      <div class="credentials-container">
+        @for (cred of element.credentials; track cred.id) {
+          <div class="credential-item">
+            <span class="credential-type">{{ cred.identityProvider }}</span>
+            @if (cred.idpId) {
+              <span class="credential-id">({{ cred.idpId }})</span>
+            }
+            @if (environment !== production) {
+              <button
+                mat-icon-button
+                type="button"
+                color="warn"
+                class="unlink-button"
+                tabindex="0" (keydown.enter)="onUnlinkCredential(element.id, cred)" (click)="onUnlinkCredential(element.id, cred)">
+                <mat-icon class="delete-icon">link_off</mat-icon>
+              </button>
+            }
+          </div>
+        }
+      </div>
     </td>
   </ng-container>
 
-  <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
-  <tr *matRowDef="let row; columns: displayedColumns" mat-row></tr>
-</table>
+  @if (environment !== production) {
+    <ng-container matColumnDef="delete">
+      <th *matHeaderCellDef scope="col" mat-header-cell></th>
+      <td *matCellDef="let element" mat-cell>
+        <mat-icon class="delete" tabindex="0" (keydown.enter)="onDeleteParty(element.id)" (click)="onDeleteParty(element.id)"
+          >delete</mat-icon
+          >
+        </td>
+      </ng-container>
+    }
+
+    <tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
+    <tr *matRowDef="let row; columns: displayedColumns" mat-row></tr>
+  </table>

@@ -9,35 +9,45 @@
   </div>
   <div class="second-row">
     <div class="school-box">
-      <p *ngIf="collegeText">
-        <span>{{ collegeText }}</span>
-      </p>
+      @if (collegeText) {
+        <p>
+          <span>{{ collegeText }}</span>
+        </p>
+      }
     </div>
     <div class="extra-box-large">
-      <p *ngIf="noticeText">
-        <span>Status: {{ noticeText }}</span>
-      </p>
-      <p *ngIf="createdOnText">
-        <span>{{ createdOnText }}</span>
-      </p>
+      @if (noticeText) {
+        <p>
+          <span>Status: {{ noticeText }}</span>
+        </p>
+      }
+      @if (createdOnText) {
+        <p>
+          <span>{{ createdOnText }}</span>
+        </p>
+      }
     </div>
   </div>
-  <div *ngIf="isCancelEnabled || isApproveEnabled" class="actions">
-    <button
-      *ngIf="isCancelEnabled"
-      class="cancel"
-      mat-stroked-button
-      type="button"
-      (click)="cancelClick.emit(id)">
-      Cancel
-    </button>
-    <button
-      *ngIf="isApproveEnabled"
-      class="approve"
-      mat-stroked-button
-      type="button"
-      (click)="approveClick.emit(id)">
-      Approve
-    </button>
-  </div>
+  @if (isCancelEnabled || isApproveEnabled) {
+    <div class="actions">
+      @if (isCancelEnabled) {
+        <button
+          class="cancel"
+          mat-stroked-button
+          type="button"
+          tabindex="0" (keydown.enter)="cancelClick.emit(id)" (click)="cancelClick.emit(id)">
+          Cancel
+        </button>
+      }
+      @if (isApproveEnabled) {
+        <button
+          class="approve"
+          mat-stroked-button
+          type="button"
+          tabindex="0" (keydown.enter)="approveClick.emit(id)" (click)="approveClick.emit(id)">
+          Approve
+        </button>
+      }
+    </div>
+  }
 </section>

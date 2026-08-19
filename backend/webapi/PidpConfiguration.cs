@@ -9,6 +9,7 @@ public class PidpConfiguration
     private static readonly string? EnvironmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
     public string ApplicationUrl { get; set; } = string.Empty;
+    public string CorsAllowedOrigins { get; set; } = string.Empty;
 
     public AddressAutocompleteClientConfiguration AddressAutocompleteClient { get; set; } = new();
     public BCProviderClientConfiguration BCProviderClient { get; set; } = new();

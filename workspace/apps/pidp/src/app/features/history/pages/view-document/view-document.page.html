@@ -1,11 +1,10 @@
 <ui-page>
-  <ng-container *ngIf="document">
+  @if (document) {
     <ui-page-header>{{ document.title }}</ui-page-header>
-
     <ui-page-section>
       <p [innerHtml]="document.content | safe: 'html'"></p>
     </ui-page-section>
-  </ng-container>
+  }
 
   <ng-template appViewDocument></ng-template>
 
@@ -15,7 +14,7 @@
       uiPageFooterAction
       color="primary"
       type="button"
-      (click)="onBack()">
+      tabindex="0" (keydown.enter)="onBack()" (click)="onBack()">
       Back
     </button>
   </ui-page-footer>

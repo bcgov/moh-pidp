@@ -9,7 +9,7 @@ using PlrIntakeTests.TestingExtensions;
 public class IndexTests : InMemoryDbTest
 {
     [Fact]
-    public async void GetRecords_SingleCpnSingleRecord_SingleMatchingRecord()
+    public async Task GetRecords_SingleCpnSingleRecord_SingleMatchingRecord()
     {
         var cpn = "CPN";
         var record = this.TestDb.Has(new PlrRecord
@@ -45,7 +45,7 @@ public class IndexTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void GetRecords_SingleCpnMultipleRecords_MultipleMatchingRecords()
+    public async Task GetRecords_SingleCpnMultipleRecords_MultipleMatchingRecords()
     {
         var cpn = "CPN";
         var records = this.TestDb.HasSome(new[]
@@ -95,7 +95,7 @@ public class IndexTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void GetRecords_MultipleCpnsMultipleRecords_MultipleMatchingRecords()
+    public async Task GetRecords_MultipleCpnsMultipleRecords_MultipleMatchingRecords()
     {
         var cpn1 = "CPN1";
         var cpn2 = "CPN2";
@@ -170,7 +170,7 @@ public class IndexTests : InMemoryDbTest
 
         foreach (var record in records)
         {
-            Assert.Single(results.Where(result => comparesEqual(record, result)));
+            Assert.Single(results, result => comparesEqual(record, result));
         }
     }
 }

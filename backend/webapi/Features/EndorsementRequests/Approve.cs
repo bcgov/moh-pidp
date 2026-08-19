@@ -80,6 +80,7 @@ public class Approve
                     : endorsementRequest.RequestingPartyId);
             }
 
+            this.context.BusinessEvents.Add(EndorsementApproved.Create(command.PartyId, command.EndorsementRequestId, this.clock.GetCurrentInstant()));
             await this.context.SaveChangesAsync();
 
             return DomainResult.Success();

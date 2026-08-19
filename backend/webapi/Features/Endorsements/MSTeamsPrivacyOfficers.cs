@@ -1,7 +1,6 @@
 namespace Pidp.Features.Endorsements;
 
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
+using Mapster;
 using DomainResults.Common;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -38,9 +37,8 @@ public class MSTeamsPrivacyOfficers
         public QueryValidator() => this.RuleFor(x => x.PartyId).GreaterThan(0);
     }
 
-    public class QueryHandler(IMapper mapper, PidpDbContext context) : IQueryHandler<Query, IDomainResult<List<Model>>>
+    public class QueryHandler(PidpDbContext context) : IQueryHandler<Query, IDomainResult<List<Model>>>
     {
-        private readonly IMapper mapper = mapper;
         private readonly PidpDbContext context = context;
 
         public async Task<IDomainResult<List<Model>>> HandleAsync(Query query)
@@ -48,7 +46,7 @@ public class MSTeamsPrivacyOfficers
             var models = await this.context.MSTeamsClinics
                 .Where(clinic => this.context.ActiveEndorsementRelationships(query.PartyId)
                     .Any(relationship => relationship.PartyId == clinic.PrivacyOfficerId))
-                .ProjectTo<Model>(this.mapper.ConfigurationProvider)
+                .ProjectToType<Model>()
                 .ToListAsync();
 
             return DomainResult.Success(models);

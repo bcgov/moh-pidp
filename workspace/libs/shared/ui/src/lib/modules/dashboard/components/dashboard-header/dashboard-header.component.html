@@ -1,27 +1,33 @@
 <mat-toolbar [class.theme-light]="theme === 'light'">
-  <span *ngIf="allowMobileToggle && (mobileToggleBreakpoint$ | async)">
-    <button mat-icon-button aria-label="open" (click)="onOpenMenu()">
-      <mat-icon>menu</mat-icon>
-    </button>
-  </span>
+  @if (allowMobileToggle && (mobileToggleBreakpoint$ | async)) {
+    <span>
+      <button mat-icon-button aria-label="open" tabindex="0" (keydown.enter)="onOpenMenu()" (click)="onOpenMenu()">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </span>
+  }
   <span>
     <ui-bc-gov-logo [theme]="theme"></ui-bc-gov-logo>
   </span>
 
   <span class="flex-fill"></span>
 
-  <span *ngIf="username && (usernameBreakpoint$ | async)" class="username">
-    {{ username }}
-  </span>
-  <span *ngIf="username" class="logout">
-    <button
-      mat-icon-button
-      matTooltip="Logout"
-      aria-label="logout"
-      (click)="onLogout()">
-      <mat-icon>logout</mat-icon>
-    </button>
-  </span>
+  @if (username && (usernameBreakpoint$ | async)) {
+    <span class="username">
+      {{ username }}
+    </span>
+  }
+  @if (username) {
+    <span class="logout">
+      <button
+        mat-icon-button
+        matTooltip="Logout"
+        aria-label="logout"
+        tabindex="0" (keydown.enter)="onLogout()" (click)="onLogout()">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </span>
+  }
 </mat-toolbar>
 
 <div class="ngx-progress">

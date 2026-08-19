@@ -1,13 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  Inject,
-  OnInit,
-  TemplateRef,
-  ViewChild,
-  inject,
-  signal,
-} from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, inject, signal } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -71,6 +63,15 @@ import {
   styleUrl: './external-accounts.page.scss',
 })
 export class ExternalAccountsPage implements OnInit {
+  private readonly config = inject<AppConfig>(APP_CONFIG);
+  private readonly dialog = inject(MatDialog);
+  private readonly loadingOverlay = inject(LoadingOverlayService);
+  private readonly partyService = inject(PartyService);
+  private readonly resource = inject(ExternalAccountsResource);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+  private readonly toastService = inject(ToastService);
+
   public sanitizer = inject(DomSanitizer);
   public matIconRegistry = inject(MatIconRegistry);
 
@@ -81,16 +82,7 @@ export class ExternalAccountsPage implements OnInit {
   private readonly refreshAccounts$ = new Subject<void>();
   public invitedExternalAccounts$!: Observable<InvitedExternalAccount[]>;
 
-  public constructor(
-    @Inject(APP_CONFIG) private config: AppConfig,
-    private dialog: MatDialog,
-    private loadingOverlay: LoadingOverlayService,
-    private partyService: PartyService,
-    private resource: ExternalAccountsResource,
-    private router: Router,
-    private route: ActivatedRoute,
-    private toastService: ToastService,
-  ) {
+  public constructor() {
     this.registerSvgIcons();
     this.emailSupport = this.config.emails.providerIdentitySupport;
   }
@@ -301,6 +293,7 @@ export class ExternalAccountsPage implements OnInit {
       switchMap(() =>
         this.resource.getInvitedExternalAccounts(this.partyService.partyId),
       ),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       catchError((err: any) => {
         this.toastService.openErrorToast('Failed to load external accounts.');
         console.error(err);

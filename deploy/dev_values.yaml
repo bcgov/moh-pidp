@@ -19,7 +19,16 @@ redis:
     existingSecretPasswordKey: database-password
 
 nginx:
-  replicaCount: 1
+  image:
+    registry: image-registry.openshift-image-registry.svc:5000/f088b1-tools
+    repository: bitnami-nginx
+    tag: 1.31.1
+  metrics:
+    enabled: false
+    image:
+      registry: image-registry.openshift-image-registry.svc:5000/f088b1-tools
+      repository: bitnami-nginx-exporter
+      tag: 1.5.1
 
 frontend:
   replicaCount: 1
@@ -32,6 +41,7 @@ webapi:
   replicaCount: 1
   aspnetcore:
     environment: Staging
+  corsAllowedOrigins: "https://dev.healthprovideridentityportal.gov.bc.ca"
 
 plr-intake:
   replicaCount: 1
@@ -39,3 +49,6 @@ plr-intake:
 rabbitmq:
   autoCreate: true
   host: rabbitmq://pidp:password@rabbitmq:5672/
+
+trivy:
+  enabled: true

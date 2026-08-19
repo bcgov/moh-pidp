@@ -4,10 +4,12 @@
   "projectType": "application",
   "sourceRoot": "apps/pidp/src",
   "prefix": "app",
+  "tags": ["scope:pidp", "type:app"],
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
       "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
       "options": {
         "outputPath": "dist/apps/pidp",
         "index": "apps/pidp/src/index.html",
@@ -25,7 +27,7 @@
           "includePaths": ["apps/pidp/src/scss"]
         },
         "scripts": [],
-        "allowedCommonJsDependencies": ["keycloak-js"]
+        "allowedCommonJsDependencies": ["keycloak-js", "html2canvas", "qrcode"]
       },
       "configurations": {
         "production": {
@@ -57,11 +59,16 @@
           "sourceMap": true,
           "namedChunks": true
         }
-      },
-      "defaultConfiguration": "production"
+      }
     },
     "serve": {
       "executor": "@angular-devkit/build-angular:dev-server",
+      "defaultConfiguration": "development",
+      "continuous": true,
+      "options": {
+        "port": 4200,
+        "proxyConfig": "apps/pidp/proxy.conf.json"
+      },
       "configurations": {
         "production": {
           "buildTarget": "pidp:build:production"
@@ -69,11 +76,6 @@
         "development": {
           "buildTarget": "pidp:build:development"
         }
-      },
-      "defaultConfiguration": "development",
-      "options": {
-        "port": 4200,
-        "proxyConfig": "apps/pidp/proxy.conf.json"
       }
     },
     "extract-i18n": {
@@ -92,6 +94,5 @@
         "jestConfig": "apps/pidp/jest.config.ts"
       }
     }
-  },
-  "tags": ["scope:pidp", "type:app"]
+  }
 }

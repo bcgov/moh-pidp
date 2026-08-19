@@ -11,6 +11,7 @@ nupkg/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+.vscode/*
 
 # Rider
 .idea
@@ -48,3 +49,7 @@ logs/
 
 # Environment Variables
 .env
+
+workspace/.angular/*
+workspace/.nx/*
+workspace/.vscode/*

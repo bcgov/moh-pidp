@@ -2,19 +2,20 @@
   <div class="breadcrumb">
     <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
   </div>
-  <ui-alert
-    *ngIf="licenceDeclarationFailed"
-    type="muted"
-    icon="error_outline"
-    iconType="outlined"
-    heading="Error finding your licence">
-    <ng-container uiAlertContent>
-      <p>
-        Your request to submit your college licence was unsuccessful. Check the
-        college and college licence number and try again.
-      </p>
-    </ng-container>
-  </ui-alert>
+  @if (licenceDeclarationFailed) {
+    <ui-alert
+      type="muted"
+      icon="error_outline"
+      iconType="outlined"
+      heading="Error finding your licence">
+      <ng-container uiAlertContent>
+        <p>
+          Your request to submit your college licence was unsuccessful. Check the
+          college and college licence number and try again.
+        </p>
+      </ng-container>
+    </ui-alert>
+  }
 
   <form novalidate [formGroup]="formState.form" (ngSubmit)="onSubmit()">
     <section>
@@ -32,49 +33,55 @@
             formControlName="collegeCode"
             aria-labelledby="college-licence-declaration-college-licence">
             <mat-option [value]="0">None</mat-option>
-            <mat-option *ngFor="let college of colleges" [value]="college.code">
-              {{ college.name }}
-            </mat-option>
+            @for (college of colleges; track college) {
+              <mat-option [value]="college.code">
+                {{ college.name }}
+              </mat-option>
+            }
           </mat-select>
           <mat-error>Required</mat-error>
         </mat-form-field>
-        <p *ngIf="showNurseValidationInfo">
-          If you are a nurse, this number may be referred to as your "Nurse ID".
-          You can confirm you have the correct number by checking it
-          <a
-            target="_blank"
-            rel="noopener"
-            href="https://registry.bccnp.ca/ElasticSearch/Search"
-            aria-label="BC College of Nurses and Midwives Search"
-            >here</a
-          >.
-        </p>
-        <mat-form-field *ngIf="formState.collegeCode.value">
-          <mat-label class="field-label">Licence Number</mat-label>
-          <input
-            matInput
-            formControlName="licenceNumber"
-            aria-labelledby="college-licence-declaration-licence-number" />
-          <mat-error>Required</mat-error>
-          <mat-hint> Example would be a 5 digit code </mat-hint>
-        </mat-form-field>
-      </div>
-    </section>
-    <div>
-      <p class="footer-text">
-        Our system will automatically authenticate your college licence after
-        information has been filled.
-      </p>
+        @if (showNurseValidationInfo) {
+          <p>
+            If you are a nurse, this number may be referred to as your "Nurse ID".
+            You can confirm you have the correct number by checking it
+            <a
+              target="_blank"
+              rel="noopener"
+              href="https://registry.bccnp.ca/ElasticSearch/Search"
+              aria-label="BC College of Nurses and Midwives Search"
+              >here</a
+              >.
+            </p>
+          }
+          @if (formState.collegeCode.value) {
+            <mat-form-field>
+              <mat-label class="field-label">Licence Number</mat-label>
+              <input
+                matInput
+                aria-label="Licence Number" 
+                formControlName="licenceNumber"/>
+                <mat-error>Required</mat-error>
+                <mat-hint> Example would be a 5 digit code </mat-hint>
+              </mat-form-field>
+            }
+          </div>
+        </section>
+        <div>
+          <p class="footer-text">
+            Our system will automatically authenticate your college licence after
+            information has been filled.
+          </p>
+        </div>
+        <div class="actions">
+          <button
+            mat-flat-button
+            uiPageFooterAction
+            type="submit"
+            color="primary"
+            [disabled]="disableSearch">
+            {{ formState.collegeCode.value === 0 ? "Save" : "Search" }}
+          </button>
+        </div>
+      </form>
     </div>
-    <div class="actions">
-      <button
-        mat-flat-button
-        uiPageFooterAction
-        type="submit"
-        color="primary"
-        [disabled]="disableSearch">
-        {{ formState.collegeCode.value === 0 ? "Save" : "Search" }}
-      </button>
-    </div>
-  </form>
-</div>

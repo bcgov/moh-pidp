@@ -7,13 +7,13 @@ import { faChartSimple, faUserCheck } from '@fortawesome/free-solid-svg-icons';
 
 import { AccessRoutes } from '@app/features/access/access.routes';
 import { ShellRoutes } from '@app/features/shell/shell.routes';
+import { Constants } from '@app/shared/constants';
 
 import { StatusCode } from '../../enums/status-code.enum';
 import { ProfileStatus } from '../../models/profile-status.model';
 import { PortalSectionAction } from '../portal-section-action.model';
 import { PortalSectionKey } from '../portal-section-key.type';
 import { IPortalSection } from '../portal-section.model';
-import { Constants } from '@app/shared/constants';
 
 export class ImmsbcPortalSection implements IPortalSection {
   public readonly key: PortalSectionKey;
@@ -30,9 +30,7 @@ export class ImmsbcPortalSection implements IPortalSection {
   ) {
     this.key = 'immsBC';
     this.heading = 'ImmsBC';
-    this.description =
-      'ImmsBC lorum ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
-
+    this.description = 'All pharmacies providing publicly funded influenza vaccines are required to use ImmsBC to manage all aspects of the administration of flu and COVID-19 vaccines to British Columbians.';
     this.keyWords = profileStatus.status.immsBC.keyWords || [];
     this.completedMessage = Constants.accessGrantedText;
   }

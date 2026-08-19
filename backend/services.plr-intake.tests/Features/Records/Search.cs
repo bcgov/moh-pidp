@@ -9,7 +9,7 @@ using PlrIntakeTests.TestingExtensions;
 public class SearchTests : InMemoryDbTest
 {
     [Fact]
-    public async void SearchRecords_SingleRecord_SingleCpn()
+    public async Task SearchRecords_SingleRecord_SingleCpn()
     {
         var record = this.TestDb.Has(new PlrRecord
         {
@@ -56,7 +56,7 @@ public class SearchTests : InMemoryDbTest
 
     [Theory]
     [MemberData(nameof(IdMatchTestData))]
-    public async void SearchRecords_TrimsSpacesTrimsTo5DigitsAndLeadingZeros_Match(string dbId, string searchId)
+    public async Task SearchRecords_TrimsSpacesTrimsTo5DigitsAndLeadingZeros_Match(string dbId, string searchId)
     {
         var record = this.TestDb.Has(new PlrRecord
         {
@@ -107,7 +107,7 @@ public class SearchTests : InMemoryDbTest
     [Theory]
     [InlineData("1234", "91234")]
     [InlineData("90022", "00022")]
-    public async void SearchRecords_SimilarButNotMatchingRecords_NoMatch(string dbId, string searchId)
+    public async Task SearchRecords_SimilarButNotMatchingRecords_NoMatch(string dbId, string searchId)
     {
         var record = this.TestDb.Has(new PlrRecord
         {

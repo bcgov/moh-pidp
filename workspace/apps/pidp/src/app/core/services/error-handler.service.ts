@@ -12,6 +12,7 @@ export class ErrorHandlerService implements ErrorHandler {
   public constructor(
     // Can't use DI in constructor of the error handler as it's loaded
     // first during bootstrapping therefore have to use the injector
+    // eslint-disable-next-line @angular-eslint/prefer-inject
     private injector: Injector,
   ) {}
 

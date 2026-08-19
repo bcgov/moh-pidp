@@ -1,56 +1,39 @@
 <div class="container" uiPidpInjectViewportCss>
   <ui-page mode="full">
-    <ui-alert
-      *ngIf="accessRequestFailed"
-      type="danger"
-      icon="error_outline"
-      iconType="outlined"
-      heading="Error Accept Agreement">
+    @if (accessRequestFailed) {
+    <ui-alert type="danger" icon="error_outline" iconType="outlined" heading="Error Accept Agreement">
       <ng-container uiAlertContent>
         <p>
           Your acceptance of the agreement could not be processed at this time.
           If this issue persists, contact
-          <a
-            uiAnchor
-            scheme="mailto"
-            [attr.href]="specialAuthoritySupportEmail"></a>
+          <a uiAnchor scheme="mailto" [attr.href]="specialAuthoritySupportEmail">{{specialAuthoritySupportEmail}}</a>
           for assistance.
         </p>
       </ng-container>
     </ui-alert>
+    }
 
     <app-user-access-agreement-document></app-user-access-agreement-document>
 
-    <p *ngIf="!completed" class="padding-container">
-      <span
-        >I, <b>{{ (fullName$ | async) }}</b>, represent and warrant that all
+    @if (!completed) {
+    <p class="padding-container">
+      <span>I, <b>{{ (fullName$ | async) }}</b>, represent and warrant that all
         information provided in connection with my application for access to the
-        System(s), is true and correct.</span
-      >
+        System(s), is true and correct.</span>
     </p>
+    }
 
     <div class="button-container">
-      <ng-container *ngIf="completed; else notCompleted">
-        <button
-          class="back-button"
-          mat-stroked-button
-          uiPageFooterAction
-          color="primary"
-          type="button"
-          (click)="onBack()">
-          Home
-        </button>
-      </ng-container>
-      <ng-template #notCompleted>
-        <button
-          mat-flat-button
-          uiPageFooterAction
-          color="primary"
-          type="button"
-          (click)="onAcceptAgreement()">
-          Accept Agreement
-        </button>
-      </ng-template>
+      @if (completed) {
+      <button class="back-button" mat-stroked-button uiPageFooterAction color="primary" type="button"
+        tabindex="0" (keydown.enter)="onBack()" (click)="onBack()">
+        Home
+      </button>
+      } @else {
+      <button mat-flat-button uiPageFooterAction color="primary" type="button" tabindex="0" (keydown.enter)="onAcceptAgreement()" (click)="onAcceptAgreement()">
+        Accept Agreement
+      </button>
+      }
     </div>
   </ui-page>
 </div>

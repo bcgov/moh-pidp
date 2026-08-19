@@ -1,5 +1,5 @@
+@if (show) {
 <ui-alert
-  *ngIf="show"
   type="info"
   icon="error_outline"
   heading="Collection Notice">
@@ -13,9 +13,10 @@
         mat-flat-button
         type="button"
         color="primary"
-        (click)="onAccept()">
+        tabindex="0" (keydown.enter)="onAccept()" (click)="onAccept()">
         Ok
       </button>
     </span>
   </ng-container>
 </ui-alert>
+}

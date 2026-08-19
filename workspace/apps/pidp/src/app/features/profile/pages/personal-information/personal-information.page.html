@@ -24,77 +24,79 @@
           <img
             src="/assets/images/icons/perm-contact-calendar.svg"
             alt="Contact Calendar" />
+          </div>
         </div>
+        <h2>BC Services Card information</h2>
+        <app-user-info [user]="user$ | async"></app-user-info>
       </div>
-      <h2>BC Services Card information</h2>
-      <app-user-info [user]="user$ | async"></app-user-info>
-    </div>
 
-    <ui-page-section>
-      <ui-page-section-subheader>
-        <ng-container uiPageSectionSubheaderDesc>
-          <span *ngIf="(identityProvider$ | async) | isHighAssurance">
-            This information comes from the BC Services Card. If you use a
-            different name in your college licence, select "My name is different
-            on my college licence".
-          </span>
-          <p class="light-color">
-            This will not change your BC Services card information.
-          </p>
-        </ng-container>
-      </ui-page-section-subheader>
+      <ui-page-section>
+        <ui-page-section-subheader>
+          <ng-container uiPageSectionSubheaderDesc>
+            @if ((identityProvider$ | async) | isHighAssurance) {
+              <span>
+                This information comes from the BC Services Card. If you use a
+                different name in your college licence, select "My name is different
+                on my college licence".
+              </span>
+            }
+            <p class="light-color">
+              This will not change your BC Services card information.
+            </p>
+          </ng-container>
+        </ui-page-section-subheader>
 
-      <div class="row expansion-item-container">
-        <div class="expansion-item col-sm-10">
-          <mat-expansion-panel
-            class="expansion-panel"
-            #panel
-            hideToggle
-            (opened)="panelOpenState.set(true)"
-            (closed)="panelOpenState.set(false)">
-            <mat-expansion-panel-header>
-              <mat-panel-title
-                ><b
+        <div class="row expansion-item-container">
+          <div class="expansion-item col-sm-10">
+            <mat-expansion-panel
+              class="expansion-panel"
+              #panel
+              hideToggle
+              (opened)="panelOpenState.set(true)"
+              (closed)="panelOpenState.set(false)">
+              <mat-expansion-panel-header>
+                <mat-panel-title
+                  ><b
                   >My name is different on my college licence</b
-                ></mat-panel-title
-              >
-              <mat-icon>{{panel.expanded ? 'remove' : 'add'}}</mat-icon>
-            </mat-expansion-panel-header>
-            <!--body-->
-            <h1>Preferred Name</h1>
-            <ng-container uiPageSectionSubheaderDesc>
-              If you use a name professionally that is different from your legal
-              name, enter it here.
-              <p>
-                Entering a preferred name will not change your BC Services Card
-                name.
-              </p>
-            </ng-container>
+                  ></mat-panel-title
+                  >
+                  <mat-icon>{{panel.expanded ? 'remove' : 'add'}}</mat-icon>
+                </mat-expansion-panel-header>
+                <!--body-->
+                <h1>Preferred Name</h1>
+                <ng-container uiPageSectionSubheaderDesc>
+                  If you use a name professionally that is different from your legal
+                  name, enter it here.
+                  <p>
+                    Entering a preferred name will not change your BC Services Card
+                    name.
+                  </p>
+                </ng-container>
 
-            <ui-preferred-name-form
-              [form]="formState.form"></ui-preferred-name-form>
-          </mat-expansion-panel>
-        </div>
-      </div>
-    </ui-page-section>
+                <ui-preferred-name-form
+                [form]="formState.form"></ui-preferred-name-form>
+              </mat-expansion-panel>
+            </div>
+          </div>
+        </ui-page-section>
 
-    <ui-page-section>
-      <h1>Contact Information</h1>
-      <ng-container uiPageSectionSubheaderDesc>
-        Provide your contact information. Please use an email that you check
-        regularly.
-      </ng-container>
+        <ui-page-section>
+          <h1>Contact Information</h1>
+          <ng-container uiPageSectionSubheaderDesc>
+            Provide your contact information. Please use an email that you check
+            regularly.
+          </ng-container>
 
-      <ui-contact-info-form
-        class="contact-information"
-        [form]="formState.form"
-        (emailChanges)="onEmailInputChange($event)"></ui-contact-info-form>
-    </ui-page-section>
+          <ui-contact-info-form
+            class="contact-information"
+            [form]="formState.form"
+          (emailChanges)="onEmailInputChange($event)"></ui-contact-info-form>
+        </ui-page-section>
 
-    <ui-page-footer [mode]="'reverse'">
-      <button mat-flat-button uiPageFooterAction type="submit" color="primary">
-        {{(profileStatus === '1') ? 'Continue' : 'Save Information'}}
-      </button>
-    </ui-page-footer>
-  </ui-page>
-</div>
+        <ui-page-footer [mode]="'reverse'">
+          <button mat-flat-button uiPageFooterAction type="submit" color="primary">
+            {{(profileStatus === '1') ? 'Continue' : 'Save Information'}}
+          </button>
+        </ui-page-footer>
+      </ui-page>
+    </div>

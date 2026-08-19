@@ -1,11 +1,5 @@
-import { AsyncPipe, NgIf } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-} from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -13,7 +7,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { Observable, combineLatest, distinctUntilChanged, map } from 'rxjs';
 
-import { NgProgressComponent } from 'ngx-progressbar';
+import { NgProgressbar } from 'ngx-progressbar';
 
 import { BcGovLogoComponent } from '../../../../components/bc-gov-logo/bc-gov-logo.component';
 import { ViewportService } from '../../../../services/viewport.service';
@@ -24,19 +18,19 @@ import { DashboardHeaderTheme } from '../../models/dashboard-header-config.model
   templateUrl: './dashboard-header.component.html',
   styleUrls: ['./dashboard-header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     MatToolbarModule,
-    NgIf,
     MatButtonModule,
     MatIconModule,
     BcGovLogoComponent,
     MatTooltipModule,
-    NgProgressComponent,
-    AsyncPipe,
-  ],
+    NgProgressbar,
+    AsyncPipe
+],
 })
 export class DashboardHeaderComponent {
+  protected viewportService = inject(ViewportService);
+
   /**
    * @description
    * Theme for the dashboard header.
@@ -66,7 +60,9 @@ export class DashboardHeaderComponent {
   public mobileToggleBreakpoint$: Observable<boolean>;
   public usernameBreakpoint$: Observable<boolean>;
 
-  public constructor(public viewportService: ViewportService) {
+  public constructor() {
+    const viewportService = this.viewportService;
+
     this.theme = 'dark';
     this.toggleMobileMenu = new EventEmitter<void>();
     this.logout = new EventEmitter<void>();

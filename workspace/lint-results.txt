@@ -1,0 +1,335 @@
+yarn run v1.22.22
+$ C:\Users\danew\repo\bcgov\moh-pidp\workspace\node_modules\.bin\nx run-many -t lint
+
+[7m[1m[36m NX [39m[22m[27m  [36mRunning target [1mlint[22m for 8 projects:[39m
+
+[2m-[22m shared-data-access
+[2m-[22m pidp-presentation
+[2m-[22m shared-root-route
+[2m-[22m pidp-data-model
+[2m-[22m shared-utils
+[2m-[22m shared-ui
+[2m-[22m pidp-e2e
+[2m-[22m pidp
+
+[2m[36m[39m[22m
+
+[2m> [22m[2mnx run[22m pidp-e2e:lint  [2m[existing outputs match the cache, left as is][22m
+
+[1m[33mThe `@nx/eslint:lint` executor is deprecated and will be removed in Nx v24. Run `nx g @nx/eslint:convert-to-inferred` to migrate to the `@nx/eslint/plugin` inferred targets. See https://nx.dev/docs/guides/tasks--caching/convert-to-inferred for details.[39m[22m
+
+Linting "pidp-e2e"...
+
+Γ£ö All files pass linting
+
+
+[2m> [22m[2mnx run[22m shared-utils:lint
+
+[1m[33mThe `@nx/eslint:lint` executor is deprecated and will be removed in Nx v24. Run `nx g @nx/eslint:convert-to-inferred` to migrate to the `@nx/eslint/plugin` inferred targets. See https://nx.dev/docs/guides/tasks--caching/convert-to-inferred for details.[39m[22m
+
+Linting "shared-utils"...
+
+Γ£ö All files pass linting
+
+
+[2m> [22m[2mnx run[22m shared-data-access:lint
+
+[1m[33mThe `@nx/eslint:lint` executor is deprecated and will be removed in Nx v24. Run `nx g @nx/eslint:convert-to-inferred` to migrate to the `@nx/eslint/plugin` inferred targets. See https://nx.dev/docs/guides/tasks--caching/convert-to-inferred for details.[39m[22m
+
+Linting "shared-data-access"...
+
+Γ£ö All files pass linting
+
+
+[2m> [22m[2mnx run[22m pidp-presentation:lint
+
+[1m[33mThe `@nx/eslint:lint` executor is deprecated and will be removed in Nx v24. Run `nx g @nx/eslint:convert-to-inferred` to migrate to the `@nx/eslint/plugin` inferred targets. See https://nx.dev/docs/guides/tasks--caching/convert-to-inferred for details.[39m[22m
+
+Linting "pidp-presentation"...
+
+Γ£ö All files pass linting
+
+
+[2m> [22m[2mnx run[22m shared-ui:lint
+
+[1m[33mThe `@nx/eslint:lint` executor is deprecated and will be removed in Nx v24. Run `nx g @nx/eslint:convert-to-inferred` to migrate to the `@nx/eslint/plugin` inferred targets. See https://nx.dev/docs/guides/tasks--caching/convert-to-inferred for details.[39m[22m
+
+Linting "shared-ui"...
+[0m
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\libs\shared\ui\src\lib\components\tooltip\tooltip.component.html[24m
+  [2m1:1[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+  [2m1:1[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\libs\shared\ui\src\lib\modules\context-help\context-help\context-help.component.html[24m
+  [2m1:1[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+  [2m1:1[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+
+[31m[1mΓ£û 4 problems (4 errors, 0 warnings)[22m[39m
+[0m
+Γ£û 4 problems (4 errors, 0 warnings)
+
+
+[2m> [22m[2mnx run[22m pidp-data-model:lint
+
+[1m[33mThe `@nx/eslint:lint` executor is deprecated and will be removed in Nx v24. Run `nx g @nx/eslint:convert-to-inferred` to migrate to the `@nx/eslint/plugin` inferred targets. See https://nx.dev/docs/guides/tasks--caching/convert-to-inferred for details.[39m[22m
+
+Linting "pidp-data-model"...
+
+Γ£ö All files pass linting
+
+
+[2m> [22m[2mnx run[22m shared-root-route:lint
+
+[1m[33mThe `@nx/eslint:lint` executor is deprecated and will be removed in Nx v24. Run `nx g @nx/eslint:convert-to-inferred` to migrate to the `@nx/eslint/plugin` inferred targets. See https://nx.dev/docs/guides/tasks--caching/convert-to-inferred for details.[39m[22m
+
+Linting "shared-root-route"...
+
+Γ£ö All files pass linting
+
+
+[2m> [22m[2mnx run[22m pidp:lint
+
+[1m[33mThe `@nx/eslint:lint` executor is deprecated and will be removed in Nx v24. Run `nx g @nx/eslint:convert-to-inferred` to migrate to the `@nx/eslint/plugin` inferred targets. See https://nx.dev/docs/guides/tasks--caching/convert-to-inferred for details.[39m[22m
+
+Linting "pidp"...
+[0m
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\core\services\error-handler.service.ts[24m
+  [2m15:5[22m  [33mwarning[39m  Prefer using the inject() function over constructor parameter injection. Use Angular's migration schematic to automatically refactor: ng generate @angular/core:inject  [2m@angular-eslint/prefer-inject[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\core\services\error.service.ts[24m
+  [2m10:22[22m  [33mwarning[39m  Prefer using the inject() function over constructor parameter injection. Use Angular's migration schematic to automatically refactor: ng generate @angular/core:inject  [2m@angular-eslint/prefer-inject[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\access\components\access-request-card\access-request-card.component.html[24m
+  [2m2:3[22m  [31merror[39m  Elements with interaction handlers must be focusable  [2m@angular-eslint/template/interactive-supports-focus[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\access\pages\driver-fitness\driver-fitness.page.html[24m
+  [2m15:11[22m  [31merror[39m  <a> should have content  [2m@angular-eslint/template/elements-content[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\access\pages\halo\halo-resource.service.ts[24m
+  [2m12:22[22m  [33mwarning[39m  Prefer using the inject() function over constructor parameter injection. Use Angular's migration schematic to automatically refactor: ng generate @angular/core:inject  [2m@angular-eslint/prefer-inject[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\access\pages\hcim-account-transfer\hcim-account-transfer.page.html[24m
+   [2m79:15[22m  [31merror[39m  <a> should have content  [2m@angular-eslint/template/elements-content[22m
+   [2m84:15[22m  [31merror[39m  <a> should have content  [2m@angular-eslint/template/elements-content[22m
+  [2m103:17[22m  [31merror[39m  <a> should have content  [2m@angular-eslint/template/elements-content[22m
+  [2m108:17[22m  [31merror[39m  <a> should have content  [2m@angular-eslint/template/elements-content[22m
+  [2m124:19[22m  [31merror[39m  <a> should have content  [2m@angular-eslint/template/elements-content[22m
+  [2m129:19[22m  [31merror[39m  <a> should have content  [2m@angular-eslint/template/elements-content[22m
+  [2m145:21[22m  [31merror[39m  <a> should have content  [2m@angular-eslint/template/elements-content[22m
+  [2m150:21[22m  [31merror[39m  <a> should have content  [2m@angular-eslint/template/elements-content[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\access\pages\immsbc-eforms\immsbc-eforms.page.html[24m
+  [2m16:13[22m  [31merror[39m  <a> should have content  [2m@angular-eslint/template/elements-content[22m
+  [2m53:13[22m  [31merror[39m  <a> should have content  [2m@angular-eslint/template/elements-content[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\access\pages\immsbc\edit-staff-dialog.component.ts[24m
+  [2m109:5[22m  [33mwarning[39m  Prefer using the inject() function over constructor parameter injection. Use Angular's migration schematic to automatically refactor: ng generate @angular/core:inject  [2m@angular-eslint/prefer-inject[22m
+  [2m110:5[22m  [33mwarning[39m  Prefer using the inject() function over constructor parameter injection. Use Angular's migration schematic to automatically refactor: ng generate @angular/core:inject  [2m@angular-eslint/prefer-inject[22m
+  [2m111:5[22m  [33mwarning[39m  Prefer using the inject() function over constructor parameter injection. Use Angular's migration schematic to automatically refactor: ng generate @angular/core:inject  [2m@angular-eslint/prefer-inject[22m
+  [2m112:5[22m  [33mwarning[39m  Prefer using the inject() function over constructor parameter injection. Use Angular's migration schematic to automatically refactor: ng generate @angular/core:inject  [2m@angular-eslint/prefer-inject[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\access\pages\immsbc\immsbc-manage-pharmacy.page.ts[24m
+  [2m15:10[22m  [31merror[39m  'PillComponent' is defined but never used  [2m@typescript-eslint/no-unused-vars[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\access\pages\immsbc\pharmacy-resource.service.ts[24m
+  [2m19:22[22m  [33mwarning[39m  Prefer using the inject() function over constructor parameter injection. Use Angular's migration schematic to automatically refactor: ng generate @angular/core:inject  [2m@angular-eslint/prefer-inject[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\access\pages\immsbc\pharmacy-staff-management.component.ts[24m
+  [2m109:32[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m
+  [2m155:32[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\access\pages\immsbc\qr-code-dialog.component.ts[24m
+  [2m31:22[22m  [33mwarning[39m  Prefer using the inject() function over constructor parameter injection. Use Angular's migration schematic to automatically refactor: ng generate @angular/core:inject  [2m@angular-eslint/prefer-inject[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\access\pages\infant-rsv-eforms\infant-rsv-eforms.page.html[24m
+  [2m16:13[22m  [31merror[39m  <a> should have content  [2m@angular-eslint/template/elements-content[22m
+  [2m54:13[22m  [31merror[39m  <a> should have content  [2m@angular-eslint/template/elements-content[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\access\pages\ms-teams-clinic-member\ms-teams-clinic-member.page.html[24m
+  [2m20:13[22m  [31merror[39m  <a> should have content                                   [2m@angular-eslint/template/elements-content[22m
+  [2m60:23[22m  [31merror[39m  A label component must be associated with a form element  [2m@angular-eslint/template/label-has-associated-control[22m
+  [2m79:31[22m  [31merror[39m  A label component must be associated with a form element  [2m@angular-eslint/template/label-has-associated-control[22m
+  [2m90:33[22m  [31merror[39m  A label component must be associated with a form element  [2m@angular-eslint/template/label-has-associated-control[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\access\pages\ms-teams-privacy-officer\ms-teams-privacy-officer.page.html[24m
+  [2m22:13[22m  [31merror[39m  <a> should have content                                   [2m@angular-eslint/template/elements-content[22m
+  [2m72:21[22m  [31merror[39m  A label component must be associated with a form element  [2m@angular-eslint/template/label-has-associated-control[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\access\pages\sa-eforms\sa-eforms.page.html[24m
+  [2m16:13[22m  [31merror[39m  <a> should have content  [2m@angular-eslint/template/elements-content[22m
+  [2m53:13[22m  [31merror[39m  <a> should have content  [2m@angular-eslint/template/elements-content[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\accounts\pages\account-linking\account-linking.page.html[24m
+   [2m77:17[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+   [2m77:17[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+  [2m103:21[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+  [2m103:21[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+  [2m110:15[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+  [2m133:25[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+  [2m133:25[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+  [2m142:19[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+  [2m169:29[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+  [2m169:29[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\accounts\pages\bc-provider-application\bc-provider-application.page.html[24m
+   [2m46:11[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+   [2m46:11[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+  [2m171:17[22m  [31merror[39m  <img/> element must have a text alternative                                             [2m@angular-eslint/template/alt-text[22m
+  [2m180:21[22m  [31merror[39m  A label component must be associated with a form element                                [2m@angular-eslint/template/label-has-associated-control[22m
+  [2m193:25[22m  [31merror[39m  A label component must be associated with a form element                                [2m@angular-eslint/template/label-has-associated-control[22m
+  [2m240:31[22m  [31merror[39m  <img/> element must have a text alternative                                             [2m@angular-eslint/template/alt-text[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\accounts\pages\bc-provider-edit\bc-provider-edit.page.html[24m
+  [2m38:17[22m  [31merror[39m  A label component must be associated with a form element  [2m@angular-eslint/template/label-has-associated-control[22m
+  [2m51:21[22m  [31merror[39m  A label component must be associated with a form element  [2m@angular-eslint/template/label-has-associated-control[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\accounts\pages\external-accounts\external-accounts.page.ts[24m
+  [2m296:24[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\admin\pages\parties\parties.page.ts[24m
+  [2m80:58[22m  [33mwarning[39m  Unexpected any. Specify a different type  [2m@typescript-eslint/no-explicit-any[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\auth\pages\link-account-error\link-account-error.page.html[24m
+   [2m92:9[22m   [31merror[39m  <a> should have content  [2m@angular-eslint/template/elements-content[22m
+   [2m94:9[22m   [31merror[39m  <a> should have content  [2m@angular-eslint/template/elements-content[22m
+  [2m122:11[22m  [31merror[39m  <a> should have content  [2m@angular-eslint/template/elements-content[22m
+  [2m127:11[22m  [31merror[39m  <a> should have content  [2m@angular-eslint/template/elements-content[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\auth\pages\login\login.page.html[24m
+  [2m9:11[22m  [31merror[39m  <img/> element must have a text alternative  [2m@angular-eslint/template/alt-text[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\faq\pages\help\help.page.html[24m
+  [2m215:35[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+  [2m215:35[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+  [2m309:37[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+  [2m319:39[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+  [2m332:41[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+  [2m342:43[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+  [2m355:45[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\faq\pages\mfa-setup\mfa-setup.page.html[24m
+   [2m11:9[22m    [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+   [2m11:9[22m    [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+   [2m25:11[22m   [31merror[39m  <a> should have content                                                                 [2m@angular-eslint/template/elements-content[22m
+  [2m370:117[22m  [31merror[39m  <a> should have content                                                                 [2m@angular-eslint/template/elements-content[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\organization-info\pages\endorsements\endorsements.page.ts[24m
+  [2m371:15[22m  [33mwarning[39m  Forbidden non-null assertion  [2m@typescript-eslint/no-non-null-assertion[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\portal\components\portal-alert\components\pending-endorsement\pending-endorsement.component.ts[24m
+  [2m8:5[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+  [2m8:5[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\portal\components\portal-card\portal-card.component.ts[24m
+  [2m67:5[22m  [33mwarning[39m  Prefer using the inject() function over constructor parameter injection. Use Angular's migration schematic to automatically refactor: ng generate @angular/core:inject  [2m@angular-eslint/prefer-inject[22m
+  [2m68:5[22m  [33mwarning[39m  Prefer using the inject() function over constructor parameter injection. Use Angular's migration schematic to automatically refactor: ng generate @angular/core:inject  [2m@angular-eslint/prefer-inject[22m
+  [2m69:5[22m  [33mwarning[39m  Prefer using the inject() function over constructor parameter injection. Use Angular's migration schematic to automatically refactor: ng generate @angular/core:inject  [2m@angular-eslint/prefer-inject[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\portal\components\portal-carousel\portal-carousel.component.ts[24m
+  [2m62:5[22m  [33mwarning[39m  Prefer using the inject() function over constructor parameter injection. Use Angular's migration schematic to automatically refactor: ng generate @angular/core:inject  [2m@angular-eslint/prefer-inject[22m
+  [2m63:5[22m  [33mwarning[39m  Prefer using the inject() function over constructor parameter injection. Use Angular's migration schematic to automatically refactor: ng generate @angular/core:inject  [2m@angular-eslint/prefer-inject[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\portal\portal.page.html[24m
+  [2m11:7[22m  [31merror[39m  Elements with interaction handlers must be focusable  [2m@angular-eslint/template/interactive-supports-focus[22m
+  [2m28:9[22m  [31merror[39m  Elements with interaction handlers must be focusable  [2m@angular-eslint/template/interactive-supports-focus[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\profile\pages\college-licence\college-licence-information\college-licence-information.page.html[24m
+  [2m63:25[22m  [31merror[39m  A label component must be associated with a form element  [2m@angular-eslint/template/label-has-associated-control[22m
+  [2m72:27[22m  [31merror[39m  A label component must be associated with a form element  [2m@angular-eslint/template/label-has-associated-control[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\shell\components\navbar-menu\nav-menu.html[24m
+   [2m31:5[22m   [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+   [2m31:5[22m   [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+   [2m50:19[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+   [2m50:19[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+   [2m55:21[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+   [2m55:21[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+   [2m62:23[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+   [2m62:23[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+   [2m67:25[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+   [2m67:25[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+   [2m78:27[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+   [2m78:27[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+   [2m92:31[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+   [2m92:31[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+   [2m98:35[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+   [2m98:35[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+  [2m105:37[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+  [2m105:37[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+  [2m111:39[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+  [2m111:39[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+  [2m123:39[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+  [2m123:39[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+  [2m166:39[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+  [2m166:39[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+  [2m171:41[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+  [2m171:41[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+  [2m176:43[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+  [2m176:43[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+  [2m181:45[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+  [2m181:45[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+  [2m186:47[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+  [2m186:47[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+  [2m191:49[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+  [2m191:49[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+  [2m197:53[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+  [2m197:53[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+  [2m204:55[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+  [2m204:55[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+  [2m210:57[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+  [2m210:57[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+  [2m216:57[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+  [2m216:57[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+  [2m220:61[22m  [31merror[39m  click must be accompanied by either keyup, keydown or keypress event for accessibility  [2m@angular-eslint/template/click-events-have-key-events[22m
+  [2m220:61[22m  [31merror[39m  Elements with interaction handlers must be focusable                                    [2m@angular-eslint/template/interactive-supports-focus[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\features\shell\pages\support-error\support-error.page.html[24m
+  [2m10:7[22m  [31merror[39m  <a> should have content  [2m@angular-eslint/template/elements-content[22m
+  [2m15:7[22m  [31merror[39m  <a> should have content  [2m@angular-eslint/template/elements-content[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\modules\permissions\permissions.directive.ts[24m
+  [2m20:5[22m  [33mwarning[39m  Prefer using the inject() function over constructor parameter injection. Use Angular's migration schematic to automatically refactor: ng generate @angular/core:inject  [2m@angular-eslint/prefer-inject[22m
+  [2m21:5[22m  [33mwarning[39m  Prefer using the inject() function over constructor parameter injection. Use Angular's migration schematic to automatically refactor: ng generate @angular/core:inject  [2m@angular-eslint/prefer-inject[22m
+  [2m22:5[22m  [33mwarning[39m  Prefer using the inject() function over constructor parameter injection. Use Angular's migration schematic to automatically refactor: ng generate @angular/core:inject  [2m@angular-eslint/prefer-inject[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\shared\components\address-autocomplete\address-autocomplete.component.html[24m
+  [2m3:5[22m  [31merror[39m  A label component must be associated with a form element  [2m@angular-eslint/template/label-has-associated-control[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\shared\components\address-form\address-form.component.html[24m
+  [2m26:11[22m  [31merror[39m  A label component must be associated with a form element  [2m@angular-eslint/template/label-has-associated-control[22m
+  [2m46:11[22m  [31merror[39m  A label component must be associated with a form element  [2m@angular-eslint/template/label-has-associated-control[22m
+  [2m67:11[22m  [31merror[39m  A label component must be associated with a form element  [2m@angular-eslint/template/label-has-associated-control[22m
+  [2m82:13[22m  [31merror[39m  A label component must be associated with a form element  [2m@angular-eslint/template/label-has-associated-control[22m
+  [2m97:15[22m  [31merror[39m  A label component must be associated with a form element  [2m@angular-eslint/template/label-has-associated-control[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\shared\components\get-support\get-support.component.html[24m
+  [2m11:9[22m  [31merror[39m  <a> should have content  [2m@angular-eslint/template/elements-content[22m
+  [2m20:7[22m  [31merror[39m  <a> should have content  [2m@angular-eslint/template/elements-content[22m
+  [2m25:7[22m  [31merror[39m  <a> should have content  [2m@angular-eslint/template/elements-content[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\shared\components\get-support\get-support.component.ts[24m
+  [2m42:5[22m  [33mwarning[39m  Prefer using the inject() function over constructor parameter injection. Use Angular's migration schematic to automatically refactor: ng generate @angular/core:inject  [2m@angular-eslint/prefer-inject[22m
+  [2m43:5[22m  [33mwarning[39m  Prefer using the inject() function over constructor parameter injection. Use Angular's migration schematic to automatically refactor: ng generate @angular/core:inject  [2m@angular-eslint/prefer-inject[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\shared\components\need-help\need-help.component.html[24m
+  [2m16:13[22m  [31merror[39m  <a> should have content  [2m@angular-eslint/template/elements-content[22m
+  [2m23:13[22m  [31merror[39m  <a> should have content  [2m@angular-eslint/template/elements-content[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\app\shared\components\success-dialog\components\feedback-send.component.ts[24m
+   [2m9:7[22m  [31merror[39m  <img/> element must have a text alternative  [2m@angular-eslint/template/alt-text[22m
+  [2m21:9[22m  [31merror[39m  <img/> element must have a text alternative  [2m@angular-eslint/template/alt-text[22m
+
+[4mC:\Users\danew\repo\bcgov\moh-pidp\workspace\apps\pidp\src\assets\snowplow.js[24m
+  [2m7:36[22m  [31merror[39m  Use the rest parameters instead of 'arguments'  [2mprefer-rest-params[22m
+
+[31m[1mΓ£û 147 problems (123 errors, 24 warnings)[22m[39m
+[0m
+Γ£û 147 problems (123 errors, 24 warnings)
+
+
+[2m[31m[39m[22m
+  Run duration:      20.5s
+  Cache:             1/6 hit (17%)
+  Critical path:     13.0s (1 task)
+  Recoverable time:  7.4s (36% of the run)
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.

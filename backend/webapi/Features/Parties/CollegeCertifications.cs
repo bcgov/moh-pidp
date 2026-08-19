@@ -1,6 +1,6 @@
 namespace Pidp.Features.Parties;
 
-using AutoMapper;
+using Mapster;
 using DomainResults.Common;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -35,12 +35,10 @@ public class CollegeCertifications
 
     public class QueryHandler(
         ILogger<QueryHandler> logger,
-        IMapper mapper,
         IPlrClient client,
         PidpDbContext context) : IQueryHandler<Query, IDomainResult<List<Model>>>
     {
         private readonly ILogger<QueryHandler> logger = logger;
-        private readonly IMapper mapper = mapper;
         private readonly IPlrClient client = client;
         private readonly PidpDbContext context = context;
 
@@ -67,7 +65,7 @@ public class CollegeCertifications
                 return DomainResult.Failed<List<Model>>();
             }
 
-            return DomainResult.Success(this.mapper.Map<List<Model>>(records));
+            return DomainResult.Success(records.Adapt<List<Model>>());
         }
     }
 }

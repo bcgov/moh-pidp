@@ -1,0 +1,60 @@
+<div class="box container" uiPidpInjectViewportCss>
+  <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
+  <div class="content">
+
+    <!-- Page Intro -->
+    <section class="page-intro">
+      <h1>ImmsBC - Pharmacy Profile Creation</h1>
+      <p class="intro-welcome">ImmsBC Pharmacy Profile creation form.</p>
+      <p>
+        All pharmacies providing publicly funded influenza vaccines are required to use ImmsBC to manage all aspects of
+        the administration of flu and COVID-19 vaccines to British Columbians.
+      </p>
+      <p>
+        ImmsBC is used for scheduling, managing appointments, entering vaccine records and inventory. Patients are able
+        to see if your pharmacy provides influenza vaccines, COVID-19 vaccines or both vaccination types prior to
+        booking.
+      </p>
+      <p>For pharmacies that currently have access to ImmsBC, no action is required.</p>
+      <p>For pharmacies not currently using ImmsBC, please register your pharmacy for ImmsBC access by filling in this
+        form.</p>
+
+      <h2 class="prereq-heading">
+        Before you fill out this form, please ensure the following pre-requisites have been met:
+      </h2>
+      <ul class="prereq-list">
+        <li>
+          CareConnect Privacy and Security Agreement is completed and a screenshot is available to be uploaded with
+          your registration form.
+          <ul class="prereq-sub-list">
+            <li>In order to gain access to the ImmsBC system, your pharmacy will need to have submitted the CareConnect
+              Privacy and Security Agreement for your pharmacy. Please <a href="#">click here</a> to get started.
+              Although ImmsBC and CareConnect are independent systems both systems are hosted by PHSA. By completing
+              the CareConnect Privacy and Security Agreement, you are meeting the privacy and security requirements for
+              your pharmacy in order to gain access to ImmsBC also.</li>
+          </ul>
+        </li>
+        <li>Pharmacy is registered in good standing with the College of Pharmacists of BC as a community pharmacy.</li>
+        <li>You are the registered pharmacy manager at the pharmacy.</li>
+        <li>Your pharmacy is enrolled with Pharmacare with a Pharmacare ID.</li>
+      </ul>
+    </section>
+
+    <!-- Form -->
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="account-form" novalidate>
+
+      <!-- SECTION 1: About the Pharmacy -->
+      <div class="form-panel">
+        <h2 class="panel-title">About the Pharmacy</h2>
+
+        <app-pharmacy-form [form]="form" [showAcknowledgements]="true"></app-pharmacy-form>
+      </div>
+
+      <!-- Submit -->
+      <div class="submit-row">
+        <button mat-flat-button type="submit" class="submit-btn">Submit</button>
+      </div>
+
+    </form>
+  </div>
+</div>

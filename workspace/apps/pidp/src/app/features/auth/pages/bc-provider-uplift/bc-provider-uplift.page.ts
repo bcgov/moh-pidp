@@ -1,5 +1,5 @@
 import { NgOptimizedImage } from '@angular/common';
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -20,7 +20,6 @@ import { AuthService } from '../../services/auth.service';
   selector: 'app-bc-provider-uplift',
   templateUrl: './bc-provider-uplift.page.html',
   styleUrls: ['./bc-provider-uplift.page.scss'],
-  standalone: true,
   imports: [
     AnchorDirective,
     InjectViewportCssClassDirective,
@@ -32,15 +31,15 @@ import { AuthService } from '../../services/auth.service';
   ],
 })
 export class BcProviderUpliftPage {
+  private readonly config = inject<AppConfig>(APP_CONFIG);
+  private readonly authService = inject(AuthService);
+
   public bcscMobileSetupUrl: string;
   public logoutRedirectUrl: string;
   public loginRedirectUrl: string;
   public providerIdentitySupport: string;
 
-  public constructor(
-    @Inject(APP_CONFIG) private readonly config: AppConfig,
-    private readonly authService: AuthService,
-  ) {
+  public constructor() {
     this.bcscMobileSetupUrl = this.config.urls.bcscMobileSetup;
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
     this.loginRedirectUrl = `${

@@ -8,47 +8,53 @@
     </p>
   </div>
   <div class="search-content">
-    <span>Total results: <b>{{ filteredAccessSections?.length }}</b></span>
+    <span>Total results: <b>{{ (accessSections$ | async)?.length ?? 0 }}</b></span>
     <div class="div-search">
-      <fa-icon
-        *ngIf="showSearchIcon"
-        class="search-icon"
+      @if (showSearchIcon) {
+        <fa-icon
+          class="search-icon"
         [icon]="faMagnifyingGlass"></fa-icon>
+      }
       <input
         matInput
+        aria-label="Search"
         #filter
         (focus)="showSearchIcon=false"
         (input)="onSearch($event)"
         (focusout)="onSearch($event)"
         (keyup.enter)="search(filter.value)" />
-      <button
-        type="button"
-        mat-flat-button
-        color="primary"
-        (click)="search(filter.value)">
-        Search
-      </button>
+        <button
+          type="button"
+          mat-flat-button
+          color="primary"
+          tabindex="0" (keydown.enter)="search(filter.value)" (click)="search(filter.value)">
+          Search
+        </button>
+      </div>
+    </div>
+
+    @for (section of accessSections$ | async; track section) {
+      <app-access-request-card
+        class="card-container"
+        [heading]="section.heading"
+        [description]="section.description"
+        [icon]="section.icon"
+        [actionDisabled]="section.action.disabled"
+        [completed]="section.status === 'Completed'"
+        [completedText]="section.completedMessage"
+      (action)="onCardAction(section)"></app-access-request-card>
+    }
+
+    <div class="back-to-top-container">
+      @if (showBackToTopButton) {
+        <button
+          class="back-to-top"
+          tabindex="0" (keydown.enter)="scrollToTop()" (click)="scrollToTop()">
+          <fa-icon [icon]="faArrowUp"></fa-icon>
+        </button>
+      }
+      @if (showBackToTopButton) {
+        <div class="back-to-top-text">Back to top</div>
+      }
     </div>
   </div>
-
-  <app-access-request-card
-    *ngFor="let section of filteredAccessSections"
-    class="card-container"
-    [heading]="section.heading"
-    [description]="section.description"
-    [icon]="section.icon"
-    [actionDisabled]="section.action.disabled"
-    [completed]="section.status === 'Completed'"
-    [completedText]="section.completedMessage"
-    (action)="onCardAction(section)"></app-access-request-card>
-
-  <div class="back-to-top-container">
-    <button
-      *ngIf="showBackToTopButton"
-      class="back-to-top"
-      (click)="scrollToTop()">
-      <fa-icon [icon]="faArrowUp"></fa-icon>
-    </button>
-    <div *ngIf="showBackToTopButton" class="back-to-top-text">Back to top</div>
-  </div>
-</div>

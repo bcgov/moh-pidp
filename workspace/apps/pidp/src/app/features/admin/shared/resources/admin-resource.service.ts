@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable, catchError, of } from 'rxjs';
 
@@ -12,13 +12,19 @@ export interface PartyList {
   providerName?: string;
   providerCollegeCode?: string;
   saEformsAccessRequest?: boolean;
+  credentials?: {
+    id: number;
+    identityProvider: string;
+    idpId?: string;
+  }[];
 }
 
 @Injectable({
   providedIn: 'root',
 })
 export class AdminResource {
-  public constructor(private apiResource: ApiHttpClient) {}
+  private readonly apiResource = inject(ApiHttpClient);
+
 
   public getParties(): Observable<PartyList[]> {
     return this.apiResource.get<PartyList[]>('/admin/parties').pipe(
@@ -44,6 +50,17 @@ export class AdminResource {
       NoContentResponse,
       catchError((error: HttpErrorResponse) => {
         // TODO add logging and toast messaging around specific errors when the admin starts getting a bit of attention
+        throw error;
+      }),
+    );
+  }
+
+  public deleteCredential(partyId: number, credentialId: number, deleteFromBcProvider: boolean): NoContent {
+    return this.apiResource.delete<void>(`${this.getResourcePath(partyId)}/credentials/${credentialId}`, {
+      params: { deleteFromBcProvider }
+    }).pipe(
+      NoContentResponse,
+      catchError((error: HttpErrorResponse) => {
         throw error;
       }),
     );

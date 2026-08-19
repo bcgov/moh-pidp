@@ -1,7 +1,7 @@
 import { ClipboardModule } from '@angular/cdk/clipboard';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { AsyncPipe, NgIf, NgOptimizedImage } from '@angular/common';
-import { Component, Inject, OnInit, inject } from '@angular/core';
+import { AsyncPipe, NgOptimizedImage } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatStepperModule } from '@angular/material/stepper';
@@ -49,10 +49,9 @@ import { ivfWebsite } from './ivf-constants';
     ClipboardModule,
     InjectViewportCssClassDirective,
     RouterLink,
-    NgIf,
     FontAwesomeModule,
-    NgOptimizedImage,
-  ],
+    NgOptimizedImage
+],
   templateUrl: './ivf.page.html',
   styleUrl: './ivf.page.scss',
   providers: [
@@ -63,6 +62,16 @@ import { ivfWebsite } from './ivf-constants';
   ],
 })
 export class IvfPage implements OnInit {
+  private readonly config = inject<AppConfig>(APP_CONFIG);
+  private readonly authService = inject(AuthService);
+  private readonly bcProviderResource = inject(BcProviderEditResource);
+  private readonly discoveryResource = inject(DiscoveryResource);
+  private readonly portalResource = inject(PortalResource);
+  private readonly partyService = inject(PartyService);
+  private readonly router = inject(Router);
+  private readonly toastService = inject(ToastService);
+  private readonly snowplowService = inject(SnowplowService);
+
   public bcProvider$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(
     false,
   );
@@ -92,17 +101,7 @@ export class IvfPage implements OnInit {
   public matIconRegistry = inject(MatIconRegistry);
   public faArrowRight = faArrowRight;
 
-  public constructor(
-    @Inject(APP_CONFIG) private readonly config: AppConfig,
-    private readonly authService: AuthService,
-    private readonly bcProviderResource: BcProviderEditResource,
-    private readonly discoveryResource: DiscoveryResource,
-    private readonly portalResource: PortalResource,
-    private readonly partyService: PartyService,
-    private readonly router: Router,
-    private readonly toastService: ToastService,
-    private readonly snowplowService: SnowplowService,
-  ) {
+  public constructor() {
     this.registerSvgIcons();
     this.selectedIndex = -1;
     this.ivfWebsite = ivfWebsite;

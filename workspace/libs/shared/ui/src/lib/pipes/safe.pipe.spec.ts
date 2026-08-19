@@ -1,21 +1,16 @@
-import { TestBed, inject, waitForAsync } from '@angular/core/testing';
-import { DomSanitizer } from '@angular/platform-browser';
+import { TestBed } from '@angular/core/testing';
 
 import { DomSanitizerType, SafePipe } from './safe.pipe';
 
 describe('SafePipe', () => {
   let pipe: SafePipe;
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [],
+      providers: [SafePipe],
     });
-  }));
-
-  beforeEach(inject(
-    [DomSanitizer],
-    (sanitizer: DomSanitizer) => (pipe = new SafePipe(sanitizer)),
-  ));
+    pipe = TestBed.inject(SafePipe);
+  });
 
   it('create an instance', () => expect(pipe).toBeTruthy());
 
@@ -40,7 +35,7 @@ describe('SafePipe', () => {
         (finalResult, type) => finalResult && !!pipe.transform(value, type),
         result,
       );
-    } catch (e) {
+    } catch {
       result = false;
     }
     expect(result).toBe(true);
@@ -53,7 +48,7 @@ describe('SafePipe', () => {
     let result = null;
     try {
       pipe.transform(value, domSanitizerType);
-    } catch (e) {
+    } catch {
       result = message;
     }
     expect(result).toBe(message);

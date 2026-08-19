@@ -1,5 +1,5 @@
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { BehaviorSubject, Observable, map } from 'rxjs';
 
@@ -45,6 +45,9 @@ export enum PidpViewport {
   providedIn: 'root',
 })
 export class ViewportService {
+  private readonly breakpointObserver = inject(BreakpointObserver);
+  private readonly pidpBreakpointObserver = inject(BreakpointObserver);
+
   public breakpointObserver$: Observable<BreakpointState>;
 
   public pidpBreakpointObserver$: Observable<BreakpointState>;
@@ -52,10 +55,9 @@ export class ViewportService {
   public viewportSubject = new BehaviorSubject<PidpViewport>(this.viewport);
   public viewportBroadcast$ = this.viewportSubject.asObservable();
 
-  public constructor(
-    private readonly breakpointObserver: BreakpointObserver,
-    private readonly pidpBreakpointObserver: BreakpointObserver,
-  ) {
+  public constructor() {
+    const breakpointObserver = this.breakpointObserver;
+
     this.breakpointObserver$ = breakpointObserver.observe([
       BootstrapBreakpoints.medium,
       BootstrapBreakpoints.large,

@@ -67,10 +67,10 @@ jobs:
       - name: "Checkout Code"
         uses: actions/checkout@master
 
-      - name: Use Node.js 18.x
-        uses: actions/setup-node@v3
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@v4
         with:
-          node-version: 18.x
+          node-version: 22.x
      
       - name: YARN Install
         run:  yarn install
@@ -95,10 +95,10 @@ jobs:
       - name: "Checkout Code"
         uses: actions/checkout@master
 
-      - name: Use Node.js 18.x
-        uses: actions/setup-node@v3
+      - name: Use Node.js 22.x
+        uses: actions/setup-node@v4
         with:
-          node-version: 18.x
+          node-version: 22.x
 
       - name: YARN Install
         run:  yarn install
@@ -274,6 +274,9 @@ jobs:
         run: |
           echo current installed helm releases
           helm list --namespace f088b1-dev
+
+          echo building charts...
+          helm dependency update charts/pidp
 
           echo installing helm chart...
           helm upgrade --install --wait --values ./deploy/pr_values.yaml --namespace f088b1-dev pr-${{ env.pr_number }} charts/pidp --debug --set global.image.tag=pr-${{ env.pr_number }}

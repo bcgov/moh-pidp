@@ -1,6 +1,7 @@
 import { driverFitnessSupportEmail } from '@app/features/access/pages/driver-fitness/driver-fitness.constants';
 import { hcimWebAccountTransferSupport } from '@app/features/access/pages/hcim-account-transfer/hcim-account-transfer-constants';
 import { immsBCEformsSupportEmail } from '@app/features/access/pages/immsbc-eforms/immsbc-eforms.constants';
+import { infantRsvEformsSupportEmail } from '@app/features/access/pages/infant-rsv-eforms/infant-rsv-eforms.constants';
 import {
   doctorsTechnologyOfficeEmail,
   doctorsTechnologyOfficeUrl,
@@ -36,6 +37,7 @@ export const environment: AppEnvironment = {
     msTeamsSupport: msTeamsSupportEmail,
     doctorsTechnologyOfficeSupport: doctorsTechnologyOfficeEmail,
     immsBCEformsSupport: immsBCEformsSupportEmail,
+    infantRsvEformsSupport: infantRsvEformsSupportEmail,
   },
   urls: {
     bcscAppDownload: `https://www2.gov.bc.ca/gov/content/governments/government-id/bcservicescardapp/download-app`,
@@ -55,6 +57,8 @@ export const environment: AppEnvironment = {
     },
     initOptions: {
       onLoad: 'check-sso',
+      silentCheckSsoRedirectUri:
+        window.location.origin + '/assets/silent-check-sso.html',
     },
   },
   snowplow: {

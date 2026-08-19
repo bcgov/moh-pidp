@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -22,10 +22,9 @@ import { LoggerService } from './logger.service';
   providedIn: 'root',
 })
 export class FormUtilsService {
-  public constructor(
-    private fb: FormBuilder,
-    private logger: LoggerService,
-  ) {}
+  private readonly fb = inject(FormBuilder);
+  private readonly logger = inject(LoggerService);
+
 
   /**
    * @description
@@ -133,20 +132,6 @@ export class FormUtilsService {
       control.clearValidators();
       control.updateValueAndValidity();
     }
-  }
-
-  /**
-   * @description
-   * Set or reset control(s) validator
-   */
-  public setOrResetValidators(
-    setOrReset: boolean,
-    control: FormControl | FormGroup,
-    blacklist?: string[],
-  ): void {
-    setOrReset
-      ? this.setValidators(control, [Validators.required], blacklist)
-      : this.resetAndClearValidators(control, blacklist);
   }
 
   /**

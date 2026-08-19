@@ -16,6 +16,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: AccessRoutes.HCIM_WEB_PCR,
+    loadChildren: (): Promise<Routes> =>
+      import('./pages/hcim-web-pcr/hcim-web-pcr-routing.routes').then(
+        (m) => m.routes,
+      ),
+  },
+  {
     path: AccessRoutes.DRIVER_FITNESS,
     loadChildren: (): Promise<Routes> =>
       import('./pages/driver-fitness/driver-fitness-routing.routes').then(
@@ -47,6 +54,20 @@ export const routes: Routes = [
     path: AccessRoutes.IMMSBC_EFORMS,
     loadChildren: (): Promise<Routes> =>
       import('./pages/immsbc-eforms/immsbc-eforms-routing.routes').then(
+        (m) => m.routes,
+      ),
+  },
+  {
+    path: AccessRoutes.INFANT_RSV_EFORMS,
+    loadChildren: (): Promise<Routes> =>
+      import('./pages/infant-rsv-eforms/infant-rsv-eforms-routing.routes').then(
+        (m) => m.routes,
+      ),
+  },
+  {
+    path: AccessRoutes.NPDP_EFORMS,
+    loadChildren: (): Promise<Routes> =>
+      import('./pages/npdp-eforms/npdp-eforms-routing.routes').then(
         (m) => m.routes,
       ),
   },

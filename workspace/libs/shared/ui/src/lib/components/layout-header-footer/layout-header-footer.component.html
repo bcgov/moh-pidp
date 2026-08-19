@@ -1,23 +1,13 @@
 <div class="page-container" uiPidpInjectViewportCss>
   <header>
     <div class="banner">
-      <a
-        class="logo-link"
-        title="Home"
-        aria-label="Go home"
-        (click)="navigateToRoot()">
-        <img
-          *ngIf="isMobile"
-          class="logo-mobile"
-          loading="lazy"
-          src="../assets/images/logo.svg"
-          aria-label="BC Government Logo" />
-        <img
-          *ngIf="!isMobile"
-          class="logo-desktop"
-          loading="lazy"
-          src="../assets/images/logo-banner.svg"
-          aria-label="BC Government Logo" />
+      <a class="logo-link" href="/" tabindex="0" (keydown.enter)="navigateToRoot(); $event.preventDefault()" (click)="navigateToRoot(); $event.preventDefault()">
+        @if (isMobile) {
+        <img class="logo-mobile" loading="lazy" src="../assets/images/logo.svg" alt="BC Government Home" />
+        }
+        @if (!isMobile) {
+        <img class="logo-desktop" loading="lazy" src="../assets/images/logo-banner.svg" alt="BC Government Home" />
+        }
       </a>
     </div>
     <div class="title">
@@ -34,25 +24,19 @@
     <div class="footer-container">
       <ul>
         <li>
-          <button class="text-button" (click)="navigateToRoot()">Home</button>
+          <button class="text-button" tabindex="0" (keydown.enter)="navigateToRoot()" (click)="navigateToRoot()">Home</button>
         </li>
         <li>
-          <a href="https://www2.gov.bc.ca/gov/content/home/disclaimer"
-            >Disclaimer</a
-          >
+          <a href="https://www2.gov.bc.ca/gov/content/home/disclaimer">Disclaimer</a>
         </li>
         <li>
           <a href="https://www2.gov.bc.ca/gov/content/home/privacy">Privacy</a>
         </li>
         <li>
-          <a href="https://www2.gov.bc.ca/gov/content/home/accessibility"
-            >Accessibility</a
-          >
+          <a href="https://www2.gov.bc.ca/gov/content/home/accessibility">Accessibility</a>
         </li>
         <li>
-          <a href="https://www2.gov.bc.ca/gov/content/home/copyright"
-            >Copyright</a
-          >
+          <a href="https://www2.gov.bc.ca/gov/content/home/copyright">Copyright</a>
         </li>
         <li>
           <a uiAnchor scheme="mailto" [href]="emailSupport">Contact Us</a>
