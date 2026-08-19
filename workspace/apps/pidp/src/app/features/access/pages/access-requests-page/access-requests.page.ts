@@ -23,6 +23,8 @@ import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrum
 import { Constants } from '@app/shared/constants';
 
 import { AccessRequestCardComponent } from '../../components/access-request-card/access-request-card.component';
+import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
+import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 
 @Component({
   selector: 'app-access-request-page',
@@ -42,6 +44,7 @@ export class AccessRequestsPage implements OnInit, OnDestroy {
   private readonly partyService = inject(PartyService);
   private readonly portalService = inject(PortalService);
   private readonly portalResource = inject(PortalResource);
+  private readonly authorizedUserService = inject(AuthorizedUserService);
 
   /**
    * @description
@@ -50,6 +53,7 @@ export class AccessRequestsPage implements OnInit, OnDestroy {
    */
   public accessState$: Observable<AccessState>;
   public accessSections$: Observable<IAccessSection[] | undefined>;
+  public identityProvider$: Observable<string>;
   private readonly search$ = new BehaviorSubject<string>('');
 
   public faArrowUp = faArrowUp;
@@ -70,6 +74,23 @@ export class AccessRequestsPage implements OnInit, OnDestroy {
     this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
 
+    this.identityProvider$ = this.authorizedUserService.identityProvider$.pipe(
+      map((idp) => {
+        switch (idp) {
+          case IdentityProvider.BCSC:
+            return 'BC Services Card';
+          case IdentityProvider.BC_PROVIDER:
+            return 'BC Provider';
+          case IdentityProvider.IDIR:
+            return 'IDIR';
+          case IdentityProvider.PHSA:
+            return 'PHSA';
+          default:
+            return idp;
+        }
+      })
+    );
+
     this.accessSections$ = combineLatest([
       this.accessState$.pipe(map((state) => state?.access)),
       this.search$,
@@ -80,11 +101,11 @@ export class AccessRequestsPage implements OnInit, OnDestroy {
         }
         const filtered = searchText
           ? access.filter(
-              (section) =>
-                section.heading.toLowerCase().includes(searchText.toLowerCase()) ||
-                section.description.toLowerCase().includes(searchText.toLowerCase()) ||
-                section.keyWords?.includes(searchText.toLowerCase()),
-            )
+            (section) =>
+              section.heading.toLowerCase().includes(searchText.toLowerCase()) ||
+              section.description.toLowerCase().includes(searchText.toLowerCase()) ||
+              section.keyWords?.includes(searchText.toLowerCase()),
+          )
           : access;
         return [...filtered].sort((a, b) => a.heading.localeCompare(b.heading));
       })

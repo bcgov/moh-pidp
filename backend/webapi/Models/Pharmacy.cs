@@ -21,6 +21,9 @@ public class Pharmacy : BaseAuditable
     public ICollection<PharmacyPartyRole> Staff { get; set; } = [];
     public ICollection<PharmacyEnrolment> EnrolmentLinks { get; set; } = [];
 
+    public Guid? DocumentId { get; set; }
+    public Document? Document { get; set; }
+
     [ForeignKey(nameof(Manager))]
     public int? ManagerId { get; set; }
     public Party? Manager { get; set; }

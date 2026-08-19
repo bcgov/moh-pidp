@@ -21,6 +21,7 @@ public class PidpDbContext(
     public DbSet<Credential> Credentials { get; set; } = default!;
     public DbSet<CredentialLinkErrorLog> CredentialLinkErrorLogs { get; set; } = default!;
     public DbSet<CredentialLinkTicket> CredentialLinkTickets { get; set; } = default!;
+    public DbSet<Document> Documents { get; set; } = default!;
     public DbSet<EmailLog> EmailLogs { get; set; } = default!;
     public DbSet<EndorsementRelationship> EndorsementRelationships { get; set; } = default!;
     public DbSet<EndorsementRequest> EndorsementRequests { get; set; } = default!;

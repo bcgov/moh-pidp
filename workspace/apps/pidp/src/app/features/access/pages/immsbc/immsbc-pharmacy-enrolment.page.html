@@ -3,11 +3,37 @@
   <div class="container-fluid">
     <div class="row justify-content-center">
       <div class="col-sm-12 col-md-10 col-lg-8">
-        <div class="text-center py-5">
-          @if (!isError) {
-            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        <div class="py-5">
+          <p class="mb-4 lead text-center" [class.text-danger]="isError">{{ message }}</p>
+
+          @if (!isError && form) {
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+              <div class="acknowledgement-group mb-4 p-4 border rounded bg-light">
+                <h3 class="ack-heading h5 mb-3">Privacy, Confidentiality and Security Acknowledgement</h3>
+                <label class="checkbox-label d-flex align-items-start">
+                  <input type="checkbox" formControlName="privacyTrainingAcknowledged" class="mt-1 me-2" />
+                  <span>
+                    I acknowledge that I have completed the privacy and security training from CareConnect related to PII (personal identifiable information) & PHI (personal health information) in compliance with government regulations.
+                  </span>
+                </label>
+                @if (form.get('privacyTrainingAcknowledged')?.invalid && form.get('privacyTrainingAcknowledged')?.touched) {
+                  <div class="text-danger mt-2 small">This acknowledgement is required to enrol.</div>
+                }
+              </div>
+
+              <div class="text-center">
+                <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid">
+                  Enrol
+                </button>
+              </div>
+            </form>
           }
-          <p class="mt-4 lead" [class.text-danger]="isError">{{ message }}</p>
+
+          @if (!isError && !form) {
+            <div class="text-center">
+              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            </div>
+          }
         </div>
       </div>
     </div>

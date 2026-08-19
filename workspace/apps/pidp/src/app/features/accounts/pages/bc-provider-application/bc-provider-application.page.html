@@ -38,7 +38,8 @@
             mat-flat-button
             type="button"
             color="primary"
-            tabindex="0" (keydown.enter)="onUplift()" (click)="onUplift()">
+            tabindex="0" (keydown.enter)="onUplift()" (click)="onUplift()"
+            [disabled]="isSubmitting">
             Start uplift
             <img src="/assets/images/icons/icon-vector.svg" alt="vector" />
           </button>

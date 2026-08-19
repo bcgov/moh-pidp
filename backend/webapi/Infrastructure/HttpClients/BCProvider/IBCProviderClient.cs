@@ -16,8 +16,16 @@ public interface IBCProviderClient
     /// Returns null on an error.
     /// </summary>
     /// <param name="userPrincipalName"></param>
-    /// <param name="attributesName"></param>
+    /// <param name="attributeName"></param>
     public Task<object?> GetAttribute(string userPrincipalName, string attributeName);
+
+    /// <summary>
+    /// Gets specific additional attributes for a BC Provider account.
+    /// Returns null on an error.
+    /// </summary>
+    /// <param name="userPrincipalName"></param>
+    /// <param name="attributeNames"></param>
+    public Task<IDictionary<string, object>?> GetUserAttributes(string userPrincipalName, string[] attributeNames);
 
     /// <summary>
     /// Removes all authentication methods from a user, except for password.

@@ -167,6 +167,10 @@ export class BcProviderApplicationPage
   }
 
   public onUplift(): void {
+    if (this.isSubmitting) {
+      return;
+    }
+
     const data: DialogOptions = {
       title: 'You will be redirected',
       bottomBorder: false,
@@ -229,6 +233,9 @@ export class BcProviderApplicationPage
   }
 
   protected performSubmission(): Observable<string | void> {
+    if (this.isSubmitting) {
+      return EMPTY;
+    }
     const partyId = this.partyService.partyId;
     this.password = this.formState.password.value;
     this.isSubmitting = true;
@@ -272,9 +279,11 @@ export class BcProviderApplicationPage
   }
 
   private uplift(): Observable<void | null> {
+    this.isSubmitting = true;
     this.loadingOverlayService.open(LOADING_OVERLAY_DEFAULT_MESSAGE);
     return this.resource.createLinkTicket(this.partyService.partyId).pipe(
       switchMap(() => {
+        this.isSubmitting = false;
         this.loadingOverlayService.close();
         return this.authService.logout(
           `${
@@ -284,6 +293,8 @@ export class BcProviderApplicationPage
         );
       }),
       catchError(() => {
+        this.isSubmitting = false;
+        this.loadingOverlayService.close();
         this.logger.error('Link Request creation failed');
 
         return of(null);

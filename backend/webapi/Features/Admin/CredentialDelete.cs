@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Pidp.Data;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
+using Pidp.Infrastructure.HttpClients.Keycloak;
 
 public class CredentialDelete
 {
@@ -18,9 +19,11 @@ public class CredentialDelete
 
     public class CommandHandler(
         IBCProviderClient bcProviderClient,
+        IKeycloakAdministrationClient keycloakClient,
         PidpDbContext context) : ICommandHandler<Command, IDomainResult>
     {
         private readonly IBCProviderClient bcProviderClient = bcProviderClient;
+        private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
         private readonly PidpDbContext context = context;
 
         public async Task<IDomainResult> HandleAsync(Command command)
@@ -39,6 +42,15 @@ public class CredentialDelete
                 if (!success)
                 {
                     return DomainResult.Failed("Failed to delete account from BC Provider Active Directory.");
+                }
+
+                if (credential.UserId != Guid.Empty)
+                {
+                    var keycloakSuccess = await this.keycloakClient.DeleteUser(credential.UserId);
+                    if (!keycloakSuccess)
+                    {
+                        return DomainResult.Failed("Failed to delete account from Keycloak.");
+                    }
                 }
             }
 

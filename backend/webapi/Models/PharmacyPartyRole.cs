@@ -21,4 +21,6 @@ public class PharmacyPartyRole : BaseAuditable
 
     public DateTime? EffectiveStartDate { get; set; }
     public DateTime? EffectiveEndDate { get; set; }
+
+    public DateTime? PrivacyTrainingAckDate { get; set; }
 }

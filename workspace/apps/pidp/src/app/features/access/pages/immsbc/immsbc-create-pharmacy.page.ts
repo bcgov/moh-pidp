@@ -61,6 +61,7 @@ export class ImmsbcCreatePharmacyPage implements OnInit {
       ackAccessToVaccines: [false, Validators.requiredTrue],
       ackPrivacy: [false, Validators.requiredTrue],
       ackRemovalAccess: [false, Validators.requiredTrue],
+      evidence: [null, Validators.required],
     });
   }
 
@@ -71,8 +72,16 @@ export class ImmsbcCreatePharmacyPage implements OnInit {
       return;
     }
 
+    const formData = new FormData();
+    Object.keys(this.form.value).forEach(key => {
+      const value = this.form.value[key];
+      if (value !== null && value !== undefined) {
+        formData.append(key, value);
+      }
+    });
+
     this.resource
-      .createPharmacy(this.form.value)
+      .createPharmacy(formData)
       .pipe(
         catchError(() => {
           this.snackBar.open('An error occurred while creating the pharmacy. Please try again.', 'Close', { duration: 10000 });

@@ -55,7 +55,6 @@ public class StatusLog
             return await this.context.StatusChageLogs
                 .Where(log => log.ShouldBeProcessed)
                 .OrderBy(log => log.Created)
-                .Take(query.Limit)
                 .Select(log => new Model()
                 {
                     Id = log.Id,
@@ -67,6 +66,7 @@ public class StatusLog
                     IdentifierType = log.PlrRecord.IdentifierType,
                     ProviderRoleType = log.PlrRecord.ProviderRoleType
                 })
+                .Take(query.Limit)
                 .ToListAsync();
         }
     }

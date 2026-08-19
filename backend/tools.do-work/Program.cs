@@ -9,6 +9,7 @@ using DoWork;
 using DoWork.Services.CredentialDeletionService;
 using Pidp;
 using Pidp.Data;
+using Pidp.Infrastructure.HttpClients;
 
 
 await Host.CreateDefaultBuilder(args)
@@ -18,11 +19,14 @@ await Host.CreateDefaultBuilder(args)
         var config = InitializeConfiguration(services);
 
         services
-            // .AddHttpClients(config)
+            .AddHttpClients(config)
             // .AddRateLimitedKeycloakClient(config)
             .AddSingleton<IClock>(SystemClock.Instance)
             .AddMediator()
             .AddTransient<ICredentialDeletionService, CredentialDeletionService>()
+            .AddTransient<DoWork.Services.DataDriftFixService.IDataDriftFixService, DoWork.Services.DataDriftFixService.DataDriftFixService>()
+            .AddTransient<DoWork.Services.KeycloakClientValidationService.IKeycloakClientValidationService, DoWork.Services.KeycloakClientValidationService.KeycloakClientValidationService>()
+            .AddTransient<DoWork.Services.RemoveCollegeLicenseInfoService.IRemoveCollegeLicenseInfoService, DoWork.Services.RemoveCollegeLicenseInfoService.RemoveCollegeLicenseInfoService>()
             .AddTransient<IDoWorkService, DoWorkService>()
             .AddHostedService<HostedServiceWrapper>()
             .AddDbContext<PidpDbContext>(options => options
