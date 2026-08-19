@@ -43,41 +43,20 @@ public class RemoveCollegeLicenseInfoService(
                 Console.WriteLine($"Checked {i} / {userIds.Count} users...");
             }
 
-            var user = await this.keycloakClient.GetUser(userId);
-            if (user == null)
+            var result = await this.ProcessUserAsync(userId, keysToRemove);
+            switch (result)
             {
-                usersNotFound++;
-                continue;
-            }
-
-            if (user.Attributes == null)
-            {
-                continue;
-            }
-
-            var requiresUpdate = false;
-            foreach (var key in keysToRemove)
-            {
-                if (user.Attributes.ContainsKey(key))
-                {
-                    user.Attributes.Remove(key);
-                    requiresUpdate = true;
-                    Console.WriteLine($"Found and removing '{key}' for User ID {userId}");
-                }
-            }
-
-            if (requiresUpdate)
-            {
-                var success = await this.keycloakClient.UpdateUser(userId, user);
-                if (success)
-                {
+                case UserProcessResult.NotFound:
+                    usersNotFound++;
+                    break;
+                case UserProcessResult.Cleaned:
                     usersCleaned++;
-                }
-                else
-                {
+                    break;
+                case UserProcessResult.Failed:
                     usersFailed++;
-                    Console.WriteLine($"Failed to update User ID {userId}");
-                }
+                    break;
+                case UserProcessResult.NoUpdateRequired:
+                    break;
             }
         }
 
@@ -86,5 +65,52 @@ public class RemoveCollegeLicenseInfoService(
         Console.WriteLine($"Users cleaned: {usersCleaned}");
         Console.WriteLine($"Users failed to update: {usersFailed}");
         Console.WriteLine($"Users not found in Keycloak: {usersNotFound}");
+    }
+
+    private enum UserProcessResult
+    {
+        NotFound,
+        Cleaned,
+        Failed,
+        NoUpdateRequired
+    }
+
+    private async Task<UserProcessResult> ProcessUserAsync(Guid userId, string[] keysToRemove)
+    {
+        var user = await this.keycloakClient.GetUser(userId);
+        if (user == null)
+        {
+            return UserProcessResult.NotFound;
+        }
+
+        if (user.Attributes == null)
+        {
+            return UserProcessResult.NoUpdateRequired;
+        }
+
+        var requiresUpdate = false;
+        foreach (var key in keysToRemove)
+        {
+            if (user.Attributes.ContainsKey(key))
+            {
+                user.Attributes.Remove(key);
+                requiresUpdate = true;
+                Console.WriteLine($"Found and removing '{key}' for User ID {userId}");
+            }
+        }
+
+        if (requiresUpdate)
+        {
+            var success = await this.keycloakClient.UpdateUser(userId, user);
+            if (success)
+            {
+                return UserProcessResult.Cleaned;
+            }
+            
+            Console.WriteLine($"Failed to update User ID {userId}");
+            return UserProcessResult.Failed;
+        }
+
+        return UserProcessResult.NoUpdateRequired;
     }
 }

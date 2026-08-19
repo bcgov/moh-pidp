@@ -54,95 +54,10 @@ public class DataDriftFixService(
         foreach (var credential in credentials)
         {
             count++;
-            if (string.IsNullOrEmpty(credential.Party?.Cpn))
+            var driftData = await this.EvaluateCredentialAsync(credential, clientId, prefix, attributeNames, count, credentials.Count);
+            if (driftData != null && !string.IsNullOrEmpty(credential.IdpId))
             {
-                continue;
-            }
-
-            var upn = credential.IdpId;
-            if (string.IsNullOrEmpty(upn))
-            {
-                continue;
-            }
-
-            Console.WriteLine($"[{count}/{credentials.Count}] Evaluating {upn}...");
-
-            var plrStanding = await this.plrClient.GetStandingsDigestAsync(credential.Party.Cpn);
-            
-            var endorsingCpns = await this.context.ActiveEndorsingParties(credential.PartyId)
-                .Select(party => party.Cpn)
-                .ToListAsync();
-            var endorsingPlrDigest = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
-
-            var expectedIsMd = plrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding;
-            var expectedIsPharm = plrStanding.With(IdentifierType.Pharmacist).HasGoodStanding;
-            var expectedIsRnp = plrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding;
-            var expectedIsMoa = !plrStanding.HasGoodStanding && endorsingPlrDigest.HasGoodStanding;
-            
-            var expectedMspIds = plrStanding.MspIds;
-            var expectedMspIdsString = expectedMspIds.Any() ? "[" + string.Join(",", expectedMspIds.Select(s => $"\"{s}\"")) + "]" : null;
-
-            var expectedEndorserDataList = endorsingPlrDigest.WithGoodStanding().With(BCProviderAttributes.EndorserDataEligibleIdentifierTypes).Cpns;
-            var expectedEndorserDataString = "[" + string.Join(",", expectedEndorserDataList.Select(s => $"\"{s}\"")) + "]";
-
-            var actualAttributes = await this.bcProviderClient.GetUserAttributes(upn, attributeNames);
-
-            if (actualAttributes == null)
-            {
-                Console.WriteLine($"ERROR: Failed to retrieve attributes for {upn}");
-                continue;
-            }
-
-            var actualIsMd = GetBoolValue(actualAttributes, $"{prefix}isMd");
-            var actualIsPharm = GetBoolValue(actualAttributes, $"{prefix}isPharm");
-            var actualIsRnp = GetBoolValue(actualAttributes, $"{prefix}isRnp");
-            var actualIsMoa = GetBoolValue(actualAttributes, $"{prefix}isMoa");
-            var actualMspIds = GetStringValue(actualAttributes, $"{prefix}mspId");
-            var actualEndorserData = GetStringValue(actualAttributes, $"{prefix}endorserData");
-
-            var updateAttributes = new BCProviderAttributes(clientId);
-            var driftDetected = false;
-            
-            if (expectedIsMd != actualIsMd) 
-            { 
-                updateAttributes.SetIsMd(expectedIsMd); 
-                Console.WriteLine($" - isMd drift: expected {expectedIsMd}, actual {actualIsMd}"); 
-                driftDetected = true; 
-            }
-            if (expectedIsPharm != actualIsPharm) 
-            { 
-                updateAttributes.SetIsPharm(expectedIsPharm); 
-                Console.WriteLine($" - isPharm drift: expected {expectedIsPharm}, actual {actualIsPharm}"); 
-                driftDetected = true; 
-            }
-            if (expectedIsRnp != actualIsRnp) 
-            { 
-                updateAttributes.SetIsRnp(expectedIsRnp); 
-                Console.WriteLine($" - isRnp drift: expected {expectedIsRnp}, actual {actualIsRnp}"); 
-                driftDetected = true; 
-            }
-            if (expectedIsMoa != actualIsMoa) 
-            { 
-                updateAttributes.SetIsMoa(expectedIsMoa); 
-                Console.WriteLine($" - isMoa drift: expected {expectedIsMoa}, actual {actualIsMoa}"); 
-                driftDetected = true; 
-            }
-            if (expectedMspIdsString != actualMspIds) 
-            { 
-                updateAttributes.SetMspId(expectedMspIds);
-                Console.WriteLine($" - mspId drift: expected {expectedMspIdsString ?? "null"}, actual {actualMspIds ?? "null"}"); 
-                driftDetected = true; 
-            }
-            if (expectedEndorserDataString != (actualEndorserData ?? "[]")) 
-            { 
-                updateAttributes.SetEndorserData(expectedEndorserDataList); 
-                Console.WriteLine($" - endorserData drift: expected {expectedEndorserDataString}, actual {actualEndorserData ?? "[]"}"); 
-                driftDetected = true; 
-            }
-
-            if (driftDetected)
-            {
-                discrepancies.Add(upn, updateAttributes.AsAdditionalData());
+                discrepancies.Add(credential.IdpId, driftData);
             }
         }
 
@@ -158,27 +73,129 @@ public class DataDriftFixService(
         
         if (input?.Trim().Equals("Y", StringComparison.OrdinalIgnoreCase) == true)
         {
-            Console.WriteLine("Applying fixes...");
-            foreach (var kvp in discrepancies)
-            {
-                var upn = kvp.Key;
-                var updates = kvp.Value;
-                var success = await this.bcProviderClient.UpdateAttributes(upn, updates);
-                if (success)
-                {
-                    Console.WriteLine($"Successfully updated {upn}");
-                }
-                else
-                {
-                    Console.WriteLine($"Failed to update {upn}");
-                }
-            }
-            Console.WriteLine("Fixes applied.");
+            await this.ApplyUpdatesAsync(discrepancies);
         }
         else
         {
             Console.WriteLine("Aborting. No updates executed.");
         }
+    }
+
+    private async Task<IDictionary<string, object>?> EvaluateCredentialAsync(
+        Pidp.Models.Credential credential,
+        string clientId,
+        string prefix,
+        string[] attributeNames,
+        int count,
+        int totalCount)
+    {
+        if (string.IsNullOrEmpty(credential.Party?.Cpn) || string.IsNullOrEmpty(credential.IdpId))
+        {
+            return null;
+        }
+
+        var upn = credential.IdpId;
+        Console.WriteLine($"[{count}/{totalCount}] Evaluating {upn}...");
+
+        var plrStanding = await this.plrClient.GetStandingsDigestAsync(credential.Party.Cpn);
+        
+        var endorsingCpns = await this.context.ActiveEndorsingParties(credential.PartyId)
+            .Select(party => party.Cpn)
+            .ToListAsync();
+        var endorsingPlrDigest = await this.plrClient.GetAggregateStandingsDigestAsync(endorsingCpns);
+
+        var expectedIsMd = plrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding;
+        var expectedIsPharm = plrStanding.With(IdentifierType.Pharmacist).HasGoodStanding;
+        var expectedIsRnp = plrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding;
+        var expectedIsMoa = !plrStanding.HasGoodStanding && endorsingPlrDigest.HasGoodStanding;
+        
+        var expectedMspIds = plrStanding.MspIds;
+        var expectedMspIdsString = expectedMspIds.Any() ? "[" + string.Join(",", expectedMspIds.Select(s => $"\"{s}\"")) + "]" : null;
+
+        var expectedEndorserDataList = endorsingPlrDigest.WithGoodStanding().With(BCProviderAttributes.EndorserDataEligibleIdentifierTypes).Cpns;
+        var expectedEndorserDataString = "[" + string.Join(",", expectedEndorserDataList.Select(s => $"\"{s}\"")) + "]";
+
+        var actualAttributes = await this.bcProviderClient.GetUserAttributes(upn, attributeNames);
+
+        if (actualAttributes == null)
+        {
+            Console.WriteLine($"ERROR: Failed to retrieve attributes for {upn}");
+            return null;
+        }
+
+        var actualIsMd = GetBoolValue(actualAttributes, $"{prefix}isMd");
+        var actualIsPharm = GetBoolValue(actualAttributes, $"{prefix}isPharm");
+        var actualIsRnp = GetBoolValue(actualAttributes, $"{prefix}isRnp");
+        var actualIsMoa = GetBoolValue(actualAttributes, $"{prefix}isMoa");
+        var actualMspIds = GetStringValue(actualAttributes, $"{prefix}mspId");
+        var actualEndorserData = GetStringValue(actualAttributes, $"{prefix}endorserData");
+
+        var updateAttributes = new BCProviderAttributes(clientId);
+        var driftDetected = false;
+        
+        if (expectedIsMd != actualIsMd) 
+        { 
+            updateAttributes.SetIsMd(expectedIsMd); 
+            Console.WriteLine($" - isMd drift: expected {expectedIsMd}, actual {actualIsMd}"); 
+            driftDetected = true; 
+        }
+        if (expectedIsPharm != actualIsPharm) 
+        { 
+            updateAttributes.SetIsPharm(expectedIsPharm); 
+            Console.WriteLine($" - isPharm drift: expected {expectedIsPharm}, actual {actualIsPharm}"); 
+            driftDetected = true; 
+        }
+        if (expectedIsRnp != actualIsRnp) 
+        { 
+            updateAttributes.SetIsRnp(expectedIsRnp); 
+            Console.WriteLine($" - isRnp drift: expected {expectedIsRnp}, actual {actualIsRnp}"); 
+            driftDetected = true; 
+        }
+        if (expectedIsMoa != actualIsMoa) 
+        { 
+            updateAttributes.SetIsMoa(expectedIsMoa); 
+            Console.WriteLine($" - isMoa drift: expected {expectedIsMoa}, actual {actualIsMoa}"); 
+            driftDetected = true; 
+        }
+        if (expectedMspIdsString != actualMspIds) 
+        { 
+            updateAttributes.SetMspId(expectedMspIds);
+            Console.WriteLine($" - mspId drift: expected {expectedMspIdsString ?? "null"}, actual {actualMspIds ?? "null"}"); 
+            driftDetected = true; 
+        }
+        if (expectedEndorserDataString != (actualEndorserData ?? "[]")) 
+        { 
+            updateAttributes.SetEndorserData(expectedEndorserDataList); 
+            Console.WriteLine($" - endorserData drift: expected {expectedEndorserDataString}, actual {actualEndorserData ?? "[]"}"); 
+            driftDetected = true; 
+        }
+
+        if (driftDetected)
+        {
+            return updateAttributes.AsAdditionalData();
+        }
+
+        return null;
+    }
+
+    private async Task ApplyUpdatesAsync(Dictionary<string, IDictionary<string, object>> discrepancies)
+    {
+        Console.WriteLine("Applying fixes...");
+        foreach (var kvp in discrepancies)
+        {
+            var upn = kvp.Key;
+            var updates = kvp.Value;
+            var success = await this.bcProviderClient.UpdateAttributes(upn, updates);
+            if (success)
+            {
+                Console.WriteLine($"Successfully updated {upn}");
+            }
+            else
+            {
+                Console.WriteLine($"Failed to update {upn}");
+            }
+        }
+        Console.WriteLine("Fixes applied.");
     }
 
     private static bool GetBoolValue(IDictionary<string, object> dict, string key)
