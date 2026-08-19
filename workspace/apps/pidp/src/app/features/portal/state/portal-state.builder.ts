@@ -12,7 +12,6 @@ import { AccountLinkingPortalSection } from './access/account-linking-portal-sec
 import { BcProviderPortalSection } from './access/bc-provider-portal-section.class';
 import { DriverFitnessPortalSection } from './access/driver-fitness-portal-section.class';
 import { HaloPortalSection } from './access/halo-portal-section.class';
-import { HcimAccountTransferPortalSection } from './access/hcim-account-transfer-portal-section.class';
 import { HcimWebPcrPortalSection } from './access/hcim-web-pcr-portal-section.class';
 import { ImmsBCEformsPortalSection } from './access/immsbc-eforms-portal-section.class';
 import { ImmsbcPortalSection } from './access/immscbc-portal-section.class';
@@ -92,12 +91,6 @@ export class AccessStateBuilder {
       ...ArrayUtils.insertResultIf<IAccessSection>(
         this.insertSection('saEforms', profileStatus),
         () => [new SaEformsPortalSection(profileStatus, this.router)],
-      ),
-      ...ArrayUtils.insertResultIf<IAccessSection>(
-        this.insertSection('hcimAccountTransfer', profileStatus),
-        () => [
-          new HcimAccountTransferPortalSection(profileStatus, this.router),
-        ],
       ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
         this.insertSection('hcimWebPcr', profileStatus) &&
@@ -248,12 +241,6 @@ export class PortalStateBuilder {
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('bcProvider', profileStatus),
         () => [new BcProviderPortalSection(profileStatus, this.router)],
-      ),
-      ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.insertSection('hcimAccountTransfer', profileStatus),
-        () => [
-          new HcimAccountTransferPortalSection(profileStatus, this.router),
-        ],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('hcimWebPcr', profileStatus) &&

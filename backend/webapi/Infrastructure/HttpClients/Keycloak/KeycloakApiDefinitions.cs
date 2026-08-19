@@ -2,7 +2,6 @@
 
 using System.Text.Json;
 
-using Pidp.Infrastructure.HttpClients.Ldap;
 using Pidp.Models.Lookups;
 
 public class MohKeycloakEnrolment
@@ -85,8 +84,6 @@ public class UserRepresentation
     public string? Username { get; set; }
 
     public UserRepresentation SetCpn(string cpn) => this.SetAttribute("common_provider_number", cpn);
-
-    internal UserRepresentation SetLdapOrgDetails(LdapLoginResponse.OrgDetails orgDetails) => this.SetAttribute("org_details", JsonSerializer.Serialize(orgDetails, SerializationOptions));
 
     public UserRepresentation SetOpId(string opId) => this.SetAttribute("opId", opId);
 

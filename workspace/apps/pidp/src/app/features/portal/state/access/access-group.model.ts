@@ -10,7 +10,6 @@ import { SaEformsSection } from './sa-eforms-section.model';
 export const accessSectionKeys = [
   'saEforms',
   'accountLinking',
-  'hcimAccountTransfer',
   'hcimWebPcr',
   'immsBCEforms',
   'infantRsvEforms',
@@ -45,7 +44,6 @@ export interface AccessGroup extends IAccessGroup {
   saEforms: SaEformsSection;
   accountLinking: Section;
   bcProvider: Section;
-  hcimAccountTransfer: Section;
   hcimWebPcr: Section;
   immsBCEforms: Section;
   infantRsvEforms: Section;
