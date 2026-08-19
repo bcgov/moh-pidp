@@ -28,6 +28,13 @@ public interface IKeycloakAdministrationClient
     Task<bool> AssignRealmRole(Guid userId, string roleName);
 
     /// <summary>
+    /// Deletes a User in Keycloak.
+    /// Returns true if the operation was successful.
+    /// </summary>
+    /// <param name="userId"></param>
+    Task<bool> DeleteUser(Guid userId);
+
+    /// <summary>
     /// Creates a new User in Keycloak. Username must be unique.
     /// Returns the User's UserId if successful.
     /// </summary>

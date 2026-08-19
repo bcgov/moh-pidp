@@ -7,11 +7,20 @@ using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 using Pidp.Data;
+using Pidp.Infrastructure.Auth;
+using Pidp.Infrastructure.HttpClients.BCProvider;
+using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Models;
 
-public class CredentialDeletionService(IClock clock, PidpDbContext context) : ICredentialDeletionService
+public class CredentialDeletionService(
+    IBCProviderClient bcProviderClient,
+    IClock clock,
+    IKeycloakAdministrationClient keycloakClient,
+    PidpDbContext context) : ICredentialDeletionService
 {
+    private readonly IBCProviderClient bcProviderClient = bcProviderClient;
     private readonly IClock clock = clock;
+    private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
     private readonly PidpDbContext context = context;
 
     public async Task DeleteCredentialsAsync()
@@ -41,9 +50,22 @@ public class CredentialDeletionService(IClock clock, PidpDbContext context) : IC
 
         if (int.TryParse(Console.ReadLine(), out var count) && count == foundCredentials.Count)
         {
+            foreach (var credential in foundCredentials)
+            {
+                if (credential.IdentityProvider == IdentityProviders.BCProvider && !string.IsNullOrEmpty(credential.IdpId))
+                {
+                    await this.bcProviderClient.DeleteBCProviderAccount(credential.IdpId);
+                }
+
+                if (credential.UserId != Guid.Empty)
+                {
+                    await this.keycloakClient.DeleteUser(credential.UserId);
+                }
+            }
+
             this.context.Credentials.RemoveRange(foundCredentials);
             await this.context.SaveChangesAsync();
-            Console.WriteLine($"Credentials deleted from database.");
+            Console.WriteLine($"Credentials deleted from database, Keycloak, and BC Provider AD.");
         }
         else
         {

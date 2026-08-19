@@ -73,6 +73,12 @@ public class KeycloakAdministrationClient(HttpClient httpClient, ILogger<Keycloa
         return result.IsSuccess;
     }
 
+    public async Task<bool> DeleteUser(Guid userId)
+    {
+        var result = await this.DeleteAsync($"users/{userId}");
+        return result.IsSuccess;
+    }
+
     public async Task<Guid?> CreateUser(UserRepresentation userRep)
     {
         if (userRep.Username == null)
