@@ -1,4 +1,4 @@
-namespace Pidp.Features.Parties;
+﻿namespace Pidp.Features.Parties;
 
 using Mapster;
 using FluentValidation;
@@ -81,6 +81,7 @@ public partial class ProfileStatus
                     ProfileSection.Create<IvfSection>(data),
                     ProfileSection.Create<MSTeamsClinicMemberSection>(data),
                     ProfileSection.Create<MSTeamsPrivacyOfficerSection>(data),
+                    ProfileSection.Create<NpdpEformsSection>(data),
                     ProfileSection.Create<PemcodSection>(data),
                     ProfileSection.Create<ProviderReportingPortalSection>(data),
                     ProfileSection.Create<ProvincialAttachmentSystemSection>(data),

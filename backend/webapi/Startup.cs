@@ -1,4 +1,4 @@
-namespace Pidp;
+﻿namespace Pidp;
 
 using System.Reflection;
 using System.Text.Json;
@@ -17,6 +17,7 @@ using NodaTime.Serialization.SystemTextJson;
 using Pidp.Data;
 using Pidp.Extensions;
 using Pidp.Features;
+using Pidp.Features.AccessRequests;
 using Pidp.Infrastructure;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HealthChecks;
@@ -78,6 +79,9 @@ public class Startup(IConfiguration configuration)
             .AddRabbitMQ(config)
             .AddMediator(options => options.ServiceLifetime = Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped)
             .AddScoped<IEmailService, EmailService>()
+            .AddScoped<IAccessRequestRevocationService, AccessRequestRevocationService>()
+            .AddScoped<IAccessRequestRevocationPolicy, InfantRsvEformsRevocationPolicy>()
+            .AddScoped<IAccessRequestRevocationPolicy, NpdpEformsRevocationPolicy>()
             .AddScoped<IPidpAuthorizationService, PidpAuthorizationService>()
             .AddScoped<IPlrStatusUpdateService, PlrStatusUpdateService>()
             .AddScoped<IBCProviderService, BCProviderService>()

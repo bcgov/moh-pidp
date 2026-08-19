@@ -1,4 +1,4 @@
-namespace Pidp.Models.Lookups;
+﻿namespace Pidp.Models.Lookups;
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -16,7 +16,8 @@ public enum AccessTypeCode
     UserAccessAgreement,
     ImmsBCEforms,
     HcimWebPcr,
-    InfantRsvEforms
+    InfantRsvEforms,
+    NpdpEforms
 }
 
 [Table("AccessTypeLookup")]
@@ -43,6 +44,7 @@ public class AccessTypeDataGenerator : ILookupDataGenerator<AccessType>
         new AccessType { Code = AccessTypeCode.UserAccessAgreement,      Name = "OneHealthID Service Use Policy Agreement"    },
         new AccessType { Code = AccessTypeCode.ImmsBCEforms,             Name = "Immunization Entry eForm"                    },
         new AccessType { Code = AccessTypeCode.HcimWebPcr,               Name = "Provincial Client Registry"                  },
-        new AccessType { Code = AccessTypeCode.InfantRsvEforms,          Name = "Infant RSV Immunization Request eForm"        }
+        new AccessType { Code = AccessTypeCode.InfantRsvEforms,          Name = "Infant RSV Immunization Request eForm"        },
+        new AccessType { Code = AccessTypeCode.NpdpEforms,               Name = "Exceptional Coverage: National PharmaCare and Mifepristone/Misoprostol" }
     ];
 }

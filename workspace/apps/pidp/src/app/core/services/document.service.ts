@@ -13,6 +13,7 @@ export enum DocumentType {
   PROVIDER_REPORTING_PORTAL_COLLECTION_NOTICE = 'provider-reporting-portal-collection-notice',
   IMMSBC_EFORMS_COLLECTION_NOTICE = 'immsbc-eforms-collection-notice',
   INFANT_RSV_EFORMS_COLLECTION_NOTICE = 'infant-rsv-eforms-collection-notice',
+  NPDP_EFORMS_COLLECTION_NOTICE = 'npdp-eforms-collection-notice',
   PHARMACY_ADMIN_COLLECTION_NOTICE = 'pharmacy-admin-collection-notice',
 }
 
@@ -77,6 +78,11 @@ export class DocumentService {
         title: 'Infant RSV Immunization Request eForm Collection Notice',
       },
       {
+        type: DocumentType.NPDP_EFORMS_COLLECTION_NOTICE,
+        title:
+          'Exceptional Coverage: National PharmaCare and Mifepristone/Misoprostol Collection Notice',
+      },
+      {
         type: DocumentType.PHARMACY_ADMIN_COLLECTION_NOTICE,
         title: 'Pharmacy Administration Collection Notice',
       },
@@ -133,6 +139,11 @@ export class DocumentService {
         return {
           ...this.getDocumentMetaData(documentType),
           content: this.getInfantRsvEformsCollectionNotice(),
+        };
+      case DocumentType.NPDP_EFORMS_COLLECTION_NOTICE:
+        return {
+          ...this.getDocumentMetaData(documentType),
+          content: this.getNpdpEformsCollectionNotice(),
         };
       case DocumentType.PHARMACY_ADMIN_COLLECTION_NOTICE:
         return {
@@ -366,6 +377,20 @@ export class DocumentService {
       and will not be used for any other purpose other than the one stated above. If you have any questions
       about the collection of this personal information please contact PHSA's Information Access & Privacy
       Office at 1-855-229-9800 or at <a href="mailto:${this.config.emails.infantRsvEformsSupport}">${this.config.emails.infantRsvEformsSupport}</a>.
+    `;
+  }
+
+  public getNpdpEformsCollectionNotice(): string {
+    return `
+      Personal information on this form is collected under the authority of section 22 of the
+      Pharmaceutical Services Act for coverage under PharmaCare&rsquo;s Assurance Plan (Plan Z) or
+      PharmaCare National Pharmacare Plan (Plan NP). The personal information will be used to
+      support the client to be a Plan NP or Plan Z beneficiary. If you have questions about the
+      collection of personal information on this form, contact Health Insurance BC (HIBC). From the
+      Lower Mainland, call 604 683-7151. Elsewhere in B.C., call 1 800 663-7100 (toll free).
+      Personal information will be released to PharmaCare for the provision of drug benefits. This
+      information will be used and disclosed in accordance with the Freedom of Information and
+      Protection of Privacy Act and the Pharmaceutical Services Act.
     `;
   }
 

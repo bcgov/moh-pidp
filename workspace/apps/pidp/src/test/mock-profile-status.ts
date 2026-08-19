@@ -41,6 +41,7 @@ export class MockProfileStatus {
         provincialAttachmentSystem: { statusCode: StatusCode.AVAILABLE },
         immsBCEforms: { statusCode: StatusCode.AVAILABLE },
         infantRsvEforms: { statusCode: StatusCode.AVAILABLE },
+        npdpEforms: { statusCode: StatusCode.AVAILABLE },
         externalAccounts: { statusCode: StatusCode.AVAILABLE },
         halo: { statusCode: StatusCode.AVAILABLE },
         ivf: { statusCode: StatusCode.AVAILABLE },

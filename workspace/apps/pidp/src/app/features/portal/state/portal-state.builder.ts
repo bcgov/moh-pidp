@@ -17,6 +17,7 @@ import { HcimWebPcrPortalSection } from './access/hcim-web-pcr-portal-section.cl
 import { ImmsBCEformsPortalSection } from './access/immsbc-eforms-portal-section.class';
 import { ImmsbcPortalSection } from './access/immscbc-portal-section.class';
 import { InfantRsvEformsPortalSection } from './access/infant-rsv-eforms-portal-section.class';
+import { NpdpEformsPortalSection } from './access/npdp-eforms-portal-section.class';
 import { IvfPortalSection } from './access/ivf-portal-section.class';
 import { MsTeamsClinicMemberPortalSection } from './access/ms-teams-clinic-member-portal-section.class';
 import { MsTeamsPrivacyOfficerPortalSection } from './access/ms-teams-privacy-officer-portal-section.class';
@@ -138,9 +139,13 @@ export class AccessStateBuilder {
         () => [new ImmsBCEformsPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
-        this.insertSection('infantRsvEforms', profileStatus) &&
-          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        this.insertSection('infantRsvEforms', profileStatus),
         () => [new InfantRsvEformsPortalSection(profileStatus, this.router)],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('npdpEforms', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        () => [new NpdpEformsPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
         this.insertSection('halo', profileStatus) &&
@@ -291,9 +296,13 @@ export class PortalStateBuilder {
         () => [new ImmsBCEformsPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.insertSection('infantRsvEforms', profileStatus) &&
-          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        this.insertSection('infantRsvEforms', profileStatus),
         () => [new InfantRsvEformsPortalSection(profileStatus, this.router)],
+      ),
+      ...ArrayUtils.insertResultIf<IPortalSection>(
+        this.insertSection('npdpEforms', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        () => [new NpdpEformsPortalSection(profileStatus, this.router)],
       ),
     ];
   }
