@@ -18,6 +18,8 @@ public class StatusLog
     {
         public int Id { get; set; }
         public string? Cpn { get; set; }
+        public string? OldStatusCode { get; set; }
+        public string? OldStatusReasonCode { get; set; }
         public string? NewStatusCode { get; set; }
         public string? NewStatusReasonCode { get; set; }
         public string? IdentifierType { get; set; }
@@ -57,6 +59,8 @@ public class StatusLog
                 {
                     Id = log.Id,
                     Cpn = log.PlrRecord!.Cpn,
+                    OldStatusCode = log.OldStatusCode,
+                    OldStatusReasonCode = log.OldStatusReasonCode,
                     NewStatusCode = log.NewStatusCode,
                     NewStatusReasonCode = log.NewStatusReasonCode,
                     IdentifierType = log.PlrRecord.IdentifierType,

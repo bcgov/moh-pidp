@@ -8,7 +8,6 @@ using Pidp.Extensions;
 using Pidp.Infrastructure.HttpClients.AddressAutocomplete;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Keycloak;
-using Pidp.Infrastructure.HttpClients.Ldap;
 using Pidp.Infrastructure.HttpClients.Mail;
 using Pidp.Infrastructure.HttpClients.Plr;
 
@@ -44,8 +43,6 @@ public static class HttpClientSetup
                 ClientId = config.ChesClient.ClientId,
                 ClientSecret = config.ChesClient.ClientSecret
             });
-
-        services.AddHttpClientWithBaseAddress<ILdapClient, LdapClient>(config.LdapClient.Url);
 
         services.AddHttpClientWithBaseAddress<IKeycloakAdministrationClient, KeycloakAdministrationClient>(config.Keycloak.AdministrationUrl)
             .WithBearerToken(new KeycloakAdministrationClientCredentials

@@ -16,7 +16,6 @@ public class PidpConfiguration
     public ConnectionStringConfiguration ConnectionStrings { get; set; } = new();
     public ChesClientConfiguration ChesClient { get; set; } = new();
     public KeycloakConfiguration Keycloak { get; set; } = new();
-    public LdapClientConfiguration LdapClient { get; set; } = new();
     public MailServerConfiguration MailServer { get; set; } = new();
     public PlrClientConfiguration PlrClient { get; set; } = new();
     public RabbitMQConfiguration RabbitMQ { get; set; } = new();
@@ -61,11 +60,6 @@ public class PidpConfiguration
         public string AdministrationClientId { get; set; } = string.Empty;
         public string AdministrationClientSecret { get; set; } = string.Empty;
         public string HcimClientId { get; set; } = string.Empty;
-    }
-
-    public class LdapClientConfiguration
-    {
-        public string Url { get; set; } = string.Empty;
     }
 
     public class MailServerConfiguration
