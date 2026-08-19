@@ -8,18 +8,18 @@ using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Infrastructure.Services;
 using Pidp.Models.Lookups;
 
-public class InfantRsvEformsRevocationPolicy(
+public class NpdpEformsRevocationPolicy(
     IAccessRequestRevocationService revocationService,
-    ILogger<InfantRsvEformsRevocationPolicy> logger,
+    ILogger<NpdpEformsRevocationPolicy> logger,
     IPlrClient plrClient,
     PidpDbContext context) : IAccessRequestRevocationPolicy
 {
     private readonly IAccessRequestRevocationService revocationService = revocationService;
-    private readonly ILogger<InfantRsvEformsRevocationPolicy> logger = logger;
+    private readonly ILogger<NpdpEformsRevocationPolicy> logger = logger;
     private readonly IPlrClient plrClient = plrClient;
     private readonly PidpDbContext context = context;
 
-    public AccessTypeCode AccessTypeCode => AccessTypeCode.InfantRsvEforms;
+    public AccessTypeCode AccessTypeCode => AccessTypeCode.NpdpEforms;
 
     public async Task RevokeIfIneligibleAsync(int partyId, PlrStatusChangeLog? statusChange = null, CancellationToken cancellationToken = default)
     {
@@ -27,7 +27,7 @@ public class InfantRsvEformsRevocationPolicy(
             .Where(party => party.Id == partyId)
             .Select(party => new
             {
-                HoldsEnrolment = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.InfantRsvEforms),
+                HoldsEnrolment = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.NpdpEforms),
                 party.Cpn,
             })
             .SingleOrDefaultAsync(cancellationToken);
@@ -53,11 +53,11 @@ public class InfantRsvEformsRevocationPolicy(
             return;
         }
 
-        await this.revocationService.RevokeAsync(partyId, AccessTypeCode.InfantRsvEforms, reason, statusChange.FormatTrigger(), cancellationToken);
+        await this.revocationService.RevokeAsync(partyId, AccessTypeCode.NpdpEforms, reason, statusChange.FormatTrigger(), cancellationToken);
     }
 
     /// <summary>
-    /// Mirrors the grant-time checks in InfantRsvEforms.CommandHandler: a Party with a CPN is judged
+    /// Mirrors the grant-time checks in NpdpEforms.CommandHandler: a Party with a CPN is judged
     /// on their own standing, one without a CPN (i.e. an MOA) on their endorsements.
     /// </summary>
     private async Task<(bool Eligible, bool StandingIsKnown, string Reason)> EvaluateEligibilityAsync(int partyId, string? cpn)
@@ -70,21 +70,21 @@ public class InfantRsvEformsRevocationPolicy(
 
             var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
 
-            return (InfantRsvEforms.IsEligibleByEndorsement(endorsementPlrStanding),
+            return (NpdpEforms.IsEligibleByEndorsement(endorsementPlrStanding),
                 !endorsementPlrStanding.Error,
                 "no active endorsement from a Medical Doctor, Nurse, or Midwife in good standing");
         }
 
         var partyPlrStanding = await this.plrClient.GetStandingsDigestAsync(cpn);
 
-        return (InfantRsvEforms.IsEligible(partyPlrStanding),
+        return (NpdpEforms.IsEligible(partyPlrStanding),
             !partyPlrStanding.Error,
             "licence no longer in good standing and not a CPS postgraduate");
     }
 }
 
-public static partial class InfantRsvEformsRevocationLoggingExtensions
+public static partial class NpdpEformsRevocationLoggingExtensions
 {
-    [LoggerMessage(1, LogLevel.Warning, "Could not determine PLR standing for Party {partyId}; Infant RSV eForms access was left in place.")]
-    public static partial void LogRevocationSkippedPlrError(this ILogger<InfantRsvEformsRevocationPolicy> logger, int partyId);
+    [LoggerMessage(1, LogLevel.Warning, "Could not determine PLR standing for Party {partyId}; NPDP eForms access was left in place.")]
+    public static partial void LogRevocationSkippedPlrError(this ILogger<NpdpEformsRevocationPolicy> logger, int partyId);
 }

@@ -1,4 +1,4 @@
-namespace Pidp.Features.CommonHandlers;
+﻿namespace Pidp.Features.CommonHandlers;
 
 using MassTransit;
 using MediatR;
@@ -61,14 +61,19 @@ public class UpdateBCProviderAfterEndorsementStandingUpdated(
 }
 
 /// <summary>
-/// An MOA holds the Infant RSV eForms card on the strength of their endorsements, so losing the
-/// last endorser in good standing must take the role away again.
+/// An MOA holds their cards on the strength of their endorsements, so losing the last endorser in
+/// good standing must take the associated roles away again.
 /// </summary>
-public class RevokeInfantRsvEformsAfterEndorsementStandingUpdated(
-    IInfantRsvEformsRevocationService revocationService) : INotificationHandler<EndorsementStandingUpdated>
+public class RevokeAccessRequestsAfterEndorsementStandingUpdated(
+    IEnumerable<IAccessRequestRevocationPolicy> revocationPolicies) : INotificationHandler<EndorsementStandingUpdated>
 {
-    private readonly IInfantRsvEformsRevocationService revocationService = revocationService;
+    private readonly IEnumerable<IAccessRequestRevocationPolicy> revocationPolicies = revocationPolicies;
 
     public async Task Handle(EndorsementStandingUpdated notification, CancellationToken cancellationToken)
-        => await this.revocationService.RevokeIfIneligibleAsync(notification.PartyId, cancellationToken: cancellationToken);
+    {
+        foreach (var policy in this.revocationPolicies)
+        {
+            await policy.RevokeIfIneligibleAsync(notification.PartyId, cancellationToken: cancellationToken);
+        }
+    }
 }

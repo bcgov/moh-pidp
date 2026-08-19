@@ -1,4 +1,4 @@
-namespace Pidp.Infrastructure.Services;
+﻿namespace Pidp.Infrastructure.Services;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -9,17 +9,18 @@ using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models.DomainEvents;
+using Pidp.Models.Lookups;
 
 public sealed class PlrStatusUpdateService(
     IBCProviderClient bcProviderClient,
-    IInfantRsvEformsRevocationService rsvRevocationService,
+    IEnumerable<IAccessRequestRevocationPolicy> revocationPolicies,
     IPlrClient plrClient,
     ILogger<PlrStatusUpdateService> logger,
     PidpDbContext context,
     PidpConfiguration config) : IPlrStatusUpdateService
 {
     private readonly IBCProviderClient bcProviderClient = bcProviderClient;
-    private readonly IInfantRsvEformsRevocationService rsvRevocationService = rsvRevocationService;
+    private readonly IEnumerable<IAccessRequestRevocationPolicy> revocationPolicies = revocationPolicies;
     private readonly IPlrClient plrClient = plrClient;
     private readonly ILogger<PlrStatusUpdateService> logger = logger;
     private readonly PidpDbContext context = context;
@@ -109,18 +110,22 @@ public sealed class PlrStatusUpdateService(
             }
         }
 
-        // Runs on every status change: RSV eligibility includes CPS postgrads, whose transitions
-        // do not necessarily move the good-standing flag.
-        try
+        // Runs on every status change: some cards' eligibility includes CPS postgrads, whose
+        // transitions do not necessarily move the good-standing flag.
+        foreach (var policy in this.revocationPolicies)
         {
-            await this.rsvRevocationService.RevokeIfIneligibleAsync(party.Id, status, stoppingToken);
-        }
-        catch (Exception e) when (e is not OperationCanceledException)
-        {
-            // A revocation that always threw would never be acked, blocking the head of the queue
-            // and stalling every other consumer. Failing to revoke leaves today's behaviour intact;
-            // stalling the pipeline does not. The service stages nothing before it can throw.
-            this.logger.LogRevocationFailed(party.Id, e);
+            try
+            {
+                await policy.RevokeIfIneligibleAsync(party.Id, status, stoppingToken);
+            }
+            catch (Exception e) when (e is not OperationCanceledException)
+            {
+                // A revocation that always threw would never be acked, blocking the head of the
+                // queue and stalling every other consumer. Failing to revoke leaves today's
+                // behaviour intact; stalling the pipeline does not. Policies stage nothing before
+                // they can throw, and one failing card must not stop the others.
+                this.logger.LogRevocationFailed(policy.AccessTypeCode, party.Id, e);
+            }
         }
 
         await this.context.SaveChangesAsync(stoppingToken);
@@ -138,6 +143,6 @@ public static partial class PlrStatusUpdateServiceLoggingExtensions
     [LoggerMessage(2, LogLevel.Information, "Status update {statusId} has been proccessed.")]
     public static partial void LogStatusUpdateProcessed(this ILogger<PlrStatusUpdateService> logger, int statusId);
 
-    [LoggerMessage(3, LogLevel.Error, "Unhandled exception while re-evaluating Infant RSV eForms eligibility for Party {partyId}. The rest of the status update was processed.")]
-    public static partial void LogRevocationFailed(this ILogger<PlrStatusUpdateService> logger, int partyId, Exception e);
+    [LoggerMessage(3, LogLevel.Error, "Unhandled exception while re-evaluating {accessTypeCode} eligibility for Party {partyId}. The rest of the status update was processed.")]
+    public static partial void LogRevocationFailed(this ILogger<PlrStatusUpdateService> logger, AccessTypeCode accessTypeCode, int partyId, Exception e);
 }

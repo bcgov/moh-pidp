@@ -1,4 +1,4 @@
-namespace Pidp;
+﻿namespace Pidp;
 
 using FluentValidation;
 using HealthChecks.ApplicationStatus.DependencyInjection;
@@ -43,7 +43,9 @@ public class Startup(IConfiguration configuration)
             .AddRabbitMQ(config)
             .AddMediatR(opt => opt.RegisterServicesFromAssemblyContaining<Startup>())
             .AddScoped<IEmailService, EmailService>()
-            .AddScoped<IInfantRsvEformsRevocationService, InfantRsvEformsRevocationService>()
+            .AddScoped<IAccessRequestRevocationService, AccessRequestRevocationService>()
+            .AddScoped<IAccessRequestRevocationPolicy, InfantRsvEformsRevocationPolicy>()
+            .AddScoped<IAccessRequestRevocationPolicy, NpdpEformsRevocationPolicy>()
             .AddScoped<IPidpAuthorizationService, PidpAuthorizationService>()
             .AddScoped<IPlrStatusUpdateService, PlrStatusUpdateService>()
             .AddSingleton<IClock>(SystemClock.Instance)
