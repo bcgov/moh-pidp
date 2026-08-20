@@ -115,8 +115,8 @@ public class Startup(IConfiguration configuration)
         services.AddHealthChecks()
             .AddApplicationStatus(tags: [HealthCheckTag.Liveness.Value])
             .AddCheck<BackgroundWorkerHealthCheck>("PlrStatusUpdateSchedulingService", tags: [HealthCheckTag.BackgroundServices.Value])
-            .AddDbContextCheck<PidpDbContext>(tags: [HealthCheckTag.Readiness.Value])
-            .AddRabbitMQ(sp => new RabbitMQ.Client.ConnectionFactory { Uri = new Uri(config.RabbitMQ.HostAddress) }.CreateConnectionAsync(), "rabbitmq", null, [HealthCheckTag.Readiness.Value], null);
+            .AddCheck<RabbitMQHealthCheck>("RabbitMQHealthCheck", tags: [HealthCheckTag.BackgroundServices.Value])
+            .AddDbContextCheck<PidpDbContext>(tags: [HealthCheckTag.Readiness.Value]);
 
         services.AddSwaggerGen(options =>
         {
