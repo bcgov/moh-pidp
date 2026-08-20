@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -73,6 +73,7 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
   private readonly dialog = inject(MatDialog);
   private readonly loadingOverlayService = inject(LoadingOverlayService);
   private readonly navigationService = inject(NavigationService);
+  private readonly cd = inject(ChangeDetectorRef);
 
   public title: string;
   public completed: boolean | null;
@@ -175,6 +176,7 @@ export class AccountLinkingPage implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((credentials) => {
         this.credentials = credentials;
+        this.cd.detectChanges();
       });
   }
 

@@ -4,6 +4,7 @@ import {
   Input,
   OnChanges,
   SimpleChanges,
+  inject,
 } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -35,6 +36,8 @@ import { PortalCardComponent } from '../portal-card/portal-card.component';
   ],
 })
 export class PortalCarouselComponent implements OnChanges {
+  private readonly router = inject(Router);
+
   public faCaretLeft = faCaretLeft;
   public faCaretRight = faCaretRight;
   public faCircle = faCircle;
@@ -58,10 +61,8 @@ export class PortalCarouselComponent implements OnChanges {
     return this.cardsPerSlide > 1;
   }
 
-  public constructor(
-    private readonly router: Router,
-    viewportService: ViewportService,
-  ) {
+  public constructor() {
+    const viewportService = inject(ViewportService);
     viewportService.viewportBroadcast$.subscribe((viewport) => {
       if (viewport === PidpViewport.xsmall) {
         this.cardsPerSlide = 1;

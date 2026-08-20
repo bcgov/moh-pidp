@@ -5,7 +5,7 @@
       mat-icon-button
       matTooltip="Logout"
       aria-label="logout"
-      (click)="onLogout()">
+      tabindex="0" (keydown.enter)="onLogout()" (click)="onLogout()">
       <mat-icon>logout</mat-icon>
     </button>
   </div>
@@ -34,7 +34,7 @@
             class="login-app-button"
             mat-flat-button
             color="primary"
-            (click)="onLogin()">
+            tabindex="0" (keydown.enter)="onLogin()" (click)="onLogin()">
             Log in with the BC Services Card
           </button>
           <div class="login-setup">

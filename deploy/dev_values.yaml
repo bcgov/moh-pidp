@@ -41,6 +41,7 @@ webapi:
   replicaCount: 1
   aspnetcore:
     environment: Staging
+  corsAllowedOrigins: "https://dev.healthprovideridentityportal.gov.bc.ca"
 
 plr-intake:
   replicaCount: 1
@@ -48,3 +49,6 @@ plr-intake:
 rabbitmq:
   autoCreate: true
   host: rabbitmq://pidp:password@rabbitmq:5672/
+
+trivy:
+  enabled: true

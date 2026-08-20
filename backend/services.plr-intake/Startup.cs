@@ -74,21 +74,9 @@ public class Startup
         app.UseAuthentication();
         app.UseAuthorization();
 
-        var intakeBinding = new BasicHttpBinding
-        {
-            Security = new BasicHttpSecurity
-            {
-                Mode = BasicHttpSecurityMode.TransportCredentialOnly,
-                Transport = new HttpTransportSecurity
-                {
-                    ClientCredentialType = HttpClientCredentialType.Basic
-                }
-            }
-        };
-
         app.UseEndpoints(endpoints =>
         {
-            endpoints.UseSoapEndpoint<IIntakeService>("/api/PLRHL7", intakeBinding, SoapSerializer.XmlSerializer);
+            endpoints.UseSoapEndpoint<IIntakeService>("/api/PLRHL7", new SoapEncoderOptions(), SoapSerializer.XmlSerializer);
             endpoints.MapControllers();
             endpoints.MapHealthChecks("/health/liveness", new HealthCheckOptions
             {

@@ -5,7 +5,7 @@
     class="pas-banner-button"
     mat-flat-button
     color="primary"
-    (click)="toggle()">
+    tabindex="0" (keydown.enter)="toggle()" (click)="toggle()">
     {{ expanded ? 'Hide Steps' : 'Get Started' }}
   </button>
 </div>

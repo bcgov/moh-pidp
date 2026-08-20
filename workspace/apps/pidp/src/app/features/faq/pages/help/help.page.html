@@ -212,7 +212,7 @@
                                 </mat-expansion-panel-header>
                                 <p>
                                   View instructions to setup Multi-factor authentication
-                                  <a class="mfa-link" (click)="navigateToMfaPage()">here</a>.
+                                  <a class="mfa-link" tabindex="0" (keydown.enter)="navigateToMfaPage()" (click)="navigateToMfaPage()">here</a>.
                                 </p>
                               </mat-expansion-panel>
                             </div>
@@ -308,7 +308,7 @@
                                   <div class="links-section first-column">
                                     <div
                                       class="link-container"
-                                      (click)="onClickSendEmail('mailto:OneHealthID@gov.bc.ca')"
+                                      tabindex="0" (keydown.enter)="onClickSendEmail('mailto:OneHealthID@gov.bc.ca')" (click)="onClickSendEmail('mailto:OneHealthID@gov.bc.ca')"
                                       (keyup)="onClickSendEmail('mailto:OneHealthID@gov.bc.ca')">
                                       <img
                                         class="icon-question"
@@ -318,7 +318,7 @@
                                       </div>
                                       <div
                                         class="link-container"
-                                        (click)="onClickSendEmail('mailto:hlth.registriesadmin@gov.bc.ca')"
+                                        tabindex="0" (keydown.enter)="onClickSendEmail('mailto:hlth.registriesadmin@gov.bc.ca')" (click)="onClickSendEmail('mailto:hlth.registriesadmin@gov.bc.ca')"
                                         (keyup)="onClickSendEmail('mailto:hlth.registriesadmin@gov.bc.caa')">
                                         <img
                                           class="icon-question"
@@ -331,7 +331,7 @@
                                       <div class="links-section first-column">
                                         <div
                                           class="link-container"
-                                          (click)="onClickSendEmail('mailto:satransformation@gov.bc.ca')"
+                                          tabindex="0" (keydown.enter)="onClickSendEmail('mailto:satransformation@gov.bc.ca')" (click)="onClickSendEmail('mailto:satransformation@gov.bc.ca')"
                                           (keyup)="onClickSendEmail('mailto:satransformation@gov.bc.ca')">
                                           <img
                                             class="icon-question"
@@ -341,7 +341,7 @@
                                           </div>
                                           <div
                                             class="link-container"
-                                            (click)="onClickSendEmail('mailto:support@driver-fitness.com')"
+                                            tabindex="0" (keydown.enter)="onClickSendEmail('mailto:support@driver-fitness.com')" (click)="onClickSendEmail('mailto:support@driver-fitness.com')"
                                             (keyup)="onClickSendEmail('mailto:support@driver-fitness.com')">
                                             <img
                                               class="icon-question"
@@ -354,7 +354,7 @@
                                           <div class="links-section first-column">
                                             <div
                                               class="link-container"
-                                              (click)="onClickSendEmail('mailto:securemessagingsupport@fraserhealth.ca')"
+                                              tabindex="0" (keydown.enter)="onClickSendEmail('mailto:securemessagingsupport@fraserhealth.ca')" (click)="onClickSendEmail('mailto:securemessagingsupport@fraserhealth.ca')"
                                               (keyup)="onClickSendEmail('mailto:securemessagingsupport@fraserhealth.ca')">
                                               <img
                                                 class="icon-question"
@@ -369,7 +369,7 @@
                                             @if (showBackToTopButton) {
                                               <button
                                                 class="back-to-top"
-                                                (click)="scrollToTop()">
+                                                tabindex="0" (keydown.enter)="scrollToTop()" (click)="scrollToTop()">
                                                 <fa-icon [icon]="faArrowUp"></fa-icon>
                                               </button>
                                             }

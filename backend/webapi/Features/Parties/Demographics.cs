@@ -1,20 +1,20 @@
 namespace Pidp.Features.Parties;
 
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
+using Mapster;
 using FluentValidation;
 using HybridModelBinding;
-using MassTransit;
-using MediatR;
+using Pidp.Infrastructure.Queue;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
 using Pidp.Data;
 using Pidp.Extensions;
-using static Pidp.Features.CommonHandlers.UpdateKeycloakAttributesConsumer;
+using static Pidp.Features.CommonHandlers.UpdateKeycloakAttributesHandler;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Models.DomainEvents;
+using Pidp.Models;
+using NodaTime;
 
 public class Demographics
 {
@@ -63,22 +63,22 @@ public class Demographics
         }
     }
 
-    public class QueryHandler(IMapper mapper, PidpDbContext context) : IQueryHandler<Query, Command>
+    public class QueryHandler(PidpDbContext context) : IQueryHandler<Query, Command>
     {
-        private readonly IMapper mapper = mapper;
         private readonly PidpDbContext context = context;
 
         public async Task<Command> HandleAsync(Query query)
         {
             return await this.context.Parties
                 .Where(party => party.Id == query.Id)
-                .ProjectTo<Command>(this.mapper.ConfigurationProvider)
+                .ProjectToType<Command>()
                 .SingleAsync();
         }
     }
 
-    public class CommandHandler(PidpDbContext context) : ICommandHandler<Command>
+    public class CommandHandler(IClock clock, PidpDbContext context) : ICommandHandler<Command>
     {
+        private readonly IClock clock = clock;
         private readonly PidpDbContext context = context;
 
         public async Task HandleAsync(Command command)
@@ -103,38 +103,40 @@ public class Demographics
             party.Email = command.Email;
             party.Phone = command.Phone;
 
+            this.context.BusinessEvents.Add(DemographicsUpdated.Create(party.Id, this.clock.GetCurrentInstant()));
+
             await this.context.SaveChangesAsync();
         }
     }
 
-    public class PartyEmailUpdatedHandler(IBus bus) : INotificationHandler<PartyEmailUpdated>
+    public class PartyEmailUpdatedHandler(IRabbitMqPublisher bus) : Mediator.INotificationHandler<PartyEmailUpdated>
     {
-        private readonly IBus bus = bus;
+        private readonly IRabbitMqPublisher bus = bus;
 
-        public async Task Handle(PartyEmailUpdated notification, CancellationToken cancellationToken)
+        public async ValueTask Handle(PartyEmailUpdated notification, CancellationToken cancellationToken)
         {
             // TODO: replace by pushing a generic Update BC Provider Attribute message.
-            await this.bus.Publish(notification, cancellationToken);
+            await this.bus.PublishAsync(notification, cancellationToken);
 
-            await this.bus.Publish(UpdateKeycloakAttributes.FromUpdateAction(notification.UserId, user => user.SetPidpEmail(notification.NewEmail)), cancellationToken);
+            await this.bus.PublishAsync(UpdateKeycloakAttributes.FromUpdateAction(notification.UserId, user => user.SetPidpEmail(notification.NewEmail)), cancellationToken);
         }
     }
 
-    public class PartyEmailUpdatedBcProviderConsumer(
+    public class PartyEmailUpdatedBcProviderHandler(
         IBCProviderClient client,
         PidpConfiguration config,
         PidpDbContext context,
-        ILogger<PartyEmailUpdatedBcProviderConsumer> logger) : IConsumer<PartyEmailUpdated>
+        ILogger<PartyEmailUpdatedBcProviderHandler> logger)
     {
         private readonly IBCProviderClient client = client;
         private readonly PidpDbContext context = context;
         private readonly string bcProviderClientId = config.BCProviderClient.ClientId;
-        private readonly ILogger<PartyEmailUpdatedBcProviderConsumer> logger = logger;
+        private readonly ILogger<PartyEmailUpdatedBcProviderHandler> logger = logger;
 
-        public async Task Consume(ConsumeContext<PartyEmailUpdated> context)
+        public async Task HandleAsync(PartyEmailUpdated message)
         {
             var userPrincipalNames = await this.context.Parties
-                .Where(party => party.Id == context.Message.PartyId)
+                .Where(party => party.Id == message.PartyId)
                 .Select(party => party.Upns)
                 .SingleAsync();
 
@@ -143,35 +145,37 @@ public class Demographics
                 return;
             }
 
-            var bcProviderAttributes = new BCProviderAttributes(this.bcProviderClientId).SetPidpEmail(context.Message.NewEmail);
+            var bcProviderAttributes = new BCProviderAttributes(this.bcProviderClientId).SetPidpEmail(message.NewEmail);
 
             foreach (var upn in userPrincipalNames)
             {
                 if (!await this.client.UpdateAttributes(upn, bcProviderAttributes.AsAdditionalData()))
                 {
-                    this.logger.LogBCProviderEmailUpdateFailed(context.Message.UserId);
+                    this.logger.LogBCProviderEmailUpdateFailed(message.UserId);
                     throw new InvalidOperationException("Error Comunicating with Azure AD");
                 }
             }
         }
     }
 
-    public class PartyPhoneUpdatedHandler(IBus bus) : INotificationHandler<PartyPhoneUpdated>
+    public class PartyPhoneUpdatedHandler(IRabbitMqPublisher bus) : Mediator.INotificationHandler<PartyPhoneUpdated>
     {
-        private readonly IBus bus = bus;
+        private readonly IRabbitMqPublisher bus = bus;
 
-        public async Task Handle(PartyPhoneUpdated notification, CancellationToken cancellationToken)
+        public async ValueTask Handle(PartyPhoneUpdated notification, CancellationToken cancellationToken)
         {
             foreach (var userId in notification.UserIds)
             {
-                await this.bus.Publish(UpdateKeycloakAttributes.FromUpdateAction(userId, user => user.SetPidpPhone(notification.NewPhone)), cancellationToken);
+                await this.bus.PublishAsync(UpdateKeycloakAttributes.FromUpdateAction(userId, user => user.SetPidpPhone(notification.NewPhone)), cancellationToken);
             }
         }
     }
 }
 
-public static partial class PartyEmailUpdatedBcProviderConsumerLoggingExtensions
+public static partial class PartyEmailUpdatedBcProviderHandlerLoggingExtensions
 {
     [LoggerMessage(2, LogLevel.Error, "Error when updating the email to User #{userId} in Azure AD.")]
-    public static partial void LogBCProviderEmailUpdateFailed(this ILogger<Demographics.PartyEmailUpdatedBcProviderConsumer> logger, Guid userId);
+    public static partial void LogBCProviderEmailUpdateFailed(this ILogger<Demographics.PartyEmailUpdatedBcProviderHandler> logger, Guid userId);
 }
+
+

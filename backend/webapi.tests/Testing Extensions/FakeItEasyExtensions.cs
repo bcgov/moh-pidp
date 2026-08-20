@@ -70,6 +70,40 @@ public static class FakeItEasyExtensions
         }
     }
 
+    /// <summary>
+    /// Fakes return false for Task&lt;bool&gt; by default, so a revocation test that does not arm
+    /// RemoveAccessRoles would never reach the database writes it means to assert on.
+    /// </summary>
+    public static IKeycloakAdministrationClient ReturningTrueWhenRemovingClientRoles(this IKeycloakAdministrationClient client, Guid? userId = null)
+    {
+        if (userId == null)
+        {
+            A.CallTo(() => client.RemoveAccessRoles(A<Guid>._, A<MohKeycloakEnrolment>._)).Returns(true);
+            A.CallTo(() => client.RemoveClientRole(A<Guid>._, A<Role>._)).Returns(true);
+        }
+        else
+        {
+            A.CallTo(() => client.RemoveAccessRoles(userId.Value, A<MohKeycloakEnrolment>._)).Returns(true);
+            A.CallTo(() => client.RemoveClientRole(userId.Value, A<Role>._)).Returns(true);
+        }
+
+        return client;
+    }
+
+    public static void AssertNoRolesRemoved(this IKeycloakAdministrationClient client, Guid? userId = null)
+    {
+        if (userId == null)
+        {
+            A.CallTo(() => client.RemoveAccessRoles(A<Guid>._, A<MohKeycloakEnrolment>._)).MustNotHaveHappened();
+            A.CallTo(() => client.RemoveClientRole(A<Guid>._, A<Role>._)).MustNotHaveHappened();
+        }
+        else
+        {
+            A.CallTo(() => client.RemoveAccessRoles(userId.Value, A<MohKeycloakEnrolment>._)).MustNotHaveHappened();
+            A.CallTo(() => client.RemoveClientRole(userId.Value, A<Role>._)).MustNotHaveHappened();
+        }
+    }
+
     public static IPlrClient ReturningAStandingsDigest(this IPlrClient client, bool goodStanding, string? identifierType = null)
         => client.ReturningAStandingsDigest(AMock.StandingsDigest(goodStanding, identifierType));
 

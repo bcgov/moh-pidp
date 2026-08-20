@@ -17,7 +17,7 @@
         <fa-icon [icon]="faThumbsUp"></fa-icon>
       </div>
       @if (!section.action.disabled) {
-      <button mat-stroked-button color="primary" aria-label="Edit" (click)="onClick(section)">
+      <button mat-stroked-button color="primary" aria-label="Edit" tabindex="0" (keydown.enter)="onClick(section)" (click)="onClick(section)">
         <span>{{ section.action.label }}</span>
       </button>
       }
@@ -30,7 +30,7 @@
         <fa-icon [icon]="faThumbsUp"></fa-icon>
       </div>
       @if (!section.action.disabled) {
-      <button mat-stroked-button color="primary" aria-label="Edit" (click)="onClick(section)">
+      <button mat-stroked-button color="primary" aria-label="Edit" tabindex="0" (keydown.enter)="onClick(section)" (click)="onClick(section)">
         <span>{{ section.action.label }}</span>
       </button>
       }
@@ -41,7 +41,7 @@
       <div class="learn-more">
         <span>Learn More</span>
       </div>
-      <button class="learn-more-button" aria-label="Go" (click)="onClick(section)">
+      <button class="learn-more-button" aria-label="Go" tabindex="0" (keydown.enter)="onClick(section)" (click)="onClick(section)">
         <fa-icon [icon]="faPlus"></fa-icon>
       </button>
     </ng-container>
@@ -50,7 +50,7 @@
     <ng-container>
       @if (!section.action.disabled) {
       <button mat-flat-button color="primary" target="_blank" rel="noopener noreferrer"
-        aria-label="Visit Provincial Attachment System website" (click)="onClickVisit(section)">
+        aria-label="Visit Provincial Attachment System website" tabindex="0" (keydown.enter)="onClickVisit(section)" (click)="onClickVisit(section)">
         Visit
       </button>
       }

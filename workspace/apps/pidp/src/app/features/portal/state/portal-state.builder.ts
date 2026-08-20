@@ -12,9 +12,11 @@ import { AccountLinkingPortalSection } from './access/account-linking-portal-sec
 import { BcProviderPortalSection } from './access/bc-provider-portal-section.class';
 import { DriverFitnessPortalSection } from './access/driver-fitness-portal-section.class';
 import { HaloPortalSection } from './access/halo-portal-section.class';
-import { HcimAccountTransferPortalSection } from './access/hcim-account-transfer-portal-section.class';
+import { HcimWebPcrPortalSection } from './access/hcim-web-pcr-portal-section.class';
 import { ImmsBCEformsPortalSection } from './access/immsbc-eforms-portal-section.class';
 import { ImmsbcPortalSection } from './access/immscbc-portal-section.class';
+import { InfantRsvEformsPortalSection } from './access/infant-rsv-eforms-portal-section.class';
+import { NpdpEformsPortalSection } from './access/npdp-eforms-portal-section.class';
 import { IvfPortalSection } from './access/ivf-portal-section.class';
 import { MsTeamsClinicMemberPortalSection } from './access/ms-teams-clinic-member-portal-section.class';
 import { MsTeamsPrivacyOfficerPortalSection } from './access/ms-teams-privacy-officer-portal-section.class';
@@ -91,10 +93,9 @@ export class AccessStateBuilder {
         () => [new SaEformsPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
-        this.insertSection('hcimAccountTransfer', profileStatus),
-        () => [
-          new HcimAccountTransferPortalSection(profileStatus, this.router),
-        ],
+        this.insertSection('hcimWebPcr', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        () => [new HcimWebPcrPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
         this.insertSection('driverFitness', profileStatus),
@@ -129,6 +130,15 @@ export class AccessStateBuilder {
       ...ArrayUtils.insertResultIf<IAccessSection>(
         this.insertSection('immsBCEforms', profileStatus),
         () => [new ImmsBCEformsPortalSection(profileStatus, this.router)],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('infantRsvEforms', profileStatus),
+        () => [new InfantRsvEformsPortalSection(profileStatus, this.router)],
+      ),
+      ...ArrayUtils.insertResultIf<IAccessSection>(
+        this.insertSection('npdpEforms', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        () => [new NpdpEformsPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
         this.insertSection('halo', profileStatus) &&
@@ -233,10 +243,9 @@ export class PortalStateBuilder {
         () => [new BcProviderPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.insertSection('hcimAccountTransfer', profileStatus),
-        () => [
-          new HcimAccountTransferPortalSection(profileStatus, this.router),
-        ],
+        this.insertSection('hcimWebPcr', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        () => [new HcimWebPcrPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('driverFitness', profileStatus),
@@ -272,6 +281,15 @@ export class PortalStateBuilder {
       ...ArrayUtils.insertResultIf<IPortalSection>(
         this.insertSection('immsBCEforms', profileStatus),
         () => [new ImmsBCEformsPortalSection(profileStatus, this.router)],
+      ),
+      ...ArrayUtils.insertResultIf<IPortalSection>(
+        this.insertSection('infantRsvEforms', profileStatus),
+        () => [new InfantRsvEformsPortalSection(profileStatus, this.router)],
+      ),
+      ...ArrayUtils.insertResultIf<IPortalSection>(
+        this.insertSection('npdpEforms', profileStatus) &&
+          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        () => [new NpdpEformsPortalSection(profileStatus, this.router)],
       ),
     ];
   }

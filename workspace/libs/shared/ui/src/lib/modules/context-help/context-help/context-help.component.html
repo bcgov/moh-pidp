@@ -1,5 +1,5 @@
 <a mat-icon-button aria-label="Help" [color]="menuIconColor" [class.small]="small" [matMenuTriggerFor]="help"
-  (click)="onOpenContextMenu($event)">
+  tabindex="0" (keydown.enter)="onOpenContextMenu($event)" (click)="onOpenContextMenu($event)">
   <mat-icon [class.material-icons-outlined]="outlined">{{ icon }}</mat-icon>
 </a>
 <mat-menu #help="matMenu" [xPosition]="xPosition" [yPosition]="yPosition">

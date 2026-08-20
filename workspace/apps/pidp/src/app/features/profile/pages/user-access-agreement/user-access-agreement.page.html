@@ -26,11 +26,11 @@
     <div class="button-container">
       @if (completed) {
       <button class="back-button" mat-stroked-button uiPageFooterAction color="primary" type="button"
-        (click)="onBack()">
+        tabindex="0" (keydown.enter)="onBack()" (click)="onBack()">
         Home
       </button>
       } @else {
-      <button mat-flat-button uiPageFooterAction color="primary" type="button" (click)="onAcceptAgreement()">
+      <button mat-flat-button uiPageFooterAction color="primary" type="button" tabindex="0" (keydown.enter)="onAcceptAgreement()" (click)="onAcceptAgreement()">
         Accept Agreement
       </button>
       }

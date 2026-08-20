@@ -7,11 +7,20 @@ using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 using Pidp.Data;
+using Pidp.Infrastructure.Auth;
+using Pidp.Infrastructure.HttpClients.BCProvider;
+using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Models;
 
-public class CredentialDeletionService(IClock clock, PidpDbContext context) : ICredentialDeletionService
+public class CredentialDeletionService(
+    IBCProviderClient bcProviderClient,
+    IClock clock,
+    IKeycloakAdministrationClient keycloakClient,
+    PidpDbContext context) : ICredentialDeletionService
 {
+    private readonly IBCProviderClient bcProviderClient = bcProviderClient;
     private readonly IClock clock = clock;
+    private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
     private readonly PidpDbContext context = context;
 
     public async Task DeleteCredentialsAsync()
@@ -19,7 +28,7 @@ public class CredentialDeletionService(IClock clock, PidpDbContext context) : IC
         var credentials = ReadCredentialsFromFileAsync();
         if (!credentials.Any())
         {
-            Console.WriteLine("No Credentials found in CredentialsToDelete file.");
+            Console.WriteLine("ERROR: No Credentials found in CredentialsToDelete file.");
             return;
         }
 
@@ -32,7 +41,8 @@ public class CredentialDeletionService(IClock clock, PidpDbContext context) : IC
         Console.WriteLine($"{foundCredentials.Count} Credentials found in database.");
         if (credentials.Count() != foundCredentials.Count)
         {
-            Console.WriteLine($">> Warning: number of credentials found in CredentialsToDelete does not match number of credentials found in Database.");
+            Console.WriteLine("ERROR: Number of credentials found in CredentialsToDelete does not match number of credentials found in Database.");
+            return;
         }
 
         this.WriteCredentialsToFileAsync(foundCredentials);
@@ -40,13 +50,26 @@ public class CredentialDeletionService(IClock clock, PidpDbContext context) : IC
 
         if (int.TryParse(Console.ReadLine(), out var count) && count == foundCredentials.Count)
         {
+            foreach (var credential in foundCredentials)
+            {
+                if (credential.IdentityProvider == IdentityProviders.BCProvider && !string.IsNullOrEmpty(credential.IdpId))
+                {
+                    await this.bcProviderClient.DeleteBCProviderAccount(credential.IdpId);
+                }
+
+                if (credential.UserId != Guid.Empty)
+                {
+                    await this.keycloakClient.DeleteUser(credential.UserId);
+                }
+            }
+
             this.context.Credentials.RemoveRange(foundCredentials);
             await this.context.SaveChangesAsync();
-            Console.WriteLine($"Credentials deleted from database.");
+            Console.WriteLine($"Credentials deleted from database, Keycloak, and BC Provider AD.");
         }
         else
         {
-            Console.WriteLine("No Credentials deleted.");
+            Console.WriteLine("Aborting. No Credentials deleted.");
         }
     }
 

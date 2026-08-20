@@ -1,12 +1,11 @@
 namespace Pidp.Models;
 
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using EntityFrameworkCore.Projectables;
 using Microsoft.EntityFrameworkCore;
 using NanoidDotNet;
 using NodaTime;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
 using Pidp.Data;
 using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
@@ -83,7 +82,7 @@ public class Party : BaseAuditable
     public bool EmailIsVerified(string email) => this.VerifiedEmails
         .Any(verifiedEmail => verifiedEmail.IsVerified
             && verifiedEmail.Email.ToLower() == email.ToLower());
-
+        
     /// <summary>
     /// The "primary" Credential of a Party is the a) BC Services Card Credential or b) the only non-BC Services Card Credential.
     /// </summary>

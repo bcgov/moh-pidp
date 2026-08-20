@@ -14,7 +14,7 @@ public class LicenceDeclarationTests : InMemoryDbTest
 {
     [Theory]
     [MemberData(nameof(CollegeCodeTestCases))]
-    public async void HandleAsync_LicenceFoundInGoodStanding_FoundEventPublished(CollegeCode collegeCode)
+    public async Task HandleAsync_LicenceFoundInGoodStanding_FoundEventPublished(CollegeCode collegeCode)
     {
         var expectedCpn = "Cpnn";
         var licenceNumber = collegeCode.ToString();
@@ -49,7 +49,7 @@ public class LicenceDeclarationTests : InMemoryDbTest
 
     [Theory]
     [MemberData(nameof(CollegeCodeTestCases))]
-    public async void HandleAsync_LicenceNotFound_NotFoundEventPublished(CollegeCode collegeCode)
+    public async Task HandleAsync_LicenceNotFound_NotFoundEventPublished(CollegeCode collegeCode)
     {
         var licenceNumber = collegeCode.ToString();
         var party = this.TestDb.HasAParty(party =>

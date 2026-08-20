@@ -62,7 +62,7 @@
           }
           <button
             [class.instructions-text]="!showInstructions"
-            (click)="toggleInstructions()">
+            tabindex="0" (keydown.enter)="toggleInstructions()" (click)="toggleInstructions()">
             {{!showInstructions ? 'Instructions' : 'Back'}}
           </button>
         </div>

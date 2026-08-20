@@ -1,7 +1,6 @@
-namespace Pidp.Features.Parties;
+﻿namespace Pidp.Features.Parties;
 
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
+using Mapster;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -45,11 +44,9 @@ public partial class ProfileStatus
     }
 
     public class QueryHandler(
-        IMapper mapper,
         IPlrClient plrClient,
         PidpDbContext context) : IQueryHandler<Query, Model>
     {
-        private readonly IMapper mapper = mapper;
         private readonly IPlrClient plrClient = plrClient;
         private readonly PidpDbContext context = context;
 
@@ -57,7 +54,7 @@ public partial class ProfileStatus
         {
             var data = await this.context.Parties
                 .Where(party => party.Id == query.Id)
-                .ProjectTo<ProfileData>(this.mapper.ConfigurationProvider)
+                .ProjectToType<ProfileData>()
                 .SingleAsync();
 
             await data.Finalize(this.context, this.plrClient, query.User);
@@ -76,12 +73,14 @@ public partial class ProfileStatus
                     ProfileSection.Create<DriverFitnessSection>(data),
                     ProfileSection.Create<ExternalAccountsSection>(data),
                     ProfileSection.Create<HaloSection>(data),
-                    ProfileSection.Create<HcimAccountTransferSection>(data),
+                    ProfileSection.Create<HcimWebPcrSection>(data),
                     ProfileSection.Create<ImmsBCEformsSection>(data),
                     ProfileSection.Create<ImmsBCSection>(data),
+                    ProfileSection.Create<InfantRsvEformsSection>(data),
                     ProfileSection.Create<IvfSection>(data),
                     ProfileSection.Create<MSTeamsClinicMemberSection>(data),
                     ProfileSection.Create<MSTeamsPrivacyOfficerSection>(data),
+                    ProfileSection.Create<NpdpEformsSection>(data),
                     ProfileSection.Create<PemcodSection>(data),
                     ProfileSection.Create<ProviderReportingPortalSection>(data),
                     ProfileSection.Create<ProvincialAttachmentSystemSection>(data),

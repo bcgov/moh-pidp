@@ -8,6 +8,7 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
   template: ` <div style="position: relative;">
       <img
         src="/assets/images/feedback-doctor-logo.svg"
+        alt="Doctor logo"
         style="width: 100%;display: block;" />
       <button
         type="button"
@@ -20,6 +21,7 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
         (click)="onSuccessDialogClose()">
         <img
           src="/assets/images/feedback-close-logo.png"
+          alt="Close logo"
           style="width: 2.5rem;" />
       </button>
     </div>

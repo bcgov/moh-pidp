@@ -2,13 +2,12 @@ namespace PidpTests.Features.AccessRequests;
 
 using FakeItEasy;
 using NodaTime;
-using Xunit;
-
 using Pidp.Features.AccessRequests;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using PidpTests.TestingExtensions;
+using Xunit;
 
 public class DriverFitnessTests : InMemoryDbTest
 {
@@ -20,7 +19,7 @@ public class DriverFitnessTests : InMemoryDbTest
 
     [Theory]
     [MemberData(nameof(DriverFitnessIdentifierTypeTestData))]
-    public async void CreateDriverFitnessEnrolment_ValidProfileWithVaryingLicence_MatchesAllowedTypes(IdentifierType identifierType)
+    public async Task CreateDriverFitnessEnrolment_ValidProfileWithVaryingLicence_MatchesAllowedTypes(IdentifierType identifierType)
     {
         var party = this.TestDb.HasAParty(party =>
         {
@@ -44,7 +43,7 @@ public class DriverFitnessTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void CreateDriverFitnessEnrolment_NoLicenceNoEndorsements_Denied()
+    public async Task CreateDriverFitnessEnrolment_NoLicenceNoEndorsements_Denied()
     {
         var party = this.TestDb.HasAParty(party =>
         {
@@ -69,7 +68,7 @@ public class DriverFitnessTests : InMemoryDbTest
 
     [Theory]
     [MemberData(nameof(DriverFitnessIdentifierTypeTestData))]
-    public async void CreateDriverFitnessEnrolment_NoLicenceWithEndorsement_Accepted(IdentifierType otherPartyIdentifierType)
+    public async Task CreateDriverFitnessEnrolment_NoLicenceWithEndorsement_Accepted(IdentifierType otherPartyIdentifierType)
     {
         var party = this.TestDb.HasAParty(party =>
         {
@@ -114,7 +113,7 @@ public class DriverFitnessTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void CreateDriverFitnessEnrolment_WrongLicenceWithEndorsement_Denied()
+    public async Task CreateDriverFitnessEnrolment_WrongLicenceWithEndorsement_Denied()
     {
         var party = this.TestDb.HasAParty(party =>
         {

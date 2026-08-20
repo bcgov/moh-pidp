@@ -16,7 +16,7 @@ public class BCProviderClientTests
 {
     [Theory]
     [MemberData(nameof(IllegalCharactersTestCases))]
-    public async void CreateBCProvider_NameWithIllegalCharacters_IllegalCharactersRemoved(string firstName, string lastName)
+    public async Task CreateBCProvider_NameWithIllegalCharacters_IllegalCharactersRemoved(string firstName, string lastName)
     {
         var allowedCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.-_!#^~";
         var filteredCharacters = $"{firstName}.{lastName}"

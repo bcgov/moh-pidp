@@ -9,16 +9,17 @@ public class PidpConfiguration
     private static readonly string? EnvironmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
     public string ApplicationUrl { get; set; } = string.Empty;
+    public string CorsAllowedOrigins { get; set; } = string.Empty;
 
     public AddressAutocompleteClientConfiguration AddressAutocompleteClient { get; set; } = new();
     public BCProviderClientConfiguration BCProviderClient { get; set; } = new();
     public ConnectionStringConfiguration ConnectionStrings { get; set; } = new();
     public ChesClientConfiguration ChesClient { get; set; } = new();
     public KeycloakConfiguration Keycloak { get; set; } = new();
-    public LdapClientConfiguration LdapClient { get; set; } = new();
     public MailServerConfiguration MailServer { get; set; } = new();
     public PlrClientConfiguration PlrClient { get; set; } = new();
     public RabbitMQConfiguration RabbitMQ { get; set; } = new();
+    public PharmacyConfiguration Pharmacy { get; set; } = new();
 
     // ------- Configuration Objects -------
 
@@ -61,11 +62,6 @@ public class PidpConfiguration
         public string HcimClientId { get; set; } = string.Empty;
     }
 
-    public class LdapClientConfiguration
-    {
-        public string Url { get; set; } = string.Empty;
-    }
-
     public class MailServerConfiguration
     {
         public string Url { get; set; } = string.Empty;
@@ -81,5 +77,10 @@ public class PidpConfiguration
     public class RabbitMQConfiguration
     {
         public string HostAddress { get; set; } = string.Empty;
+    }
+
+    public class PharmacyConfiguration
+    {
+        public string NotificationEmail { get; set; } = string.Empty;
     }
 }

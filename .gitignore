@@ -2,7 +2,12 @@
 .DS_Store
 .AppleDouble
 .LSOverride
-
+*.swp
+*.*~
+project.lock.json
+.DS_Store
+*.pyc
+nupkg/
 tls/
 
 # Icon must end with two \r
@@ -26,4 +31,56 @@ workspace/.nx/workspace-data/project-graph.json
 workspace/.nx/workspace-data/d/daemon.log
 workspace/.nx/workspace-data/d/server-process.json
 workspace/.nx/workspace-data/file-map.json
-/workspace/.nx
+workspace/.nx
+workspace/.vscode
+workspace/.angular
+workspace/.scannerwork
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.vscode/*
+
+# Rider
+.idea
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+msbuild.log
+msbuild.err
+msbuild.wrn
+
+# Visual Studio 2015
+.vs/
+
+# SonarQube
+.sonarqube/
+
+# Logging
+logs/
+
+# Environment Variables
+.env
+
+# Helm chart
+/charts/*/charts/*.tgz
+

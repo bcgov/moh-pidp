@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   ###############################################################################
   ###                     PostgreSQL Database Definition                      ###
@@ -7,10 +5,10 @@ services:
   pidp-db:
     restart: always
     container_name: pidpdb
-    image: postgres:10.6
+    image: postgres:16
     environment:
       POSTGRES_PASSWORD: postgres
-      POSTGRES_USERNAME: postgres
+      POSTGRES_USER: postgres
       POSTGRES_DB: postgres
     ports:
       - "5433:5432"
@@ -18,6 +16,11 @@ services:
       - local_pidp_postgress_data:/var/lib/postgresql/data
     networks:
       - pidp-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   ###############################################################################
   ###                       PIdP API Backend Definition                       ###
@@ -42,6 +45,7 @@ services:
       ConnectionStrings__PidpDatabase: "host=pidpdb;port=5432;database=postgres;username=postgres;password=postgres"
       PlrClient__Url: "http://pidp-plr-intake:8080/api" # Assuming the PLR intake microservice is also running in Docker
       RabbitMQ__HostAddress: "amqp://guest:guest@pidp-rabbitmq:5672/"
+      CorsAllowedOrigins: "http://localhost:4200,http://localhost:5050,https://localhost:5051"
     volumes:
       - ./backend/webapi/:/app
       - pidp-webapi-bin:/app/bin
@@ -55,13 +59,14 @@ services:
     networks:
       - pidp-net
     depends_on:
-      - pidp-db
+      pidp-db:
+        condition: service_healthy
+      pidp-rabbitmq:
+        condition: service_healthy
     entrypoint: /bin/bash
     command: [
       "-c",
-      "echo Waiting for Database...;
-      sleep 10;
-      echo \"Running Database Migrations...\";
+      "echo \"Running Database Migrations...\";
       dotnet ef database update;
       echo \"Starting API...\";
       dotnet watch run --urls=http://+:8080"
@@ -96,13 +101,12 @@ services:
     networks:
       - pidp-net
     depends_on:
-      - pidp-db
+      pidp-db:
+        condition: service_healthy
     entrypoint: /bin/bash
     command: [
       "-c",
-      "echo Waiting for Database...;
-      sleep 5;
-      echo \"Running PLR Database Migrations...\";
+      "echo \"Running PLR Database Migrations...\";
       dotnet ef database update;
       echo \"Starting PLR API...\";
       dotnet watch run --urls=http://+:8080"
@@ -114,7 +118,7 @@ services:
   pidp-rabbitmq:
     container_name: 'pidp-rabbitmq'
     restart: always
-    image: masstransit/rabbitmq:3.12
+    image: rabbitmq:3-management
     environment:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
@@ -123,14 +127,19 @@ services:
       - 15672:15672
     networks:
       - pidp-net
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   ###############################################################################
   ###                                 Mailhog                                 ###
   ###############################################################################
   mailhog:
-    container_name: mailhog
+    container_name: mailpit
     restart: always
-    image: mailhog/mailhog:latest
+    image: axllent/mailpit:latest
     ports:
       - 25:1025
       - 1025:1025
@@ -156,6 +165,21 @@ services:
       - 9090:8080
     profiles: ["full", "keycloak"]
 
+  ###############################################################################
+  ###                                  Trivy                                  ###
+  ###############################################################################
+  trivy:
+    container_name: trivy
+    image: aquasec/trivy:latest
+    command: server --listen 0.0.0.0:4954
+    ports:
+      - 4954:4954
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - trivy-cache:/root/.cache/trivy
+    networks:
+      - pidp-net
+
 ###############################################################################
 ###                           Networks Definition                           ###
 ###############################################################################
@@ -170,3 +194,4 @@ volumes:
   local_pidp_postgress_data: null
   pidp-webapi-bin:
   pidp-webapi-obj:
+  trivy-cache:

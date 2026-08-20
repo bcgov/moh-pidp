@@ -14,7 +14,7 @@ using PidpTests.TestingExtensions;
 public class MSTeamsClinicMemberTests : InMemoryDbTest
 {
     [Fact]
-    public async void Create_WithProfileNoEndorsements_Fail()
+    public async Task Create_WithProfileNoEndorsements_Fail()
     {
         var party = this.TestDb.HasAParty(party =>
         {
@@ -32,7 +32,7 @@ public class MSTeamsClinicMemberTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void Create_WithEndorsementNotClinicPrivacyOfficer_Fail()
+    public async Task Create_WithEndorsementNotClinicPrivacyOfficer_Fail()
     {
         var party = this.TestDb.HasAParty(party =>
         {
@@ -74,7 +74,7 @@ public class MSTeamsClinicMemberTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void Create_WithEndorsementFromPrivacyOfficer_SuccessWithEmails()
+    public async Task Create_WithEndorsementFromPrivacyOfficer_SuccessWithEmails()
     {
         var party = this.TestDb.HasAParty(party =>
         {

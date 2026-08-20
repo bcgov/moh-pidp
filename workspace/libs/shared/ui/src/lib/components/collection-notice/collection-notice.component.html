@@ -13,7 +13,7 @@
         mat-flat-button
         type="button"
         color="primary"
-        (click)="onAccept()">
+        tabindex="0" (keydown.enter)="onAccept()" (click)="onAccept()">
         Ok
       </button>
     </span>

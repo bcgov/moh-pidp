@@ -18,3 +18,7 @@ dependencies:
   - name: nginx
     repository: "file://../nginx"
     version: "9.8.0"
+  # - name: trivy
+  #   repository: "https://aquasecurity.github.io/helm-charts/"
+  #   version: "0.26.0"
+  #   condition: trivy.enabled
