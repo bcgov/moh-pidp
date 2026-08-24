@@ -17,6 +17,7 @@ public class NewUserRepresentation
     public string OpId { get; set; } = string.Empty;
     public string PidpEmail { get; set; } = string.Empty;
     public DateTimeOffset UaaDate { get; set; }
+    public IEnumerable<string> PractitionerRole { get; set; } = [];
 
     public string Password { get; set; } = string.Empty;
 }
@@ -49,7 +50,8 @@ public class BCProviderAttributes(string clientId)
             .SetLoa(3)
             .SetOpId(representation.OpId)
             .SetPidpEmail(representation.PidpEmail)
-            .SetUaaDate(representation.UaaDate);
+            .SetUaaDate(representation.UaaDate)
+            .SetPractitionerRole(representation.PractitionerRole);
 
         if (!string.IsNullOrWhiteSpace(representation.Cpn))
         {
@@ -79,6 +81,7 @@ public class BCProviderAttributes(string clientId)
     public BCProviderAttributes SetOpId(string opId) => this.SetProperty(nameof(opId), opId);
     public BCProviderAttributes SetPidpEmail(string pidpEmail) => this.SetProperty(nameof(pidpEmail), pidpEmail);
     public BCProviderAttributes SetUaaDate(DateTimeOffset uaaDate) => this.SetProperty(nameof(uaaDate), uaaDate);
+    public BCProviderAttributes SetPractitionerRole(IEnumerable<string> practitionerRole) => this.SetProperty(nameof(practitionerRole), "[" + string.Join(",", practitionerRole.Select(s => $"\"{s}\"")) + "]");
 
     private BCProviderAttributes SetProperty(string propertyName, object value)
     {

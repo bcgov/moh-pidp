@@ -124,6 +124,12 @@ public class PlrStandingsDigest
         .Where(mspId => !string.IsNullOrWhiteSpace(mspId))
         .Select(mspId => mspId!);
 
+    public IEnumerable<string> ProviderRoleTypes => this.records
+        .Select(record => record.ProviderRoleType)
+        .Where(type => !string.IsNullOrWhiteSpace(type))
+        .Distinct()
+        .Select(type => type!);
+
     private PlrStandingsDigest(bool error, IEnumerable<DigestRecord>? records = null)
     {
         this.Error = error;

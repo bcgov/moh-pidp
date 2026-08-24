@@ -1,4 +1,4 @@
-﻿namespace Pidp.Infrastructure.Services;
+namespace Pidp.Infrastructure.Services;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -71,10 +71,8 @@ public sealed class PlrStatusUpdateService(
             party.DomainEvents.Add(new EndorsementStandingUpdated(relation.PartyId));
         }
 
-        // Every status change is now queued, not just those that flip good standing, so this block
-        // gates itself on the flip it has always depended on.
-        if (party.Upns.Any()
-            && !status.IsGoodStandingUnchanged())
+        // Every update is now queued, we used to have '&& !status.IsGoodStandingUnchanged()'
+        if (party.Upns.Any())
         {
             var bcProviderAttributes = new BCProviderAttributes(this.clientId);
 
@@ -102,9 +100,11 @@ public sealed class PlrStatusUpdateService(
                 bcProviderAttributes.SetIsPharm(status.IsGoodStanding);
             }
 
+            var plrStanding = await this.plrClient.GetStandingsDigestAsync(status.Cpn);
+            bcProviderAttributes.SetPractitionerRole(plrStanding.ProviderRoleTypes);
+
             if (status.MspId != null)
             {
-                var plrStanding = await this.plrClient.GetStandingsDigestAsync(status.Cpn);
                 bcProviderAttributes.SetMspId(plrStanding.MspIds);
             }
 
