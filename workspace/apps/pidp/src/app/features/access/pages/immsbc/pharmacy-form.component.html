@@ -9,24 +9,69 @@
   </div>
 
   <div class="form-field">
-    <label for="address">Street Address</label>
-    <input id="address" type="text" formControlName="address" autocomplete="shipping street-address" />
-    @if (form.get('address')?.invalid && form.get('address')?.touched) {
-    <div class="form-error">Street Address is required.</div>
+    <label for="healthAuthority">Health Authority</label>
+    <select id="healthAuthority" formControlName="healthAuthority">
+      <option value="BC Pharmacy Association">BC Pharmacy Association</option>
+      <option value="First Nations Health Authority">First Nations Health Authority</option>
+      <option value="Fraser Health Authority">Fraser Health Authority</option>
+      <option value="Northern Health Authority">Northern Health Authority</option>
+      <option value="Vancouver Coastal Health Authority">Vancouver Coastal Health Authority</option>
+      <option value="Vancouver Island Health Authority">Vancouver Island Health Authority</option>
+      <option value="Other">Other</option>
+    </select>
+    @if (form.get('healthAuthority')?.invalid && form.get('healthAuthority')?.touched) {
+    <div class="form-error">Health Authority is required.</div>
     }
   </div>
 
   <div class="form-field">
-    <label for="phone">Pharmacy Phone Number (Format: XXX-XXX-XXXX)</label>
-    <input id="phone" type="tel" formControlName="phone" autocomplete="tel" mask="000-000-0000" />
+    <label for="address1">Address Line 1</label>
+    <input id="address1" type="text" formControlName="address1" autocomplete="address-line1" />
+    @if (form.get('address1')?.invalid && form.get('address1')?.touched) {
+    <div class="form-error">Address Line 1 is required.</div>
+    }
+  </div>
+
+  <div class="form-field">
+    <label for="address2">Address Line 2 (Optional)</label>
+    <input id="address2" type="text" formControlName="address2" autocomplete="address-line2" />
+  </div>
+
+  <div class="form-field">
+    <label for="city">City</label>
+    <input id="city" type="text" formControlName="city" autocomplete="address-level2" />
+    @if (form.get('city')?.invalid && form.get('city')?.touched) {
+    <div class="form-error">City is required.</div>
+    }
+  </div>
+
+  <div class="form-field">
+    <label for="province">Province</label>
+    <input id="province" type="text" formControlName="province" autocomplete="address-level1" />
+    @if (form.get('province')?.invalid && form.get('province')?.touched) {
+    <div class="form-error">Province is required.</div>
+    }
+  </div>
+
+  <div class="form-field">
+    <label for="postalCode">Postal Code</label>
+    <input id="postalCode" type="text" formControlName="postalCode" autocomplete="postal-code" />
+    @if (form.get('postalCode')?.invalid && form.get('postalCode')?.touched) {
+    <div class="form-error">Postal Code is required.</div>
+    }
+  </div>
+
+  <div class="form-field">
+    <label for="phone">Pharmacy Phone Number (Format: (XXX) XXX-XXXX)</label>
+    <input id="phone" type="tel" formControlName="phone" autocomplete="tel" mask="(000) 000-0000" />
     @if (form.get('phone')?.invalid && form.get('phone')?.touched) {
     <div class="form-error">Phone Number is required.</div>
     }
   </div>
 
   <div class="form-field">
-    <label for="fax">Pharmacy Fax Number (Format: XXX-XXX-XXXX)</label>
-    <input id="fax" type="tel" formControlName="fax" autocomplete="tel" mask="000-000-0000" />
+    <label for="fax">Pharmacy Fax Number (Format: (XXX) XXX-XXXX)</label>
+    <input id="fax" type="tel" formControlName="fax" autocomplete="tel" mask="(000) 000-0000" />
     @if (form.get('fax')?.invalid && form.get('fax')?.touched) {
     <div class="form-error">Fax Number is required.</div>
     }

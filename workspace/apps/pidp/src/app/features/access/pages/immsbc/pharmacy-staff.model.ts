@@ -17,7 +17,12 @@ export interface PharmacyProfile {
 export interface Pharmacy {
   id: number;
   name: string;
-  address: string;
+  healthAuthority: string;
+  address1: string;
+  address2: string;
+  city: string;
+  province: string;
+  postalCode: string;
   managerName: string;
   email: string;
   phone: string;

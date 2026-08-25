@@ -13,7 +13,12 @@ public class PharmacyIndex
     {
         public int PartyId { get; set; }
         public string Name { get; set; } = string.Empty;
-        public string Address { get; set; } = string.Empty;
+        public string HealthAuthority { get; set; } = string.Empty;
+        public string Address1 { get; set; } = string.Empty;
+        public string Address2 { get; set; } = string.Empty;
+        public string City { get; set; } = string.Empty;
+        public string Province { get; set; } = string.Empty;
+        public string PostalCode { get; set; } = string.Empty;
         public string ManagerName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
@@ -28,7 +33,12 @@ public class PharmacyIndex
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public string Address { get; set; } = string.Empty;
+        public string HealthAuthority { get; set; } = string.Empty;
+        public string Address1 { get; set; } = string.Empty;
+        public string? Address2 { get; set; }
+        public string City { get; set; } = string.Empty;
+        public string Province { get; set; } = string.Empty;
+        public string PostalCode { get; set; } = string.Empty;
         public string ManagerName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
@@ -54,7 +64,12 @@ public class PharmacyIndex
             {
                 Id = pharmacy.Id,
                 Name = pharmacy.Name,
-                Address = pharmacy.Address,
+                HealthAuthority = pharmacy.HealthAuthority,
+                Address1 = pharmacy.Address1,
+                Address2 = pharmacy.Address2,
+                City = pharmacy.City,
+                Province = pharmacy.Province,
+                PostalCode = pharmacy.PostalCode,
                 ManagerName = pharmacy.ManagerName,
                 Email = pharmacy.Email,
                 Phone = pharmacy.Phone,
