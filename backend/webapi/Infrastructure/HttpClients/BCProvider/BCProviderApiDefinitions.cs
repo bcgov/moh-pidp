@@ -18,6 +18,7 @@ public class NewUserRepresentation
     public string PidpEmail { get; set; } = string.Empty;
     public DateTimeOffset UaaDate { get; set; }
     public IEnumerable<string> PractitionerRole { get; set; } = [];
+    public IEnumerable<string> CollegeId { get; set; } = [];
 
     public string Password { get; set; } = string.Empty;
 }
@@ -51,7 +52,8 @@ public class BCProviderAttributes(string clientId)
             .SetOpId(representation.OpId)
             .SetPidpEmail(representation.PidpEmail)
             .SetUaaDate(representation.UaaDate)
-            .SetPractitionerRole(representation.PractitionerRole);
+            .SetPractitionerRole(representation.PractitionerRole)
+            .SetCollegeId(representation.CollegeId);
 
         if (!string.IsNullOrWhiteSpace(representation.Cpn))
         {
@@ -82,6 +84,7 @@ public class BCProviderAttributes(string clientId)
     public BCProviderAttributes SetPidpEmail(string pidpEmail) => this.SetProperty(nameof(pidpEmail), pidpEmail);
     public BCProviderAttributes SetUaaDate(DateTimeOffset uaaDate) => this.SetProperty(nameof(uaaDate), uaaDate);
     public BCProviderAttributes SetPractitionerRole(IEnumerable<string> practitionerRole) => this.SetProperty(nameof(practitionerRole), "[" + string.Join(",", practitionerRole.Select(s => $"\"{s}\"")) + "]");
+    public BCProviderAttributes SetCollegeId(IEnumerable<string> collegeId) => this.SetProperty(nameof(collegeId), "[" + string.Join(",", collegeId.Select(s => $"\"{s}\"")) + "]");
 
     private BCProviderAttributes SetProperty(string propertyName, object value)
     {

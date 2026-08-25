@@ -152,6 +152,7 @@ public partial class BCProviderClient(
                     AdditionalData = bcProviderAttributes
                 });
 
+            this.logger.LogAttributesUpdated(userPrincipalName);
             return true;
         }
         catch
@@ -175,6 +176,7 @@ public partial class BCProviderClient(
                     }
                 });
 
+            this.logger.LogPasswordUpdated(userPrincipalName);
             return true;
         }
         catch
@@ -191,6 +193,7 @@ public partial class BCProviderClient(
             await this.client.Users[userPrincipalName]
                 .PatchAsync(user);
 
+            this.logger.LogUserUpdated(userPrincipalName);
             return true;
         }
         catch
@@ -205,6 +208,7 @@ public partial class BCProviderClient(
         try
         {
             await this.client.Users[userPrincipalName].DeleteAsync();
+            this.logger.LogUserDeleted(userPrincipalName);
             return true;
         }
         catch (Exception ex)
@@ -236,6 +240,7 @@ public partial class BCProviderClient(
             var filteredAuthMethods = authMethods.Value.Where(authMethod => authMethod is not PasswordAuthenticationMethod).ToList();
             if (filteredAuthMethods.Count == 0)
             {
+                this.logger.LogAuthMethodsRemoved(userPrincipalName);
                 allMethodsDeleted = true;
                 break;
             }
@@ -415,4 +420,19 @@ public static partial class BCProviderClientLoggingExtensions
 
     [LoggerMessage(13, LogLevel.Error, "An error occurred while inviting user {userPrincipalName}. Reason: {reason}")]
     public static partial void LogInviteUserError(this ILogger<BCProviderClient> logger, string userPrincipalName, string? reason);
+
+    [LoggerMessage(14, LogLevel.Information, "Successfully updated attributes for BC Provider account: {userPrincipalName}")]
+    public static partial void LogAttributesUpdated(this ILogger<BCProviderClient> logger, string userPrincipalName);
+
+    [LoggerMessage(15, LogLevel.Information, "Successfully updated password for BC Provider account: {userPrincipalName}")]
+    public static partial void LogPasswordUpdated(this ILogger<BCProviderClient> logger, string userPrincipalName);
+
+    [LoggerMessage(16, LogLevel.Information, "Successfully updated user profile for BC Provider account: {userPrincipalName}")]
+    public static partial void LogUserUpdated(this ILogger<BCProviderClient> logger, string userPrincipalName);
+
+    [LoggerMessage(17, LogLevel.Information, "Successfully removed authentication methods for BC Provider account: {userPrincipalName}")]
+    public static partial void LogAuthMethodsRemoved(this ILogger<BCProviderClient> logger, string userPrincipalName);
+
+    [LoggerMessage(18, LogLevel.Information, "Successfully deleted BC Provider account: {userPrincipalName}")]
+    public static partial void LogUserDeleted(this ILogger<BCProviderClient> logger, string userPrincipalName);
 }

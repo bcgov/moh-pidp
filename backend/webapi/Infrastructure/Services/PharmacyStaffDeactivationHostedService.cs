@@ -19,7 +19,7 @@ public class PharmacyStaffDeactivationHostedService(
 
         Thread.Sleep(40000); // Wait for 40 seconds to allow the application to fully start before executing the service
 
-        this.logger.LogInformation("Pharmacy Staff Deactivation Hosted Service is starting.");
+        this.logger.LogServiceStarting();
 
         while (!stoppingToken.IsCancellationRequested)
         {
@@ -31,13 +31,25 @@ public class PharmacyStaffDeactivationHostedService(
             }
             catch (Exception ex)
             {
-                this.logger.LogError(ex, "Error occurred executing Pharmacy Staff Deactivation Hosted Service.");
+                this.logger.LogServiceError(ex);
             }
 
             // Run once a day (24 hours)
             await Task.Delay(TimeSpan.FromDays(1), stoppingToken);
         }
 
-        this.logger.LogInformation("Pharmacy Staff Deactivation Hosted Service is stopping.");
+        this.logger.LogServiceStopping();
     }
+}
+
+public static partial class PharmacyStaffDeactivationLoggingExtensions
+{
+    [LoggerMessage(1, LogLevel.Information, "Pharmacy Staff Deactivation Hosted Service is starting.")]
+    public static partial void LogServiceStarting(this ILogger logger);
+
+    [LoggerMessage(2, LogLevel.Error, "Error occurred executing Pharmacy Staff Deactivation Hosted Service.")]
+    public static partial void LogServiceError(this ILogger logger, Exception ex);
+
+    [LoggerMessage(3, LogLevel.Information, "Pharmacy Staff Deactivation Hosted Service is stopping.")]
+    public static partial void LogServiceStopping(this ILogger logger);
 }

@@ -44,6 +44,7 @@ public sealed class PlrStatusUpdateService(
         }
 
         var status = statusChanges.Single();
+        this.logger.LogProcessingStatusUpdateForCpn(status.Cpn);
 
         var party = await this.context.Parties
             .Include(party => party.Credentials)
@@ -110,6 +111,7 @@ public sealed class PlrStatusUpdateService(
 
             foreach (var upn in party.Upns)
             {
+                this.logger.LogApplyingAttributeUpdates(upn);
                 await this.bcProviderClient.UpdateAttributes(upn, bcProviderAttributes.AsAdditionalData());
             }
         }
@@ -150,4 +152,10 @@ public static partial class PlrStatusUpdateServiceLoggingExtensions
 
     [LoggerMessage(3, LogLevel.Error, "Unhandled exception while re-evaluating {accessTypeCode} eligibility for Party {partyId}. The rest of the status update was processed.")]
     public static partial void LogRevocationFailed(this ILogger<PlrStatusUpdateService> logger, AccessTypeCode accessTypeCode, int partyId, Exception e);
+
+    [LoggerMessage(4, LogLevel.Information, "Processing PLR status update for CPN {cpn}. Evaluating attributes for update.")]
+    public static partial void LogProcessingStatusUpdateForCpn(this ILogger<PlrStatusUpdateService> logger, string? cpn);
+
+    [LoggerMessage(5, LogLevel.Information, "Applying PLR-driven attribute updates to BC Provider account for UPN: {upn}")]
+    public static partial void LogApplyingAttributeUpdates(this ILogger<PlrStatusUpdateService> logger, string upn);
 }

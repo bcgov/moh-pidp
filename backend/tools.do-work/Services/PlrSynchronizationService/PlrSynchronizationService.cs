@@ -25,10 +25,10 @@ public class PlrSynchronizationService(
 
     public async Task SynchronizePlrToEntraAsync(bool dryRun)
     {
-        this.logger.LogInformation("Starting PLR to Entra synchronization...");
+        this.logger.LogStartingPlrSynchronization();
         if (dryRun)
         {
-            this.logger.LogInformation("DRY RUN MODE: No updates will be applied to Entra.");
+            this.logger.LogDryRunMode();
         }
         var clientId = this.config.BCProviderClient.ClientId;
 
@@ -37,7 +37,7 @@ public class PlrSynchronizationService(
             .Where(party => party.Cpn != null && party.Credentials.Any(c => c.IdentityProvider == IdentityProviders.BCProvider))
             .ToListAsync();
 
-        this.logger.LogInformation("Found {Count} parties with BCProvider credentials and a CPN.", parties.Count);
+        this.logger.LogFoundParties(parties.Count);
 
         int count = 0;
         foreach (var party in parties)
@@ -68,20 +68,79 @@ public class PlrSynchronizationService(
             bcProviderAttributes.SetIsPharm(plrStanding.With(IdentifierType.Pharmacist).HasGoodStanding);
             bcProviderAttributes.SetPractitionerRole(plrStanding.ProviderRoleTypes);
             bcProviderAttributes.SetMspId(plrStanding.MspIds);
+            bcProviderAttributes.SetCollegeId(plrStanding.CollegeIds);
 
             foreach (var upn in upns)
             {
                 if (upn == null) continue;
-                this.logger.LogInformation("Updating Entra attributes for UPN: {Upn}", upn);
+
+                var additionalData = bcProviderAttributes.AsAdditionalData();
+                var currentAttributes = await this.bcProviderClient.GetUserAttributes(upn, additionalData.Keys.ToArray());
+
+                var hasChanges = false;
+                if (currentAttributes != null)
+                {
+                    foreach (var kvp in additionalData)
+                    {
+                        var newValueString = kvp.Value?.ToString()?.ToLowerInvariant() ?? "null";
+                        var currentValueString = currentAttributes.TryGetValue(kvp.Key, out var currVal) ? (currVal?.ToString()?.ToLowerInvariant() ?? "null") : "null";
+
+                        if (newValueString != currentValueString)
+                        {
+                            this.logger.LogAttributeChanging(upn, kvp.Key, currentValueString, newValueString);
+                            hasChanges = true;
+                        }
+                    }
+                }
+                else
+                {
+                    this.logger.LogCouldNotRetrieveAttributes(upn);
+                    hasChanges = true;
+                }
+
+                if (!hasChanges)
+                {
+                    this.logger.LogNoAttributeChangesRequired(upn);
+                    continue;
+                }
+
+                this.logger.LogUpdatingEntraAttributes(upn);
                 if (!dryRun)
                 {
-                    await this.bcProviderClient.UpdateAttributes(upn, bcProviderAttributes.AsAdditionalData());
+                    await this.bcProviderClient.UpdateAttributes(upn, additionalData);
                 }
             }
 
             count++;
         }
 
-        this.logger.LogInformation("Finished synchronizing {Count} parties.", count);
+        this.logger.LogFinishedSynchronizing(count);
     }
+}
+
+public static partial class PlrSynchronizationLoggingExtensions
+{
+    [LoggerMessage(1, LogLevel.Information, "Starting PLR to Entra synchronization...")]
+    public static partial void LogStartingPlrSynchronization(this ILogger logger);
+
+    [LoggerMessage(2, LogLevel.Information, "DRY RUN MODE: No updates will be applied to Entra.")]
+    public static partial void LogDryRunMode(this ILogger logger);
+
+    [LoggerMessage(3, LogLevel.Information, "Found {Count} parties with BCProvider credentials and a CPN.")]
+    public static partial void LogFoundParties(this ILogger logger, int count);
+
+    [LoggerMessage(4, LogLevel.Information, "UPN: {Upn} Attribute {Key} changing from {OldValue} to {NewValue}")]
+    public static partial void LogAttributeChanging(this ILogger logger, string upn, string key, string oldValue, string newValue);
+
+    [LoggerMessage(5, LogLevel.Warning, "UPN: {Upn} Could not retrieve current attributes from Entra.")]
+    public static partial void LogCouldNotRetrieveAttributes(this ILogger logger, string upn);
+
+    [LoggerMessage(6, LogLevel.Information, "UPN: {Upn} No attribute changes required.")]
+    public static partial void LogNoAttributeChangesRequired(this ILogger logger, string upn);
+
+    [LoggerMessage(7, LogLevel.Information, "Updating Entra attributes for UPN: {Upn}")]
+    public static partial void LogUpdatingEntraAttributes(this ILogger logger, string upn);
+
+    [LoggerMessage(8, LogLevel.Information, "Finished synchronizing {Count} parties.")]
+    public static partial void LogFinishedSynchronizing(this ILogger logger, int count);
 }

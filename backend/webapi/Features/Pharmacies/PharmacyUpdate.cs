@@ -1,3 +1,5 @@
+#pragma warning disable CA1805
+
 namespace Pidp.Features.Pharmacies;
 
 using FluentValidation;

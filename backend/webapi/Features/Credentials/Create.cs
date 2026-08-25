@@ -74,7 +74,9 @@ public class Create
             var existingCredential = await this.context.Credentials
                 .Where(credential => credential.UserId == userId
                     || (credential.IdentityProvider == userIdentityProvider
+#pragma warning disable CA1304, CA1862, CA1311
                         && credential.IdpId!.ToLower() == userIdpId.ToLower()))
+#pragma warning restore CA1304, CA1862, CA1311
                 .SingleOrDefaultAsync();
 
             if (existingCredential != null)
@@ -208,12 +210,12 @@ public class Create
 
                 foreach (var credential in party.Credentials)
                 {
-                    await this.bus.PublishAsync(UpdateKeycloakAttributes.FromUpdateAction(credential.UserId, user => user.SetOpId(party.OpId)), cancellationToken);
+                    await this.bus.PublishAsync(UpdateKeycloakAttributes.FromUpdateAction(credential.UserId, user => user.SetOpId(party.OpId ?? "")), cancellationToken);
                 }
             }
             else
             {
-                await this.bus.PublishAsync(UpdateKeycloakAttributes.FromUpdateAction(newCredential.UserId, user => user.SetOpId(party.OpId)), cancellationToken);
+                await this.bus.PublishAsync(UpdateKeycloakAttributes.FromUpdateAction(newCredential.UserId, user => user.SetOpId(party.OpId ?? "")), cancellationToken);
             }
         }
     }
@@ -234,7 +236,7 @@ public class Create
                 })
                 .SingleAsync(cancellationToken);
 
-            await this.bus.PublishAsync(UpdateKeycloakAttributes.FromUpdateAction(notification.Credential.UserId, user => user.SetPidpEmail(attributes.Email).SetPidpPhone(attributes.Phone)), cancellationToken);
+            await this.bus.PublishAsync(UpdateKeycloakAttributes.FromUpdateAction(notification.Credential.UserId, user => user.SetPidpEmail(attributes.Email ?? "").SetPidpPhone(attributes.Phone ?? "")), cancellationToken);
         }
     }
 

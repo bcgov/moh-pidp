@@ -1,3 +1,5 @@
+#pragma warning disable CA1805
+
 namespace Pidp.Features.Pharmacies;
 
 using Mediator;
@@ -32,7 +34,7 @@ public class StaffUpdate
 
             if (!requestingPartyIsAdmin)
             {
-                throw new AccessViolationException("User is not an admin of this pharmacy.");
+                throw new InvalidOperationException("User is not an admin of this pharmacy.");
             }
 
             var staffRole = await context.PharmacyPartyRoles
