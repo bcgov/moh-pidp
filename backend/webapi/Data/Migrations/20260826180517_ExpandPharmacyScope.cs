@@ -15,7 +15,6 @@ namespace Pidp.Data.Migrations
             migrationBuilder.AddColumn<string>( name: "City", table: "Pharmacies", type: "text", nullable: false, defaultValue: ""); 
             migrationBuilder.AddColumn<string>( name: "Province", table: "Pharmacies", type: "text", nullable: false, defaultValue: ""); 
             migrationBuilder.AddColumn<string>( name: "HealthAuthority", table: "Pharmacies", type: "text", nullable: false, defaultValue: ""); 
-            migrationBuilder.InsertData( table: "AccessTypeLookup", columns: new[] { "Code", "Name" }, values: new object[] { 13, "Exceptional Coverage: National PharmaCare and Mifepristone/Misoprostol" }); 
             migrationBuilder.UpdateData( table: "Pharmacies", keyColumn: "Id", keyValue: 1, columns: new[] { "Address1", "Address2", "City", "HealthAuthority", "PostalCode", "Province" }, values: new object[] { "13444 108 Ave", "", "Surrey", "", "V3T 2K1", "BC" }); 
             migrationBuilder.UpdateData( table: "Pharmacies", keyColumn: "Id", keyValue: 2, columns: new[] { "Address1", "Address2", "City", "HealthAuthority", "PostalCode", "Province" }, values: new object[] { "112 - 15315 66 Avenue", "", "Surrey", "", "V3S 2A1", "BC" }); 
             migrationBuilder.UpdateData( table: "Pharmacies", keyColumn: "Id", keyValue: 3, columns: new[] { "Address1", "Address2", "City", "HealthAuthority", "PostalCode", "Province" }, values: new object[] { "683 Denman St", "", "Vancouver", "", "V6G 2L3", "BC" }); 
