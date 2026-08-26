@@ -51,7 +51,7 @@ public class StaffDelete
 
                 context.BusinessEvents.Add(PharmacyStaffChanged.Create(request.RequestingPartyId, pharmacyName, clock.GetCurrentInstant()));
 
-                staffRole.EffectiveEndDate = clock.GetCurrentInstant().ToDateTimeUtc();
+                context.PharmacyPartyRoles.Remove(staffRole);
                 await context.SaveChangesAsync(cancellationToken);
 
                 await bcProviderService.UpdatePharmStaffAttributes(request.PartyId, cancellationToken);

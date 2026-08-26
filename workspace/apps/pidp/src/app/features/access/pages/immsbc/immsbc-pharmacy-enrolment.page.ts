@@ -56,14 +56,6 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
       return;
     }
 
-    if (!this.partyService.partyId) {
-      // Not authenticated, redirect to login and return to this page
-      this.keycloak.login({
-        redirectUri: window.location.href,
-      });
-      return; // Stop execution until user is logged in and redirected back
-    }
-
     // User is authenticated, proceed with form setup
     this.form = this.fb.group({
       privacyTrainingAcknowledged: [false, Validators.requiredTrue]

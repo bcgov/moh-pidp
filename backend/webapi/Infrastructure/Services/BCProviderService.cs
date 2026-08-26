@@ -54,7 +54,7 @@ public class BCProviderService(PidpDbContext context, IBCProviderClient bcProvid
         }
 
         var pharmacyNames = roles.Select(r => r.Pharmacy.Name).Distinct().ToList();
-        string department = string.Join(", ", pharmacyNames);
+        string department = string.Join("|", pharmacyNames);
 
         var licenceNumber = await this.context.Parties
             .Where(p => p.Id == partyId)

@@ -45,19 +45,20 @@
     }
   </div>
 
-  <div class="form-field">
-    <label for="province">Province</label>
-    <input id="province" type="text" formControlName="province" autocomplete="address-level1" />
-    @if (form.get('province')?.invalid && form.get('province')?.touched) {
-    <div class="form-error">Province is required.</div>
-    }
-  </div>
+  <input type="hidden" formControlName="province" />
 
   <div class="form-field">
     <label for="postalCode">Postal Code</label>
-    <input id="postalCode" type="text" formControlName="postalCode" autocomplete="postal-code" />
+    <input id="postalCode" type="text" formControlName="postalCode" autocomplete="postal-code" mask="S0S 0S0" style="text-transform: uppercase" />
     @if (form.get('postalCode')?.invalid && form.get('postalCode')?.touched) {
-    <div class="form-error">Postal Code is required.</div>
+    <div class="form-error">
+      @if (form.get('postalCode')?.hasError('required')) {
+      Postal Code is required.
+      }
+      @if (form.get('postalCode')?.hasError('pattern') || form.get('postalCode')?.hasError('mask')) {
+      Please enter a valid Canadian Postal Code (e.g. V8V 1V1).
+      }
+    </div>
     }
   </div>
 
