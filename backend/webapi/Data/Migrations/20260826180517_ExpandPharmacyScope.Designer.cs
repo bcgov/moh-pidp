@@ -13,7 +13,7 @@ using Pidp.Data;
 namespace Pidp.Data.Migrations
 {
     [DbContext(typeof(PidpDbContext))]
-    [Migration("20260825212812_ExpandPharmacyScope")]
+    [Migration("20260826180517_ExpandPharmacyScope")]
     partial class ExpandPharmacyScope
     {
         /// <inheritdoc />
