@@ -5,6 +5,7 @@
     <RootNamespace>DoWork</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <NoWarn>$(NoWarn);CA1311;CA1304;CA1853</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\webapi\pidp.csproj" />

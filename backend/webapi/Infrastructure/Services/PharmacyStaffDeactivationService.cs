@@ -1,5 +1,9 @@
 namespace Pidp.Infrastructure.Services;
 
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Graph.Models;
@@ -7,10 +11,6 @@ using NodaTime;
 using Pidp.Data;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 public class PharmacyStaffDeactivationService(
     PidpDbContext context,
@@ -40,7 +40,10 @@ public class PharmacyStaffDeactivationService(
         foreach (var partyId in partiesWithExpiredRoles)
         {
             await this.ProcessPartyDeactivationAsync(partyId, yesterdayStart, yesterdayEnd, cancellationToken);
+            Thread.Sleep(5000); // Wait 5 seconds for BCProvider to update the user, be a nice neighbor
         }
+
+
 
         this.logger.LogInformation("Finished daily pharmacy staff deactivation task.");
     }
@@ -76,7 +79,9 @@ public class PharmacyStaffDeactivationService(
                 return;
             }
 
+#pragma warning disable CA1305
             var dateStr = roleEndedYesterday.EffectiveEndDate!.Value.ToString("yyyyMMdd");
+#pragma warning restore CA1305
             var disabledJobTitle = $"disabled (onehealthid,immsbc,{roleEndedYesterday.PharmacyId},{dateStr})";
 
             var userUpdate = new User

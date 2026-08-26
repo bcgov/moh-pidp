@@ -115,7 +115,6 @@ public class Startup(IConfiguration configuration)
         services.AddHealthChecks()
             .AddApplicationStatus(tags: [HealthCheckTag.Liveness.Value])
             .AddCheck<BackgroundWorkerHealthCheck>("PlrStatusUpdateSchedulingService", tags: [HealthCheckTag.BackgroundServices.Value])
-            .AddCheck<RabbitMQHealthCheck>("RabbitMQHealthCheck", tags: [HealthCheckTag.BackgroundServices.Value])
             .AddDbContextCheck<PidpDbContext>(tags: [HealthCheckTag.Readiness.Value]);
 
         services.AddSwaggerGen(options =>

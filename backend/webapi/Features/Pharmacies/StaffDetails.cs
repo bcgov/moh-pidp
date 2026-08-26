@@ -8,7 +8,7 @@ using Pidp.Models.Lookups;
 
 public class StaffDetails
 {
-    public class Query : IRequest<Model>
+    public class Query : IRequest<Model?>
     {
         public int PharmacyId { get; set; }
         public int PartyId { get; set; }
@@ -23,9 +23,9 @@ public class StaffDetails
         public DateTime? EffectiveEndDate { get; set; }
     }
 
-    public class QueryHandler(PidpDbContext context) : IRequestHandler<Query, Model>
+    public class QueryHandler(PidpDbContext context) : IRequestHandler<Query, Model?>
     {
-        public async ValueTask<Model> Handle(Query request, CancellationToken cancellationToken)
+        public async ValueTask<Model?> Handle(Query request, CancellationToken cancellationToken)
         {
 
             var role = await context.PharmacyPartyRoles
@@ -39,6 +39,11 @@ public class StaffDetails
                     EffectiveEndDate = role.EffectiveEndDate ?? DateTime.MinValue
                 })
                 .SingleOrDefaultAsync(cancellationToken);
+
+            if (role == null)
+            {
+                return null;
+            }
 
             return new Model
             {

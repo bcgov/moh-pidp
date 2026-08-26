@@ -8,9 +8,11 @@ using Pidp.Models;
 
 public class PidpDbContext(
     DbContextOptions<PidpDbContext> options,
+    ILogger<PidpDbContext> logger,
     IClock clock,
     IMediator mediator) : DbContext(options)
 {
+    private readonly ILogger<PidpDbContext> logger = logger;
     private readonly IClock clock = clock;
     private readonly IMediator mediator = mediator;
 
@@ -47,6 +49,7 @@ public class PidpDbContext(
     {
         await this.DispatchDomainEventsAsync();
         this.ApplyAudits();
+        this.LogDatabaseChanges();
 
         return await base.SaveChangesAsync(cancellationToken);
     }
@@ -98,7 +101,35 @@ public class PidpDbContext(
         }
     }
 
+    private void LogDatabaseChanges()
+    {
+        var changes = this.ChangeTracker.Entries()
+            .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified || e.State == EntityState.Deleted);
+
+        foreach (var entry in changes)
+        {
+            var entityName = entry.Entity.GetType().Name;
+            var state = entry.State.ToString();
+            
+            string keyInfo = "";
+            var keyName = entry.Metadata.FindPrimaryKey()?.Properties.Select(x => x.Name).FirstOrDefault();
+            if (keyName != null)
+            {
+                var keyValue = entry.Property(keyName).CurrentValue;
+                keyInfo = $" (Key: {keyName} = {keyValue})";
+            }
+
+            this.logger.LogDatabaseChange(entityName, keyInfo, state);
+        }
+    }
+
     // Uncomment for SQL logging
     // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     //     => optionsBuilder.LogTo(Console.WriteLine);
+}
+
+public static partial class PidpDbContextLoggingExtensions
+{
+    [LoggerMessage(1, LogLevel.Information, "Database Change: {entityName}{keyInfo} was {state}")]
+    public static partial void LogDatabaseChange(this ILogger<PidpDbContext> logger, string entityName, string keyInfo, string state);
 }
