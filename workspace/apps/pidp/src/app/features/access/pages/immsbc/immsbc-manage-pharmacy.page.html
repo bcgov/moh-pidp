@@ -11,9 +11,9 @@
           pharmacy.</p>
       </div>
       @if (!selectedPharmacy) {
-      <h4>Select a pharmacy from the list below to start managing it.</h4>
+      <h4 style="margin-top: 10px;">Select a pharmacy from the list below to start managing it.</h4>
       } @else {
-      <h4>Manage details and staff for {{ selectedPharmacy.pharmacyName }}.</h4>
+      <h4 style="margin-top: 10px;">Manage details and staff for {{ selectedPharmacy.pharmacyName }}.</h4>
       }
     </section>
     <!-- Step 1: Pharmacy Selection -->
@@ -66,7 +66,7 @@
             <form [formGroup]="detailsForm" (ngSubmit)="onUpdateDetails()" novalidate>
               <app-pharmacy-form [form]="detailsForm" [showAcknowledgements]="false"
                 [isNameReadonly]="true"></app-pharmacy-form>
-              <div class="submit-row justify-content-end">
+              <div class="submit-row">
                 <button mat-flat-button type="submit" class="submit-btn">
                   Save Changes
                 </button>
