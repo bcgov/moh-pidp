@@ -4,7 +4,9 @@ WORKDIR /source
 ENV DOTNET_CLI_HOME="/opt"
 ENV PATH="$PATH:/opt/.dotnet/tools"
 
-RUN dotnet tool install --global dotnet-ef --version "8.*"
+RUN apk add --no-cache krb5-libs
+
+RUN dotnet tool install --global dotnet-ef --version "10.*"
 
 COPY *.csproj .
 RUN dotnet restore -r linux-musl-x64 /p:PublishReadyToRun=true
@@ -21,11 +23,7 @@ WORKDIR /app
 ENV ASPNETCORE_ENVIRONMENT="Production"
 ENV ASPNETCORE_URLS="http://+:8080"
 
-# ENV \
-#     DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false \
-#     LC_ALL=en_US.UTF-8 \
-#     LANG=en_US.UTF-8
-# RUN apk add --no-cache icu-libs
+RUN apk add --no-cache krb5-libs
 
 COPY --from=build-env /app .
 COPY --from=build-env /source/efbundle .
