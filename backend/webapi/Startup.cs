@@ -85,8 +85,8 @@ public class Startup(IConfiguration configuration)
             .AddScoped<IPidpAuthorizationService, PidpAuthorizationService>()
             .AddScoped<IPlrStatusUpdateService, PlrStatusUpdateService>()
             .AddScoped<IBCProviderService, BCProviderService>()
-            .AddScoped<IPharmacyStaffDeactivationService, PharmacyStaffDeactivationService>()
-            .AddHostedService<PharmacyStaffDeactivationHostedService>()
+            // .AddScoped<IPharmacyStaffDeactivationService, PharmacyStaffDeactivationService>()
+            // .AddHostedService<PharmacyStaffDeactivationHostedService>()
             .AddSingleton<IClock>(SystemClock.Instance)
             .AddSingleton<BackgroundWorkerHealthCheck>();
 
