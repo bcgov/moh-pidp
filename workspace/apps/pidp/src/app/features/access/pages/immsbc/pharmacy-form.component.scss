@@ -60,6 +60,12 @@
     &::placeholder {
       color: #aaa;
     }
+
+    &[type="file"] {
+      border: none;
+      padding: 0;
+      height: auto;
+    }
   }
 
   .helper-text {
