@@ -24,13 +24,13 @@ public class StaffCreate
     {
         private readonly PidpDbContext context;
         private readonly IClock clock;
-        private readonly IBCProviderService bcProviderService;
+        private readonly IRoleSynchronizationService roleSynchronizationService;
 
-        public CommandHandler(PidpDbContext context, IClock clock, IBCProviderService bcProviderService)
+        public CommandHandler(PidpDbContext context, IClock clock, IRoleSynchronizationService roleSynchronizationService)
         {
             this.context = context;
             this.clock = clock;
-            this.bcProviderService = bcProviderService;
+            this.roleSynchronizationService = roleSynchronizationService;
         }
 
         public async ValueTask<Unit> Handle(Command request, CancellationToken cancellationToken)
@@ -90,7 +90,7 @@ public class StaffCreate
                 throw new InvalidOperationException("Please link a BC Provider credential via /account/bc-provider-application.");
             }
 
-            await this.bcProviderService.UpdatePharmStaffAttributes(request.PartyId, cancellationToken);
+            await this.roleSynchronizationService.UpdatePharmStaffAttributes(request.PartyId, cancellationToken);
             return Unit.Value;
         }
     }

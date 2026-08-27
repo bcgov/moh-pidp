@@ -1,22 +1,14 @@
 <div class="form-panel">
-  <h4 class="panel-title">Add Staff to This Pharmacy</h4>
-  <p class="panel-description">
-    Share these links with new clerks & clinicans associated with the the immunization rollout. Staff will need to log
-    in with their BC Services Card.
-    <br />
-    New staff will appear in the list below as "Inactive" until an administrator activates their role by setting an
-    effective end date.
+  <p class="panel-description">Share the link below with staff associated with your organization. Staff will need to
+    login with their BC Services Card to OneHealthID to register with ImmsBC.</p>
+  <p>
+    Once activated, users will appear in the list below as inactive clerk until an administrator updates their role and
+    set an effective end date.
   </p>
   <div class="button-group">
-    <button mat-flat-button color="primary" tabindex="0" (keydown.enter)="generateLink(PharmacyRole.Clinician)" (click)="generateLink(PharmacyRole.Clinician)">
-      <mat-icon>link</mat-icon>
-      Generate Clinician Link
-    </button>
     &nbsp;
-    <button mat-flat-button color="primary" tabindex="0" (keydown.enter)="generateLink(PharmacyRole.Clerk)" (click)="generateLink(PharmacyRole.Clerk)">
-      <mat-icon>link</mat-icon>
-      Generate Clerk Link
-    </button>
+    <button mat-flat-button color="primary" tabindex="0" (keydown.enter)="generateLink(PharmacyRole.Clerk)"
+      (click)="generateLink(PharmacyRole.Clerk)"><mat-icon>link</mat-icon>Generate Link & QR Code</button>
   </div>
 </div>
 <p style="margin-top: 5px">&nbsp;</p>
@@ -25,7 +17,7 @@
   @if (staff$ | async; as staff) {
   @if (!staff.length) {
   <div class="text-center">
-    <p>No staff members are associated with this pharmacy.</p>
+    <p>No staff members associated with this organization.</p>
   </div>
   }
   @if (staff.length) {
@@ -72,14 +64,16 @@
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let element" class="text-right">
-        <button mat-icon-button tabindex="0" (keydown.enter)="onRenew(element)" (click)="onRenew(element)" aria-label="Renew staff member" matTooltip="Renew user">
+        <button mat-icon-button tabindex="0" (keydown.enter)="onRenew(element)" (click)="onRenew(element)"
+          aria-label="Renew staff member" matTooltip="Renew user">
           <mat-icon>autorenew</mat-icon>
         </button>
-        <button mat-icon-button tabindex="0" (keydown.enter)="onEdit(element)" (click)="onEdit(element)" aria-label="Edit staff member" matTooltip="Edit user">
+        <button mat-icon-button tabindex="0" (keydown.enter)="onEdit(element)" (click)="onEdit(element)"
+          aria-label="Edit staff member" matTooltip="Edit user">
           <mat-icon>edit</mat-icon>
         </button>
-        <button mat-icon-button color="warn" tabindex="0" (keydown.enter)="onDelete(element)" (click)="onDelete(element)" aria-label="Remove staff member"
-          matTooltip="Remove user">
+        <button mat-icon-button color="warn" tabindex="0" (keydown.enter)="onDelete(element)"
+          (click)="onDelete(element)" aria-label="Remove staff member" matTooltip="Remove user">
           <mat-icon>delete</mat-icon>
         </button>
       </td>

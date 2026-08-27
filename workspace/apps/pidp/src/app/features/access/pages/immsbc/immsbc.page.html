@@ -4,9 +4,12 @@
     <section class="intro">
       <div class="content-header">
         <h1>ImmsBC</h1>
-        <p>All pharmacies providing publicly funded influenza vaccines are required to use ImmsBC to manage all aspects of the administration of flu and COVID-19 vaccines to British Columbians.
-ImmsBC is used for scheduling, managing appointments, entering vaccine records and inventory. Patients are able to see if your pharmacy provides influenza vaccines, COVID-19 vaccines or both vaccination types prior to booking.<br />
-For pharmacies that currently have access to ImmsBC, no action is required.</p>
+        <p>All pharmacies providing publicly funded influenza vaccines are required to use ImmsBC to manage all aspects
+          of the administration of flu and COVID-19 vaccines to British Columbians.
+          ImmsBC is used for scheduling, managing appointments, entering vaccine records and inventory. Patients are
+          able to see if your pharmacy provides influenza vaccines, COVID-19 vaccines or both vaccination types prior to
+          booking.</p>
+        <p>For pharmacies that currently have access to ImmsBC, you can manage your existing pharmacy information.</p>
       </div>
     </section>
     <section class="main">
@@ -64,27 +67,17 @@ For pharmacies that currently have access to ImmsBC, no action is required.</p>
                 Use your newly created BCProvider to login to the ImmsBC portal
               </p>
               @if (bcProviderStatusCode === StatusCode.COMPLETED) {
-                <p
-                  class="bcprovider-username">
-                  <strong>{{ bcProviderUsername }}</strong>
-                  <button
-                    mat-icon-button
-                    type="button"
-                    matTooltip="Copy your BCProvider to clipboard"
-                    aria-label="Copy your BCProvider to clipboard"
-                    [cdkCopyToClipboard]="bcProviderUsername"
-                    (cdkCopyToClipboardCopied)="onCopy()">
-                    <mat-icon>content_paste</mat-icon>
-                  </button>
-                </p>
+              <p class="bcprovider-username">
+                <strong>{{ bcProviderUsername }}</strong>
+                <button mat-icon-button type="button" matTooltip="Copy your BCProvider to clipboard"
+                  aria-label="Copy your BCProvider to clipboard" [cdkCopyToClipboard]="bcProviderUsername"
+                  (cdkCopyToClipboardCopied)="onCopy()">
+                  <mat-icon>content_paste</mat-icon>
+                </button>
+              </p>
               }
-              <button
-                mat-flat-button
-                type="button"
-                color="primary"
-                aria-labelledby="navigate-to-immsbc"
-                [disabled]="immsbc$ | async"
-                tabindex="0" (keydown.enter)="navigateToPath()" (click)="navigateToPath()">
+              <button mat-flat-button type="button" color="primary" aria-labelledby="navigate-to-immsbc"
+                [disabled]="immsbc$ | async" tabindex="0" (keydown.enter)="navigateToPath()" (click)="navigateToPath()">
                 Login to the ImmsBC portal with your BCProvider
               </button>
             </div>
@@ -99,13 +92,15 @@ For pharmacies that currently have access to ImmsBC, no action is required.</p>
       </div>
       <div class="card action-buttons-card">
         <div class="action-buttons-group">
-          <div [matTooltip]="bcProviderStatusCode !== StatusCode.COMPLETED ? 'You must create a BCProvider Credential before adding or managing a pharmacy.' : ''">
+          <div
+            [matTooltip]="bcProviderStatusCode !== StatusCode.COMPLETED ? 'You must create a BCProvider Credential before adding or managing a pharmacy.' : ''">
             <button mat-flat-button type="button" color="primary" class="action-button-large" style="width: 100%;"
               routerLink="/access/immsbc/create-pharmacy" [disabled]="bcProviderStatusCode !== StatusCode.COMPLETED">
               Add Pharmacy
-            </button> 
+            </button>
           </div>
-          <div [matTooltip]="bcProviderStatusCode !== StatusCode.COMPLETED ? 'You must create a BCProvider Credential before adding or managing a pharmacy.' : ''">
+          <div
+            [matTooltip]="bcProviderStatusCode !== StatusCode.COMPLETED ? 'You must create a BCProvider Credential before adding or managing a pharmacy.' : ''">
             <button mat-flat-button type="button" color="primary" class="action-button-large" style="width: 100%;"
               routerLink="/access/immsbc/manage-pharmacy" [disabled]="bcProviderStatusCode !== StatusCode.COMPLETED">
               Manage Pharmacy
@@ -119,7 +114,8 @@ For pharmacies that currently have access to ImmsBC, no action is required.</p>
           <div class="card-container auth-card">
             <div class="card-footer auth-card-footer">
               <button mat-flat-button uiPageFooterAction type="submit" color="primary"
-                aria-labelledby="navigate-to-immsbc" [disabled]="immsbc$ | async" tabindex="0" (keydown.enter)="navigateToPath()" (click)="navigateToPath()">
+                aria-labelledby="navigate-to-immsbc" [disabled]="immsbc$ | async" tabindex="0"
+                (keydown.enter)="navigateToPath()" (click)="navigateToPath()">
                 <fa-icon [icon]="faArrowRight"></fa-icon>
               </button>
             </div>
@@ -127,16 +123,13 @@ For pharmacies that currently have access to ImmsBC, no action is required.</p>
         </div>
         <div class="main-image-text">
           <div class="main-image-text-title">
-            <mat-icon
-              class="assistance-content__icon"
-              [svgIcon]="'imms-icon'"></mat-icon
-              ><strong>ImmsBC</strong>
-            </div>
-            <div class="main-image-text-instructions">
-              Login once the instructions are complete.
-            </div>
+            <mat-icon class="assistance-content__icon" [svgIcon]="'imms-icon'"></mat-icon><strong>ImmsBC</strong>
+          </div>
+          <div class="main-image-text-instructions">
+            Login once the instructions are complete.
           </div>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
   </div>
+</div>

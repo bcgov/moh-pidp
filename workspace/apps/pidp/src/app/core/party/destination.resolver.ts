@@ -43,6 +43,11 @@ export const destinationResolver: ResolveFn<Destination | null> = () => {
           break;
         case Destination.PORTAL:
           wizardComplete = true;
+          const returnUrl = sessionStorage.getItem('return-url');
+          if (returnUrl && returnUrl.startsWith('/')) {
+            sessionStorage.removeItem('return-url');
+            router.navigateByUrl(returnUrl);
+          }
           break;
       }
     }),

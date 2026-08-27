@@ -11,17 +11,22 @@ using NodaTime;
 using Pidp.Data;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
+using Pidp.Infrastructure.HttpClients.Keycloak;
+using Pidp.Models;
+using Pidp.Models.Lookups;
 
 public class PharmacyStaffDeactivationService(
     PidpDbContext context,
     IBCProviderClient bcProviderClient,
     IClock clock,
-    ILogger<PharmacyStaffDeactivationService> logger) : IPharmacyStaffDeactivationService
+    ILogger<PharmacyStaffDeactivationService> logger,
+    IKeycloakAdministrationClient keycloakClient) : IPharmacyStaffDeactivationService
 {
     private readonly PidpDbContext context = context;
     private readonly IBCProviderClient bcProviderClient = bcProviderClient;
     private readonly IClock clock = clock;
     private readonly ILogger<PharmacyStaffDeactivationService> logger = logger;
+    private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
 
     public async Task DeactivateExpiredStaffAsync(CancellationToken cancellationToken)
     {
@@ -69,12 +74,16 @@ public class PharmacyStaffDeactivationService(
                 return;
             }
 
-            var upn = await this.context.Credentials
-                .Where(c => c.PartyId == partyId && c.IdentityProvider == IdentityProviders.BCProvider)
-                .Select(c => c.IdpId)
+            var partyDetails = await this.context.Parties
+                .Where(p => p.Id == partyId)
+                .Select(p => new
+                {
+                    PrimaryUserId = p.PrimaryUserId,
+                    Upn = p.Credentials.Where(c => c.IdentityProvider == IdentityProviders.BCProvider).Select(c => c.IdpId).FirstOrDefault()
+                })
                 .FirstOrDefaultAsync(cancellationToken);
 
-            if (string.IsNullOrEmpty(upn))
+            if (partyDetails == null || string.IsNullOrEmpty(partyDetails.Upn))
             {
                 return;
             }
@@ -89,17 +98,22 @@ public class PharmacyStaffDeactivationService(
                 JobTitle = disabledJobTitle
             };
 
-            var success = await this.bcProviderClient.UpdateUser(upn, userUpdate);
+            var success = await this.bcProviderClient.UpdateUser(partyDetails.Upn, userUpdate);
             if (success)
             {
                 if (this.logger.IsEnabled(LogLevel.Information))
                 {
-                    this.logger.LogInformation("Successfully set job title to '{JobTitle}' for user '{Upn}'.", disabledJobTitle, upn);
+                    this.logger.LogInformation("Successfully set job title to '{JobTitle}' for user '{Upn}'.", disabledJobTitle, partyDetails.Upn);
                 }
+
+                // Remove all Keycloak roles
+                await this.keycloakClient.RemoveAccessRoles(partyDetails.PrimaryUserId, MohKeycloakEnrolment.ImmsBcPhaAdmin);
+                await this.keycloakClient.RemoveAccessRoles(partyDetails.PrimaryUserId, MohKeycloakEnrolment.ImmsBcPhaClinician);
+                await this.keycloakClient.RemoveAccessRoles(partyDetails.PrimaryUserId, MohKeycloakEnrolment.ImmsBcPhaClerk);
             }
             else
             {
-                this.logger.LogError("Failed to update job title for user '{Upn}'.", upn);
+                this.logger.LogError("Failed to update job title for user '{Upn}'.", partyDetails.Upn);
             }
         }
         catch (Exception ex)

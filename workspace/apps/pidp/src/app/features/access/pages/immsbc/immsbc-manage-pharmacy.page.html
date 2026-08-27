@@ -3,17 +3,15 @@
   <div class="content">
     <section class="page-intro">
       <h1>ImmsBC - Manage Pharmacy</h1>
-      <p class="intro-welcome">ImmsBC Pharmacy Profile Management</p>
-
-      <div class="important-intro-note">
-        <p class="note-text">As a Pharmacy Administrator, maintaining accurate pharmacy information and active staff
-          associations is essential for securing access to the ImmsBC portal to schedule patient visits to your
-          pharmacy.</p>
-      </div>
+      <p class="important-intro-note">
+        As an administrator, maintaining accurate pharmacy information and active staff
+        associations is essential for securing access to the ImmsBC portal to schedule patient visits to your
+        pharmacy.
+      </p>
       @if (!selectedPharmacy) {
-      <h4 style="margin-top: 10px;">Select a pharmacy from the list below to start managing it.</h4>
+      <h4 style="margin-top: 20px;">Select an item from the list to start managing it.</h4>
       } @else {
-      <h4 style="margin-top: 10px;">Manage details and staff for {{ selectedPharmacy.pharmacyName }}.</h4>
+      <h4 style="margin-top: 20px;">Manage details and staff for <b>{{ selectedPharmacy.pharmacyName }}</b>.</h4>
       }
     </section>
     <!-- Step 1: Pharmacy Selection -->
@@ -30,8 +28,8 @@
         }
         @for (assoc of profile.associations; track assoc.pharmacyId) {
         @if (getRole(assoc.role) === 'Admin') {
-        <mat-card tabindex="0" (keydown.enter)="selectPharmacy(assoc)" (click)="selectPharmacy(assoc)" onKeyUp="selectPharmacy(assoc)" class="clickable-card mb-3"
-          [class.mat-elevation-z4]="true">
+        <mat-card tabindex="0" (keydown.enter)="selectPharmacy(assoc)" (click)="selectPharmacy(assoc)"
+          onKeyUp="selectPharmacy(assoc)" class="clickable-card mb-3" [class.mat-elevation-z4]="true">
           <mat-card-header>
             <mat-card-title> {{ assoc.pharmacyName }} </mat-card-title>
           </mat-card-header>
@@ -49,20 +47,17 @@
     } @else {
     @if (selectedPharmacy) {
     <div class="d-flex align-items-center mb-4">
-      <button mat-flat-button color="primary" tabindex="0" (keydown.enter)="deselectPharmacy()" (click)="deselectPharmacy()" class="ml-auto">
+      <button mat-flat-button color="primary" tabindex="0" (keydown.enter)="deselectPharmacy()"
+        (click)="deselectPharmacy()" class="ml-auto">
         <mat-icon>arrow_back</mat-icon>
         <span>Change Pharmacy</span>
       </button>
     </div>
 
     <mat-tab-group animationDuration="0ms" class="form-panel">
-      <mat-tab label="Pharmacy Details">
+      <mat-tab label="Details">
         <ng-template matTabContent>
           <div class="py-4">
-            <h2 class="panel-title mt-0">Update Pharmacy Details</h2>
-            <p class="panel-description">
-              Use this form to update the contact and address information for your pharmacy.
-            </p>
             <form [formGroup]="detailsForm" (ngSubmit)="onUpdateDetails()" novalidate>
               <app-pharmacy-form [form]="detailsForm" [showAcknowledgements]="false"
                 [isNameReadonly]="true"></app-pharmacy-form>
@@ -78,10 +73,6 @@
       <mat-tab label="Staff Management">
         <ng-template matTabContent>
           <div class="py-4">
-            <h2 class="panel-title mt-0">Staff Management</h2>
-            <p class="panel-description">
-              Use this section to update the staff associated with your pharmacy.
-            </p>
             <app-pharmacy-staff-management [pharmacyName]="selectedPharmacy.pharmacyName"
               [pharmacyId]="selectedPharmacy.pharmacyId"></app-pharmacy-staff-management>
           </div>

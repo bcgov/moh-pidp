@@ -6,12 +6,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
   ConfirmDialogComponent,
   DialogOptions,
-  PageComponent,
-  PageHeaderComponent,
+  InjectViewportCssClassDirective,
 } from '@bcgov/shared/ui';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { PartyService } from '@app/core/party/party.service';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
+import { AccessRoutes } from '@app/features/access/access.routes';
 import Keycloak from 'keycloak-js';
 import { catchError, throwError } from 'rxjs';
 import { PharmacyResource } from './pharmacy-resource.service';
@@ -23,10 +24,10 @@ import { PharmacyResource } from './pharmacy-resource.service';
     CommonModule,
     MatDialogModule,
     MatProgressBarModule,
-    PageComponent,
-    PageHeaderComponent,
     ReactiveFormsModule,
     MatButtonModule,
+    InjectViewportCssClassDirective,
+    BreadcrumbComponent,
   ],
   templateUrl: './immsbc-pharmacy-enrolment.page.html',
 })
@@ -41,12 +42,19 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
 
   public form!: FormGroup;
   public token: string | null = null;
+  public breadcrumbsData: Array<{ title: string; path: string }> = [];
 
-  public title = 'Pharmacy Enrolment';
+  public title = 'Enrolment';
   public message = 'Processing your enrolment...';
   public isError = false;
 
   public ngOnInit(): void {
+    this.breadcrumbsData = [
+      { title: 'Home', path: '' },
+      { title: 'Access', path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS) },
+      { title: 'ImmsBC', path: AccessRoutes.routePath(AccessRoutes.IMMSBC) },
+      { title: 'Enrolment', path: '' },
+    ];
     this.token = this.route.snapshot.paramMap.get('token');
 
     if (!this.token) {
@@ -60,7 +68,7 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
     this.form = this.fb.group({
       privacyTrainingAcknowledged: [false, Validators.requiredTrue]
     });
-    
+
     this.message = 'Please acknowledge the privacy and security training to proceed.';
   }
 
@@ -69,7 +77,7 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
       this.form.markAllAsTouched();
       return;
     }
-    
+
     this.message = 'Processing your enrolment...';
     this.isError = false;
 
@@ -99,7 +107,7 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
           } else {
             this.handleError(firstLine);
           }
-          
+
           return throwError(() => error);
         }),
       )
