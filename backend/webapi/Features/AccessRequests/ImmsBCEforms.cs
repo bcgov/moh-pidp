@@ -24,6 +24,13 @@ public class ImmsBCEforms
             .With(AllowedIdentifierTypes)
             .HasGoodStanding;
     }
+
+    public static bool IsEligibleByEndorsement(PlrStandingsDigest endorsementPlrStanding)
+    {
+        return endorsementPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding
+            || endorsementPlrStanding.With(IdentifierType.Nurse).HasGoodStanding;
+    }
+
     public class Command : ICommand<IDomainResult>
     {
         public int PartyId { get; set; }
@@ -82,8 +89,7 @@ public class ImmsBCEforms
 
                 var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
 
-                if (!endorsementPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding &&
-                    !endorsementPlrStanding.With(IdentifierType.Nurse).HasGoodStanding)
+                if (!IsEligibleByEndorsement(endorsementPlrStanding))
                 {
                     this.logger.LogAccessRequestDenied(command.PartyId);
                     this.context.BusinessEvents.Add(AccessRequestFailed.Create(command.PartyId, AccessTypeCode.ImmsBCEforms.ToString(), this.clock.GetCurrentInstant()));
