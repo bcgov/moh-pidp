@@ -195,9 +195,8 @@ export class EditStaffDialogComponent implements OnInit {
       this.pharmacyResource
         .updateStaff(this.data.pharmacyId, this.data.staff.partyId, payload)
         .pipe(
-          catchError((error: HttpErrorResponse) => {
-            let message = 'An error occurred while updating the staff role.';
-            this.snackBar.open(message, 'Close', { duration: 10000 });
+          catchError(() => {
+            this.snackBar.open('An error occurred while updating the staff role.', 'Close', { duration: 10000 });
             return EMPTY;
           })
         )
