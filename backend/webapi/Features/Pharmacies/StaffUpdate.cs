@@ -50,34 +50,24 @@ public class StaffUpdate
                 throw new InvalidOperationException("Staff record not found.");
             }
 
-            if (request.Role == PharmacyRole.Clinician)
+            if (staffRole.Role == PharmacyRole.Admin && request.Role != PharmacyRole.Admin)
             {
-                if (string.IsNullOrEmpty(staffRole.Party.Cpn))
-                {
-                    return DomainResult.Failed("User does not have a registered CPN.");
-                }
-
-                var digest = await plrClient.GetStandingsDigestAsync(staffRole.Party.Cpn);
-                if (!digest.With(IdentifierType.Pharmacist).HasGoodStanding)
-                {
-                    return DomainResult.Failed("User is not a Pharmacist in good standing in PLR.");
-                }
+                throw new InvalidOperationException("Admin role cannot be removed.");
             }
 
-            if (staffRole.Role != request.Role)
-            {
-                var pharmacyName = await context.Pharmacies
-                    .Where(p => p.Id == request.PharmacyId)
-                    .Select(p => p.Name)
-                    .SingleOrDefaultAsync(cancellationToken) ?? string.Empty;
+            var pharmacyName = await context.Pharmacies
+                .Where(p => p.Id == request.PharmacyId)
+                .Select(p => p.Name)
+                .SingleOrDefaultAsync(cancellationToken) ?? string.Empty;
 
-                context.BusinessEvents.Add(PharmacyStaffChanged.Create(request.RequestingPartyId, pharmacyName, clock.GetCurrentInstant()));
+            context.BusinessEvents.Add(PharmacyStaffChanged.Create(request.RequestingPartyId, pharmacyName, clock.GetCurrentInstant()));
 
-                staffRole.Role = request.Role;
-                await context.SaveChangesAsync(cancellationToken);
+            staffRole.Role = request.Role;
+            staffRole.EffectiveStartDate = request.EffectiveStartDate?.ToUniversalTime();
+            staffRole.EffectiveEndDate = request.EffectiveEndDate?.ToUniversalTime();
+            await context.SaveChangesAsync(cancellationToken);
 
-                await roleSynchronizationService.UpdatePharmStaffAttributes(request.PartyId, cancellationToken);
-            }
+            await roleSynchronizationService.UpdatePharmStaffAttributes(request.PartyId, cancellationToken);
 
             return DomainResult.Success();
         }

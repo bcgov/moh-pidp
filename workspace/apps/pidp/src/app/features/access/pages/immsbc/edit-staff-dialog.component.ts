@@ -197,13 +197,6 @@ export class EditStaffDialogComponent implements OnInit {
         .pipe(
           catchError((error: HttpErrorResponse) => {
             let message = 'An error occurred while updating the staff role.';
-            if (error?.error?.errors?.length) {
-              message = error.error.errors[0];
-            } else if (error?.error?.title) {
-              message = error.error.title;
-            } else if (typeof error?.error === 'string') {
-              message = error.error;
-            }
             this.snackBar.open(message, 'Close', { duration: 10000 });
             return EMPTY;
           })

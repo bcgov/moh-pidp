@@ -29,7 +29,7 @@ public class RoleSynchronizationService(PidpDbContext context, IBCProviderClient
             })
             .FirstOrDefaultAsync(cancellationToken);
 
-        if (partyDetails == null || string.IsNullOrEmpty(partyDetails.Upn))
+        if (partyDetails == null)
         {
             return;
         }
@@ -75,20 +75,23 @@ public class RoleSynchronizationService(PidpDbContext context, IBCProviderClient
             department = "";
         }
 
-        var userUpdate = new User
+        if (!string.IsNullOrEmpty(partyDetails.Upn))
         {
-            JobTitle = jobTitle,
-            Department = department,
-            OfficeLocation = licenceNumber,
-            UsageLocation = "CA"
-        };
+            var userUpdate = new User
+            {
+                JobTitle = jobTitle,
+                Department = department,
+                OfficeLocation = licenceNumber,
+                UsageLocation = "CA"
+            };
 
-        var success = await this.bcProviderClient.UpdateUser(partyDetails.Upn, userUpdate);
-        if (success)
-        {
-            var details = $"JobTitle: {jobTitle}, Department: {department}, OfficeLocation: {licenceNumber}";
-            this.context.BusinessEvents.Add(BCProviderAttributesUpdated.Create(partyId, details, this.clock.GetCurrentInstant()));
-            await this.context.SaveChangesAsync(cancellationToken);
+            var success = await this.bcProviderClient.UpdateUser(partyDetails.Upn, userUpdate);
+            if (success)
+            {
+                var details = $"JobTitle: {jobTitle}, Department: {department}, OfficeLocation: {licenceNumber}";
+                this.context.BusinessEvents.Add(BCProviderAttributesUpdated.Create(partyId, details, this.clock.GetCurrentInstant()));
+                await this.context.SaveChangesAsync(cancellationToken);
+            }
         }
 
         // Sync Keycloak roles

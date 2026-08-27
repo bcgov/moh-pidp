@@ -52,6 +52,11 @@ public class PharmacyUpdate
                 throw new KeyNotFoundException();
             }
 
+            if (pharmacy.Name != request.Name)
+            {
+                throw new InvalidOperationException("Pharmacy name cannot be modified.");
+            }
+
             request.Address2 ??= string.Empty;
             context.Entry(pharmacy).CurrentValues.SetValues(request);
             context.BusinessEvents.Add(PharmacyUpdated.Create(request.RequestingPartyId, pharmacy.Name, clock.GetCurrentInstant()));
