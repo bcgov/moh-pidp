@@ -21,7 +21,7 @@ public class NpdpEformsRevocationPolicy(
 
     public AccessTypeCode AccessTypeCode => AccessTypeCode.NpdpEforms;
 
-    public async Task RevokeIfIneligibleAsync(int partyId, PlrStatusChangeLog? statusChange = null, CancellationToken cancellationToken = default)
+    public async Task<RevocationDecision> RevokeIfIneligibleAsync(int partyId, PlrStatusChangeLog? statusChange = null, CancellationToken cancellationToken = default)
     {
         var dto = await this.context.Parties
             .Where(party => party.Id == partyId)
@@ -35,7 +35,7 @@ public class NpdpEformsRevocationPolicy(
         // Bail out before any PLR call for the many Parties who never held this card.
         if (dto?.HoldsEnrolment != true)
         {
-            return;
+            return RevocationDecision.NotHeld(AccessTypeCode.NpdpEforms);
         }
 
         var (eligible, standingIsKnown, reason) = await this.EvaluateEligibilityAsync(partyId, dto.Cpn);
@@ -45,15 +45,17 @@ public class NpdpEformsRevocationPolicy(
         if (!standingIsKnown)
         {
             this.logger.LogRevocationSkippedPlrError(partyId);
-            return;
+            return RevocationDecision.StandingUnknown(AccessTypeCode.NpdpEforms);
         }
 
         if (eligible)
         {
-            return;
+            return RevocationDecision.Eligible(AccessTypeCode.NpdpEforms);
         }
 
-        await this.revocationService.RevokeAsync(partyId, AccessTypeCode.NpdpEforms, reason, statusChange.FormatTrigger(), cancellationToken);
+        return await this.revocationService.RevokeAsync(partyId, AccessTypeCode.NpdpEforms, reason, statusChange.FormatTrigger(), cancellationToken)
+            ? RevocationDecision.Revoked(AccessTypeCode.NpdpEforms, reason)
+            : RevocationDecision.RevokeFailed(AccessTypeCode.NpdpEforms, reason);
     }
 
     /// <summary>

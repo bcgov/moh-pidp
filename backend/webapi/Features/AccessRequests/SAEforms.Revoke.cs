@@ -13,6 +13,15 @@ public class SAEformsRevocationPolicy(
     IPlrClient plrClient,
     PidpDbContext context) : IAccessRequestRevocationPolicy
 {
+    /// <summary>
+    /// Special Authority has no endorsement path, so a Party with no CPN cannot qualify. Worth reporting
+    /// separately from a lapsed licence: this population is data drift, not anyone losing their standing,
+    /// and a reviewer seeing a lot of it should investigate rather than approve.
+    /// </summary>
+    private const string NoCpnReason = "no CPN on record; Special Authority eForms is granted on the Party's own licence and has no endorsement path";
+
+    private const string NotInGoodStandingReason = "licence no longer in good standing and not a CPS postgraduate";
+
     private readonly IAccessRequestRevocationService revocationService = revocationService;
     private readonly ILogger<SAEformsRevocationPolicy> logger = logger;
     private readonly IPlrClient plrClient = plrClient;
@@ -20,7 +29,7 @@ public class SAEformsRevocationPolicy(
 
     public AccessTypeCode AccessTypeCode => AccessTypeCode.SAEforms;
 
-    public async Task RevokeIfIneligibleAsync(int partyId, PlrStatusChangeLog? statusChange = null, CancellationToken cancellationToken = default)
+    public async Task<RevocationDecision> RevokeIfIneligibleAsync(int partyId, PlrStatusChangeLog? statusChange = null, CancellationToken cancellationToken = default)
     {
         var dto = await this.context.Parties
             .Where(party => party.Id == partyId)
@@ -34,10 +43,17 @@ public class SAEformsRevocationPolicy(
         // Bail out before any PLR call for the many Parties who never held this card.
         if (dto?.HoldsEnrolment != true)
         {
-            return;
+            return RevocationDecision.NotHeld(AccessTypeCode.SAEforms);
         }
 
-        // Unlike every other eForm card, Special Authority has no endorsement path
+        // Matches the grant-time check in SAEforms.CommandHandler, which asks PLR about a null CPN and
+        // gets an empty digest back. Deciding it here instead spares the round trip and, more usefully,
+        // lets the outcome say what actually disqualified them.
+        if (dto.Cpn == null)
+        {
+            return await this.RevokeAsync(partyId, NoCpnReason, statusChange, cancellationToken);
+        }
+
         var partyPlrStanding = await this.plrClient.GetStandingsDigestAsync(dto.Cpn);
 
         // Fail closed: an unreachable PLR yields a digest with no records, which looks exactly like
@@ -45,20 +61,22 @@ public class SAEformsRevocationPolicy(
         if (partyPlrStanding.Error)
         {
             this.logger.LogRevocationSkippedPlrError(partyId);
-            return;
+            return RevocationDecision.StandingUnknown(AccessTypeCode.SAEforms);
         }
 
         if (SAEforms.IsEligible(partyPlrStanding))
         {
-            return;
+            return RevocationDecision.Eligible(AccessTypeCode.SAEforms);
         }
 
-        await this.revocationService.RevokeAsync(
-            partyId,
-            AccessTypeCode.SAEforms,
-            "licence no longer in good standing and not a CPS postgraduate",
-            statusChange.FormatTrigger(),
-            cancellationToken);
+        return await this.RevokeAsync(partyId, NotInGoodStandingReason, statusChange, cancellationToken);
+    }
+
+    private async Task<RevocationDecision> RevokeAsync(int partyId, string reason, PlrStatusChangeLog? statusChange, CancellationToken cancellationToken)
+    {
+        return await this.revocationService.RevokeAsync(partyId, AccessTypeCode.SAEforms, reason, statusChange.FormatTrigger(), cancellationToken)
+            ? RevocationDecision.Revoked(AccessTypeCode.SAEforms, reason)
+            : RevocationDecision.RevokeFailed(AccessTypeCode.SAEforms, reason);
     }
 }
 

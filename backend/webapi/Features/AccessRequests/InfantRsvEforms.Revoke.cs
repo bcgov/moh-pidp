@@ -21,7 +21,7 @@ public class InfantRsvEformsRevocationPolicy(
 
     public AccessTypeCode AccessTypeCode => AccessTypeCode.InfantRsvEforms;
 
-    public async Task RevokeIfIneligibleAsync(int partyId, PlrStatusChangeLog? statusChange = null, CancellationToken cancellationToken = default)
+    public async Task<RevocationDecision> RevokeIfIneligibleAsync(int partyId, PlrStatusChangeLog? statusChange = null, CancellationToken cancellationToken = default)
     {
         var dto = await this.context.Parties
             .Where(party => party.Id == partyId)
@@ -35,7 +35,7 @@ public class InfantRsvEformsRevocationPolicy(
         // Bail out before any PLR call for the many Parties who never held this card.
         if (dto?.HoldsEnrolment != true)
         {
-            return;
+            return RevocationDecision.NotHeld(AccessTypeCode.InfantRsvEforms);
         }
 
         var (eligible, standingIsKnown, reason) = await this.EvaluateEligibilityAsync(partyId, dto.Cpn);
@@ -45,15 +45,17 @@ public class InfantRsvEformsRevocationPolicy(
         if (!standingIsKnown)
         {
             this.logger.LogRevocationSkippedPlrError(partyId);
-            return;
+            return RevocationDecision.StandingUnknown(AccessTypeCode.InfantRsvEforms);
         }
 
         if (eligible)
         {
-            return;
+            return RevocationDecision.Eligible(AccessTypeCode.InfantRsvEforms);
         }
 
-        await this.revocationService.RevokeAsync(partyId, AccessTypeCode.InfantRsvEforms, reason, statusChange.FormatTrigger(), cancellationToken);
+        return await this.revocationService.RevokeAsync(partyId, AccessTypeCode.InfantRsvEforms, reason, statusChange.FormatTrigger(), cancellationToken)
+            ? RevocationDecision.Revoked(AccessTypeCode.InfantRsvEforms, reason)
+            : RevocationDecision.RevokeFailed(AccessTypeCode.InfantRsvEforms, reason);
     }
 
     /// <summary>
