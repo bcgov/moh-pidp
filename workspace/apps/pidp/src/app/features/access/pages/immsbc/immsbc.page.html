@@ -95,13 +95,6 @@
           <div
             [matTooltip]="bcProviderStatusCode !== StatusCode.COMPLETED ? 'You must create a BCProvider Credential before adding or managing a pharmacy.' : ''">
             <button mat-flat-button type="button" color="primary" class="action-button-large" style="width: 100%;"
-              routerLink="/access/immsbc/create-pharmacy" [disabled]="bcProviderStatusCode !== StatusCode.COMPLETED">
-              Add Pharmacy
-            </button>
-          </div>
-          <div
-            [matTooltip]="bcProviderStatusCode !== StatusCode.COMPLETED ? 'You must create a BCProvider Credential before adding or managing a pharmacy.' : ''">
-            <button mat-flat-button type="button" color="primary" class="action-button-large" style="width: 100%;"
               routerLink="/access/immsbc/manage-pharmacy" [disabled]="bcProviderStatusCode !== StatusCode.COMPLETED">
               Manage Pharmacy
             </button>
