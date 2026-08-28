@@ -18,7 +18,7 @@ public class PharmacyUpdate
         public string Name { get; set; } = string.Empty;
         public string HealthAuthority { get; set; } = string.Empty;
         public string Address1 { get; set; } = string.Empty;
-        public string Address2 { get; set; } = string.Empty;
+        public string? Address2 { get; set; }
         public string City { get; set; } = string.Empty;
         public string Province { get; set; } = string.Empty;
         public string PostalCode { get; set; } = string.Empty;
@@ -52,6 +52,12 @@ public class PharmacyUpdate
                 throw new KeyNotFoundException();
             }
 
+            if (pharmacy.Name != request.Name)
+            {
+                throw new InvalidOperationException("Pharmacy name cannot be modified.");
+            }
+
+            request.Address2 ??= string.Empty;
             context.Entry(pharmacy).CurrentValues.SetValues(request);
             context.BusinessEvents.Add(PharmacyUpdated.Create(request.RequestingPartyId, pharmacy.Name, clock.GetCurrentInstant()));
 

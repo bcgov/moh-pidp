@@ -1,5 +1,6 @@
 namespace Pidp.Features.Pharmacies;
 
+using DomainResults.Mvc;
 using Mediator;
 using Pidp.Extensions;
 using Microsoft.AspNetCore.Authorization;
@@ -117,8 +118,12 @@ public class PharmaciesController(IMediator mediator, PidpDbContext context) : C
         command.PharmacyId = pharmacyId;
         command.PartyId = partyId;
         command.RequestingPartyId = this.User.GetPartyId(this.context);
-        await this.mediator.Send(command);
-        return this.NoContent();
+        var result = await this.mediator.Send(command);
+        if (result.IsSuccess)
+        {
+            return this.NoContent();
+        }
+        return result.ToActionResult();
     }
 
     [HttpDelete("{pharmacyId}/staff/{partyId}")]

@@ -13,6 +13,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
+import { catchError, EMPTY } from 'rxjs';
 
 import { IStaff, PharmacyRole } from './pharmacy-staff.model';
 import { PharmacyResource } from './pharmacy-resource.service';
@@ -25,7 +27,7 @@ export interface EditStaffDialogData {
 @Component({
   selector: 'app-edit-staff-dialog',
   template: `
-    <h2 mat-dialog-title>Edit Staff: </h2>
+    <h2 mat-dialog-title>Edit {{ data.staff.fullName }}'s Access</h2>
     <mat-dialog-content>
       <form [formGroup]="form">
         <mat-form-field class="w-100">
@@ -44,6 +46,16 @@ export interface EditStaffDialogData {
             [matDatepicker]="startPicker"
             formControlName="effectiveStartDate"
           />
+          <button
+            mat-icon-button
+            matSuffix
+            (click)="setToday()"
+            type="button"
+            aria-label="Set to today"
+            title="Set to today"
+          >
+            <mat-icon>today</mat-icon>
+          </button>
           <mat-datepicker-toggle
             matSuffix
             [for]="startPicker"
@@ -64,6 +76,7 @@ export interface EditStaffDialogData {
             (click)="extendDate()"
             type="button"
             aria-label="Set to next August 1st"
+            title="Set to next August 1st"
           >
             <mat-icon>update</mat-icon>
           </button>
@@ -99,6 +112,7 @@ export interface EditStaffDialogData {
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatSnackBarModule,
   ],
 })
 export class EditStaffDialogComponent implements OnInit {
@@ -106,6 +120,7 @@ export class EditStaffDialogComponent implements OnInit {
   private readonly dialogRef = inject<MatDialogRef<EditStaffDialogComponent>>(MatDialogRef);
   public data = inject<EditStaffDialogData>(MAT_DIALOG_DATA);
   private readonly pharmacyResource = inject(PharmacyResource);
+  private readonly snackBar = inject(MatSnackBar);
 
   public form: FormGroup;
   public PharmacyRole = PharmacyRole;
@@ -142,6 +157,11 @@ export class EditStaffDialogComponent implements OnInit {
     });
   }
 
+  public setToday(): void {
+    this.form.get('effectiveStartDate')?.setValue(new Date());
+    this.form.markAsDirty();
+  }
+
   public extendDate(): void {
     const today = new Date();
     const currentYear = today.getFullYear();
@@ -173,7 +193,16 @@ export class EditStaffDialogComponent implements OnInit {
 
       this.pharmacyResource
         .updateStaff(this.data.pharmacyId, this.data.staff.partyId, payload)
-        .subscribe(() => this.dialogRef.close(true));
+        .pipe(
+          catchError(() => {
+            this.snackBar.open('An error occurred while updating the staff role.', 'Close', { duration: 10000 });
+            return EMPTY;
+          })
+        )
+        .subscribe(() => {
+          this.snackBar.open('Staff updated successfully.', 'Close', { duration: 3000 });
+          this.dialogRef.close(true);
+        });
     }
   }
 }

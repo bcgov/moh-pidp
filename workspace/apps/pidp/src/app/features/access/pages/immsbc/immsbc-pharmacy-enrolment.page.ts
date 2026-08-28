@@ -6,14 +6,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {
   ConfirmDialogComponent,
   DialogOptions,
-  PageComponent,
-  PageHeaderComponent,
+  InjectViewportCssClassDirective,
 } from '@bcgov/shared/ui';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { PartyService } from '@app/core/party/party.service';
+import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
+import { AccessRoutes } from '@app/features/access/access.routes';
 import Keycloak from 'keycloak-js';
-import { EMPTY, catchError } from 'rxjs';
+import { catchError, throwError } from 'rxjs';
 import { PharmacyResource } from './pharmacy-resource.service';
 
 @Component({
@@ -23,10 +24,10 @@ import { PharmacyResource } from './pharmacy-resource.service';
     CommonModule,
     MatDialogModule,
     MatProgressBarModule,
-    PageComponent,
-    PageHeaderComponent,
     ReactiveFormsModule,
     MatButtonModule,
+    InjectViewportCssClassDirective,
+    BreadcrumbComponent,
   ],
   templateUrl: './immsbc-pharmacy-enrolment.page.html',
 })
@@ -41,12 +42,19 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
 
   public form!: FormGroup;
   public token: string | null = null;
+  public breadcrumbsData: Array<{ title: string; path: string }> = [];
 
-  public title = 'Pharmacy Enrolment';
+  public title = 'Enrolment';
   public message = 'Processing your enrolment...';
   public isError = false;
 
   public ngOnInit(): void {
+    this.breadcrumbsData = [
+      { title: 'Home', path: '' },
+      { title: 'Access', path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS) },
+      { title: 'ImmsBC', path: AccessRoutes.routePath(AccessRoutes.IMMSBC) },
+      { title: 'Enrolment', path: '' },
+    ];
     this.token = this.route.snapshot.paramMap.get('token');
 
     if (!this.token) {
@@ -56,19 +64,11 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
       return;
     }
 
-    if (!this.partyService.partyId) {
-      // Not authenticated, redirect to login and return to this page
-      this.keycloak.login({
-        redirectUri: window.location.href,
-      });
-      return; // Stop execution until user is logged in and redirected back
-    }
-
     // User is authenticated, proceed with form setup
     this.form = this.fb.group({
       privacyTrainingAcknowledged: [false, Validators.requiredTrue]
     });
-    
+
     this.message = 'Please acknowledge the privacy and security training to proceed.';
   }
 
@@ -77,7 +77,7 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
       this.form.markAllAsTouched();
       return;
     }
-    
+
     this.message = 'Processing your enrolment...';
     this.isError = false;
 
@@ -85,20 +85,36 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
       .enrolStaff(this.token, { privacyTrainingAcknowledged: true })
       .pipe(
         catchError((error) => {
-          const errorMessage = (error.error as string).split('\n')[0];
-          const parsedMessage = errorMessage.substring(errorMessage.indexOf(': ') + 2).trim() ||
-            'An unexpected error occurred during enrolment.';
-
-          if (parsedMessage.toLowerCase().includes('bc provider') || parsedMessage.includes('bc-provider-application')) {
-            this.handleMissingBcProviderError(parsedMessage);
-          } else {
-            this.handleError(parsedMessage);
+          let errorMessage = 'An unexpected error occurred during enrolment.';
+          if (typeof error.error === 'string') {
+            errorMessage = error.error;
+          } else if (error.error?.detail) {
+            errorMessage = error.error.detail;
+          } else if (error.error?.title) {
+            errorMessage = error.error.title;
+          } else if (error.message) {
+            errorMessage = error.message;
           }
-          return EMPTY;
+
+          let parsedMessage = errorMessage;
+          if (parsedMessage.includes(': ')) {
+            parsedMessage = parsedMessage.substring(parsedMessage.indexOf(': ') + 2).trim();
+          }
+          const firstLine = parsedMessage.split('\n')[0] || 'An unexpected error occurred during enrolment.';
+
+          if (firstLine.toLowerCase().includes('bc provider') || firstLine.includes('bc-provider-application')) {
+            this.handleMissingBcProviderError(firstLine);
+          } else {
+            this.handleError(firstLine);
+          }
+
+          return throwError(() => error);
         }),
       )
-      .subscribe(() => {
-        this.handleSuccess();
+      .subscribe({
+        complete: () => {
+          this.handleSuccess();
+        }
       });
   }
 
@@ -106,7 +122,7 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
     const data: DialogOptions = {
       title: 'Enrolment Successful',
       message:
-        'You have been successfully associated with the pharmacy. You will now be redirected to the home page.',
+        'You have been successfully associated with the pharmacy. You can now request access to ImmsBC from the access request page.',
       actionText: 'OK',
       cancelHide: true,
     };

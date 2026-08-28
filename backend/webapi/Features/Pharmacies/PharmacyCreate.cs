@@ -16,7 +16,7 @@ public class PharmacyCreate
         public string Name { get; set; } = string.Empty;
         public string HealthAuthority { get; set; } = string.Empty;
         public string Address1 { get; set; } = string.Empty;
-        public string Address2 { get; set; } = string.Empty;
+        public string? Address2 { get; set; }
         public string City { get; set; } = string.Empty;
         public string Province { get; set; } = string.Empty;
         public string PostalCode { get; set; } = string.Empty;
@@ -78,7 +78,7 @@ public class PharmacyCreate
                 Name = request.Name,
                 HealthAuthority = request.HealthAuthority,
                 Address1 = request.Address1,
-                Address2 = request.Address2,
+                Address2 = request.Address2 ?? string.Empty,
                 City = request.City,
                 Province = request.Province,
                 PostalCode = request.PostalCode,

@@ -1,10 +1,10 @@
 <form [formGroup]="form" novalidate>
   <div class="form-field" [class.is-readonly]="isNameReadonly">
-    <label for="name">Pharmacy Name</label>
+    <label for="name">Organization Name</label>
     <input id="name" type="text" formControlName="name" autocomplete="organization" [readonly]="isNameReadonly" />
     <span class="helper-text">Please include store number if applicable, use format: "Name #12345"</span>
     @if (form.get('name')?.invalid && form.get('name')?.touched) {
-    <div class="form-error">Pharmacy Name is required.</div>
+    <div class="form-error">Organization Name is required.</div>
     }
   </div>
 
@@ -17,7 +17,6 @@
       <option value="Northern Health Authority">Northern Health Authority</option>
       <option value="Vancouver Coastal Health Authority">Vancouver Coastal Health Authority</option>
       <option value="Vancouver Island Health Authority">Vancouver Island Health Authority</option>
-      <option value="Other">Other</option>
     </select>
     @if (form.get('healthAuthority')?.invalid && form.get('healthAuthority')?.touched) {
     <div class="form-error">Health Authority is required.</div>
@@ -45,24 +44,26 @@
     }
   </div>
 
-  <div class="form-field">
-    <label for="province">Province</label>
-    <input id="province" type="text" formControlName="province" autocomplete="address-level1" />
-    @if (form.get('province')?.invalid && form.get('province')?.touched) {
-    <div class="form-error">Province is required.</div>
-    }
-  </div>
+  <input type="hidden" formControlName="province" />
 
   <div class="form-field">
     <label for="postalCode">Postal Code</label>
-    <input id="postalCode" type="text" formControlName="postalCode" autocomplete="postal-code" />
+    <input id="postalCode" type="text" formControlName="postalCode" autocomplete="postal-code" mask="S0S 0S0"
+      style="text-transform: uppercase" />
     @if (form.get('postalCode')?.invalid && form.get('postalCode')?.touched) {
-    <div class="form-error">Postal Code is required.</div>
+    <div class="form-error">
+      @if (form.get('postalCode')?.hasError('required')) {
+      Postal Code is required.
+      }
+      @if (form.get('postalCode')?.hasError('pattern') || form.get('postalCode')?.hasError('mask')) {
+      Please enter a valid Canadian Postal Code (e.g. V8V 1V1).
+      }
+    </div>
     }
   </div>
 
   <div class="form-field">
-    <label for="phone">Pharmacy Phone Number (Format: (XXX) XXX-XXXX)</label>
+    <label for="phone">Phone Number (Format: (XXX) XXX-XXXX)</label>
     <input id="phone" type="tel" formControlName="phone" autocomplete="tel" mask="(000) 000-0000" />
     @if (form.get('phone')?.invalid && form.get('phone')?.touched) {
     <div class="form-error">Phone Number is required.</div>
@@ -70,7 +71,7 @@
   </div>
 
   <div class="form-field">
-    <label for="fax">Pharmacy Fax Number (Format: (XXX) XXX-XXXX)</label>
+    <label for="fax">Fax Number (Format: (XXX) XXX-XXXX)</label>
     <input id="fax" type="tel" formControlName="fax" autocomplete="tel" mask="(000) 000-0000" />
     @if (form.get('fax')?.invalid && form.get('fax')?.touched) {
     <div class="form-error">Fax Number is required.</div>
@@ -78,7 +79,7 @@
   </div>
 
   <div class="form-field">
-    <label for="managerName">Pharmacy Manager Name</label>
+    <label for="managerName">Manager Name (as displayed in public)</label>
     <input id="managerName" type="text" formControlName="managerName" placeholder="FirstName LastName"
       autocomplete="name" />
     @if (form.get('managerName')?.invalid && form.get('managerName')?.touched) {
@@ -87,9 +88,8 @@
   </div>
 
   <div class="form-field">
-    <label for="email">Pharmacy Manager Email Address</label>
-    <input id="email" type="email" formControlName="email" placeholder="FirstName.LastName@email.com"
-      autocomplete="email" />
+    <label for="email">Manager Email Address (for system notifications only)</label>
+    <input id="email" type="email" formControlName="email" placeholder="first.last@email.com" autocomplete="email" />
     @if (form.get('email')?.invalid && form.get('email')?.touched) {
     <div class="form-error">
       @if (form.get('email')?.hasError('required')) {
@@ -119,9 +119,10 @@
   </div>
 
   <div class="form-field">
-    <label for="evidence">Evidence of Privacy Course Completion</label>
+    <label for="evidence">Evidence</label>
     <input id="evidence" type="file" (change)="onFileChange($event)" accept=".docx,.pdf,.png,.jpg,.jpeg" />
-    <span class="helper-text">Please upload a screenshot of the CareConnect portal showing registration and completion of the privacy course, including the "Worksite ID" (max 5MB).</span>
+    <span class="helper-text">Please upload a screenshot of the CareConnect portal showing registration and completion
+      of the privacy course, including the "Worksite ID" (max 5MB).</span>
     @if (form.get('evidence')?.invalid && form.get('evidence')?.touched) {
     <div class="form-error">Evidence document is required.</div>
     }

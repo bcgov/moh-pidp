@@ -1,4 +1,4 @@
-﻿namespace Pidp;
+namespace Pidp;
 
 using System.Reflection;
 using System.Text.Json;
@@ -84,9 +84,9 @@ public class Startup(IConfiguration configuration)
             .AddScoped<IAccessRequestRevocationPolicy, NpdpEformsRevocationPolicy>()
             .AddScoped<IPidpAuthorizationService, PidpAuthorizationService>()
             .AddScoped<IPlrStatusUpdateService, PlrStatusUpdateService>()
-            .AddScoped<IBCProviderService, BCProviderService>()
-            .AddScoped<IPharmacyStaffDeactivationService, PharmacyStaffDeactivationService>()
-            .AddHostedService<PharmacyStaffDeactivationHostedService>()
+            .AddScoped<IRoleSynchronizationService, RoleSynchronizationService>()
+            // .AddScoped<IPharmacyStaffDeactivationService, PharmacyStaffDeactivationService>()
+            // .AddHostedService<PharmacyStaffDeactivationHostedService>()
             .AddSingleton<IClock>(SystemClock.Instance)
             .AddSingleton<BackgroundWorkerHealthCheck>();
 

@@ -1,4 +1,4 @@
-﻿namespace Pidp.Infrastructure.HttpClients.Keycloak;
+namespace Pidp.Infrastructure.HttpClients.Keycloak;
 
 using System.Text.Json;
 
@@ -17,6 +17,10 @@ public class MohKeycloakEnrolment
 
     public static readonly MohKeycloakEnrolment MoaLicenceStatus = new("LICENCE-STATUS", "MOA");
     public static readonly MohKeycloakEnrolment PractitionerLicenceStatus = new("LICENCE-STATUS", "PRACTITIONER");
+
+    public static readonly MohKeycloakEnrolment ImmsBcPhaAdmin = new("IMMSBC-BCPHA", "ADMIN");
+    public static readonly MohKeycloakEnrolment ImmsBcPhaClerk = new("IMMSBC-BCPHA", "CLERK");
+    public static readonly MohKeycloakEnrolment ImmsBcPhaClinician = new("IMMSBC-BCPHA", "CLINICIAN");
 
     public IEnumerable<string> AccessRoles { get; private set; }
     public AccessTypeCode? AssocatedAccessRequest { get; private set; }

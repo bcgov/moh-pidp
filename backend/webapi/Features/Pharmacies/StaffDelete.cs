@@ -17,7 +17,7 @@ public class StaffDelete
         public int RequestingPartyId { get; set; }
     }
 
-    public class CommandHandler(PidpDbContext context, IClock clock, IBCProviderService bcProviderService) : IRequestHandler<Command>
+    public class CommandHandler(PidpDbContext context, IClock clock, IRoleSynchronizationService roleSynchronizationService) : IRequestHandler<Command>
     {
         public async ValueTask<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
@@ -51,10 +51,10 @@ public class StaffDelete
 
                 context.BusinessEvents.Add(PharmacyStaffChanged.Create(request.RequestingPartyId, pharmacyName, clock.GetCurrentInstant()));
 
-                staffRole.EffectiveEndDate = clock.GetCurrentInstant().ToDateTimeUtc();
+                context.PharmacyPartyRoles.Remove(staffRole);
                 await context.SaveChangesAsync(cancellationToken);
 
-                await bcProviderService.UpdatePharmStaffAttributes(request.PartyId, cancellationToken);
+                await roleSynchronizationService.UpdatePharmStaffAttributes(request.PartyId, cancellationToken);
             }
             return Unit.Value;
         }
