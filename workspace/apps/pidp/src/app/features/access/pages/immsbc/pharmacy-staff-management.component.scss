@@ -1,0 +1,24 @@
+.button-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-column-actions {
+  width: 120px;
+}
+
+::ng-deep {
+  .pending {
+    background-color: #ffc107; // Amber
+  }
+
+  .active {
+    background-color: #4caf50; // Green
+    color: white;
+  }
+}

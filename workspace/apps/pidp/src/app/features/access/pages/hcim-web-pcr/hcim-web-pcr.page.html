@@ -1,0 +1,171 @@
+<div class="box container" uiPidpInjectViewportCss>
+    <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
+    <div class="content">
+        @if (accessRequestFailed) {
+        <section class="alert">
+            <h2>Error Requesting Access</h2>
+            <p>
+                Your request for access to the Provincial Client Registry could not be processed at this time. If this
+                issue persists, contact
+                <a [attr.href]="'mailto:' + registriesConnectionsEmail">{{ registriesConnectionsEmail }}</a>
+                for assistance.
+            </p>
+        </section>
+        }
+
+        @if (enrolmentError) {
+        <app-enrolment-error></app-enrolment-error>
+        }
+
+        <section class="intro">
+            <div class="content-header">
+                <h1>Provincial Client Registry</h1>
+                <p>
+                    Official repository of healthcare client demographic information, such as the Personal Health
+                    Numbers (PHN), name, date of birth, and contact details. Authorized users can search, store, update,
+                    and create patient demographic information within this registry.
+                </p>
+            </div>
+        </section>
+        <section class="support">
+            <div class="support-card">
+                <h2>Need Help or Have Questions?</h2>
+                <p>
+                    For any problems, questions, or to request an upgrade to your access level, please contact the
+                    <strong>Registries Connections</strong>
+                    group:
+                </p>
+                <p>
+                    <a [attr.href]="'mailto:' + registriesConnectionsEmail">{{ registriesConnectionsEmail }}</a>
+                </p>
+            </div>
+        </section>
+        <section class="main">
+            <div class="card main-stepper">
+                <div class="stepper-title">Instructions</div>
+                <mat-stepper orientation="vertical" #stepper [selectedIndex]="selectedIndex">
+                    <mat-step [state]="bcProviderStatusCode === StatusCode.COMPLETED ? 'done' : 'number'"
+                        [completed]="bcProviderStatusCode === StatusCode.COMPLETED">
+                        <ng-template matStepLabel>
+                            Create a BCProvider Credential
+                        </ng-template>
+                        <div>
+                            <p class="guide-information">
+                                A BCProvider is a credential used to access health applications.
+                                In the future the BCProvider will be integrated with multiple
+                                health authorities, EMRs and other government health services.
+                            </p>
+                            <button mat-flat-button type="button" color="primary"
+                                routerLink="/account/bc-provider-application" aria-labelledby="complete-bcprovider"
+                                [disabled]="bcProvider$ | async">
+                                Create a BCProvider Credential
+                            </button>
+                        </div>
+                        <div class="smaller-text">
+                            <em>Need help? Try this
+                                <a uiAnchor [attr.href]="bcProviderTutorial">video tutorial</a>
+                            </em>
+                        </div>
+                        <div class="stepper-buttons">
+                            <button mat-stroked-button matStepperNext>Next</button>
+                        </div>
+                    </mat-step>
+
+                    <mat-step [completed]="false">
+                        <ng-template matStepLabel>
+                            Multi-Factor Authentication (MFA) Set-Up Guide
+                        </ng-template>
+                        <p class="guide-information">
+                            If you need help setting up your Multi-Factor Authentication
+                            (MFA), please
+                            <a href="assets/documents/mfa.pdf" download>download this PDF</a>
+                        </p>
+
+                        <div class="stepper-buttons">
+                            <button mat-stroked-button matStepperPrevious>Back</button>
+                            <button mat-stroked-button matStepperNext>Next</button>
+                        </div>
+                    </mat-step>
+
+                    <mat-step [state]="hcimWebPcrStatusCode === StatusCode.COMPLETED ? 'done' : 'number'"
+                        [completed]="hcimWebPcrStatusCode === StatusCode.COMPLETED">
+                        <ng-template matStepLabel>
+                            Get Access to the Provincial Client Registry
+                        </ng-template>
+                        <div>
+                            <p class="guide-information">
+                                Request access to the Provincial Client Registry. Once your access has been granted
+                                you can log in below with your BCProvider credential.
+                            </p>
+                            <button mat-flat-button type="button" color="primary"
+                                aria-labelledby="request-hcim-web-pcr-access" [disabled]="getAccessDisabled"
+                                tabindex="0" (keydown.enter)="onRequestAccess()" (click)="onRequestAccess()">
+                                Get Access
+                            </button>
+                        </div>
+                        <div class="stepper-buttons">
+                            <button mat-stroked-button matStepperPrevious>Back</button>
+                            <button mat-stroked-button matStepperNext>Next</button>
+                        </div>
+                    </mat-step>
+
+                    <mat-step [completed]="false">
+                        <ng-template matStepLabel>
+                            Login to the Provincial Client Registry with your BCProvider
+                        </ng-template>
+                        <div>
+                            <p class="guide-information">
+                                Use your newly created BCProvider to login to the Provincial Client Registry.
+                            </p>
+                            @if (bcProviderStatusCode === StatusCode.COMPLETED) {
+                            <p class="bcprovider-username">
+                                <strong>{{ bcProviderUsername }}</strong>
+                                <button mat-icon-button type="button" matTooltip="Copy your BCProvider to clipboard"
+                                    aria-label="Copy your BCProvider to clipboard"
+                                    [cdkCopyToClipboard]="bcProviderUsername" (cdkCopyToClipboardCopied)="onCopy()">
+                                    <mat-icon>content_paste</mat-icon>
+                                </button>
+                            </p>
+                            }
+                            <button mat-flat-button type="button" color="primary"
+                                aria-labelledby="navigate-to-hcim-web-pcr" [disabled]="hcimWebPcr$ | async"
+                                tabindex="0" (keydown.enter)="navigateToPath()" (click)="navigateToPath()">
+                                Login to the Provincial Client Registry with your BCProvider
+                            </button>
+                        </div>
+                        <div class="stepper-buttons">
+                            <button mat-stroked-button matStepperPrevious>Back</button>
+                            <button mat-stroked-button tabindex="0" (keydown.enter)="stepper.reset()" (click)="stepper.reset()">Reset</button>
+                        </div>
+                    </mat-step>
+                </mat-stepper>
+            </div>
+            <div class="pcr-button-container">
+                <div class="card pcr-button">
+                    <img ngSrc="/assets/images/checkup.png" alt="checkup" priority fill />
+                    <div class="card-container auth-card">
+                        <div class="card-header auth-card-header">
+                            <h3><strong>Provincial Client Registry</strong></h3>
+                        </div>
+                        <div class="card-footer auth-card-footer">
+                            <button mat-flat-button uiPageFooterAction type="button" color="primary"
+                                aria-labelledby="navigate-to-hcim-web-pcr" [disabled]="hcimWebPcr$ | async"
+                                tabindex="0" (keydown.enter)="navigateToPath()" (click)="navigateToPath()">
+                                Login
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                @if ((hcimWebPcr$ | async)) {
+                <div class="pcr-button-text">
+                    @if (bcProviderStatusCode === StatusCode.COMPLETED) {
+                    <i>You will need to get access before logging in.</i>
+                    } @else {
+                    <i>You will need a BCProvider credential, and to get access, before logging in.</i>
+                    }
+                </div>
+                }
+            </div>
+        </section>
+    </div>
+</div>

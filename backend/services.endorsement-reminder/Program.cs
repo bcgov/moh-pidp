@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -32,7 +32,7 @@ await Host.CreateDefaultBuilder(args)
 
         services
             .AddSingleton<IClock>(SystemClock.Instance)
-            .AddMediatR(opt => opt.RegisterServicesFromAssemblyContaining<Startup>())
+            .AddMediator()
             .AddTransient<IEmailService, EmailService>()
             .AddTransient<IEndorsementMaintenanceService, EndorsementMaintenanceService>()
             .AddHostedService<HostedServiceWrapper>()

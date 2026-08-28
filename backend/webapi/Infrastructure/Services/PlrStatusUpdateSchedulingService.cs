@@ -22,9 +22,17 @@ public class PlrStatusUpdateSchedulingService(
             while (await this.timer.WaitForNextTickAsync(stoppingToken)
                 && !stoppingToken.IsCancellationRequested)
             {
-                using var scope = this.scopeFactory.CreateScope();
-                await scope.ServiceProvider.GetRequiredService<IPlrStatusUpdateService>()
-                    .DoWorkAsync(stoppingToken);
+                try
+                {
+                    using var scope = this.scopeFactory.CreateScope();
+                    await scope.ServiceProvider.GetRequiredService<IPlrStatusUpdateService>()
+                        .DoWorkAsync(stoppingToken);
+                }
+                catch (Exception e) when (e is not OperationCanceledException)
+                {
+                    // A single failed iteration must not stop the service; the next tick retries.
+                    this.logger.LogWorkIterationFailed(e);
+                }
             }
         }
         catch (Exception e)
@@ -56,4 +64,7 @@ public static partial class PlrStatusUpdateSchedulingServiceLoggingExtensions
 
     [LoggerMessage(3, LogLevel.Critical, "Unhandled exception in PLR Status Update Scheduling Service. Service stopped.")]
     public static partial void LogServiceHasStoppedUnexpectedly(this ILogger<PlrStatusUpdateSchedulingService> logger, Exception e);
+
+    [LoggerMessage(4, LogLevel.Error, "Unhandled exception during a PLR Status Update work iteration. The Service will continue.")]
+    public static partial void LogWorkIterationFailed(this ILogger<PlrStatusUpdateSchedulingService> logger, Exception e);
 }

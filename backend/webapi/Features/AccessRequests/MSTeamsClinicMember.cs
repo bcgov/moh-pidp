@@ -1,7 +1,6 @@
 namespace Pidp.Features.AccessRequests;
 
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
+using Mapster;
 using DomainResults.Common;
 using FluentValidation;
 using HybridModelBinding;
@@ -40,27 +39,25 @@ public class MSTeamsClinicMember
         IClock clock,
         IEmailService emailService,
         ILogger<CommandHandler> logger,
-        IMapper mapper,
         PidpDbContext context) : ICommandHandler<Command, IDomainResult>
     {
         private readonly IClock clock = clock;
         private readonly IEmailService emailService = emailService;
         private readonly ILogger<CommandHandler> logger = logger;
-        private readonly IMapper mapper = mapper;
         private readonly PidpDbContext context = context;
 
         public async Task<IDomainResult> HandleAsync(Command command)
         {
             var enrolmentDto = await this.context.Parties
                 .Where(party => party.Id == command.PartyId)
-                .ProjectTo<EnrolmentDto>(this.mapper.ConfigurationProvider)
+                .ProjectToType<EnrolmentDto>()
                 .SingleAsync();
 
             var clinicDto = await this.context.MSTeamsClinics
                 .Where(clinic => clinic.Id == command.ClinicId
                     && this.context.ActiveEndorsementRelationships(command.PartyId)
                         .Any(relationship => relationship.PartyId == clinic.PrivacyOfficerId))
-                .ProjectTo<ClinicDto>(this.mapper.ConfigurationProvider)
+                .ProjectToType<ClinicDto>()
                 .SingleOrDefaultAsync();
 
             if (enrolmentDto.AlreadyEnroled
@@ -68,6 +65,8 @@ public class MSTeamsClinicMember
                 || clinicDto == null)
             {
                 this.logger.LogAccessRequestDenied();
+                this.context.BusinessEvents.Add(AccessRequestFailed.Create(command.PartyId, AccessTypeCode.MSTeamsClinicMember.ToString(), this.clock.GetCurrentInstant()));
+                await this.context.SaveChangesAsync();
                 return DomainResult.Failed();
             }
 
@@ -78,6 +77,8 @@ public class MSTeamsClinicMember
                 RequestedOn = this.clock.GetCurrentInstant(),
                 ClinicId = command.ClinicId
             });
+
+            this.context.BusinessEvents.Add(AccessRequestSubmitted.Create(command.PartyId, AccessTypeCode.MSTeamsClinicMember.ToString(), this.clock.GetCurrentInstant()));
 
             await this.context.SaveChangesAsync();
 

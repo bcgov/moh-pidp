@@ -7,7 +7,7 @@ using System.Xml;
 
 using PlrIntake.Models;
 
-public class PlrRecordReader
+public partial class PlrRecordReader
 {
     private const string Prefix = IntakeServiceOperationTuner.Prefix;
 
@@ -159,8 +159,7 @@ public class PlrRecordReader
     ///     Otherwise, simply returns <c>telecomNumber</c> as the single element in the array</returns>
     public static string?[] SplitTelecomNumber(string telecomNumber)
     {
-        var allDigitsRegex = new Regex("^[0-9]+$");
-        if (telecomNumber != null && telecomNumber.Length == 10 && allDigitsRegex.IsMatch(telecomNumber))
+        if (telecomNumber != null && telecomNumber.Length == 10 && AllDigitsRegex().IsMatch(telecomNumber))
         {
             return new string[] { telecomNumber[0..3], telecomNumber[3..] };
         }
@@ -204,6 +203,9 @@ public class PlrRecordReader
             return null;
         }
     }
+
+    [GeneratedRegex("^[0-9]+$")]
+    private static partial Regex AllDigitsRegex();
 }
 
 public static partial class PlrRecordReaderLoggingExtensions

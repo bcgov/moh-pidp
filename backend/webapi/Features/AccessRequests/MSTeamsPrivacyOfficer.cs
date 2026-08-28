@@ -1,7 +1,6 @@
 namespace Pidp.Features.AccessRequests;
 
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
+using Mapster;
 using DomainResults.Common;
 using FluentValidation;
 using HybridModelBinding;
@@ -59,14 +58,12 @@ public class MSTeamsPrivacyOfficer
         IClock clock,
         IEmailService emailService,
         ILogger<CommandHandler> logger,
-        IMapper mapper,
         IPlrClient plrClient,
         PidpDbContext context) : ICommandHandler<Command, IDomainResult>
     {
         private readonly IClock clock = clock;
         private readonly IEmailService emailService = emailService;
         private readonly ILogger<CommandHandler> logger = logger;
-        private readonly IMapper mapper = mapper;
         private readonly IPlrClient plrClient = plrClient;
         private readonly PidpDbContext context = context;
 
@@ -74,7 +71,7 @@ public class MSTeamsPrivacyOfficer
         {
             var dto = await this.context.Parties
                 .Where(party => party.Id == command.PartyId)
-                .ProjectTo<EnrolmentDto>(this.mapper.ConfigurationProvider)
+                .ProjectToType<EnrolmentDto>()
                 .SingleAsync();
 
             if (dto.AlreadyEnroled
@@ -84,6 +81,8 @@ public class MSTeamsPrivacyOfficer
                     .HasGoodStanding)
             {
                 this.logger.LogAccessRequestDenied();
+                this.context.BusinessEvents.Add(AccessRequestFailed.Create(command.PartyId, AccessTypeCode.MSTeamsPrivacyOfficer.ToString(), this.clock.GetCurrentInstant()));
+                await this.context.SaveChangesAsync();
                 return DomainResult.Failed();
             }
 
@@ -97,8 +96,10 @@ public class MSTeamsPrivacyOfficer
             {
                 PrivacyOfficerId = command.PartyId,
                 Name = command.ClinicName,
-                Address = this.mapper.Map<MSTeamsClinicAddress>(command.ClinicAddress)
+                Address = command.ClinicAddress.Adapt<MSTeamsClinicAddress>()
             });
+
+            this.context.BusinessEvents.Add(AccessRequestSubmitted.Create(command.PartyId, AccessTypeCode.MSTeamsPrivacyOfficer.ToString(), this.clock.GetCurrentInstant()));
 
             await this.context.SaveChangesAsync();
 

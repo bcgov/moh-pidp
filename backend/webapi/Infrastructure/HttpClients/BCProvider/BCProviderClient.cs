@@ -36,6 +36,27 @@ public partial class BCProviderClient(
         }
     }
 
+    public async Task<IDictionary<string, object>?> GetUserAttributes(string userPrincipalName, string[] attributeNames)
+    {
+        if (string.IsNullOrEmpty(userPrincipalName) || attributeNames == null || attributeNames.Length == 0)
+        {
+            return null;
+        }
+
+        try
+        {
+            var result = await this.client.Users[userPrincipalName]
+                .GetAsync(request => request.QueryParameters.Select = attributeNames);
+
+            return result?.AdditionalData;
+        }
+        catch
+        {
+            this.logger.LogGetAttributeFailure(userPrincipalName);
+            return null;
+        }
+    }
+
     public async Task<User?> CreateBCProviderAccount(NewUserRepresentation userRepresentation)
     {
         var userPrincipal = await this.CreateUniqueUserPrincipalName(userRepresentation.FirstName, userRepresentation.LastName);
@@ -131,6 +152,7 @@ public partial class BCProviderClient(
                     AdditionalData = bcProviderAttributes
                 });
 
+            this.logger.LogAttributesUpdated(userPrincipalName);
             return true;
         }
         catch
@@ -154,6 +176,7 @@ public partial class BCProviderClient(
                     }
                 });
 
+            this.logger.LogPasswordUpdated(userPrincipalName);
             return true;
         }
         catch
@@ -170,11 +193,27 @@ public partial class BCProviderClient(
             await this.client.Users[userPrincipalName]
                 .PatchAsync(user);
 
+            this.logger.LogUserUpdated(userPrincipalName);
             return true;
         }
         catch
         {
             this.logger.LogUserUpdateFailure(userPrincipalName);
+            return false;
+        }
+    }
+
+    public async Task<bool> DeleteBCProviderAccount(string userPrincipalName)
+    {
+        try
+        {
+            await this.client.Users[userPrincipalName].DeleteAsync();
+            this.logger.LogUserDeleted(userPrincipalName);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            this.logger.LogError(ex, "Failed to delete BC Provider user {userPrincipalName}.", userPrincipalName);
             return false;
         }
     }
@@ -201,6 +240,7 @@ public partial class BCProviderClient(
             var filteredAuthMethods = authMethods.Value.Where(authMethod => authMethod is not PasswordAuthenticationMethod).ToList();
             if (filteredAuthMethods.Count == 0)
             {
+                this.logger.LogAuthMethodsRemoved(userPrincipalName);
                 allMethodsDeleted = true;
                 break;
             }
@@ -380,4 +420,19 @@ public static partial class BCProviderClientLoggingExtensions
 
     [LoggerMessage(13, LogLevel.Error, "An error occurred while inviting user {userPrincipalName}. Reason: {reason}")]
     public static partial void LogInviteUserError(this ILogger<BCProviderClient> logger, string userPrincipalName, string? reason);
+
+    [LoggerMessage(14, LogLevel.Information, "Successfully updated attributes for BC Provider account: {userPrincipalName}")]
+    public static partial void LogAttributesUpdated(this ILogger<BCProviderClient> logger, string userPrincipalName);
+
+    [LoggerMessage(15, LogLevel.Information, "Successfully updated password for BC Provider account: {userPrincipalName}")]
+    public static partial void LogPasswordUpdated(this ILogger<BCProviderClient> logger, string userPrincipalName);
+
+    [LoggerMessage(16, LogLevel.Information, "Successfully updated user profile for BC Provider account: {userPrincipalName}")]
+    public static partial void LogUserUpdated(this ILogger<BCProviderClient> logger, string userPrincipalName);
+
+    [LoggerMessage(17, LogLevel.Information, "Successfully removed authentication methods for BC Provider account: {userPrincipalName}")]
+    public static partial void LogAuthMethodsRemoved(this ILogger<BCProviderClient> logger, string userPrincipalName);
+
+    [LoggerMessage(18, LogLevel.Information, "Successfully deleted BC Provider account: {userPrincipalName}")]
+    public static partial void LogUserDeleted(this ILogger<BCProviderClient> logger, string userPrincipalName);
 }

@@ -2,99 +2,115 @@
   [inBc]="inBc"
   (autocompleteAddress)="onAutocomplete($event)">
   <div class="address-button-box">
-    <button
-      *ngIf="showManualButton"
-      mat-button
-      type="button"
-      color="primary"
-      [disabled]="showAddressLineFields"
-      (click)="showManualAddress()">
-      <mat-icon>add</mat-icon>
-      Add Address Manually
-    </button>
+    @if (showManualButton) {
+      <button
+        mat-button
+        type="button"
+        color="primary"
+        [disabled]="showAddressLineFields"
+        tabindex="0" (keydown.enter)="showManualAddress()" (click)="showManualAddress()">
+        <mat-icon>add</mat-icon>
+        Add Address Manually
+      </button>
+    }
   </div>
 </app-address-autocomplete>
 
-<ng-container *ngIf="showAddressLineFields" [formGroup]="form">
-  <div class="form" uiPidpInjectViewportCss>
-    <div
-      *ngIf="showFormControl('countryCode')"
-      class="field country"
-      [class]="getFormControlOrder('countryCode')">
-      <label id="address-form-street-country">Country</label>
-      <mat-form-field>
-        <mat-select
-          formControlName="countryCode"
-          aria-labelledby="address-form-street-country"
-          [required]="isRequired('countryCode')">
-          <mat-option *ngFor="let country of countries" [value]="country.code">
-            {{ country.name }}
-          </mat-option>
-        </mat-select>
-        <mat-error>Required</mat-error>
-      </mat-form-field>
-    </div>
-    <div
-      *ngIf="showFormControl('provinceCode')"
-      class="field province"
-      [class]="getFormControlOrder('provinceCode')">
-      <label id="address-form-street-province">{{ provinceLabel }}</label>
-      <mat-form-field>
-        <mat-select
-          formControlName="provinceCode"
-          aria-labelledby="address-form-street-province"
-          [required]="isRequired('provinceCode')">
-          <mat-option
-            *ngFor="let province of filteredProvinces"
-            [value]="province.code">
-            {{ province.name }}
-          </mat-option>
-        </mat-select>
-        <mat-error>Required</mat-error>
-      </mat-form-field>
-    </div>
-    <div
-      *ngIf="showFormControl('street')"
-      class="field street"
-      [class]="getFormControlOrder('street')">
-      <label id="address-form-street-label">Street Address</label>
-      <mat-form-field>
-        <input
-          matInput
-          formControlName="street"
-          aria-labelledby="address-form-street-label"
-          [required]="isRequired('street')" />
-        <mat-error>Required</mat-error>
-      </mat-form-field>
-    </div>
-    <div
-      *ngIf="showFormControl('city')"
-      class="field city"
-      [class]="getFormControlOrder('city')">
-      <label id="address-form-street-city">City</label>
-      <mat-form-field>
-        <input
-          matInput
-          formControlName="city"
-          aria-labelledby="address-form-street-city"
-          [required]="isRequired('city')" />
-        <mat-error>Required</mat-error>
-      </mat-form-field>
-    </div>
-    <div
-      *ngIf="showFormControl('postal')"
-      class="field postal"
-      [class]="getFormControlOrder('postal')">
-      <label id="address-form-street-postal">{{ postalLabel }}</label>
-      <mat-form-field>
-        <input
-          matInput
-          formControlName="postal"
-          aria-labelledby="address-form-street-postal"
-          [mask]="postalMask"
-          [required]="isRequired('postal')" />
-        <mat-error>Required</mat-error>
-      </mat-form-field>
-    </div>
-  </div>
-</ng-container>
+@if (showAddressLineFields) {
+  <ng-container [formGroup]="form">
+    <div class="form" uiPidpInjectViewportCss>
+      @if (showFormControl('countryCode')) {
+        <div
+          class="field country"
+          [class]="getFormControlOrder('countryCode')">
+          <label for="address-country" id="address-form-street-country">Country</label>
+          <mat-form-field>
+            <mat-select
+              id="address-country"
+              formControlName="countryCode"
+              aria-labelledby="address-form-street-country"
+              [required]="isRequired('countryCode')">
+              @for (country of countries; track country) {
+                <mat-option [value]="country.code">
+                  {{ country.name }}
+                </mat-option>
+              }
+            </mat-select>
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+        </div>
+      }
+      @if (showFormControl('provinceCode')) {
+        <div
+          class="field province"
+          [class]="getFormControlOrder('provinceCode')">
+          <label for="address-province" id="address-form-street-province">{{ provinceLabel }}</label>
+          <mat-form-field>
+            <mat-select
+              id="address-province"
+              formControlName="provinceCode"
+              aria-labelledby="address-form-street-province"
+              [required]="isRequired('provinceCode')">
+              @for (province of filteredProvinces; track province) {
+                <mat-option
+                  [value]="province.code">
+                  {{ province.name }}
+                </mat-option>
+              }
+            </mat-select>
+            <mat-error>Required</mat-error>
+          </mat-form-field>
+        </div>
+      }
+      @if (showFormControl('street')) {
+        <div
+          class="field street"
+          [class]="getFormControlOrder('street')">
+          <label for="address-street" id="address-form-street-label">Street Address</label>
+          <mat-form-field>
+            <input
+              id="address-street"
+              matInput
+              formControlName="street"
+              aria-labelledby="address-form-street-label"
+              [required]="isRequired('street')" />
+              <mat-error>Required</mat-error>
+            </mat-form-field>
+          </div>
+        }
+        @if (showFormControl('city')) {
+          <div
+            class="field city"
+            [class]="getFormControlOrder('city')">
+            <label for="address-city" id="address-form-street-city">City</label>
+            <mat-form-field>
+              <input
+                id="address-city"
+                matInput
+                formControlName="city"
+                aria-labelledby="address-form-street-city"
+                [required]="isRequired('city')" />
+                <mat-error>Required</mat-error>
+              </mat-form-field>
+            </div>
+          }
+          @if (showFormControl('postal')) {
+            <div
+              class="field postal"
+              [class]="getFormControlOrder('postal')">
+              <label for="address-postal" id="address-form-street-postal">{{ postalLabel }}</label>
+              <mat-form-field>
+                <input
+                  id="address-postal"
+                  matInput
+                  formControlName="postal"
+                  aria-labelledby="address-form-street-postal"
+                  [mask]="postalMask"
+                  [required]="isRequired('postal')" />
+                  <mat-error>Required</mat-error>
+                </mat-form-field>
+              </div>
+            }
+          </div>
+        </ng-container>
+      }

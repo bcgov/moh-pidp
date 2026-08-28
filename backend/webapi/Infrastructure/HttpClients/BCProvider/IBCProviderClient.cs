@@ -16,8 +16,16 @@ public interface IBCProviderClient
     /// Returns null on an error.
     /// </summary>
     /// <param name="userPrincipalName"></param>
-    /// <param name="attributesName"></param>
+    /// <param name="attributeName"></param>
     public Task<object?> GetAttribute(string userPrincipalName, string attributeName);
+
+    /// <summary>
+    /// Gets specific additional attributes for a BC Provider account.
+    /// Returns null on an error.
+    /// </summary>
+    /// <param name="userPrincipalName"></param>
+    /// <param name="attributeNames"></param>
+    public Task<IDictionary<string, object>?> GetUserAttributes(string userPrincipalName, string[] attributeNames);
 
     /// <summary>
     /// Removes all authentication methods from a user, except for password.
@@ -57,4 +65,10 @@ public interface IBCProviderClient
     /// <param name="userPrincipalName"></param>
     /// <param name="user"></param>
     public Task<bool> UpdateUser(string userPrincipalName, User user);
+
+    /// <summary>
+    /// Deletes the given BC Provider account from Microsoft Entra (Azure AD).
+    /// </summary>
+    /// <param name="userPrincipalName"></param>
+    public Task<bool> DeleteBCProviderAccount(string userPrincipalName);
 }

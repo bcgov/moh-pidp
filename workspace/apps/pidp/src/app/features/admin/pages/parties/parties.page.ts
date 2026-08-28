@@ -1,5 +1,5 @@
-import { NgIf } from '@angular/common';
-import { Component, Inject, OnInit } from '@angular/core';
+
+import { Component, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -24,6 +24,7 @@ import {
   AdminResource,
   PartyList,
 } from '../../shared/resources/admin-resource.service';
+import { UnlinkConfirmDialogComponent } from './components/unlink-confirm-dialog.component';
 
 @Component({
   selector: 'app-parties',
@@ -34,12 +35,15 @@ import {
     MatButtonModule,
     MatIconModule,
     MatTableModule,
-    NgIf,
     PageComponent,
-    PageHeaderComponent,
-  ],
+    PageHeaderComponent
+],
 })
 export class PartiesPage implements OnInit {
+  private readonly config = inject<AppConfig>(APP_CONFIG);
+  private readonly adminResource = inject(AdminResource);
+  private readonly dialog = inject(MatDialog);
+
   public title: string;
   public dataSource: MatTableDataSource<PartyList>;
   public displayedColumns: string[] = [
@@ -47,21 +51,23 @@ export class PartiesPage implements OnInit {
     'providerName',
     'providerCollegeCode',
     'saEforms',
+    'credentials',
     'delete',
   ];
   public environment: string;
   public production: string;
 
-  public constructor(
-    @Inject(APP_CONFIG) private readonly config: AppConfig,
-    private readonly adminResource: AdminResource,
-    private readonly dialog: MatDialog,
-    route: ActivatedRoute,
-  ) {
+  public constructor() {
+    const route = inject(ActivatedRoute);
+
     this.title = route.snapshot.data.title;
     this.dataSource = new MatTableDataSource();
     this.environment = this.config.environmentName;
     this.production = EnvironmentName.PRODUCTION;
+
+    if (this.environment === this.production) {
+      this.displayedColumns = this.displayedColumns.filter(c => c !== 'delete');
+    }
   }
 
   public onDeleteParty(partyId: number): void {
@@ -69,6 +75,51 @@ export class PartiesPage implements OnInit {
       .deleteParty(partyId)
       .pipe(switchMap(() => of(this.getParties())))
       .subscribe();
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public onUnlinkCredential(partyId: number, credential: any): void {
+    if (credential.identityProvider === 'bcprovider') {
+      const data: DialogOptions = {
+        title: 'Disconnect Credential',
+        component: UnlinkConfirmDialogComponent,
+        data: {
+          message: `Are you sure you want to disconnect the BC Provider credential (${credential.idpId})?`
+        }
+      };
+      this.dialog
+        .open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result) => {
+            if (result) {
+              const deleteFromBcProvider = !!result.output?.deleteFromBcProvider;
+              return this.adminResource.deleteCredential(partyId, credential.id, deleteFromBcProvider);
+            }
+            return EMPTY;
+          }),
+          switchMap(() => of(this.getParties())),
+        )
+        .subscribe();
+    } else {
+      const data: DialogOptions = {
+        title: 'Disconnect Credential',
+        component: HtmlComponent,
+        data: {
+          content: `Are you sure you want to disconnect the ${credential.identityProvider} credential?`
+        }
+      };
+      this.dialog
+        .open(ConfirmDialogComponent, { data })
+        .afterClosed()
+        .pipe(
+          exhaustMap((result) =>
+            result ? this.adminResource.deleteCredential(partyId, credential.id, false) : EMPTY,
+          ),
+          switchMap(() => of(this.getParties())),
+        )
+        .subscribe();
+    }
   }
 
   public onDeleteParties(): void {

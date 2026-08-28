@@ -1,12 +1,11 @@
 namespace Pidp.Models;
 
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using EntityFrameworkCore.Projectables;
 using Microsoft.EntityFrameworkCore;
 using NanoidDotNet;
 using NodaTime;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
 using Pidp.Data;
 using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
@@ -79,11 +78,13 @@ public class Party : BaseAuditable
     [Projectable]
     public string DisplayFullName => $"{this.DisplayFirstName} {this.DisplayLastName}";
 
+#pragma warning disable CA1304, CA1862, CA1311
     [Projectable]
     public bool EmailIsVerified(string email) => this.VerifiedEmails
         .Any(verifiedEmail => verifiedEmail.IsVerified
             && verifiedEmail.Email.ToLower() == email.ToLower());
-
+#pragma warning restore CA1304, CA1862, CA1311
+        
     /// <summary>
     /// The "primary" Credential of a Party is the a) BC Services Card Credential or b) the only non-BC Services Card Credential.
     /// </summary>
@@ -123,7 +124,6 @@ public class Party : BaseAuditable
         var standingsDigest = await client.GetStandingsDigestAsync(this.Cpn);
 
         this.DomainEvents.Add(new PlrCpnLookupFound(this.Id, this.Credentials.Select(credential => credential.UserId), this.Cpn, standingsDigest));
-        this.DomainEvents.Add(new CollegeLicenceUpdated(this.Id));
 
         if (standingsDigest.HasGoodStanding)
         {

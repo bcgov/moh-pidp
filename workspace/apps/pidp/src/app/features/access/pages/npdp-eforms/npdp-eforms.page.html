@@ -1,0 +1,65 @@
+<div class="container" uiPidpInjectViewportCss>
+  <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
+  <ui-page mode="full">
+    <h1>{{ title }}</h1>
+
+    @if (accessRequestFailed) {
+    <ui-alert type="danger" icon="error_outline" iconType="outlined" heading="Error Requesting Access">
+      <ng-container uiAlertContent>
+        <p>
+          Your request for access to Exceptional Coverage: National PharmaCare and Mifepristone/Misoprostol
+          could not be processed at this time. If this issue persists, contact
+          <a uiAnchor scheme="mailto" [attr.href]="npdpEformsSupportEmail"></a>
+          for assistance.
+        </p>
+      </ng-container>
+    </ui-alert>
+    }
+
+    @if (enrolmentError) {
+    <app-enrolment-error></app-enrolment-error>
+    }
+
+    <ui-page-section>
+      <ui-page-section-subheader icon="assignment"
+        heading="Exceptional Coverage: National PharmaCare and Mifepristone/Misoprostol">
+        <ng-container uiPageSectionSubheaderDesc>
+          {{ completed ? 'Enrolment Complete.' : 'Collection Notice.' }}
+        </ng-container>
+      </ui-page-section-subheader>
+    </ui-page-section>
+
+    @if (completed) {
+    <ui-alert type="success" icon="check_circle" iconType="outlined" heading="You have access">
+      <ng-container uiAlertContent>
+        <p>
+          You now have access to the Exceptional Coverage: National
+          PharmaCare and Mifegymiso form. You can log into the application
+          using your BC Services Card app.
+        </p>
+        <p>
+          Follow this link to the form:<br />
+          <a uiAnchor [attr.href]="npdpEformsUrl"></a>
+        </p>
+        <p>
+          You will need to visit this link each time you want to submit the
+          form. It may be helpful to bookmark this link for future use.
+        </p>
+      </ng-container>
+    </ui-alert>
+    } @else {
+    <ui-page-section>
+      <p class="collection-notice" [innerHtml]="collectionNotice | safe: 'html'"></p>
+    </ui-page-section>
+    }
+
+    <ui-page-footer [mode]="'reverse'">
+      @if (!completed) {
+      <button mat-flat-button uiPageFooterAction type="button" color="primary" tabindex="0"
+        (keydown.enter)="onRequestAccess()" (click)="onRequestAccess()">
+        Next
+      </button>
+      }
+    </ui-page-footer>
+  </ui-page>
+</div>

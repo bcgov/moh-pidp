@@ -73,6 +73,16 @@ public class KeycloakAdministrationClient(HttpClient httpClient, ILogger<Keycloa
         return result.IsSuccess;
     }
 
+    public async Task<bool> DeleteUser(Guid userId)
+    {
+        var result = await this.DeleteAsync($"users/{userId}");
+        if (result.IsSuccess)
+        {
+            this.Logger.LogUserDeleted(userId);
+        }
+        return result.IsSuccess;
+    }
+
     public async Task<Guid?> CreateUser(UserRepresentation userRep)
     {
         if (userRep.Username == null)
@@ -91,6 +101,7 @@ public class KeycloakAdministrationClient(HttpClient httpClient, ILogger<Keycloa
         {
             if (Guid.TryParse(location.Segments.Last(), out var userId))
             {
+                this.Logger.LogUserCreated(userRep.Username, userId);
                 return userId;
             }
         }
@@ -100,6 +111,7 @@ public class KeycloakAdministrationClient(HttpClient httpClient, ILogger<Keycloa
         var user = await this.FindUser(userRep.Username);
         if (Guid.TryParse(user?.Id, out var result))
         {
+            this.Logger.LogUserCreated(userRep.Username, result);
             return result;
         }
 
@@ -206,6 +218,36 @@ public class KeycloakAdministrationClient(HttpClient httpClient, ILogger<Keycloa
         return result.Value;
     }
 
+    public async Task<bool> RemoveAccessRoles(Guid userId, MohKeycloakEnrolment enrolment)
+    {
+        if (!enrolment.AccessRoles.Any())
+        {
+            return true;
+        }
+
+        // We need both the name and ID of the role to remove it.
+        var roles = await this.GetClientRoles(enrolment.ClientId);
+        if (roles == null)
+        {
+            return false;
+        }
+
+        var rolesToRemove = roles.IntersectBy(enrolment.AccessRoles, role => role.Name);
+        if (rolesToRemove.Count() < enrolment.AccessRoles.Count())
+        {
+            // Some Roles were not found
+            return false;
+        }
+
+        var result = await this.DeleteAsync($"users/{userId}/role-mappings/clients/{rolesToRemove.First().ContainerId}", rolesToRemove);
+        if (result.IsSuccess)
+        {
+            this.Logger.LogClientRolesUnassigned(userId, enrolment.AccessRoles, enrolment.ClientId);
+        }
+
+        return result.IsSuccess;
+    }
+
     public async Task<bool> RemoveClientRole(Guid userId, Role role)
     {
         if (role.ClientRole != true)
@@ -267,4 +309,13 @@ public static partial class KeycloakAdministrationClientLoggingExtensions
 
     [LoggerMessage(9, LogLevel.Error, "Error when finding user with username {username}: multiple matching usernames found.")]
     public static partial void LogFindMultipleUsersError(this ILogger<BaseClient> logger, string username);
+
+    [LoggerMessage(10, LogLevel.Information, "User {userId} was unassigned Role(s) {roleNames} in Client {clientId}.")]
+    public static partial void LogClientRolesUnassigned(this ILogger<BaseClient> logger, Guid userId, IEnumerable<string> roleNames, string clientId);
+
+    [LoggerMessage(11, LogLevel.Information, "Successfully deleted Keycloak user with UserId: {userId}")]
+    public static partial void LogUserDeleted(this ILogger<BaseClient> logger, Guid userId);
+
+    [LoggerMessage(12, LogLevel.Information, "Successfully created Keycloak user: {username} with UserId: {userId}")]
+    public static partial void LogUserCreated(this ILogger<BaseClient> logger, string username, Guid userId);
 }

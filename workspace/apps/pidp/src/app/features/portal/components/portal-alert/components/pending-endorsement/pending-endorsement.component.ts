@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-pending-endorsement',
   template: `<p>
     ACTION REQUIRED:
-    <span (click)="onClick()">Click here</span>
+    <span tabindex="0" (keydown.enter)="onClick()" (click)="onClick()">Click here</span>
     to complete endorsement process
   </p>`,
   styles: [
@@ -15,7 +15,8 @@ import { Router } from '@angular/router';
   standalone: true,
 })
 export class PendingEndorsementComponent {
-  public constructor(private readonly router: Router) {}
+  private readonly router = inject(Router);
+
   private readonly route = '/organization-info/endorsements';
 
   public onClick(): void {

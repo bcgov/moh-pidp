@@ -1,9 +1,11 @@
 <div class="box container" uiPidpInjectViewportCss>
   <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
   <div class="content">
-    <app-enrolment-error *ngIf="enrolmentError"></app-enrolment-error>
+    @if (enrolmentError) {
+      <app-enrolment-error></app-enrolment-error>
+    }
     <form [formGroup]="formState.form" (ngSubmit)="onSubmit()">
-      <ng-container *ngIf="completed; else notCompleted">
+      @if (completed) {
         <header>
           <h2 class="title">
             Thank you for enrolling your clinic for MS Teams access.
@@ -39,86 +41,88 @@
                   id="ms-teams-privacy-officer-page-learn-more-label"
                   class="learn-more-label"
                   >Learn more</span
-                >
-                <button
-                  class="learn-more-button"
-                  routerLink="/organization-info/endorsements"
-                  aria-labelledby="ms-teams-privacy-officer-page-learn-more-label">
-                  +
-                </button>
-              </div>
-            </div>
-          </section>
-        </section>
-      </ng-container>
-      <ng-template #notCompleted>
-        <header>
-          <h1>Welcome to your MS Teams enrolment application.</h1>
-        </header>
-        <ng-container [ngSwitch]="currentPage">
-          <ng-container *ngSwitchCase="0">
-            <p class="privacy-text">
-              The form below is to be filled out by the clinic's Privacy Officer
-              only. If you are not the Privacy Officer, click back to return to
-              the Portal page.
-            </p>
-            <section class="clinic-info">
-              <header>
-                <h3>Clinic Information</h3>
-              </header>
-              <div class="form">
-                <div class="field">
-                  <label id="ms-teams-clinic">FHA Clinic Name</label>
-                  <mat-form-field>
-                    <input
-                      matInput
-                      formControlName="clinicName"
-                      aria-labelledby="ms-teams-clinic" />
-                    <mat-error>Required</mat-error>
-                  </mat-form-field>
+                  >
+                  <button
+                    class="learn-more-button"
+                    routerLink="/organization-info/endorsements"
+                    aria-labelledby="ms-teams-privacy-officer-page-learn-more-label">
+                    +
+                  </button>
                 </div>
-                <app-address-form
-                  [form]="formState.clinicAddress"></app-address-form>
               </div>
             </section>
-          </ng-container>
+          </section>
+        } @else {
+          <header>
+            <h1>Welcome to your MS Teams enrolment application.</h1>
+          </header>
+          @switch (currentPage) {
+            @case (0) {
+              <p class="privacy-text">
+                The form below is to be filled out by the clinic's Privacy Officer
+                only. If you are not the Privacy Officer, click back to return to
+                the Portal page.
+              </p>
+              <section class="clinic-info">
+                <header>
+                  <h3>Clinic Information</h3>
+                </header>
+                <div class="form">
+                  <div class="field">
+                    <label for="fha-clinic-name" id="ms-teams-clinic">FHA Clinic Name</label>
+                    <mat-form-field>
+                      <input
+                        id="fha-clinic-name"
+                        matInput
+                        formControlName="clinicName"
+                        aria-labelledby="ms-teams-clinic" />
+                        <mat-error>Required</mat-error>
+                      </mat-form-field>
+                    </div>
+                    <app-address-form
+                    [form]="formState.clinicAddress"></app-address-form>
+                  </div>
+                </section>
+              }
+              @default {
+                <p
+                  class="agreement-text"
+                [innerHtml]="getAgreementText(currentPage) | safe: 'html'"></p>
+              }
+            }
+          }
+          <section class="actions">
+            @if (!completed) {
+              <button
+                mat-stroked-button
+                uiPageFooterAction
+                type="button"
+                color="primary"
+                tabindex="0" (keydown.enter)="onBack()" (click)="onBack()">
+                Back
+              </button>
+            }
 
-          <ng-container *ngSwitchDefault>
-            <p
-              class="agreement-text"
-              [innerHtml]="getAgreementText(currentPage) | safe: 'html'"></p>
-          </ng-container>
-        </ng-container>
-      </ng-template>
-      <section class="actions">
-        <button
-          *ngIf="!completed"
-          mat-stroked-button
-          uiPageFooterAction
-          type="button"
-          color="primary"
-          (click)="onBack()">
-          Back
-        </button>
-
-        <button
-          *ngIf="!completed && currentPage !== submissionPage"
-          mat-flat-button
-          uiPageFooterAction
-          type="button"
-          color="primary"
-          (click)="onNext()">
-          {{ currentPage === 0 ? 'Next' : 'I Accept'}}
-        </button>
-        <button
-          *ngIf="!completed && currentPage === submissionPage"
-          mat-flat-button
-          uiPageFooterAction
-          type="submit"
-          color="primary">
-          Submit
-        </button>
-      </section>
-    </form>
-  </div>
-</div>
+            @if (!completed && currentPage !== submissionPage) {
+              <button
+                mat-flat-button
+                uiPageFooterAction
+                type="button"
+                color="primary"
+                tabindex="0" (keydown.enter)="onNext()" (click)="onNext()">
+                {{ currentPage === 0 ? 'Next' : 'I Accept'}}
+              </button>
+            }
+            @if (!completed && currentPage === submissionPage) {
+              <button
+                mat-flat-button
+                uiPageFooterAction
+                type="submit"
+                color="primary">
+                Submit
+              </button>
+            }
+          </section>
+        </form>
+      </div>
+    </div>

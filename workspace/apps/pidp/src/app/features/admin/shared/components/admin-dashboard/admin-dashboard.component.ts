@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
 import { Observable, map } from 'rxjs';
 
@@ -23,6 +23,9 @@ import { AuthService } from '@app/features/auth/services/auth.service';
   imports: [AsyncPipe, DashboardComponent, DashboardImageComponent],
 })
 export class AdminDashboardComponent implements IDashboard {
+  private readonly config = inject<AppConfig>(APP_CONFIG);
+  private readonly authService = inject(AuthService);
+
   public logoutRedirectUrl: string;
   public username: Observable<string>;
   public headerConfig: {
@@ -33,11 +36,9 @@ export class AdminDashboardComponent implements IDashboard {
   public showMenuItemIcons: boolean;
   public responsiveMenuItems: boolean;
 
-  public constructor(
-    @Inject(APP_CONFIG) private readonly config: AppConfig,
-    private readonly authService: AuthService,
-    accessTokenService: AccessTokenService,
-  ) {
+  public constructor() {
+    const accessTokenService = inject(AccessTokenService);
+
     this.logoutRedirectUrl = `${this.config.applicationUrl}/${this.config.routes.auth}/${AdminRoutes.BASE_PATH}`;
     this.username = accessTokenService
       .decodeToken()

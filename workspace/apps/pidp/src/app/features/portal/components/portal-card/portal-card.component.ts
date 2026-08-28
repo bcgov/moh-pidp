@@ -1,5 +1,5 @@
-import { NgClass, NgIf } from '@angular/common';
-import { Component, Inject, Input } from '@angular/core';
+import { NgClass } from '@angular/common';
+import { Component, inject, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 
@@ -23,13 +23,16 @@ import { IPortalSection } from '../../state/portal-section.model';
     InjectViewportCssClassDirective,
     MatButtonModule,
     NgClass,
-    NgIf,
   ],
 })
 export class PortalCardComponent {
+  private readonly config = inject<AppConfig>(APP_CONFIG);
+  private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
+
   public faThumbsUp = faThumbsUp;
   public faPlus = faPlus;
-  public logoutRedirectUrl: string;
+  public logoutRedirectUrl = `${this.config.applicationUrl}/`;
 
   @Input() public section!: IPortalSection;
   /**
@@ -62,14 +65,6 @@ export class PortalCardComponent {
         this.isOrganizationCategory ||
         this.isAccessToSystemsCategory)
     );
-  }
-
-  public constructor(
-    @Inject(APP_CONFIG) private readonly config: AppConfig,
-    private readonly router: Router,
-    private readonly authService: AuthService,
-  ) {
-    this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
   }
 
   public onClick(section: IPortalSection): void {

@@ -31,9 +31,7 @@ export class ImmsbcPortalSection implements IPortalSection {
   ) {
     this.key = 'immsBC';
     this.heading = 'ImmsBC';
-    this.description =
-      'ImmsBC lorum ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
-
+    this.description = 'All pharmacies providing publicly funded influenza vaccines are required to use ImmsBC to manage all aspects of the administration of flu and COVID-19 vaccines to British Columbians.';
     this.keyWords = profileStatus.status.immsBC.keyWords || [];
     this.completedMessage = Constants.accessGrantedText;
   }

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ChangeDetectorRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
@@ -72,6 +73,10 @@ describe('AccountLinkingPage', () => {
           }),
         },
         provideAutoSpy(AccessTokenService),
+        {
+          provide: ChangeDetectorRef,
+          useValue: { detectChanges: jest.fn() },
+        },
         provideAutoSpy(AccountLinkingResource),
         provideAutoSpy(ApiHttpClient),
         provideAutoSpy(Router),

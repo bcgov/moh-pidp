@@ -14,6 +14,8 @@ replicaCount: 1
 aspnetcore:
   environment: Staging
 
+corsAllowedOrigins: ""
+
 image:
   repository: pidp-webapi
   pullPolicy: Always
@@ -78,12 +80,12 @@ ingress:
   #      - chart-example.local
 
 resources:
-  limits:
-    cpu: 50m
-    memory: 200Mi
   requests:
-    cpu: 15m
-    memory: 150Mi
+    cpu: 50m
+    memory: 256Mi
+  limits:
+    cpu: 150m
+    memory: 512Mi
 
 autoscaling:
   enabled: false
@@ -104,7 +106,7 @@ rabbitmq:
 # fluentbit must be enabled for prod environment
 fluentbit:
   enabled: false
-  imageRegistry: docker.io/fluent/fluent-bit:3.0.3-debug
+  imageRegistry: docker.io/fluent/fluent-bit:3.2.10-debug
   imagePullPolicy: IfNotPresent
   # The value of slack_webhook parameter is stored in a secret called `slack-error-notification-webhook` in OpenShift.
   slack_webhook: ""

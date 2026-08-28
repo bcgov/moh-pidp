@@ -11,7 +11,7 @@ using NodaTime;
 public class EndorsmentIndexTests : InMemoryDbTest
 {
     [Fact]
-    public async void Get_WithNoEndorsements_EmptyList()
+    public async Task Get_WithNoEndorsements_EmptyList()
     {
         var party = this.TestDb.HasAParty();
         var handler = this.MockDependenciesFor<QueryHandler>();
@@ -23,7 +23,7 @@ public class EndorsmentIndexTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void Get_WithActiveAndNonActiveEndorsements_OnlyActiveAppeaer()
+    public async Task Get_WithActiveAndNonActiveEndorsements_OnlyActiveAppeaer()
     {
         var party = this.TestDb.HasAParty();
         var party2 = this.TestDb.HasAParty();
@@ -65,7 +65,7 @@ public class EndorsmentIndexTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void Get_WithActiveEndorsement_AllFieldsAppear()
+    public async Task Get_WithActiveEndorsement_AllFieldsAppear()
     {
         var party = this.TestDb.HasAParty();
         var party2 = this.TestDb.HasAParty(party =>

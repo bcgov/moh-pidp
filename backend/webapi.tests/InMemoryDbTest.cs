@@ -1,10 +1,10 @@
 namespace PidpTests;
 
-using AutoMapper;
 using FakeItEasy;
 using FakeItEasy.Sdk;
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using NodaTime;
 using System.Reflection;
 
@@ -15,6 +15,11 @@ public class InMemoryDbTest : IDisposable
 {
     protected PidpDbContext TestDb { get; }
     protected List<IDomainEvent> PublishedEvents { get; } = new();
+
+    static InMemoryDbTest()
+    {
+        Pidp.Infrastructure.MapsterSetup.Configure();
+    }
 
     protected InMemoryDbTest()
     {
@@ -27,7 +32,9 @@ public class InMemoryDbTest : IDisposable
         A.CallTo(() => mediator.Publish(A<IDomainEvent>._, A<CancellationToken>._))
            .Invokes(i => this.PublishedEvents.Add(i.GetArgument<IDomainEvent>(0)!));
 
-        this.TestDb = new PidpDbContext(options, SystemClock.Instance, mediator);
+        var logger = A.Fake<ILogger<PidpDbContext>>();
+
+        this.TestDb = new PidpDbContext(options, logger, SystemClock.Instance, mediator);
         this.TestDb.Database.EnsureCreated();
     }
 
@@ -37,8 +44,6 @@ public class InMemoryDbTest : IDisposable
         this.TestDb.Dispose();
         GC.SuppressFinalize(this);
     }
-
-    public static IMapper DefaultMapper() => new MapperConfiguration(cfg => cfg.AddMaps(Assembly.GetAssembly(typeof(PidpDbContext)))).CreateMapper();
 
     /// <summary>
     /// Creates an instance of the given Type, injecting the TestDb, Automapper Configuration, and empty mocks for all dependencies (as applicable).
@@ -58,10 +63,6 @@ public class InMemoryDbTest : IDisposable
             if (parameterType == typeof(PidpDbContext))
             {
                 defaultParameter = this.TestDb;
-            }
-            else if (parameterType == typeof(IMapper))
-            {
-                defaultParameter = DefaultMapper();
             }
             else
             {

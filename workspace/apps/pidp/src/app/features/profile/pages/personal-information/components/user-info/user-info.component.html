@@ -1,8 +1,7 @@
 <ui-user-info [user]="user">
-  <ui-key-value-info
-    *ngIf="user?.birthdate"
-    key="Date of Birth:"
-    mode="horizontal">
-    {{ user?.birthdate | formatDate | default }}
+  @if (user?.birthdate) {
+  <ui-key-value-info key="Date of Birth:" mode="horizontal">
+    {{ user.birthdate | formatDate | default }}
   </ui-key-value-info>
+  }
 </ui-user-info>

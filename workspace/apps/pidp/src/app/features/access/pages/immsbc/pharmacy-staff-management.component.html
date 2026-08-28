@@ -1,0 +1,88 @@
+<div class="form-panel">
+  <p class="panel-description">Share the link below with staff associated with your organization. Staff will need to
+    login with their BC Services Card to OneHealthID to register with ImmsBC. </p>
+  <p>Once registered, staff will appear in the
+    list below as inactive, clerk until an administrator set an effective end date and/or updates their role.
+  </p>
+  <div class="button-group">
+    &nbsp;
+    <button mat-flat-button color="primary" tabindex="0" (keydown.enter)="generateLink(PharmacyRole.Clerk)"
+      (click)="generateLink(PharmacyRole.Clerk)"><mat-icon>link</mat-icon>Generate Link & QR Code</button>
+  </div>
+</div>
+<p style="margin-top: 5px">&nbsp;</p>
+<div class="form-panel">
+  <h4 class="panel-title">Staff List</h4>
+  @if (staff$ | async; as staff) {
+  @if (!staff.length) {
+  <div class="text-center">
+    <p>No staff members associated with this organization.</p>
+  </div>
+  }
+  @if (staff.length) {
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.fullName }}
+      </td>
+    </ng-container>
+
+    <!-- Role Column -->
+    <ng-container matColumnDef="role">
+      <th mat-header-cell *matHeaderCellDef>Role</th>
+      <td mat-cell *matCellDef="let element">{{ getRole(element.role) }}</td>
+    </ng-container>
+
+    <!-- Start Date Column -->
+    <ng-container matColumnDef="effectiveStartDate">
+      <th mat-header-cell *matHeaderCellDef>Effective Start</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.effectiveStartDate | date: 'mediumDate' : 'UTC' }}
+      </td>
+    </ng-container>
+
+    <!-- End Date Column -->
+    <ng-container matColumnDef="effectiveEndDate">
+      <th mat-header-cell *matHeaderCellDef>Effective End</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.effectiveEndDate | date: 'mediumDate' : 'UTC' }}
+      </td>
+    </ng-container>
+
+    <!-- Status Column -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let element">
+        <app-pill [label]="getStatus(element)" [class]="getStatus(element) | lowercase"></app-pill>
+      </td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element" class="text-right">
+        <button mat-icon-button tabindex="0" (keydown.enter)="onRenew(element)" (click)="onRenew(element)"
+          aria-label="Renew staff member" matTooltip="Renew user">
+          <mat-icon>autorenew</mat-icon>
+        </button>
+        <button mat-icon-button tabindex="0" (keydown.enter)="onEdit(element)" (click)="onEdit(element)"
+          aria-label="Edit staff member" matTooltip="Edit user">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" tabindex="0" (keydown.enter)="onDelete(element)"
+          (click)="onDelete(element)" aria-label="Remove staff member" matTooltip="Remove user">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+  }
+  } @else {
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  }
+</div>

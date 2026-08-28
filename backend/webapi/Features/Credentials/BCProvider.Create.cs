@@ -70,7 +70,7 @@ public class BCProviderCreate
                         .Where(request => request.AccessTypeCode == AccessTypeCode.UserAccessAgreement)
                         .Select(request => request.RequestedOn)
                         .SingleOrDefault(),
-                    SAEformsEnroled = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.SAEforms),
+                    AccessRequests = party.AccessRequests.Select(request => request.AccessTypeCode),
                 })
                 .SingleAsync();
 
@@ -110,6 +110,7 @@ public class BCProviderCreate
                 OpId = party.OpId,
                 UaaDate = party.UaaAgreementDate.ToDateTimeOffset(),
                 IsMoa = !plrStanding.HasGoodStanding && endorsingPlrDigest.HasGoodStanding,
+                PractitionerRole = plrStanding.ProviderRoleTypes,
                 EndorserData = endorsingPlrDigest
                     .WithGoodStanding()
                     .With(BCProviderAttributes.EndorserDataEligibleIdentifierTypes)
@@ -141,9 +142,13 @@ public class BCProviderCreate
             }
             await this.keycloakClient.UpdateUser(userId.Value, user => user.SetOpId(party.OpId!));
 
-            if (party.SAEformsEnroled)
+            foreach (var request in party.AccessRequests)
             {
-                await this.keycloakClient.AssignAccessRoles(userId.Value, MohKeycloakEnrolment.SAEforms);
+                var enrolment = MohKeycloakEnrolment.FromAssociatedAccessRequest(request);
+                if (enrolment != null)
+                {
+                    await this.keycloakClient.AssignAccessRoles(userId.Value, enrolment);
+                }
             }
 
             this.context.Credentials.Add(new Credential
@@ -152,7 +157,6 @@ public class BCProviderCreate
                 PartyId = command.PartyId,
                 IdpId = createdUser.UserPrincipalName,
                 IdentityProvider = IdentityProviders.BCProvider,
-                DomainEvents = [new CollegeLicenceUpdated(command.PartyId)]
             });
 
             await this.context.SaveChangesAsync();

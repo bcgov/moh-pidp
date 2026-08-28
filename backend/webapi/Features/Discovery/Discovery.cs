@@ -52,14 +52,16 @@ public class Discovery
 
         public async Task<Model> HandleAsync(Query query)
         {
-            var idpId = query.User.GetIdpId()?.ToLowerInvariant();
+#pragma warning disable CA1304, CA1862, CA1311
+            var idpId = query.User.GetIdpId()?.ToLower();
+#pragma warning restore CA1304, CA1862, CA1311
 
             var data = await this.context.Credentials
-#pragma warning disable CA1304 // ToLower() is Locale Dependant
                 .Where(credential => credential.UserId == query.User.GetUserId()
                     || (credential.IdentityProvider == query.User.GetIdentityProvider()
+#pragma warning disable CA1304, CA1862, CA1311
                         && credential.IdpId!.ToLower() == idpId))
-#pragma warning restore CA1304
+#pragma warning restore CA1304, CA1862, CA1311
                 .Select(credential => new
                 {
                     Credential = credential,

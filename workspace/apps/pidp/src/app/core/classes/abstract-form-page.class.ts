@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { UrlTree } from '@angular/router';
 
 import { Observable, throwError } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, finalize, map, tap } from 'rxjs/operators';
 
 import {
   LOADING_OVERLAY_DEFAULT_MESSAGE,
@@ -21,11 +21,10 @@ import { FormUtilsService } from '@core/services/form-utils.service';
  */
 @Injectable({ providedIn: 'root' })
 export class AbstractFormDependenciesService {
-  public constructor(
-    public dialog: MatDialog,
-    public formUtilsService: FormUtilsService,
-    public loadingOverlayService: LoadingOverlayService,
-  ) {}
+  public dialog = inject(MatDialog);
+  public formUtilsService = inject(FormUtilsService);
+  public loadingOverlayService = inject(LoadingOverlayService);
+
 }
 export interface IFormPage {
   /**
@@ -112,6 +111,11 @@ export abstract class AbstractFormPage<
   public loadingOverlayMessageText: string;
   /**
    * @description
+   * Indicates if a submission is currently in progress.
+   */
+  public isPerformingSubmission: boolean;
+  /**
+   * @description
    * Whether routing should be allowed after any form
    * control's value has been changed.
    */
@@ -138,6 +142,7 @@ export abstract class AbstractFormPage<
     this.allowRoutingWhenDirty = false;
     this.canDeactivateAllowlist = [];
     this.loadingOverlayMessageText = LOADING_OVERLAY_DEFAULT_MESSAGE;
+    this.isPerformingSubmission = false;
   }
 
   /**
@@ -145,8 +150,13 @@ export abstract class AbstractFormPage<
    * Form submission event handler.
    */
   public onSubmit(): void {
+    if (this.isPerformingSubmission) {
+      return;
+    }
+
     this.hasAttemptedSubmission = true;
     if (this.checkValidity(this.formState.form)) {
+      this.isPerformingSubmission = true;
       this.onSubmitFormIsValid();
       const showLoadingOverlay = this.showOverlayOnSubmit;
       if (showLoadingOverlay) {
@@ -168,6 +178,7 @@ export abstract class AbstractFormPage<
             }
             return throwError(() => error);
           }),
+          finalize(() => (this.isPerformingSubmission = false)),
         )
         .subscribe((response?: S) => this.afterSubmitIsSuccessful(response));
     } else {

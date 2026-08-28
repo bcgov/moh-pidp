@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { catchError, tap, throwError } from 'rxjs';
 
@@ -15,11 +15,15 @@ import { PersonalInformation } from './personal-information.model';
   providedIn: 'root',
 })
 export class PersonalInformationResource extends CrudResource<PersonalInformation> {
-  public constructor(
-    protected apiResource: ApiHttpClient,
-    private toastService: ToastService,
-  ) {
+  protected apiResource: ApiHttpClient;
+  private readonly toastService = inject(ToastService);
+
+  public constructor() {
+    const apiResource = inject(ApiHttpClient);
+
     super(apiResource);
+  
+    this.apiResource = apiResource;
   }
 
   public update(id: number, payload: PersonalInformation): NoContent {

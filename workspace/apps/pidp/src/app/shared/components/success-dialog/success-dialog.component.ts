@@ -1,12 +1,5 @@
-import { NgClass, NgIf } from '@angular/common';
-import {
-  Component,
-  Input,
-  OnInit,
-  Type,
-  ViewChild,
-  ViewContainerRef,
-} from '@angular/core';
+import { NgClass } from '@angular/common';
+import { Component, Input, OnInit, Type, ViewChild, ViewContainerRef, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
@@ -21,9 +14,11 @@ import { FeedbackSendComponent } from './components/feedback-send.component';
   selector: 'app-success-dialog',
   templateUrl: './success-dialog.component.html',
   styleUrl: './success-dialog.component.scss',
-  imports: [FaIconComponent, InjectViewportCssClassDirective, NgIf, NgClass],
+  imports: [FaIconComponent, InjectViewportCssClassDirective, NgClass],
 })
 export class SuccessDialogComponent implements OnInit {
+  private readonly dialog = inject(MatDialog);
+
   public faCircleCheck = faCircleCheck;
   public faXmark = faXmark;
   public showHeader = false;
@@ -34,8 +29,6 @@ export class SuccessDialogComponent implements OnInit {
 
   @ViewChild('dialogParagraphHost', { static: true, read: ViewContainerRef })
   public dialogParagraphHost!: ViewContainerRef;
-
-  public constructor(public dialog: MatDialog) {}
 
   public onSuccessDialogClose(): void {
     this.dialog.closeAll();

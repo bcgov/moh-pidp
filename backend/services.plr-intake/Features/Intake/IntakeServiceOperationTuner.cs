@@ -53,7 +53,7 @@ public class IntakeServiceOperationTuner : IServiceOperationTuner
 
         var decoded = HttpUtility.UrlDecode(header);
         var certAsBytes = Encoding.ASCII.GetBytes(decoded);
-        return new X509Certificate2(certAsBytes);
+        return X509CertificateLoader.LoadCertificate(certAsBytes);
     }
 
     private static XElement? GetRequestBody(HttpContext httpContext, string prefix, string uri, string bodyElement)

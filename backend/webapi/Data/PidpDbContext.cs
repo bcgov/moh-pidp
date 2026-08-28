@@ -1,6 +1,6 @@
 namespace Pidp.Data;
 
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
@@ -8,9 +8,11 @@ using Pidp.Models;
 
 public class PidpDbContext(
     DbContextOptions<PidpDbContext> options,
+    ILogger<PidpDbContext> logger,
     IClock clock,
     IMediator mediator) : DbContext(options)
 {
+    private readonly ILogger<PidpDbContext> logger = logger;
     private readonly IClock clock = clock;
     private readonly IMediator mediator = mediator;
 
@@ -21,6 +23,7 @@ public class PidpDbContext(
     public DbSet<Credential> Credentials { get; set; } = default!;
     public DbSet<CredentialLinkErrorLog> CredentialLinkErrorLogs { get; set; } = default!;
     public DbSet<CredentialLinkTicket> CredentialLinkTickets { get; set; } = default!;
+    public DbSet<Document> Documents { get; set; } = default!;
     public DbSet<EmailLog> EmailLogs { get; set; } = default!;
     public DbSet<EndorsementRelationship> EndorsementRelationships { get; set; } = default!;
     public DbSet<EndorsementRequest> EndorsementRequests { get; set; } = default!;
@@ -32,6 +35,9 @@ public class PidpDbContext(
     public DbSet<MSTeamsClinicMemberEnrolment> MSTeamsClinicMemberEnrolments { get; set; } = default!;
     public DbSet<PartyLicenceDeclaration> PartyLicenceDeclarations { get; set; } = default!;
     public DbSet<Party> Parties { get; set; } = default!;
+    public DbSet<Pharmacy> Pharmacies { get; set; } = default!;
+    public DbSet<PharmacyPartyRole> PharmacyPartyRoles { get; set; } = default!;
+    public DbSet<PharmacyEnrolment> PharmacyEnrolments { get; set; } = default!;
     public DbSet<VerifiedEmail> VerifiedEmails { get; set; } = default!;
 
     /// <summary>
@@ -43,6 +49,7 @@ public class PidpDbContext(
     {
         await this.DispatchDomainEventsAsync();
         this.ApplyAudits();
+        this.LogDatabaseChanges();
 
         return await base.SaveChangesAsync(cancellationToken);
     }
@@ -94,7 +101,35 @@ public class PidpDbContext(
         }
     }
 
+    private void LogDatabaseChanges()
+    {
+        var changes = this.ChangeTracker.Entries()
+            .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified || e.State == EntityState.Deleted);
+
+        foreach (var entry in changes)
+        {
+            var entityName = entry.Entity.GetType().Name;
+            var state = entry.State.ToString();
+            
+            string keyInfo = "";
+            var keyName = entry.Metadata.FindPrimaryKey()?.Properties.Select(x => x.Name).FirstOrDefault();
+            if (keyName != null)
+            {
+                var keyValue = entry.Property(keyName).CurrentValue;
+                keyInfo = $" (Key: {keyName} = {keyValue})";
+            }
+
+            this.logger.LogDatabaseChange(entityName, keyInfo, state);
+        }
+    }
+
     // Uncomment for SQL logging
     // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     //     => optionsBuilder.LogTo(Console.WriteLine);
+}
+
+public static partial class PidpDbContextLoggingExtensions
+{
+    [LoggerMessage(1, LogLevel.Information, "Database Change: {entityName}{keyInfo} was {state}")]
+    public static partial void LogDatabaseChange(this ILogger<PidpDbContext> logger, string entityName, string keyInfo, string state);
 }

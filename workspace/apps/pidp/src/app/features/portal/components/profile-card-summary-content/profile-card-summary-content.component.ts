@@ -1,10 +1,3 @@
-import {
-  NgFor,
-  NgIf,
-  NgSwitch,
-  NgSwitchCase,
-  NgSwitchDefault,
-} from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { PhonePipe } from '@bcgov/shared/ui';
@@ -18,11 +11,6 @@ import { LookupCodePipe } from '@app/modules/lookup/lookup-code.pipe';
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
-    NgIf,
-    NgFor,
-    NgSwitch,
-    NgSwitchCase,
-    NgSwitchDefault,
     LookupCodePipe,
     PhonePipe,
   ],

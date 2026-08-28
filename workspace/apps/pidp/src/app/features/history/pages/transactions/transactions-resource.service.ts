@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
@@ -10,7 +10,8 @@ import { Transaction } from './transaction.model';
   providedIn: 'root',
 })
 export class TransactionsResource {
-  public constructor(private readonly apiResource: ApiHttpClient) {}
+  private readonly apiResource = inject(ApiHttpClient);
+
 
   public transactions(partyId: number): Observable<Transaction[]> {
     return this.apiResource.get<Transaction[]>(

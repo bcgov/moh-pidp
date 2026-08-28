@@ -2,27 +2,29 @@
   <div
     class="card-container"
     [ngClass]="{ 'cursor-default': actionDisabled }"
-    (click)="actionDisabled ? '' : onAction()"
+    tabindex="0" (keydown.enter)="actionDisabled ? '' : onAction()" (click)="actionDisabled ? '' : onAction()"
     (keyup)="actionDisabled ? '' : onAction()">
     <div class="card-header">
       <div class="card-header-icon">
         <fa-icon
           class="card-icon"
           [ngClass]="{ 'card-completed': completed }"
-          [icon]="icon"></fa-icon>
+        [icon]="icon"></fa-icon>
         <p class="card-header-text">{{ heading }}</p>
       </div>
     </div>
     <div class="card-body">
-      <p *ngIf="completed" class="completed-text">{{ completedText }}</p>
+      @if (completed) {
+        <p class="completed-text">{{ completedText }}</p>
+      }
       {{ description }}
       <div>
         <button class="learn-more" uiTextButton [disabled]="actionDisabled">
           <span [ngClass]="{ 'grey-out': actionDisabled }"
             ><u>Learn more</u><span class="arrow-right">></span></span
-          >
-        </button>
+            >
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</div>

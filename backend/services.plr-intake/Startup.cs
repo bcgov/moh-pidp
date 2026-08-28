@@ -1,5 +1,6 @@
 namespace PlrIntake;
 
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using HealthChecks.ApplicationStatus.DependencyInjection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -25,8 +26,9 @@ public class Startup
     {
         var config = this.InitializeConfiguration(services);
 
-        services.AddControllers()
-            .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<Startup>());
+        services.AddControllers();
+        services.AddFluentValidationAutoValidation();
+        services.AddValidatorsFromAssemblyContaining<Startup>();
 
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         services.AddDbContext<PlrDbContext>(options => options
@@ -74,21 +76,9 @@ public class Startup
         app.UseAuthentication();
         app.UseAuthorization();
 
-        var intakeBinding = new BasicHttpBinding
-        {
-            Security = new BasicHttpSecurity
-            {
-                Mode = BasicHttpSecurityMode.TransportCredentialOnly,
-                Transport = new HttpTransportSecurity
-                {
-                    ClientCredentialType = HttpClientCredentialType.Basic
-                }
-            }
-        };
-
         app.UseEndpoints(endpoints =>
         {
-            endpoints.UseSoapEndpoint<IIntakeService>("/api/PLRHL7", intakeBinding, SoapSerializer.XmlSerializer);
+            endpoints.UseSoapEndpoint<IIntakeService>("/api/PLRHL7", new SoapEncoderOptions(), SoapSerializer.XmlSerializer);
             endpoints.MapControllers();
             endpoints.MapHealthChecks("/health/liveness", new HealthCheckOptions
             {

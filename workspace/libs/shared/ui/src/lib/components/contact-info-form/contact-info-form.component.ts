@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -14,9 +14,8 @@ import { NgxMaskDirective } from 'ngx-mask';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    NgIf,
-    NgxMaskDirective,
-  ],
+    NgxMaskDirective
+],
 })
 export class ContactFormComponent {
   /**

@@ -1,14 +1,9 @@
-import { NgFor, NgIf } from '@angular/common';
-import {
-  Component,
-  HostListener,
-  Inject,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+
+import { AsyncPipe } from '@angular/common';
+import { Component, HostListener, OnDestroy, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 
-import { Observable, Subject, map, takeUntil, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, combineLatest, map, takeUntil, tap } from 'rxjs';
 
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import {
@@ -28,28 +23,38 @@ import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrum
 import { Constants } from '@app/shared/constants';
 
 import { AccessRequestCardComponent } from '../../components/access-request-card/access-request-card.component';
+import { AuthorizedUserService } from '@app/features/auth/services/authorized-user.service';
+import { IdentityProvider } from '@app/features/auth/enums/identity-provider.enum';
 
 @Component({
   selector: 'app-access-request-page',
   templateUrl: './access-requests.page.html',
   styleUrls: ['./access-requests.page.scss'],
   imports: [
+    AsyncPipe,
     BreadcrumbComponent,
     FaIconComponent,
     InjectViewportCssClassDirective,
     MatButtonModule,
-    NgIf,
-    AccessRequestCardComponent,
-    NgFor,
+    AccessRequestCardComponent
   ],
 })
 export class AccessRequestsPage implements OnInit, OnDestroy {
+  private readonly config = inject<AppConfig>(APP_CONFIG);
+  private readonly partyService = inject(PartyService);
+  private readonly portalService = inject(PortalService);
+  private readonly portalResource = inject(PortalResource);
+  private readonly authorizedUserService = inject(AuthorizedUserService);
+
   /**
    * @description
    * State for driving the displayed groups and sections of
    * the portal.
    */
   public accessState$: Observable<AccessState>;
+  public accessSections$: Observable<IAccessSection[] | undefined>;
+  public identityProvider$: Observable<string>;
+  private readonly search$ = new BehaviorSubject<string>('');
 
   public faArrowUp = faArrowUp;
   public faMagnifyingGlass = faMagnifyingGlass;
@@ -58,23 +63,53 @@ export class AccessRequestsPage implements OnInit, OnDestroy {
   public showSearchIcon = true;
   public isMobile = true;
   public providerIdentitySupport: string;
-  public filteredAccessSections: IAccessSection[] | undefined = [];
   public breadcrumbsData: Array<{ title: string; path: string }> = [
     { title: 'Home', path: '' },
     { title: 'Access', path: '' },
   ];
   private readonly destroy$ = new Subject<void>();
 
-  public constructor(
-    @Inject(APP_CONFIG) private readonly config: AppConfig,
-    private readonly partyService: PartyService,
-    private readonly portalService: PortalService,
-    private readonly portalResource: PortalResource,
-  ) {
+  public constructor() {
     this.accessState$ = this.portalService.accessState$;
     this.providerIdentitySupport = this.config.emails.providerIdentitySupport;
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
-    this.getCards();
+
+    this.identityProvider$ = this.authorizedUserService.identityProvider$.pipe(
+      map((idp) => {
+        switch (idp) {
+          case IdentityProvider.BCSC:
+            return 'BC Services Card';
+          case IdentityProvider.BC_PROVIDER:
+            return 'BC Provider';
+          case IdentityProvider.IDIR:
+            return 'IDIR';
+          case IdentityProvider.PHSA:
+            return 'PHSA';
+          default:
+            return idp;
+        }
+      })
+    );
+
+    this.accessSections$ = combineLatest([
+      this.accessState$.pipe(map((state) => state?.access)),
+      this.search$,
+    ]).pipe(
+      map(([access, searchText]) => {
+        if (!access) {
+          return access;
+        }
+        const filtered = searchText
+          ? access.filter(
+            (section) =>
+              section.heading.toLowerCase().includes(searchText.toLowerCase()) ||
+              section.description.toLowerCase().includes(searchText.toLowerCase()) ||
+              section.keyWords?.includes(searchText.toLowerCase()),
+          )
+          : access;
+        return [...filtered].sort((a, b) => a.heading.localeCompare(b.heading));
+      })
+    );
   }
 
   @HostListener('window:scroll', [])
@@ -92,27 +127,14 @@ export class AccessRequestsPage implements OnInit, OnDestroy {
   }
 
   public search(text: string): void {
-    if (!text) {
-      this.getCards();
-      return;
-    }
-    text = text.trim();
-    this.accessState$
-      .pipe(map((state) => state?.access))
-      .subscribe((access) => {
-        this.filteredAccessSections = access?.filter(
-          (section) =>
-            section.heading.toLowerCase().includes(text.toLowerCase()) ||
-            section.description.toLowerCase().includes(text.toLowerCase()) ||
-            section.keyWords?.includes(text.toLocaleLowerCase()),
-        );
-      });
+    this.search$.next(text.trim());
   }
 
   public onSearch(event: Event): void {
-    this.showSearchIcon = (event.target as HTMLInputElement).value === '';
+    const value = (event.target as HTMLInputElement).value;
+    this.showSearchIcon = value === '';
     if (this.showSearchIcon) {
-      this.getCards();
+      this.search$.next('');
     }
   }
 
@@ -133,19 +155,5 @@ export class AccessRequestsPage implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  private getCards(): void {
-    this.accessState$
-      .pipe(
-        map((state) => state?.access),
-        takeUntil(this.destroy$),
-      )
-      .subscribe((access) => {
-        this.filteredAccessSections = access;
-        this.filteredAccessSections?.sort((a, b) =>
-          a.heading.localeCompare(b.heading),
-        );
-      });
   }
 }

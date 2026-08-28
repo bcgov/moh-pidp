@@ -3,8 +3,8 @@ namespace Pidp.Features.Credentials;
 using DomainResults.Common;
 using FluentValidation;
 using HybridModelBinding;
-using MassTransit;
 using Microsoft.EntityFrameworkCore;
+using Pidp.Infrastructure.Queue;
 using NodaTime;
 using System.Text.Json.Serialization;
 
@@ -14,7 +14,7 @@ using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models;
 using Pidp.Models.Lookups;
-using static Pidp.Features.CommonHandlers.UpdateBcProviderAttributesConsumer;
+using static Pidp.Features.CommonHandlers.UpdateBcProviderAttributesHandler;
 
 public class BCProviderInvite
 {
@@ -37,7 +37,7 @@ public class BCProviderInvite
 
     public class CommandHandler(
         IBCProviderClient bcProviderClient,
-        IBus bus,
+        IRabbitMqPublisher bus,
         IClock clock,
         ILogger<CommandHandler> logger,
         IPlrClient plrClient,
@@ -45,7 +45,7 @@ public class BCProviderInvite
         PidpDbContext context) : ICommandHandler<Command, IDomainResult>
     {
         private readonly IBCProviderClient client = bcProviderClient;
-        private readonly IBus bus = bus;
+        private readonly IRabbitMqPublisher bus = bus;
         private readonly IClock clock = clock;
         private readonly ILogger<CommandHandler> logger = logger;
         private readonly IPlrClient plrClient = plrClient;
@@ -60,7 +60,9 @@ public class BCProviderInvite
                 {
                     EmailIsVerified = party.EmailIsVerified(command.Email),
                     ExistingAccountPartyId = this.context.InvitedEntraAccounts
+#pragma warning disable CA1304, CA1862, CA1311
                         .Where(account => account.InvitedUserPrincipalName.ToLower() == command.Email.ToLower())
+#pragma warning restore CA1304, CA1862, CA1311
                         .Select(account => (int?)account.PartyId)
                         .SingleOrDefault()
                 })
@@ -144,7 +146,7 @@ public class BCProviderInvite
                 attributes.SetUaaDate(party.UaaAgreementDate.ToDateTimeOffset());
             }
 
-            await this.bus.Publish(new UpdateBcProviderAttributes(createdUpn, attributes.AsAdditionalData()));
+            await this.bus.PublishAsync(new UpdateBcProviderAttributes(createdUpn, attributes.AsAdditionalData()));
 
             return DomainResult.Success();
         }

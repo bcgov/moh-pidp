@@ -34,6 +34,7 @@ webapi:
   replicaCount: 2
   aspnetcore:
     environment: Staging
+  corsAllowedOrigins: "https://demo.healthprovideridentityportal.gov.bc.ca"
   fluentbit:
     enabled: false
 

@@ -81,7 +81,9 @@ public class Create
             if (command.PreApproved)
             {
                 var possibleRecipients = await this.context.Parties
+#pragma warning disable CA1304, CA1862, CA1311
                     .Where(party => party.Email!.ToLower() == command.RecipientEmail.ToLower())
+#pragma warning restore CA1304, CA1862, CA1311
                     .Select(party => party.Id)
                     .ToListAsync();
 
@@ -94,6 +96,7 @@ public class Create
             }
 
             this.context.EndorsementRequests.Add(request);
+            this.context.BusinessEvents.Add(EndorsementRequestCreated.Create(command.PartyId, command.RecipientEmail, this.clock.GetCurrentInstant()));
             await this.context.SaveChangesAsync();
 
             var requestingPartyName = await this.context.Parties
@@ -122,15 +125,15 @@ public class Create
 <br>To complete the endorsement process, use {link} to log into the OneHealthID Service with your BC Services Card.
 <br>
 <br>After logging in, please:
-<br>&emsp;1. Complete the “Contact Information” tile.
+<br>&emsp;1. Complete the â€œContact Informationâ€ tile.
 <br>&emsp;2. Declare your college information (even if you do not have a college licence).
-<br>&emsp;3. Click on the “Endorsements” tile in the “Organization Information” section, and follow the prompts.
+<br>&emsp;3. Click on the â€œEndorsementsâ€ tile in the â€œOrganization Informationâ€ section, and follow the prompts.
 <br>
 <br>For additional support, contact the OneHealthID Service desk:
 <br>
-<br>&emsp;• By email at {pidpSupportEmail}
+<br>&emsp;â€¢ By email at {pidpSupportEmail}
 <br>
-<br>&emsp;• By phone at {pidpSupportPhone}
+<br>&emsp;â€¢ By phone at {pidpSupportPhone}
 <br>
 <br>Thank you.");
 

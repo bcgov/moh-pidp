@@ -4,19 +4,27 @@ using Microsoft.EntityFrameworkCore;
 
 using Pidp.Data;
 using Pidp.Extensions;
+using Pidp.Features.AccessRequests;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Plr;
+using Pidp.Models;
 using Pidp.Models.DomainEvents;
+using NodaTime;
+using Pidp.Models.Lookups;
 
 public sealed class PlrStatusUpdateService(
     IBCProviderClient bcProviderClient,
+    IEnumerable<IAccessRequestRevocationPolicy> revocationPolicies,
+    IClock clock,
     IPlrClient plrClient,
     ILogger<PlrStatusUpdateService> logger,
     PidpDbContext context,
     PidpConfiguration config) : IPlrStatusUpdateService
 {
     private readonly IBCProviderClient bcProviderClient = bcProviderClient;
+    private readonly IEnumerable<IAccessRequestRevocationPolicy> revocationPolicies = revocationPolicies;
+    private readonly IClock clock = clock;
     private readonly IPlrClient plrClient = plrClient;
     private readonly ILogger<PlrStatusUpdateService> logger = logger;
     private readonly PidpDbContext context = context;
@@ -36,6 +44,7 @@ public sealed class PlrStatusUpdateService(
         }
 
         var status = statusChanges.Single();
+        this.logger.LogProcessingStatusUpdateForCpn(status.Cpn);
 
         var party = await this.context.Parties
             .Include(party => party.Credentials)
@@ -50,8 +59,6 @@ public sealed class PlrStatusUpdateService(
             return;
         }
 
-        party.DomainEvents.Add(new CollegeLicenceUpdated(party.Id));
-
         var endorsementRelations = await this.context.ActiveEndorsingParties(party.Id)
             .Select(party => new
             {
@@ -65,6 +72,7 @@ public sealed class PlrStatusUpdateService(
             party.DomainEvents.Add(new EndorsementStandingUpdated(relation.PartyId));
         }
 
+        // Every update is now queued, we used to have '&& !status.IsGoodStandingUnchanged()'
         if (party.Upns.Any())
         {
             var bcProviderAttributes = new BCProviderAttributes(this.clientId);
@@ -93,17 +101,39 @@ public sealed class PlrStatusUpdateService(
                 bcProviderAttributes.SetIsPharm(status.IsGoodStanding);
             }
 
+            var plrStanding = await this.plrClient.GetStandingsDigestAsync(status.Cpn);
+            bcProviderAttributes.SetPractitionerRole(plrStanding.ProviderRoleTypes);
+
             if (status.MspId != null)
             {
-                var plrStanding = await this.plrClient.GetStandingsDigestAsync(status.Cpn);
                 bcProviderAttributes.SetMspId(plrStanding.MspIds);
             }
 
             foreach (var upn in party.Upns)
             {
+                this.logger.LogApplyingAttributeUpdates(upn);
                 await this.bcProviderClient.UpdateAttributes(upn, bcProviderAttributes.AsAdditionalData());
             }
         }
+
+        // Runs on every status change: some cards' eligibility includes CPS postgrads, whose
+        // transitions do not necessarily move the good-standing flag.
+        foreach (var policy in this.revocationPolicies)
+        {
+            try
+            {
+                await policy.RevokeIfIneligibleAsync(party.Id, status, stoppingToken);
+            }
+            catch (Exception e) when (e is not OperationCanceledException)
+            {
+                // A revocation that always threw would never be acked, blocking the head of the
+                // queue and stalling every other consumer. Failing to revoke leaves today's
+                // behaviour intact; stalling the pipeline does not. Policies stage nothing before
+                // they can throw, and one failing card must not stop the others.
+                this.logger.LogRevocationFailed(policy.AccessTypeCode, party.Id, e);
+            }
+        }
+        this.context.BusinessEvents.Add(PlrStatusUpdated.Create(party.Id, status.ProviderRoleType ?? string.Empty, this.clock.GetCurrentInstant()));
 
         await this.context.SaveChangesAsync(stoppingToken);
 
@@ -119,4 +149,13 @@ public static partial class PlrStatusUpdateServiceLoggingExtensions
 
     [LoggerMessage(2, LogLevel.Information, "Status update {statusId} has been proccessed.")]
     public static partial void LogStatusUpdateProcessed(this ILogger<PlrStatusUpdateService> logger, int statusId);
+
+    [LoggerMessage(3, LogLevel.Error, "Unhandled exception while re-evaluating {accessTypeCode} eligibility for Party {partyId}. The rest of the status update was processed.")]
+    public static partial void LogRevocationFailed(this ILogger<PlrStatusUpdateService> logger, AccessTypeCode accessTypeCode, int partyId, Exception e);
+
+    [LoggerMessage(4, LogLevel.Information, "Processing PLR status update for CPN {cpn}. Evaluating attributes for update.")]
+    public static partial void LogProcessingStatusUpdateForCpn(this ILogger<PlrStatusUpdateService> logger, string? cpn);
+
+    [LoggerMessage(5, LogLevel.Information, "Applying PLR-driven attribute updates to BC Provider account for UPN: {upn}")]
+    public static partial void LogApplyingAttributeUpdates(this ILogger<PlrStatusUpdateService> logger, string upn);
 }

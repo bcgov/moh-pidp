@@ -80,6 +80,7 @@ public class Approve
                     : endorsementRequest.RequestingPartyId);
             }
 
+            this.context.BusinessEvents.Add(EndorsementApproved.Create(command.PartyId, command.EndorsementRequestId, this.clock.GetCurrentInstant()));
             await this.context.SaveChangesAsync();
 
             return DomainResult.Success();
@@ -99,8 +100,14 @@ public class Approve
                     || party.Id == request.ReceivingPartyId)
                 .ToListAsync();
 
-            var party1 = parties[0];
-            var party2 = parties[1];
+            var party1 = parties.SingleOrDefault(p => p.Id == request.RequestingPartyId);
+            var party2 = parties.SingleOrDefault(p => p.Id == request.ReceivingPartyId);
+
+            if (party1 == null || party2 == null)
+            {
+                this.logger.LogError("Could not find both parties for EndorsementRequest {RequestId}. RequestingPartyId: {RequestingPartyId}, ReceivingPartyId: {ReceivingPartyId}", request.Id, request.RequestingPartyId, request.ReceivingPartyId);
+                return;
+            }
 
             if (await this.plrClient.GetStandingAsync(party1.Cpn))
             {

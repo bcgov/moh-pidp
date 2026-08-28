@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   MatSnackBar,
   MatSnackBarConfig,
@@ -10,12 +10,14 @@ import {
   providedIn: 'root',
 })
 export class ToastService {
+  private readonly snackBar = inject(MatSnackBar);
+
   private readonly defaultConfig: MatSnackBarConfig;
   private readonly durationInMilliSecs: number;
   private readonly horizontalPosition: MatSnackBarHorizontalPosition;
   private readonly verticalPosition: MatSnackBarVerticalPosition;
 
-  public constructor(private snackBar: MatSnackBar) {
+  public constructor() {
     this.durationInMilliSecs = 3000;
     this.verticalPosition = 'bottom';
     this.horizontalPosition = 'center';

@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+import { NgTemplateOutlet  } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -21,7 +21,7 @@ export type AlertType = 'success' | 'info' | 'warn' | 'danger' | 'muted';
   templateUrl: './alert.component.html',
   styleUrls: ['./alert.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CardComponent, NgIf, CardContentDirective, CardActionsDirective],
+  imports: [CardComponent, CardContentDirective, CardActionsDirective, NgTemplateOutlet],
 })
 export class AlertComponent {
   @Input() public type!: AlertType;

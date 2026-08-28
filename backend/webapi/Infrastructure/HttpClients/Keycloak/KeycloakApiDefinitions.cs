@@ -2,20 +2,25 @@ namespace Pidp.Infrastructure.HttpClients.Keycloak;
 
 using System.Text.Json;
 
-using Pidp.Infrastructure.HttpClients.Ldap;
-using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models.Lookups;
 
 public class MohKeycloakEnrolment
 {
     private static readonly List<MohKeycloakEnrolment> All = [];
     public static readonly MohKeycloakEnrolment DriverFitness = new("DMFT-WEBAPP", AccessTypeCode.DriverFitness, "DMFT_ENROLLED");
+    public static readonly MohKeycloakEnrolment HcimWebPcr = new("HCIMWEB", AccessTypeCode.HcimWebPcr, "READ_ONLY_ALL_SRC");
     public static readonly MohKeycloakEnrolment ImmsBCEforms = new("SAT-EFORMS", AccessTypeCode.ImmsBCEforms, "phsa_eforms_imms");
+    public static readonly MohKeycloakEnrolment InfantRsvEforms = new("SAT-EFORMS", AccessTypeCode.InfantRsvEforms, "phsa_eforms_infant_rsv");
+    public static readonly MohKeycloakEnrolment NpdpEforms = new("SAT-EFORMS", AccessTypeCode.NpdpEforms, "phsa_eforms_npdp");
     public static readonly MohKeycloakEnrolment ProviderReportingPortal = new("PRP-SERVICE", AccessTypeCode.ProviderReportingPortal, "MSPQI", "PMP");
     public static readonly MohKeycloakEnrolment SAEforms = new("SAT-EFORMS", AccessTypeCode.SAEforms, "phsa_eforms_sat");
 
     public static readonly MohKeycloakEnrolment MoaLicenceStatus = new("LICENCE-STATUS", "MOA");
     public static readonly MohKeycloakEnrolment PractitionerLicenceStatus = new("LICENCE-STATUS", "PRACTITIONER");
+
+    public static readonly MohKeycloakEnrolment ImmsBcPhaAdmin = new("IMMSBC-BCPHA", "ADMIN");
+    public static readonly MohKeycloakEnrolment ImmsBcPhaClerk = new("IMMSBC-BCPHA", "CLERK");
+    public static readonly MohKeycloakEnrolment ImmsBcPhaClinician = new("IMMSBC-BCPHA", "CLINICIAN");
 
     public IEnumerable<string> AccessRoles { get; private set; }
     public AccessTypeCode? AssocatedAccessRequest { get; private set; }
@@ -82,23 +87,7 @@ public class UserRepresentation
     public string? LastName { get; set; }
     public string? Username { get; set; }
 
-    public UserRepresentation SetCollegeLicenceInformation(IEnumerable<PlrRecord> plrRecords)
-    {
-        var data = plrRecords.Select(record => new
-        {
-            record.CollegeId,
-            record.MspId,
-            record.ProviderRoleType,
-            record.StatusCode,
-            record.StatusReasonCode
-        });
-
-        return this.SetAttribute("college_licence_info", JsonSerializer.Serialize(data, SerializationOptions));
-    }
-
     public UserRepresentation SetCpn(string cpn) => this.SetAttribute("common_provider_number", cpn);
-
-    internal UserRepresentation SetLdapOrgDetails(LdapLoginResponse.OrgDetails orgDetails) => this.SetAttribute("org_details", JsonSerializer.Serialize(orgDetails, SerializationOptions));
 
     public UserRepresentation SetOpId(string opId) => this.SetAttribute("opId", opId);
 

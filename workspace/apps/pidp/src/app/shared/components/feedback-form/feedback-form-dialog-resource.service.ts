@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
@@ -13,8 +13,14 @@ import { FeedbackSuccessResponse } from './feedback-form-dialog-success.response
   providedIn: 'root',
 })
 export class FeedbackFormDialogResource extends CrudResource<PersonalInformation> {
-  public constructor(private readonly apiResource: ApiHttpClient) {
+  private readonly apiResource: ApiHttpClient;
+
+  public constructor() {
+    const apiResource = inject(ApiHttpClient);
+
     super(apiResource);
+  
+    this.apiResource = apiResource;
   }
 
   public postFeedback(payload: object): Observable<FeedbackSuccessResponse> {

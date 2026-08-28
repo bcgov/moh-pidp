@@ -16,7 +16,7 @@ public class MSTeamsPrivacyOfficerTests : InMemoryDbTest
 {
     [Theory]
     [MemberData(nameof(MSTeamsIdentifierTypeTestData))]
-    public async void CreateMSTeamsEnrolment_ValidProfileWithVaryingLicence_MatchesAllowedTypes(IdentifierType identifierType)
+    public async Task CreateMSTeamsEnrolment_ValidProfileWithVaryingLicence_MatchesAllowedTypes(IdentifierType identifierType)
     {
         var party = this.TestDb.HasAParty(party =>
         {
@@ -56,7 +56,7 @@ public class MSTeamsPrivacyOfficerTests : InMemoryDbTest
     }
 
     [Fact]
-    public async void CreateMSTeamsEnrolment_ValidProfileWithValidLicence_EmailsSent()
+    public async Task CreateMSTeamsEnrolment_ValidProfileWithValidLicence_EmailsSent()
     {
         var party = this.TestDb.HasAParty(party =>
         {

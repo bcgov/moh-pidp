@@ -1,6 +1,6 @@
 namespace Pidp.Features.CommonHandlers;
 
-using MediatR;
+using Mediator;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
@@ -16,7 +16,7 @@ public class AssignAttributesInKeycloakAfterPlrCpnLookupFound(IKeycloakAdministr
 {
     private readonly IKeycloakAdministrationClient client = client;
 
-    public async Task Handle(PlrCpnLookupFound notification, CancellationToken cancellationToken)
+    public async ValueTask Handle(PlrCpnLookupFound notification, CancellationToken cancellationToken)
     {
         // TODO: what to do if this fails?
         foreach (var userId in notification.UserIds)
@@ -35,7 +35,7 @@ public class AssignKeycloakRolesAfterPlrCpnLookupFound(
     private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
     private readonly PidpDbContext context = context;
 
-    public async Task Handle(PlrCpnLookupFound notification, CancellationToken cancellationToken)
+    public async ValueTask Handle(PlrCpnLookupFound notification, CancellationToken cancellationToken)
     {
         // TODO: what to do if any of this fails?
         if (!notification.StandingsDigest.HasGoodStanding)
@@ -62,7 +62,7 @@ public class UpdateBCProviderAfterPlrCpnLookupFound(
     private readonly PidpDbContext context = context;
     private readonly string clientId = config.BCProviderClient.ClientId;
 
-    public async Task Handle(PlrCpnLookupFound notification, CancellationToken cancellationToken)
+    public async ValueTask Handle(PlrCpnLookupFound notification, CancellationToken cancellationToken)
     {
         var userPrincipalNames = await this.context.Parties
             .Where(party => party.Id == notification.PartyId)
