@@ -70,6 +70,16 @@ public class Startup
             app.UseDeveloperExceptionPage();
         }
 
+        app.Use(async (context, next) =>
+        {
+            // enable buffering for requests to the PLRHL7 endpoint so that the request body can be read multiple times / seeked
+            if (context.Request.Path.StartsWithSegments("/api/PLRHL7"))
+            {
+                context.Request.EnableBuffering();
+            }
+            await next();
+        });
+
         app.UseSerilogRequestLogging();
         app.UseRouting();
         app.UseCors("CorsPolicy");
