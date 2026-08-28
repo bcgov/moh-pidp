@@ -76,6 +76,10 @@ public class KeycloakAdministrationClient(HttpClient httpClient, ILogger<Keycloa
     public async Task<bool> DeleteUser(Guid userId)
     {
         var result = await this.DeleteAsync($"users/{userId}");
+        if (result.IsSuccess)
+        {
+            this.Logger.LogUserDeleted(userId);
+        }
         return result.IsSuccess;
     }
 
@@ -97,6 +101,7 @@ public class KeycloakAdministrationClient(HttpClient httpClient, ILogger<Keycloa
         {
             if (Guid.TryParse(location.Segments.Last(), out var userId))
             {
+                this.Logger.LogUserCreated(userRep.Username, userId);
                 return userId;
             }
         }
@@ -106,6 +111,7 @@ public class KeycloakAdministrationClient(HttpClient httpClient, ILogger<Keycloa
         var user = await this.FindUser(userRep.Username);
         if (Guid.TryParse(user?.Id, out var result))
         {
+            this.Logger.LogUserCreated(userRep.Username, result);
             return result;
         }
 
@@ -307,4 +313,9 @@ public static partial class KeycloakAdministrationClientLoggingExtensions
     [LoggerMessage(10, LogLevel.Information, "User {userId} was unassigned Role(s) {roleNames} in Client {clientId}.")]
     public static partial void LogClientRolesUnassigned(this ILogger<BaseClient> logger, Guid userId, IEnumerable<string> roleNames, string clientId);
 
+    [LoggerMessage(11, LogLevel.Information, "Successfully deleted Keycloak user with UserId: {userId}")]
+    public static partial void LogUserDeleted(this ILogger<BaseClient> logger, Guid userId);
+
+    [LoggerMessage(12, LogLevel.Information, "Successfully created Keycloak user: {username} with UserId: {userId}")]
+    public static partial void LogUserCreated(this ILogger<BaseClient> logger, string username, Guid userId);
 }

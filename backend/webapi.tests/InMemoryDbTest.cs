@@ -4,6 +4,7 @@ using FakeItEasy;
 using FakeItEasy.Sdk;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using NodaTime;
 using System.Reflection;
 
@@ -31,7 +32,9 @@ public class InMemoryDbTest : IDisposable
         A.CallTo(() => mediator.Publish(A<IDomainEvent>._, A<CancellationToken>._))
            .Invokes(i => this.PublishedEvents.Add(i.GetArgument<IDomainEvent>(0)!));
 
-        this.TestDb = new PidpDbContext(options, SystemClock.Instance, mediator);
+        var logger = A.Fake<ILogger<PidpDbContext>>();
+
+        this.TestDb = new PidpDbContext(options, logger, SystemClock.Instance, mediator);
         this.TestDb.Database.EnsureCreated();
     }
 

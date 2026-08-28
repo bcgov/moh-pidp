@@ -1,4 +1,4 @@
-﻿namespace Pidp.Features.EndorsementRequests;
+namespace Pidp.Features.EndorsementRequests;
 
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +30,9 @@ public class EmailSearch
         public async Task<Model> HandleAsync(Query query)
         {
             var existingParties = await this.context.Parties
+#pragma warning disable CA1304, CA1862, CA1311
                 .Where(party => party.Email!.ToLower() == query.RecipientEmail.ToLower())
+#pragma warning restore CA1304, CA1862, CA1311
                 .Select(party => party.DisplayFullName)
                 .ToListAsync();
 

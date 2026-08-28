@@ -1,3 +1,5 @@
+#pragma warning disable CA1805
+
 namespace Pidp.Features.Pharmacies;
 
 using FluentValidation;
@@ -14,7 +16,12 @@ public class PharmacyUpdate
     {
         public int PharmacyId { get; set; } = 0;
         public string Name { get; set; } = string.Empty;
-        public string Address { get; set; } = string.Empty;
+        public string HealthAuthority { get; set; } = string.Empty;
+        public string Address1 { get; set; } = string.Empty;
+        public string? Address2 { get; set; }
+        public string City { get; set; } = string.Empty;
+        public string Province { get; set; } = string.Empty;
+        public string PostalCode { get; set; } = string.Empty;
         public string ManagerName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
@@ -45,6 +52,12 @@ public class PharmacyUpdate
                 throw new KeyNotFoundException();
             }
 
+            if (pharmacy.Name != request.Name)
+            {
+                throw new InvalidOperationException("Pharmacy name cannot be modified.");
+            }
+
+            request.Address2 ??= string.Empty;
             context.Entry(pharmacy).CurrentValues.SetValues(request);
             context.BusinessEvents.Add(PharmacyUpdated.Create(request.RequestingPartyId, pharmacy.Name, clock.GetCurrentInstant()));
 

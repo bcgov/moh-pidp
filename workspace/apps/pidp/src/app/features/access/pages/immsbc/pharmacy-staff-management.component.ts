@@ -89,7 +89,9 @@ export class PharmacyStaffManagementComponent implements OnInit {
             .afterClosed()),
         filter((result) => !!result),
       )
-      .subscribe(() => this.refresh$.next());
+      .subscribe({
+        complete: () => this.refresh$.next()
+      });
   }
 
   public onDelete(staff: IStaff): void {
@@ -121,7 +123,12 @@ export class PharmacyStaffManagementComponent implements OnInit {
           )
         )
       )
-      .subscribe(() => this.refresh$.next());
+      .subscribe({
+        complete: () => {
+          this.dataSource.data = this.dataSource.data.filter(s => s.partyId !== staff.partyId);
+          this.refresh$.next();
+        }
+      });
   }
 
   public onRenew(staff: IStaff): void {
@@ -168,6 +175,8 @@ export class PharmacyStaffManagementComponent implements OnInit {
           )
         )
       )
-      .subscribe(() => this.refresh$.next());
+      .subscribe({
+        complete: () => this.refresh$.next()
+      });
   }
 }

@@ -1,16 +1,20 @@
+#pragma warning disable CA1805
+
 namespace Pidp.Features.Pharmacies;
 
+using DomainResults.Common;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
 using Pidp.Data;
+using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Infrastructure.Services;
 using Pidp.Models;
 using Pidp.Models.Lookups;
 
 public class StaffUpdate
 {
-    public class Command : IRequest
+    public class Command : ICommand<IDomainResult>
     {
         public int PharmacyId { get; set; } = 0;
         public int PartyId { get; set; } = 0;
@@ -20,9 +24,9 @@ public class StaffUpdate
         public int RequestingPartyId { get; set; } = 0;
     }
 
-    public class CommandHandler(IClock clock, PidpDbContext context, IBCProviderService bcProviderService) : IRequestHandler<Command>
+    public class CommandHandler(IClock clock, PidpDbContext context, IRoleSynchronizationService roleSynchronizationService, IPlrClient plrClient) : ICommandHandler<Command, IDomainResult>
     {
-        public async ValueTask<Unit> Handle(Command request, CancellationToken cancellationToken)
+        public async ValueTask<IDomainResult> Handle(Command request, CancellationToken cancellationToken)
         {
             var requestingPartyIsAdmin = await context.PharmacyPartyRoles
                 .AnyAsync(role => role.PartyId == request.RequestingPartyId
@@ -32,22 +36,24 @@ public class StaffUpdate
 
             if (!requestingPartyIsAdmin)
             {
-                throw new AccessViolationException("User is not an admin of this pharmacy.");
+                throw new InvalidOperationException("User is not an admin of this pharmacy.");
             }
 
             var staffRole = await context.PharmacyPartyRoles
+                .Include(role => role.Party)
                 .SingleOrDefaultAsync(role => role.PartyId == request.PartyId
                                            && role.PharmacyId == request.PharmacyId,
                                       cancellationToken);
 
             if (staffRole is null)
             {
-                throw new KeyNotFoundException();
+                throw new InvalidOperationException("Staff record not found.");
             }
 
-            staffRole.Role = request.Role;
-            staffRole.EffectiveStartDate = request.EffectiveStartDate?.ToUniversalTime();
-            staffRole.EffectiveEndDate = request.EffectiveEndDate?.ToUniversalTime();
+            if (staffRole.Role == PharmacyRole.Admin && request.Role != PharmacyRole.Admin)
+            {
+                throw new InvalidOperationException("Admin role cannot be removed.");
+            }
 
             var pharmacyName = await context.Pharmacies
                 .Where(p => p.Id == request.PharmacyId)
@@ -56,10 +62,14 @@ public class StaffUpdate
 
             context.BusinessEvents.Add(PharmacyStaffChanged.Create(request.RequestingPartyId, pharmacyName, clock.GetCurrentInstant()));
 
+            staffRole.Role = request.Role;
+            staffRole.EffectiveStartDate = request.EffectiveStartDate?.ToUniversalTime();
+            staffRole.EffectiveEndDate = request.EffectiveEndDate?.ToUniversalTime();
             await context.SaveChangesAsync(cancellationToken);
 
-            await bcProviderService.UpdatePharmStaffAttributes(request.PartyId, cancellationToken);
-            return Unit.Value;
+            await roleSynchronizationService.UpdatePharmStaffAttributes(request.PartyId, cancellationToken);
+
+            return DomainResult.Success();
         }
     }
 }

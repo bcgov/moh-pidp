@@ -25,6 +25,7 @@ export const destinationResolver: ResolveFn<Destination | null> = () => {
 
   return resource.getDestination(partyService.partyId).pipe(
     tap((destination) => {
+      const returnUrl = sessionStorage.getItem('return-url');
       switch (destination) {
         case Destination.DEMOGRAPHICS:
           router.navigateByUrl(
@@ -43,6 +44,10 @@ export const destinationResolver: ResolveFn<Destination | null> = () => {
           break;
         case Destination.PORTAL:
           wizardComplete = true;
+          if (returnUrl?.startsWith('/')) {
+            sessionStorage.removeItem('return-url');
+            router.navigateByUrl(returnUrl);
+          }
           break;
       }
     }),

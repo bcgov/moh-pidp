@@ -26,11 +26,11 @@ public class CommonEmailDomains
         {
             // If the input Email is just the domain, this should use the entire input.
             var domain = query.Email[(query.Email.IndexOf("@", StringComparison.OrdinalIgnoreCase) + 1)..].ToLowerInvariant();
-#pragma warning disable CA1304 // ToLower() is Locale Dependant
+#pragma warning disable CA1304, CA1862, CA1311, CA1866 // ToLower() is Locale Dependant
             var count = await this.context.Parties
                 .Where(party => party.Email!.Substring(party.Email.IndexOf("@") + 1).ToLower() == domain)
                 .CountAsync();
-#pragma warning restore CA1304
+#pragma warning restore CA1304, CA1862, CA1311, CA1866
 
             if (count > 1)
             {

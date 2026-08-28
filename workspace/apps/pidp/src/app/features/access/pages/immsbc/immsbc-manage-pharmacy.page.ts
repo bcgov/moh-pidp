@@ -60,7 +60,12 @@ export class ImmsbcManagePharmacyPage implements OnInit {
 
     this.detailsForm = this.fb.group({
       name: ['', [Validators.required]],
-      address: ['', [Validators.required]],
+      healthAuthority: ['', [Validators.required]],
+      address1: ['', [Validators.required]],
+      address2: [''],
+      city: ['', [Validators.required]],
+      province: ['BC'],
+      postalCode: ['', [Validators.required, Validators.pattern(/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/)]],
       managerName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required]],

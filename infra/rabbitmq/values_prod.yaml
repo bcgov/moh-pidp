@@ -40,8 +40,8 @@ global:
 ## @param image.debug Set to true if you would like to see extra information on logs
 ##
 image:
-  registry: docker.io
-  repository: bitnamilegacy/rabbitmq
+  registry: image-registry.openshift-image-registry.svc:5000/f088b1-tools
+  repository: bitnamilegacy-rabbitmq
   tag: 3.13.4-debian-12-r0
   digest: ""
   ## set to true if you would like to see extra information on logs
@@ -789,14 +789,16 @@ containerSecurityContext:
 ## @param resourcesPreset Set container resources according to one common preset (allowed values: none, nano, small, medium, large, xlarge, 2xlarge). This is ignored if resources is set (resources is recommended for production).
 ## More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
 ##
-resourcesPreset: "micro"
+## resourcesPreset: "micro"
 ## @param resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
 ## Example:
 resources:
-    ## Examples:
-    requests:
-      cpu: 100m
-      memory: 250Mi
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 250m
+    memory: 512Mi
 ##
 resources: {}
 ## Configure RabbitMQ containers' extra options for liveness probe
@@ -826,7 +828,7 @@ livenessProbe:
 ##
 readinessProbe:
   enabled: true
-  initialDelaySeconds: 10
+  initialDelaySeconds: 30
   timeoutSeconds: 20
   periodSeconds: 30
   failureThreshold: 3

@@ -15,6 +15,15 @@ export const landingActionsResolver: ResolveFn<null> = (
   const router = inject(Router);
 
   const endorsementToken = route.queryParamMap.get('endorsement-token');
+  const returnUrl = route.queryParamMap.get('return-url');
+
+  if (returnUrl) {
+    if (returnUrl.startsWith('/')) {
+      router.navigateByUrl(returnUrl);
+    }
+    return of(null);
+  }
+
   if (!endorsementToken) {
     return of(null);
   }

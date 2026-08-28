@@ -73,7 +73,14 @@ public class ImmsBCEforms
                 return DomainResult.Failed();
             }
 
-            if (dto.Cpn == null)
+            var isEligible = false;
+
+            if (dto.Cpn != null)
+            {
+                isEligible = IsEligible(await this.plrClient.GetStandingsDigestAsync(dto.Cpn));
+            }
+
+            if (!isEligible)
             {
                 // Check status of Endorsements
                 var endorsementCpns = await this.context.ActiveEndorsementRelationships(command.PartyId)
@@ -82,24 +89,16 @@ public class ImmsBCEforms
 
                 var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
 
-                if (!endorsementPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding &&
-                    !endorsementPlrStanding.With(IdentifierType.Nurse).HasGoodStanding)
-                {
-                    this.logger.LogAccessRequestDenied(command.PartyId);
-                    this.context.BusinessEvents.Add(AccessRequestFailed.Create(command.PartyId, AccessTypeCode.ImmsBCEforms.ToString(), this.clock.GetCurrentInstant()));
-                    await this.context.SaveChangesAsync();
-                    return DomainResult.Failed();
-                }
+                isEligible = endorsementPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding ||
+                             endorsementPlrStanding.With(IdentifierType.Nurse).HasGoodStanding;
             }
-            else
+
+            if (!isEligible)
             {
-                if (!IsEligible(await this.plrClient.GetStandingsDigestAsync(dto.Cpn)))
-                {
-                    this.logger.LogAccessRequestDenied(command.PartyId);
-                    this.context.BusinessEvents.Add(AccessRequestFailed.Create(command.PartyId, AccessTypeCode.ImmsBCEforms.ToString(), this.clock.GetCurrentInstant()));
-                    await this.context.SaveChangesAsync();
-                    return DomainResult.Failed();
-                }
+                this.logger.LogAccessRequestDenied(command.PartyId);
+                this.context.BusinessEvents.Add(AccessRequestFailed.Create(command.PartyId, AccessTypeCode.ImmsBCEforms.ToString(), this.clock.GetCurrentInstant()));
+                await this.context.SaveChangesAsync();
+                return DomainResult.Failed();
             }
 
             if (!await this.keycloakClient.AssignAccessRoles(dto.UserId, MohKeycloakEnrolment.ImmsBCEforms))

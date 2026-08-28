@@ -14,7 +14,12 @@ public class PharmacyCreate
     public class Command : IRequest<int>
     {
         public string Name { get; set; } = string.Empty;
-        public string Address { get; set; } = string.Empty;
+        public string HealthAuthority { get; set; } = string.Empty;
+        public string Address1 { get; set; } = string.Empty;
+        public string? Address2 { get; set; }
+        public string City { get; set; } = string.Empty;
+        public string Province { get; set; } = string.Empty;
+        public string PostalCode { get; set; } = string.Empty;
         public string ManagerName { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
@@ -44,7 +49,7 @@ public class PharmacyCreate
                 throw new InvalidOperationException("A pharmacy with this name already exists.");
             }
 
-            if (string.IsNullOrWhiteSpace(request.Name) || string.IsNullOrWhiteSpace(request.Address) || string.IsNullOrWhiteSpace(request.ManagerName) || string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Phone))
+            if (string.IsNullOrWhiteSpace(request.Name) || string.IsNullOrWhiteSpace(request.HealthAuthority) || string.IsNullOrWhiteSpace(request.Address1) || string.IsNullOrWhiteSpace(request.City) || string.IsNullOrWhiteSpace(request.Province) || string.IsNullOrWhiteSpace(request.PostalCode) || string.IsNullOrWhiteSpace(request.ManagerName) || string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Phone))
             {
                 throw new InvalidOperationException("All required fields must be filled.");
             }
@@ -71,7 +76,12 @@ public class PharmacyCreate
             var pharmacy = new Pharmacy
             {
                 Name = request.Name,
-                Address = request.Address,
+                HealthAuthority = request.HealthAuthority,
+                Address1 = request.Address1,
+                Address2 = request.Address2 ?? string.Empty,
+                City = request.City,
+                Province = request.Province,
+                PostalCode = request.PostalCode,
                 ManagerName = request.ManagerName,
                 Email = request.Email,
                 Phone = request.Phone,
@@ -106,13 +116,22 @@ public class PharmacyCreate
                 pharmacy.DocumentId = document.Id;
 
                 var url = $"{this.config.ApplicationUrl}/api/documents/{document.Id}";
+                var street = System.Text.RegularExpressions.Regex.Replace(request.Address1 ?? "", @"^(?i)(?:(?:(?:unit|suite)\b|[#\-,])\s*|[\w]+\s*[-,]\s*)*\d+[a-z]?\s+", "").Trim();
+                var clinicName = $"{request.City} - {request.Name} - {street}";
+                
                 var email = new Email(
                     from: EmailService.PidpEmail,
                     to: this.config.Pharmacy.NotificationEmail,
                     subject: $"New Pharmacy Registration: {request.Name}",
                     body: $@"A new pharmacy has been registered.<br><br>
+                    <b>Clinic Name:</b> {clinicName}<br>
                     <b>Name:</b> {request.Name}<br>
-                    <b>Address:</b> {request.Address}<br>
+                    <b>Health Authority:</b> {request.HealthAuthority}<br>
+                    <b>Address Line 1:</b> {request.Address1}<br>
+                    <b>Address Line 2:</b> {request.Address2}<br>
+                    <b>City:</b> {request.City}<br>
+                    <b>Province:</b> {request.Province}<br>
+                    <b>Postal Code:</b> {request.PostalCode}<br>
                     <b>Manager:</b> {request.ManagerName}<br>
                     <b>Email:</b> {request.Email}<br>
                     <b>Phone:</b> {request.Phone}<br>

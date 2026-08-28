@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <IsPackable>false</IsPackable>
     <RootNamespace>PidpTests</RootNamespace>
+    <NoWarn>$(NoWarn);xUnit1042;xUnit1045;CA1869;CS8604;xUnit1048</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="coverlet.msbuild" Version="10.0.1">

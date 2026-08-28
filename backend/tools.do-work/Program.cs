@@ -27,6 +27,7 @@ await Host.CreateDefaultBuilder(args)
             .AddTransient<DoWork.Services.DataDriftFixService.IDataDriftFixService, DoWork.Services.DataDriftFixService.DataDriftFixService>()
             .AddTransient<DoWork.Services.KeycloakClientValidationService.IKeycloakClientValidationService, DoWork.Services.KeycloakClientValidationService.KeycloakClientValidationService>()
             .AddTransient<DoWork.Services.RemoveCollegeLicenseInfoService.IRemoveCollegeLicenseInfoService, DoWork.Services.RemoveCollegeLicenseInfoService.RemoveCollegeLicenseInfoService>()
+            .AddTransient<DoWork.Services.PlrSynchronizationService.IPlrSynchronizationService, DoWork.Services.PlrSynchronizationService.PlrSynchronizationService>()
             .AddTransient<IDoWorkService, DoWorkService>()
             .AddHostedService<HostedServiceWrapper>()
             .AddDbContext<PidpDbContext>(options => options

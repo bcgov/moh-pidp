@@ -8,12 +8,14 @@ public class DoWorkService(
     DoWork.Services.DataDriftFixService.IDataDriftFixService dataDriftFixService,
     DoWork.Services.KeycloakClientValidationService.IKeycloakClientValidationService keycloakClientValidationService,
     DoWork.Services.RemoveCollegeLicenseInfoService.IRemoveCollegeLicenseInfoService removeCollegeLicenseInfoService,
-    DoWork.Services.CredentialDeletionService.ICredentialDeletionService credentialDeletionService) : IDoWorkService
+    DoWork.Services.CredentialDeletionService.ICredentialDeletionService credentialDeletionService,
+    DoWork.Services.PlrSynchronizationService.IPlrSynchronizationService plrSynchronizationService) : IDoWorkService
 {
     private readonly DoWork.Services.DataDriftFixService.IDataDriftFixService dataDriftFixService = dataDriftFixService;
     private readonly DoWork.Services.KeycloakClientValidationService.IKeycloakClientValidationService keycloakClientValidationService = keycloakClientValidationService;
     private readonly DoWork.Services.RemoveCollegeLicenseInfoService.IRemoveCollegeLicenseInfoService removeCollegeLicenseInfoService = removeCollegeLicenseInfoService;
     private readonly DoWork.Services.CredentialDeletionService.ICredentialDeletionService credentialDeletionService = credentialDeletionService;
+    private readonly DoWork.Services.PlrSynchronizationService.IPlrSynchronizationService plrSynchronizationService = plrSynchronizationService;
 
     public async Task DoWorkAsync()
     {
@@ -22,7 +24,8 @@ public class DoWorkService(
         Console.WriteLine("2. Keycloak Client Validation");
         Console.WriteLine("3. Remove College License Info");
         Console.WriteLine("4. Credential Deletion");
-        Console.Write("Enter your choice (1-4): ");
+        Console.WriteLine("5. Synchronize PLR to Entra");
+        Console.Write("Enter your choice (1-5): ");
         
         var choice = Console.ReadLine();
 
@@ -39,6 +42,12 @@ public class DoWorkService(
                 break;
             case "4":
                 await this.credentialDeletionService.DeleteCredentialsAsync();
+                break;
+            case "5":
+                Console.Write("Run in Dry-Run mode? (y/n, default y): ");
+                var dryRunChoice = Console.ReadLine();
+                var dryRun = dryRunChoice?.Trim().ToLower() != "n";
+                await this.plrSynchronizationService.SynchronizePlrToEntraAsync(dryRun);
                 break;
             default:
                 Console.WriteLine("Invalid choice.");
