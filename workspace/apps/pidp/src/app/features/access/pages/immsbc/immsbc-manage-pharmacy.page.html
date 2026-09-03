@@ -1,17 +1,15 @@
 <div class="box container" uiPidpInjectViewportCss>
   <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
   <div class="content">
-    <section class="page-intro">
+    <section class="page-intro" style="margin-bottom: 10px;">
       <h1>ImmsBC - Manage Pharmacy</h1>
       <p class="important-intro-note">
-        As an administrator, maintaining accurate pharmacy information and active staff
-        associations is essential for securing access to the ImmsBC portal to schedule patient visits to your
-        pharmacy.
+        As an administrator, maintaining accurate pharmacy information and active staff associations is essential for securing access to the ImmsBC portal.
       </p>
       @if (!selectedPharmacy) {
-      <h4 style="margin-top: 20px;">Select an item from the list to start managing it.</h4>
+      <h4 class="mb-2" style="margin-top: 20px;">Select a community pharmacy from the list to start managing it.</h4>
       } @else {
-      <h4 style="margin-top: 20px;">Manage details and staff for <b>{{ selectedPharmacy.pharmacyName }}</b></h4>
+      <h4 class="mb-2" style="margin-top: 20px;">Manage details and staff for <b>{{ selectedPharmacy.pharmacyName }}</b></h4>
       }
     </section>
     <!-- Step 1: Pharmacy Selection -->
@@ -22,12 +20,22 @@
         @if (!profile.isPharmacyAdmin || profile.associations.length === 0) {
         <div class="text-center my-5">
           <p class="mb-3">You are not registered as an administrator for any pharmacies.</p>
-          <button mat-flat-button color="primary" routerLink="/access/immsbc/create-pharmacy">Add a
-            Pharmacy</button>
+          <div style="margin-top: 1rem;">
+            <button mat-flat-button type="button" color="primary"
+              routerLink="/access/immsbc/register-pharmacy">
+              Include your Pharmacy in ImmsBC
+            </button>
+          </div>
+          <div style="margin-top: 1rem;">
+            <button mat-flat-button type="button" color="primary"
+              routerLink="/access/immsbc/claim-pharmacy">
+              Claim your Pharmacy in ImmsBC
+            </button>
+          </div>
         </div>
         }
         @for (assoc of profile.associations; track assoc.pharmacyId) {
-        @if (getRole(assoc.role) === 'Admin') {
+        @if (getRole(assoc.role) === 'Lead') {
         <mat-card tabindex="0" (keydown.enter)="selectPharmacy(assoc)" (click)="selectPharmacy(assoc)"
           onKeyUp="selectPharmacy(assoc)" class="clickable-card mb-3" [class.mat-elevation-z4]="true">
           <mat-card-header>
@@ -46,7 +54,7 @@
     </section>
     } @else {
     @if (selectedPharmacy) {
-    <div class="d-flex align-items-center mb-4">
+    <div class="d-flex align-items-center mb-2">
       <button mat-flat-button color="primary" tabindex="0" (keydown.enter)="deselectPharmacy()"
         (click)="deselectPharmacy()" class="ml-auto">
         <mat-icon>arrow_back</mat-icon>
@@ -54,31 +62,154 @@
       </button>
     </div>
 
-    <mat-tab-group animationDuration="0ms" class="form-panel">
-      <mat-tab label="Details">
-        <ng-template matTabContent>
-          <div class="py-4">
-            <form [formGroup]="detailsForm" (ngSubmit)="onUpdateDetails()" novalidate>
-              <app-pharmacy-form [form]="detailsForm" [showAcknowledgements]="false"
-                [isNameReadonly]="true"></app-pharmacy-form>
-              <div class="submit-row">
-                <button mat-flat-button type="submit" class="submit-btn">
-                  Save Changes
-                </button>
+    <div class="pb-4">
+      @if (!hasEmail && pharmacyDetails) {
+      <div class="alert alert-warning mb-4 p-4" role="alert" style="background-color: #fff3cd; color: #856404; border: 1px solid #ffeeba; border-radius: 4px;">
+        <h4 class="alert-heading" style="display: flex; align-items: center;"><mat-icon style="margin-right: 8px;">warning</mat-icon>Email Required</h4>
+        <p class="mb-0 mt-2">Please set an email address for access review reminders. <strong>Setting an email is required before staff can be managed.</strong></p>
+      </div>
+      }
+
+      <mat-accordion>
+        <mat-expansion-panel [(expanded)]="contactPanelExpanded" class="mb-4">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <h4 class="mb-0">Pharmacy Contact Information</h4>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+        @if (pharmacyDetails) {
+          <div class="mb-4">
+            <p><strong>Name:</strong> {{ pharmacyDetails.name }}</p>
+            <p><strong>Address:</strong> {{ pharmacyDetails.address }}</p>
+            <p><strong>PharmaCare Code:</strong> {{ pharmacyDetails.pharmaCareCode }}</p>
+          </div>
+          <form [formGroup]="contactForm" (ngSubmit)="onSubmitContactInfo()">
+            <div class="row">
+              <div class="col-12 col-md-4">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Email (Required)</mat-label>
+                  <input matInput formControlName="email" type="email" placeholder="example@pharmacy.com">
+                  @if (contactForm.get('email')?.hasError('required')) {
+                    <mat-error>Email is required</mat-error>
+                  }
+                  @if (contactForm.get('email')?.hasError('email')) {
+                    <mat-error>Invalid email address</mat-error>
+                  }
+                </mat-form-field>
               </div>
-            </form>
+              <div class="col-12 col-md-4">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Phone (Optional)</mat-label>
+                  <input matInput formControlName="phone" type="tel" mask="(000) 000-0000">
+                </mat-form-field>
+              </div>
+              <div class="col-12 col-md-4">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>Fax (Optional)</mat-label>
+                  <input matInput formControlName="fax" type="tel" mask="(000) 000-0000">
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="button-group text-right mt-2">
+              <button mat-flat-button color="primary" type="submit" [disabled]="contactForm.invalid || !contactForm.dirty">Update Contact Info</button>
+            </div>
+          </form>
+        } @else {
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        }
+        </mat-expansion-panel>
+      </mat-accordion>
+      
+      <p style="margin-top: 20px">&nbsp;</p>
+
+      @if (hasEmail) {
+      <div class="form-panel">
+        <h4 class="panel-title d-flex justify-content-between align-items-center">
+          Staff List
+          <div class="button-group">
+            <button mat-flat-button color="primary" class="me-2" tabindex="0" (keydown.enter)="inviteByEmail(PharmacyRole.EndUser)"
+              (click)="inviteByEmail(PharmacyRole.EndUser)"><mat-icon>mail</mat-icon>Invite by email</button>
+            <button mat-flat-button color="primary" tabindex="0" (keydown.enter)="generateLink(PharmacyRole.EndUser)"
+              (click)="generateLink(PharmacyRole.EndUser)"><mat-icon>link</mat-icon>Generate Link & QR Code</button>
           </div>
-        </ng-template>
-      </mat-tab>
-      <mat-tab label="Staff Management">
-        <ng-template matTabContent>
-          <div class="py-4">
-            <app-pharmacy-staff-management [pharmacyName]="selectedPharmacy.pharmacyName"
-              [pharmacyId]="selectedPharmacy.pharmacyId"></app-pharmacy-staff-management>
-          </div>
-        </ng-template>
-      </mat-tab>
-    </mat-tab-group>
+        </h4>
+        <p class="mb-3">Staff will need to login with their BC Services Card to OneHealthID to register with ImmsBC. Once registered, staff will appear in the list below as inactive until an administrator set an effective start & end date, and/or updates their role.</p>
+        <p class="mb-4">End Users have access to the same basic functionality. Users with Lead roles have access to Operations, Inventory, Workflows sections of IMMSBC</p>
+        @if (staff$ | async; as staff) {
+        @if (!staff.length) {
+        <div class="text-center">
+          <p>No staff members associated with this organization.</p>
+        </div>
+        }
+        @if (staff.length) {
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.fullName }}
+            </td>
+          </ng-container>
+
+          <!-- Role Column -->
+          <ng-container matColumnDef="role">
+            <th mat-header-cell *matHeaderCellDef>Role</th>
+            <td mat-cell *matCellDef="let element">{{ getRole(element.role) }}</td>
+          </ng-container>
+
+          <!-- Start Date Column -->
+          <ng-container matColumnDef="effectiveStartDate">
+            <th mat-header-cell *matHeaderCellDef>Effective Start</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.effectiveStartDate | date: 'mediumDate' : 'UTC' }}
+            </td>
+          </ng-container>
+
+          <!-- End Date Column -->
+          <ng-container matColumnDef="effectiveEndDate">
+            <th mat-header-cell *matHeaderCellDef>Effective End</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.effectiveEndDate | date: 'mediumDate' : 'UTC' }}
+            </td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let element">
+              <app-pill [label]="getStatus(element)" [class]="getStatus(element) | lowercase"></app-pill>
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let element" class="text-right">
+              <button mat-icon-button tabindex="0" (keydown.enter)="onRenew(element)" (click)="onRenew(element)"
+                aria-label="Renew staff member" matTooltip="Renew user">
+                <mat-icon>autorenew</mat-icon>
+              </button>
+              <button mat-icon-button tabindex="0" (keydown.enter)="onEdit(element)" (click)="onEdit(element)"
+                aria-label="Edit staff member" matTooltip="Edit user">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button tabindex="0" (keydown.enter)="onDelete(element)" (click)="onDelete(element)"
+                aria-label="Delete staff member" matTooltip="Delete user">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+        }
+        } @else {
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        }
+      </div>
+      }
+    </div>
     }
     }
   </div>

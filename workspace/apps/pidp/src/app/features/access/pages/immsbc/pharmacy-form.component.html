@@ -1,91 +1,35 @@
 <form [formGroup]="form" novalidate>
   <div class="form-field" [class.is-readonly]="isNameReadonly">
-    <label for="name">Organization Name</label>
+    <label for="name">Name</label>
     <input id="name" type="text" formControlName="name" autocomplete="organization" [readonly]="isNameReadonly" />
     <span class="helper-text">Please include store number if applicable, use format: "Name #12345"</span>
     @if (form.get('name')?.invalid && form.get('name')?.touched) {
-    <div class="form-error">Organization Name is required.</div>
+    <div class="form-error">Name is required.</div>
     }
   </div>
 
+
+
   <div class="form-field">
-    <label for="healthAuthority">Health Authority</label>
-    <select id="healthAuthority" formControlName="healthAuthority">
-      <option value="BC Pharmacy Association">BC Pharmacy Association</option>
-      <option value="First Nations Health Authority">First Nations Health Authority</option>
-      <option value="Fraser Health Authority">Fraser Health Authority</option>
-      <option value="Northern Health Authority">Northern Health Authority</option>
-      <option value="Vancouver Coastal Health Authority">Vancouver Coastal Health Authority</option>
-      <option value="Vancouver Island Health Authority">Vancouver Island Health Authority</option>
-    </select>
-    @if (form.get('healthAuthority')?.invalid && form.get('healthAuthority')?.touched) {
-    <div class="form-error">Health Authority is required.</div>
+    <label for="address">Address</label>
+    <input id="address" type="text" formControlName="address" autocomplete="address" />
+    @if (form.get('address')?.invalid && form.get('address')?.touched) {
+    <div class="form-error">Address is required.</div>
     }
   </div>
 
-  <div class="form-field">
-    <label for="address1">Address Line 1</label>
-    <input id="address1" type="text" formControlName="address1" autocomplete="address-line1" />
-    @if (form.get('address1')?.invalid && form.get('address1')?.touched) {
-    <div class="form-error">Address Line 1 is required.</div>
-    }
-  </div>
-
-  <div class="form-field">
-    <label for="address2">Address Line 2 (Optional)</label>
-    <input id="address2" type="text" formControlName="address2" autocomplete="address-line2" />
-  </div>
-
-  <div class="form-field">
-    <label for="city">City</label>
-    <input id="city" type="text" formControlName="city" autocomplete="address-level2" />
-    @if (form.get('city')?.invalid && form.get('city')?.touched) {
-    <div class="form-error">City is required.</div>
-    }
-  </div>
-
-  <input type="hidden" formControlName="province" />
-
-  <div class="form-field">
-    <label for="postalCode">Postal Code</label>
-    <input id="postalCode" type="text" formControlName="postalCode" autocomplete="postal-code" mask="S0S 0S0"
-      style="text-transform: uppercase" />
-    @if (form.get('postalCode')?.invalid && form.get('postalCode')?.touched) {
-    <div class="form-error">
-      @if (form.get('postalCode')?.hasError('required')) {
-      Postal Code is required.
-      }
-      @if (form.get('postalCode')?.hasError('pattern') || form.get('postalCode')?.hasError('mask')) {
-      Please enter a valid Canadian Postal Code (e.g. V8V 1V1).
-      }
-    </div>
-    }
-  </div>
 
   <div class="form-field">
     <label for="phone">Phone Number (Format: (XXX) XXX-XXXX)</label>
     <input id="phone" type="tel" formControlName="phone" autocomplete="tel" mask="(000) 000-0000" />
-    @if (form.get('phone')?.invalid && form.get('phone')?.touched) {
-    <div class="form-error">Phone Number is required.</div>
-    }
   </div>
 
   <div class="form-field">
     <label for="fax">Fax Number (Format: (XXX) XXX-XXXX)</label>
     <input id="fax" type="tel" formControlName="fax" autocomplete="tel" mask="(000) 000-0000" />
-    @if (form.get('fax')?.invalid && form.get('fax')?.touched) {
-    <div class="form-error">Fax Number is required.</div>
-    }
   </div>
 
-  <div class="form-field">
-    <label for="managerName">Manager Name (as displayed in public)</label>
-    <input id="managerName" type="text" formControlName="managerName" placeholder="FirstName LastName"
-      autocomplete="name" />
-    @if (form.get('managerName')?.invalid && form.get('managerName')?.touched) {
-    <div class="form-error">Pharmacy Manager Name is required.</div>
-    }
-  </div>
+
 
   <div class="form-field">
     <label for="email">Manager Email Address (for system notifications only)</label>
@@ -104,85 +48,23 @@
 
   <div class="form-field">
     <label for="pharmaCareCode">PharmaCare Code (BC00000XXX)</label>
-    <input id="pharmaCareCode" type="text" formControlName="pharmaCareCode" maxlength="3" />
-    <span class="helper-text">Enter the three digits for PharmaCare Code representing your pharmacy</span>
+    <input id="pharmaCareCode" type="text" formControlName="pharmaCareCode" maxlength="10" />
+    <span class="helper-text">Enter the ten characters for PharmaCare Code representing your pharmacy</span>
     @if (form.get('pharmaCareCode')?.invalid && form.get('pharmaCareCode')?.touched) {
     <div class="form-error">
       @if (form.get('pharmaCareCode')?.hasError('required')) {
       PharmaCare Code is required.
       }
       @if (form.get('pharmaCareCode')?.hasError('minlength') || form.get('pharmaCareCode')?.hasError('maxlength')) {
-      PharmaCare Code must be exactly 3 characters.
+      PharmaCare Code must be exactly 10 characters.
+      }
+      @if (form.get('pharmaCareCode')?.hasError('pattern')) {
+      PharmaCare Code must start with 'BC'.
       }
     </div>
     }
   </div>
 
-  <div class="form-field">
-    <label for="evidence">Evidence</label>
-    <input id="evidence" type="file" (change)="onFileChange($event)" accept=".docx,.pdf,.png,.jpg,.jpeg" />
-    <span class="helper-text">Please upload a screenshot of the CareConnect portal showing registration and completion
-      of the privacy course, including the "Worksite ID" (max 5MB).</span>
-    @if (form.get('evidence')?.invalid && form.get('evidence')?.touched) {
-    <div class="form-error">Evidence document is required.</div>
-    }
-  </div>
 
-  @if (showAcknowledgements) {
-  <div class="acknowledgement-group">
-    <h3 class="ack-heading">Immunization Scope</h3>
-    <label class="checkbox-label">
-      <input type="checkbox" formControlName="ackImmunizationScope" aria-describedby="ack-imm-scope-desc" />
-      <span id="ack-imm-scope-desc">
-        I declare that if I am providing vaccinations, I have a certified immunizer employed by the pharmacy and is able
-        to provide immunization services in the Province of British Columbia.
-      </span>
-    </label>
-    @if (form.get('ackImmunizationScope')?.invalid && form.get('ackImmunizationScope')?.touched) {
-    <div class="form-error">This acknowledgement is required.</div>
-    }
-  </div>
 
-  <div class="acknowledgement-group">
-    <h3 class="ack-heading">Access to Vaccines</h3>
-    <label class="checkbox-label">
-      <input type="checkbox" formControlName="ackAccessToVaccines" aria-describedby="ack-access-vacc-desc" />
-      <span id="ack-access-vacc-desc">
-        I acknowledge that if my pharmacy provides vaccinations using public supply, we will provide immunization to all
-        age cohorts eligible in the Province of British Columbia to receive a vaccination.
-      </span>
-    </label>
-    @if (form.get('ackAccessToVaccines')?.invalid && form.get('ackAccessToVaccines')?.touched) {
-    <div class="form-error">This acknowledgement is required.</div>
-    }
-  </div>
-
-  <div class="acknowledgement-group">
-    <h3 class="ack-heading">Privacy, Confidentiality and Security Acknowledgement</h3>
-    <label class="checkbox-label">
-      <input type="checkbox" formControlName="ackPrivacy" aria-describedby="ack-privacy-desc" />
-      <span id="ack-privacy-desc">
-        Each user will be required to accept a separate Privacy, Confidentiality and Security Acknowledgement before
-        gaining access to the system.
-      </span>
-    </label>
-    @if (form.get('ackPrivacy')?.invalid && form.get('ackPrivacy')?.touched) {
-    <div class="form-error">This acknowledgement is required.</div>
-    }
-  </div>
-
-  <div class="acknowledgement-group">
-    <h3 class="ack-heading">Removal of Access for Ex-Employees</h3>
-    <label class="checkbox-label">
-      <input type="checkbox" formControlName="ackRemovalAccess" aria-describedby="ack-removal-desc" />
-      <span id="ack-removal-desc">
-        If an employee is no longer employed at the pharmacy, the pharmacy manager or designate will update their staff
-        via the OneHealthID Manage Pharmacy option under the IMMSBC section.
-      </span>
-    </label>
-    @if (form.get('ackRemovalAccess')?.invalid && form.get('ackRemovalAccess')?.touched) {
-    <div class="form-error">This acknowledgement is required.</div>
-    }
-  </div>
-  }
 </form>

@@ -48,22 +48,16 @@ public class RoleSynchronizationService(PidpDbContext context, IBCProviderClient
 
         if (roles.Count > 0)
         {
-            if (roles.Any(r => r.Role == PharmacyRole.Admin))
+            if (roles.Any(r => r.Role == PharmacyRole.Lead))
             {
-                jobTitle = "admin";
-                keycloakEnrolmentToAssign = MohKeycloakEnrolment.ImmsBcPhaAdmin;
+                jobTitle = "lead";
+                keycloakEnrolmentToAssign = MohKeycloakEnrolment.ImmsBcPhaLead;
             }
-            else if (roles.Any(r => r.Role == PharmacyRole.Clinician))
+            else if (roles.Any(r => r.Role == PharmacyRole.EndUser))
             {
-                jobTitle = "clinician";
-                keycloakEnrolmentToAssign = MohKeycloakEnrolment.ImmsBcPhaClinician;
+                jobTitle = "end_user";
+                keycloakEnrolmentToAssign = MohKeycloakEnrolment.ImmsBcPhaEndUser;
             }
-            else if (roles.Any(r => r.Role == PharmacyRole.Clerk))
-            {
-                jobTitle = "clerk";
-                keycloakEnrolmentToAssign = MohKeycloakEnrolment.ImmsBcPhaClerk;
-            }
-
             var pharmacyNames = roles.Select(r => r.Pharmacy.Name).Distinct().ToList();
             department = string.Join("|", pharmacyNames);
         }
@@ -97,9 +91,8 @@ public class RoleSynchronizationService(PidpDbContext context, IBCProviderClient
         // Sync Keycloak roles
         var allImmsBcRoles = new[]
         {
-            MohKeycloakEnrolment.ImmsBcPhaAdmin,
-            MohKeycloakEnrolment.ImmsBcPhaClinician,
-            MohKeycloakEnrolment.ImmsBcPhaClerk
+            MohKeycloakEnrolment.ImmsBcPhaLead,
+            MohKeycloakEnrolment.ImmsBcPhaEndUser
         };
 
         foreach (var enrolment in allImmsBcRoles)

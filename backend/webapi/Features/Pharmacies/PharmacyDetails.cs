@@ -18,13 +18,8 @@ public class PharmacyDetails
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public string HealthAuthority { get; set; } = string.Empty;
-        public string Address1 { get; set; } = string.Empty;
-        public string Address2 { get; set; } = string.Empty;
-        public string City { get; set; } = string.Empty;
-        public string Province { get; set; } = string.Empty;
-        public string PostalCode { get; set; } = string.Empty;
-        public string ManagerName { get; set; } = string.Empty;
+        public string Address { get; set; } = string.Empty;
+
         public string Email { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
         public string Fax { get; set; } = string.Empty;
@@ -45,7 +40,16 @@ public class PharmacyDetails
 
             return await context.Pharmacies
                 .Where(p => p.Id == request.PharmacyId)
-                .ProjectToType<Model>()
+                .Select(p => new Model
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Address = p.Address,
+                    Email = p.Email,
+                    Phone = p.Phone,
+                    Fax = p.Fax,
+                    PharmaCareCode = p.PharmaCareCode
+                })
                 .SingleOrDefaultAsync(cancellationToken);
         }
     }

@@ -1,0 +1,49 @@
+<div class="box container" uiPidpInjectViewportCss>
+  <app-breadcrumb [breadcrumbs]="breadcrumbsData"></app-breadcrumb>
+  <div class="content">
+    <section class="page-intro">
+      <h1>Claim Pharmacy</h1>
+      <p>Search for a pharmacy by name or PharmaCare code to claim it.</p>
+    </section>
+
+    <div class="page-container">
+      <div class="search-section">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Search (min 3 characters)</mat-label>
+          <input matInput [formControl]="searchControl" placeholder="Enter Pharmacy Name or PharmaCare Code" />
+          <mat-icon matPrefix>search</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <div class="results-section">
+        @if (isLoading$ | async) {
+        <div class="loading">Searching...</div>
+        }
+
+        @if (errorMsg$ | async; as errorMsg) {
+        <div class="error-message">
+          {{ errorMsg }}
+        </div>
+        }
+
+        @if ((pharmacies$ | async)?.length; as count) {
+        <div class="results-list">
+          @for (pharmacy of (pharmacies$ | async); track pharmacy.id) {
+          <mat-card class="pharmacy-card">
+            <div class="pharmacy-info">
+              <div class="pharmacy-name">{{ pharmacy.name }}</div>
+              <div class="pharmacy-code">PharmaCare Code: {{ pharmacy.pharmaCareCode }}</div>
+            </div>
+            <button mat-flat-button color="primary" (click)="onClaim(pharmacy.id)">Claim</button>
+          </mat-card>
+          }
+        </div>
+        }
+      </div>
+
+      <div class="actions">
+        <button mat-stroked-button (click)="goBack()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

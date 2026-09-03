@@ -21,6 +21,8 @@ public class MohKeycloakEnrolment
     public static readonly MohKeycloakEnrolment ImmsBcPhaAdmin = new("IMMSBC-BCPHA", "ADMIN");
     public static readonly MohKeycloakEnrolment ImmsBcPhaClerk = new("IMMSBC-BCPHA", "CLERK");
     public static readonly MohKeycloakEnrolment ImmsBcPhaClinician = new("IMMSBC-BCPHA", "CLINICIAN");
+    public static readonly MohKeycloakEnrolment ImmsBcPhaLead = new("IMMSBC-BCPHA", "LEAD");
+    public static readonly MohKeycloakEnrolment ImmsBcPhaEndUser = new("IMMSBC-BCPHA", "CLINIC-END-USER");
 
     public IEnumerable<string> AccessRoles { get; private set; }
     public AccessTypeCode? AssocatedAccessRequest { get; private set; }

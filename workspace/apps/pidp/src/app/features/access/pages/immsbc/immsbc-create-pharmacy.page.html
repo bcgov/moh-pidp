@@ -45,7 +45,29 @@
     <!-- Form -->
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="account-form" novalidate>
       <div class="form-panel">
-        <app-pharmacy-form [form]="form" [showAcknowledgements]="true"></app-pharmacy-form>
+        <app-pharmacy-form [form]="form"></app-pharmacy-form>
+
+        <div class="manager-search-section">
+          <div class="form-field">
+            <label for="managerLicenceNumber">Pharmacist College Licence Number</label>
+            <div style="display: flex; gap: 1rem; align-items: stretch;">
+              <input type="text" id="managerLicenceNumber" formControlName="managerLicenceNumber" style="flex: 1;" />
+              <button mat-flat-button type="button" color="primary" (click)="searchManager()"
+                      [disabled]="!form.get('managerLicenceNumber')?.value || form.get('managerLicenceNumber')?.value === lastSearchedLicence">
+                Search
+              </button>
+            </div>
+            <span class="helper-text">Search for a Pharmacist by their College Licence Number to assign them as the Pharmacy Manager.</span>
+          </div>
+
+          <div *ngIf="managerName" class="manager-search-result success" style="margin-top: 1rem; padding: 1rem; background-color: #dff0d8; border-radius: 4px;">
+            <strong>Manager Found:</strong> {{ managerName }}
+          </div>
+          
+          <div *ngIf="form.get('managerId')?.invalid && (form.get('managerId')?.touched || form.get('managerId')?.dirty)" class="error-message" style="color: #a94442; margin-top: 0.5rem;">
+            A Manager must be assigned to create a Pharmacy.
+          </div>
+        </div>
       </div>
       <div class="submit-row">
         <button mat-flat-button type="submit" class="submit-btn">Submit</button>

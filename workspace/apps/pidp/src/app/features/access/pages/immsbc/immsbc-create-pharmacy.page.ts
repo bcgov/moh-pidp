@@ -1,10 +1,11 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { EMPTY, catchError } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 import { InjectViewportCssClassDirective } from '@bcgov/shared/ui';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 import { AccessRoutes } from '@app/features/access/access.routes';
@@ -34,6 +35,7 @@ export class ImmsbcCreatePharmacyPage implements OnInit {
   private readonly resource = inject(PharmacyResource);
   private readonly router = inject(Router);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   public ngOnInit(): void {
     this.breadcrumbsData = [
@@ -51,22 +53,41 @@ export class ImmsbcCreatePharmacyPage implements OnInit {
 
     this.form = this.fb.group({
       name: ['', Validators.required],
-      healthAuthority: ['BC Pharmacy Association', Validators.required],
-      address1: ['', Validators.required],
-      address2: [''],
-      city: ['', Validators.required],
-      province: ['BC'],
-      postalCode: ['', [Validators.required, Validators.pattern(/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/)]],
-      phone: ['', Validators.required],
-      fax: ['', Validators.required],
-      managerName: ['', Validators.required],
+      address: ['', Validators.required],
+      phone: [''],
+      fax: [''],
       email: ['', [Validators.required, Validators.email]],
-      pharmaCareCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3)]],
-      ackImmunizationScope: [false, Validators.requiredTrue],
-      ackAccessToVaccines: [false, Validators.requiredTrue],
-      ackPrivacy: [false, Validators.requiredTrue],
-      ackRemovalAccess: [false, Validators.requiredTrue],
-      evidence: [null, Validators.required],
+      pharmaCareCode: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^BC/)]],
+      managerLicenceNumber: [''],
+      managerId: [null as number | null, Validators.required],
+    });
+  }
+
+  public managerName: string | null = null;
+  public lastSearchedLicence: string | null = null;
+
+  public searchManager(): void {
+    const licenceNumber = this.form.get('managerLicenceNumber')?.value;
+    if (!licenceNumber) return;
+
+    this.lastSearchedLicence = licenceNumber;
+    this.managerName = null;
+    this.form.get('managerId')?.setValue(null);
+
+    this.resource.searchManager(licenceNumber).subscribe({
+      next: (result) => {
+        this.managerName = result.fullName;
+        this.form.get('managerId')?.setValue(result.partyId);
+        this.cdr.detectChanges();
+      },
+      error: (err: HttpErrorResponse) => {
+        if (err.status === 404) {
+          this.snackBar.open('License not found', 'Close', { duration: 3000 });
+        } else {
+          this.snackBar.open('An error occurred during search.', 'Close', { duration: 3000 });
+        }
+        this.cdr.detectChanges();
+      }
     });
   }
 
@@ -77,16 +98,8 @@ export class ImmsbcCreatePharmacyPage implements OnInit {
       return;
     }
 
-    const formData = new FormData();
-    Object.keys(this.form.value).forEach(key => {
-      const value = this.form.value[key];
-      if (value !== null && value !== undefined) {
-        formData.append(key, value);
-      }
-    });
-
     this.resource
-      .createPharmacy(formData)
+      .createPharmacy(this.form.value)
       .pipe(
         catchError(() => {
           this.snackBar.open('An error occurred while creating the pharmacy. Please try again.', 'Close', { duration: 10000 });
