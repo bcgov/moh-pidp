@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, Validators, ReactiveFormsModule, AbstractControl, ValidationErrors } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -70,7 +70,7 @@ export class InviteByEmailDialogComponent {
     emails: ['', [Validators.required, this.emailsValidator.bind(this)]]
   });
 
-  private emailsValidator(control: any) {
+  private emailsValidator(control: AbstractControl): ValidationErrors | null {
     if (!control.value) {
       return null;
     }

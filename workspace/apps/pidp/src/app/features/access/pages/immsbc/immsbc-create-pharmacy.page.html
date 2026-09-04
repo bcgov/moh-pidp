@@ -60,13 +60,17 @@
             <span class="helper-text">Search for a Pharmacist by their College Licence Number to assign them as the Pharmacy Manager.</span>
           </div>
 
-          <div *ngIf="managerName" class="manager-search-result success" style="margin-top: 1rem; padding: 1rem; background-color: #dff0d8; border-radius: 4px;">
-            <strong>Manager Found:</strong> {{ managerName }}
-          </div>
+          @if (managerName) {
+            <div class="manager-search-result success" style="margin-top: 1rem; padding: 1rem; background-color: #dff0d8; border-radius: 4px;">
+              <strong>Manager Found:</strong> {{ managerName }}
+            </div>
+          }
           
-          <div *ngIf="form.get('managerId')?.invalid && (form.get('managerId')?.touched || form.get('managerId')?.dirty)" class="error-message" style="color: #a94442; margin-top: 0.5rem;">
-            A Manager must be assigned to create a Pharmacy.
-          </div>
+          @if (form.get('managerId')?.invalid && (form.get('managerId')?.touched || form.get('managerId')?.dirty)) {
+            <div class="error-message" style="color: #a94442; margin-top: 0.5rem;">
+              A Manager must be assigned to create a Pharmacy.
+            </div>
+          }
         </div>
       </div>
       <div class="submit-row">

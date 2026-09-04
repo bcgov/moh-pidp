@@ -89,7 +89,7 @@ export class ImmsbcPage implements OnInit, OnDestroy {
   public selectedIndex: number;
   private readonly lastSelectedIndex: number;
   public hasCpn: boolean | undefined;
-  public isPharmacist: boolean = false;
+  public isPharmacist = false;
   public Destination = Destination;
   public StatusCode = StatusCode;
   public AccessRoutes = AccessRoutes;

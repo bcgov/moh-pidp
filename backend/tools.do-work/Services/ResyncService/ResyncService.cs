@@ -116,7 +116,7 @@ public class ResyncService(
                 .Where(upn => upn != null)
                 .ToList();
 
-            if (bcProviderUpns.Any())
+            if (bcProviderUpns.Count > 0)
             {
                 var bcProviderAttributes = new BCProviderAttributes(clientId);
                 bcProviderAttributes.SetIsMoa(isMoa);
@@ -149,14 +149,14 @@ public class ResyncService(
 
                             if (newValueString != currentValueString)
                             {
-                                this.logger.LogInformation($"UPN {upn} Attribute {kvp.Key} changing from {currentValueString} to {newValueString}");
+                                this.logger.LogInformation("UPN {Upn} Attribute {Key} changing from {CurrentValueString} to {NewValueString}", upn, kvp.Key, currentValueString, newValueString);
                                 hasChanges = true;
                             }
                         }
                     }
                     else
                     {
-                        this.logger.LogWarning($"UPN {upn} Could not retrieve current attributes from Entra.");
+                        this.logger.LogWarning("UPN {Upn} Could not retrieve current attributes from Entra.", upn);
                         hasChanges = true;
                     }
 
@@ -173,7 +173,7 @@ public class ResyncService(
                 var user = await this.keycloakClient.GetUser(credential.UserId);
                 if (user == null)
                 {
-                    this.logger.LogWarning($"Keycloak User ID {credential.UserId} not found.");
+                    this.logger.LogWarning("Keycloak User ID {UserId} not found.", credential.UserId);
                     continue;
                 }
 
@@ -187,7 +187,7 @@ public class ResyncService(
                     {
                         user.Attributes.Remove(key);
                         requiresKeycloakUpdate = true;
-                        this.logger.LogInformation($"Keycloak User ID {credential.UserId}: Removing obsolete key '{key}'");
+                        this.logger.LogInformation("Keycloak User ID {UserId}: Removing obsolete key '{Key}'", credential.UserId, key);
                     }
                 }
 
@@ -208,12 +208,12 @@ public class ResyncService(
                         var success = await this.keycloakClient.UpdateUser(credential.UserId, user);
                         if (!success)
                         {
-                            this.logger.LogError($"Failed to update Keycloak User ID {credential.UserId}");
+                            this.logger.LogError("Failed to update Keycloak User ID {UserId}", credential.UserId);
                         }
                     }
                     else
                     {
-                        this.logger.LogInformation($"[DRY RUN] Would update Keycloak User ID {credential.UserId}");
+                        this.logger.LogInformation("[DRY RUN] Would update Keycloak User ID {UserId}", credential.UserId);
                     }
                 }
 
@@ -252,7 +252,7 @@ public class ResyncService(
         }
     }
 
-    private static bool SetKeycloakAttribute(Pidp.Infrastructure.HttpClients.Keycloak.UserRepresentation user, string key, IEnumerable<string> EnumerableNewValue)
+    private static bool SetKeycloakAttribute(Pidp.Infrastructure.HttpClients.Keycloak.UserRepresentation user, string key, IEnumerable<string?> EnumerableNewValue)
     {
         var newValueList = EnumerableNewValue.ToList();
         if (user.Attributes.TryGetValue(key, out var currentValue))
