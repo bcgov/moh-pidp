@@ -142,7 +142,7 @@ public class ResyncService(
             // Sync Keycloak
             foreach (var userId in party.Credentials.Select(c => c.UserId))
             {
-                await this.SyncKeycloakUserAsync(userId, party, keysToRemove, plrStanding, isMd, isMoa, isPharm, isRnp, dryRun, licenceStatusClientId, eformsClientId, mdRole, moaRole, pharmRole, rnpRole, saRole, immsRole, infantRole, npdpRole);
+                                await this.SyncKeycloakUserAsync(userId, party, keysToRemove, plrStanding, isMd, isMoa, isPharm, isRnp, dryRun, licenceStatusClientId, eformsClientId, mdRole, moaRole, pharmRole, rnpRole, saRole, immsRole, infantRole, npdpRole);
             }
         }
 
@@ -247,6 +247,46 @@ public class ResyncService(
             await this.SyncClientRoleAsync(userId, eformsClientId, "phsa_eforms_imms", immsRole, hasImms);
             await this.SyncClientRoleAsync(userId, eformsClientId, "phsa_eforms_infant_rsv", infantRole, hasInfant);
             await this.SyncClientRoleAsync(userId, eformsClientId, "phsa_eforms_npdp", npdpRole, hasNpdp);
+                }
+            }
+        }
+
+        Console.WriteLine($"--- Resync Complete ({count} parties processed) ---");
+    }
+
+    private async Task SyncBCProviderUpnsAsync(List<string> bcProviderUpns, Dictionary<string, object> additionalData, bool dryRun)
+    {
+        foreach (var upn in bcProviderUpns)
+        {
+            if (string.IsNullOrWhiteSpace(upn)) continue;
+
+            var currentAttributes = await this.bcProviderClient.GetUserAttributes(upn, additionalData.Keys.ToArray());
+            var hasChanges = false;
+            
+            if (currentAttributes != null)
+            {
+                foreach (var kvp in additionalData)
+                {
+                    var newValueString = kvp.Value?.ToString()?.ToLowerInvariant() ?? "null";
+                    var currentValueString = currentAttributes.TryGetValue(kvp.Key, out var currVal) ? (currVal?.ToString()?.ToLowerInvariant() ?? "null") : "null";
+
+                    if (newValueString != currentValueString)
+                    {
+                        this.logger.LogInformation("UPN {Upn} Attribute {Key} changing from {CurrentValueString} to {NewValueString}", upn, kvp.Key, currentValueString, newValueString);
+                        hasChanges = true;
+                    }
+                }
+            }
+            else
+            {
+                this.logger.LogWarning("UPN {Upn} Could not retrieve current attributes from Entra.", upn);
+                hasChanges = true;
+            }
+
+            if (hasChanges && !dryRun)
+            {
+                await this.bcProviderClient.UpdateAttributes(upn, additionalData);
+            }
         }
     }
 

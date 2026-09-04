@@ -87,8 +87,8 @@
             <div class="row">
               <div class="col-12 col-md-4">
                 <mat-form-field appearance="outline" class="w-100">
-                  <mat-label>Email (Required)</mat-label>
-                  <input matInput formControlName="email" type="email" placeholder="example@pharmacy.com">
+                  <mat-label for="contactEmail">Email (Required)</mat-label>
+                  <input matInput id="contactEmail" formControlName="email" type="email" placeholder="example@pharmacy.com">
                   @if (contactForm.get('email')?.hasError('required')) {
                     <mat-error>Email is required</mat-error>
                   }
@@ -99,14 +99,14 @@
               </div>
               <div class="col-12 col-md-4">
                 <mat-form-field appearance="outline" class="w-100">
-                  <mat-label>Phone (Optional)</mat-label>
-                  <input matInput formControlName="phone" type="tel" mask="(000) 000-0000">
+                  <mat-label for="contactPhone">Phone (Optional)</mat-label>
+                  <input matInput id="contactPhone" formControlName="phone" type="tel" mask="(000) 000-0000">
                 </mat-form-field>
               </div>
               <div class="col-12 col-md-4">
                 <mat-form-field appearance="outline" class="w-100">
-                  <mat-label>Fax (Optional)</mat-label>
-                  <input matInput formControlName="fax" type="tel" mask="(000) 000-0000">
+                  <mat-label for="contactFax">Fax (Optional)</mat-label>
+                  <input matInput id="contactFax" formControlName="fax" type="tel" mask="(000) 000-0000">
                 </mat-form-field>
               </div>
             </div>
