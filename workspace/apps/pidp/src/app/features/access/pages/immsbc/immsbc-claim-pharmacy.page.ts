@@ -44,12 +44,12 @@ export class ImmsbcClaimPharmacyPage implements OnInit, OnDestroy {
   
   public readonly searchControl = this.fb.control('');
   
-  public pharmacies$ = new BehaviorSubject<Pharmacy[]>([]);
-  public errorMsg$ = new BehaviorSubject<string>('');
-  public isLoading$ = new BehaviorSubject<boolean>(false);
+  public readonly pharmacies$ = new BehaviorSubject<Pharmacy[]>([]);
+  public readonly errorMsg$ = new BehaviorSubject<string>('');
+  public readonly isLoading$ = new BehaviorSubject<boolean>(false);
   public breadcrumbsData: Array<{ title: string; path: string }> = [];
   
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
 
   public ngOnInit(): void {
     this.breadcrumbsData = [

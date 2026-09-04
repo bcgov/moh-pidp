@@ -9,8 +9,8 @@
     <div class="page-container">
       <div class="search-section">
         <mat-form-field appearance="outline" class="search-field">
-          <mat-label for="pharmacySearchInput">Search (min 3 characters)</mat-label>
-          <input matInput id="pharmacySearchInput" [formControl]="searchControl" placeholder="Enter Pharmacy Name or PharmaCare Code" />
+          <mat-label>Search (min 3 characters)</mat-label>
+          <input matInput id="pharmacySearchInput" aria-label="Search (min 3 characters)" [formControl]="searchControl" placeholder="Enter Pharmacy Name or PharmaCare Code" />
           <mat-icon matPrefix>search</mat-icon>
         </mat-form-field>
       </div>

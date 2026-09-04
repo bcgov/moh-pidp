@@ -80,7 +80,7 @@ export class InviteByEmailDialogComponent {
       return { invalidEmails: true };
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
     const allValid = emails.every((email: string) => emailRegex.test(email));
     
     return allValid ? null : { invalidEmails: true };

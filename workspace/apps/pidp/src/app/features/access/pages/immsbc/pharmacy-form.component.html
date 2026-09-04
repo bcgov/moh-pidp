@@ -12,7 +12,7 @@
 
   <div class="form-field">
     <label for="address">Address</label>
-    <input id="address" type="text" formControlName="address" autocomplete="address" />
+    <input id="address" type="text" formControlName="address" autocomplete="street-address" />
     @if (form.get('address')?.invalid && form.get('address')?.touched) {
     <div class="form-error">Address is required.</div>
     }
