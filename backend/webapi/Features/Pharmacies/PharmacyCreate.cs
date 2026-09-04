@@ -19,6 +19,7 @@ public class PharmacyCreate
         public string Phone { get; set; } = string.Empty;
         public string Fax { get; set; } = string.Empty;
         public string PharmaCareCode { get; set; } = string.Empty;
+        [System.Text.Json.Serialization.JsonRequired]
         public int ManagerId { get; set; }
 
     }

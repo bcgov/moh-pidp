@@ -15,9 +15,15 @@ public class PharmacyInvite
 {
     public class Command : ICommand<IDomainResult>
     {
+        [System.Text.Json.Serialization.JsonIgnore]
         public int PharmacyId { get; set; }
+        
+        [System.Text.Json.Serialization.JsonRequired]
         public PharmacyRole RoleToAssign { get; set; }
+        
         public List<string> Emails { get; set; } = new();
+        
+        [System.Text.Json.Serialization.JsonIgnore]
         public int RequestingPartyId { get; set; }
     }
 

@@ -39,7 +39,7 @@ public class PharmacyClaim
 
         public async ValueTask<IDomainResult> Handle(Command command, CancellationToken cancellationToken)
         {
-            var requestingParty = await this.context.Parties.SingleOrDefaultAsync(p => p.Id == command.RequestingPartyId);
+            var requestingParty = await this.context.Parties.SingleOrDefaultAsync(p => p.Id == command.RequestingPartyId, cancellationToken);
 
             if (requestingParty == null)
             {
@@ -52,7 +52,7 @@ public class PharmacyClaim
                 return DomainResult.Failed("Only Pharmacists in good standing can claim a pharmacy.");
             }
 
-            var pharmacy = await this.context.Pharmacies.Include(p => p.Staff).SingleOrDefaultAsync(p => p.Id == command.PharmacyId);
+            var pharmacy = await this.context.Pharmacies.Include(p => p.Staff).SingleOrDefaultAsync(p => p.Id == command.PharmacyId, cancellationToken);
 
             if (pharmacy == null)
             {
@@ -79,7 +79,7 @@ public class PharmacyClaim
             this.context.PharmacyPartyRoles.Add(leadRole);
             this.context.BusinessEvents.Add(PharmacyAdded.Create(command.RequestingPartyId, pharmacy.Name, this.clock.GetCurrentInstant()));
 
-            await this.context.SaveChangesAsync();
+            await this.context.SaveChangesAsync(cancellationToken);
 
             return DomainResult.Success();
         }

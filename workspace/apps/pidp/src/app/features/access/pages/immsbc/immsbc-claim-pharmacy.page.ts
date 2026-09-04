@@ -37,12 +37,12 @@ import { AccessRoutes } from '@app/features/access/access.routes';
   styleUrl: './immsbc-claim-pharmacy.page.scss',
 })
 export class ImmsbcClaimPharmacyPage implements OnInit, OnDestroy {
-  private fb = inject(FormBuilder);
-  private pharmacyResource = inject(PharmacyResource);
-  private toastService = inject(ToastService);
-  private router = inject(Router);
+  private readonly fb = inject(FormBuilder);
+  private readonly pharmacyResource = inject(PharmacyResource);
+  private readonly toastService = inject(ToastService);
+  private readonly router = inject(Router);
   
-  public searchControl = this.fb.control('');
+  public readonly searchControl = this.fb.control('');
   
   public pharmacies$ = new BehaviorSubject<Pharmacy[]>([]);
   public errorMsg$ = new BehaviorSubject<string>('');

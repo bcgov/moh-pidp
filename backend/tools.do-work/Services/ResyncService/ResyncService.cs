@@ -16,6 +16,7 @@ using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models.Lookups;
+using Pidp.Models;
 
 public interface IResyncService
 {
@@ -69,6 +70,7 @@ public class ResyncService(
         var parties = await this.context.Parties
             .Include(party => party.Credentials)
             .Include(party => party.AccessRequests)
+            .AsSplitQuery()
             .Where(party => party.Cpn != null)
             .ToListAsync();
 
@@ -114,6 +116,7 @@ public class ResyncService(
                 .Where(c => c.IdentityProvider == IdentityProviders.BCProvider)
                 .Select(c => c.IdpId)
                 .Where(upn => upn != null)
+                .Select(upn => upn!)
                 .ToList();
 
             if (bcProviderUpns.Count > 0)
@@ -133,111 +136,118 @@ public class ResyncService(
 
                 var additionalData = bcProviderAttributes.AsAdditionalData();
 
-                foreach (var upn in bcProviderUpns)
-                {
-                    if (string.IsNullOrWhiteSpace(upn)) continue;
-
-                    var currentAttributes = await this.bcProviderClient.GetUserAttributes(upn, additionalData.Keys.ToArray());
-                    var hasChanges = false;
-                    
-                    if (currentAttributes != null)
-                    {
-                        foreach (var kvp in additionalData)
-                        {
-                            var newValueString = kvp.Value?.ToString()?.ToLowerInvariant() ?? "null";
-                            var currentValueString = currentAttributes.TryGetValue(kvp.Key, out var currVal) ? (currVal?.ToString()?.ToLowerInvariant() ?? "null") : "null";
-
-                            if (newValueString != currentValueString)
-                            {
-                                this.logger.LogInformation("UPN {Upn} Attribute {Key} changing from {CurrentValueString} to {NewValueString}", upn, kvp.Key, currentValueString, newValueString);
-                                hasChanges = true;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        this.logger.LogWarning("UPN {Upn} Could not retrieve current attributes from Entra.", upn);
-                        hasChanges = true;
-                    }
-
-                    if (hasChanges && !dryRun)
-                    {
-                        await this.bcProviderClient.UpdateAttributes(upn, additionalData);
-                    }
-                }
+                await this.SyncBCProviderUpnsAsync(bcProviderUpns, additionalData, dryRun);
             }
 
             // Sync Keycloak
-            foreach (var credential in party.Credentials)
+            foreach (var userId in party.Credentials.Select(c => c.UserId))
             {
-                var user = await this.keycloakClient.GetUser(credential.UserId);
-                if (user == null)
-                {
-                    this.logger.LogWarning("Keycloak User ID {UserId} not found.", credential.UserId);
-                    continue;
-                }
-
-                user.Attributes ??= new Dictionary<string, string[]>();
-                var requiresKeycloakUpdate = false;
-
-                // Cleanup obsolete keys
-                foreach (var key in keysToRemove)
-                {
-                    if (user.Attributes.ContainsKey(key))
-                    {
-                        user.Attributes.Remove(key);
-                        requiresKeycloakUpdate = true;
-                        this.logger.LogInformation("Keycloak User ID {UserId}: Removing obsolete key '{Key}'", credential.UserId, key);
-                    }
-                }
-
-                // Add/Update new keys
-                requiresKeycloakUpdate |= SetKeycloakAttribute(user, "practitionerrole", new[] { JsonSerializer.Serialize(plrStanding.ProviderRoleTypes.Select(t => t.ToString())) });
-                requiresKeycloakUpdate |= SetKeycloakAttribute(user, "collegeid", new[] { JsonSerializer.Serialize(plrStanding.CollegeIds) });
-                requiresKeycloakUpdate |= SetKeycloakAttribute(user, "msp_id", new[] { JsonSerializer.Serialize(plrStanding.MspIds) });
-                requiresKeycloakUpdate |= SetKeycloakAttribute(user, "common_provider_number", new[] { party.Cpn });
-                requiresKeycloakUpdate |= SetKeycloakAttribute(user, "is_md", new[] { isMd.ToString() });
-                requiresKeycloakUpdate |= SetKeycloakAttribute(user, "is_moa", new[] { isMoa.ToString() });
-                requiresKeycloakUpdate |= SetKeycloakAttribute(user, "is_pharm", new[] { isPharm.ToString() });
-                requiresKeycloakUpdate |= SetKeycloakAttribute(user, "is_rnp", new[] { isRnp.ToString() });
-
-                if (requiresKeycloakUpdate)
-                {
-                    if (!dryRun)
-                    {
-                        var success = await this.keycloakClient.UpdateUser(credential.UserId, user);
-                        if (!success)
-                        {
-                            this.logger.LogError("Failed to update Keycloak User ID {UserId}", credential.UserId);
-                        }
-                    }
-                    else
-                    {
-                        this.logger.LogInformation("[DRY RUN] Would update Keycloak User ID {UserId}", credential.UserId);
-                    }
-                }
-
-                if (!dryRun)
-                {
-                    await this.SyncClientRoleAsync(credential.UserId, licenceStatusClientId, "MD", mdRole, isMd);
-                    await this.SyncClientRoleAsync(credential.UserId, licenceStatusClientId, "MOA", moaRole, isMoa);
-                    await this.SyncClientRoleAsync(credential.UserId, licenceStatusClientId, "PHARM", pharmRole, isPharm);
-                    await this.SyncClientRoleAsync(credential.UserId, licenceStatusClientId, "RNP", rnpRole, isRnp);
-
-                    var hasSaEforms = party.AccessRequests.Any(ar => ar.AccessTypeCode == AccessTypeCode.SAEforms);
-                    var hasImms = party.AccessRequests.Any(ar => ar.AccessTypeCode == AccessTypeCode.ImmsBCEforms);
-                    var hasInfant = party.AccessRequests.Any(ar => ar.AccessTypeCode == AccessTypeCode.InfantRsvEforms);
-                    var hasNpdp = party.AccessRequests.Any(ar => ar.AccessTypeCode == AccessTypeCode.NpdpEforms);
-
-                    await this.SyncClientRoleAsync(credential.UserId, eformsClientId, "phsa_eforms_sat", saRole, hasSaEforms);
-                    await this.SyncClientRoleAsync(credential.UserId, eformsClientId, "phsa_eforms_imms", immsRole, hasImms);
-                    await this.SyncClientRoleAsync(credential.UserId, eformsClientId, "phsa_eforms_infant_rsv", infantRole, hasInfant);
-                    await this.SyncClientRoleAsync(credential.UserId, eformsClientId, "phsa_eforms_npdp", npdpRole, hasNpdp);
-                }
+                await this.SyncKeycloakUserAsync(userId, party, keysToRemove, plrStanding, isMd, isMoa, isPharm, isRnp, dryRun, licenceStatusClientId, eformsClientId, mdRole, moaRole, pharmRole, rnpRole, saRole, immsRole, infantRole, npdpRole);
             }
         }
 
         Console.WriteLine($"--- Resync Complete ({count} parties processed) ---");
+    }
+
+    private async Task SyncBCProviderUpnsAsync(List<string> bcProviderUpns, Dictionary<string, object> additionalData, bool dryRun)
+    {
+        foreach (var upn in bcProviderUpns)
+        {
+            if (string.IsNullOrWhiteSpace(upn)) continue;
+
+            var currentAttributes = await this.bcProviderClient.GetUserAttributes(upn, additionalData.Keys.ToArray());
+            var hasChanges = false;
+            
+            if (currentAttributes != null)
+            {
+                foreach (var kvp in additionalData)
+                {
+                    var newValueString = kvp.Value?.ToString()?.ToLowerInvariant() ?? "null";
+                    var currentValueString = currentAttributes.TryGetValue(kvp.Key, out var currVal) ? (currVal?.ToString()?.ToLowerInvariant() ?? "null") : "null";
+
+                    if (newValueString != currentValueString)
+                    {
+                        this.logger.LogInformation("UPN {Upn} Attribute {Key} changing from {CurrentValueString} to {NewValueString}", upn, kvp.Key, currentValueString, newValueString);
+                        hasChanges = true;
+                    }
+                }
+            }
+            else
+            {
+                this.logger.LogWarning("UPN {Upn} Could not retrieve current attributes from Entra.", upn);
+                hasChanges = true;
+            }
+
+            if (hasChanges && !dryRun)
+            {
+                await this.bcProviderClient.UpdateAttributes(upn, additionalData);
+            }
+        }
+    }
+
+    private async Task SyncKeycloakUserAsync(Guid userId, Party party, string[] keysToRemove, PlrStandingsDigest plrStanding, bool isMd, bool isMoa, bool isPharm, bool isRnp, bool dryRun, string licenceStatusClientId, string eformsClientId, Pidp.Infrastructure.HttpClients.Keycloak.Role? mdRole, Pidp.Infrastructure.HttpClients.Keycloak.Role? moaRole, Pidp.Infrastructure.HttpClients.Keycloak.Role? pharmRole, Pidp.Infrastructure.HttpClients.Keycloak.Role? rnpRole, Pidp.Infrastructure.HttpClients.Keycloak.Role? saRole, Pidp.Infrastructure.HttpClients.Keycloak.Role? immsRole, Pidp.Infrastructure.HttpClients.Keycloak.Role? infantRole, Pidp.Infrastructure.HttpClients.Keycloak.Role? npdpRole)
+    {
+        var user = await this.keycloakClient.GetUser(userId);
+        if (user == null)
+        {
+            this.logger.LogWarning("Keycloak User ID {UserId} not found.", userId);
+            return;
+        }
+
+        user.Attributes ??= new Dictionary<string, string[]>();
+        var requiresKeycloakUpdate = false;
+
+        // Cleanup obsolete keys
+        foreach (var key in keysToRemove.Where(k => user.Attributes.ContainsKey(k)))
+        {
+            user.Attributes.Remove(key);
+            requiresKeycloakUpdate = true;
+            this.logger.LogInformation("Keycloak User ID {UserId}: Removing obsolete key '{Key}'", userId, key);
+        }
+
+        // Add/Update new keys
+        requiresKeycloakUpdate |= SetKeycloakAttribute(user, "practitionerrole", new[] { JsonSerializer.Serialize(plrStanding.ProviderRoleTypes.Select(t => t.ToString())) });
+        requiresKeycloakUpdate |= SetKeycloakAttribute(user, "collegeid", new[] { JsonSerializer.Serialize(plrStanding.CollegeIds) });
+        requiresKeycloakUpdate |= SetKeycloakAttribute(user, "msp_id", new[] { JsonSerializer.Serialize(plrStanding.MspIds) });
+        requiresKeycloakUpdate |= SetKeycloakAttribute(user, "common_provider_number", new[] { party.Cpn });
+        requiresKeycloakUpdate |= SetKeycloakAttribute(user, "is_md", new[] { isMd.ToString() });
+        requiresKeycloakUpdate |= SetKeycloakAttribute(user, "is_moa", new[] { isMoa.ToString() });
+        requiresKeycloakUpdate |= SetKeycloakAttribute(user, "is_pharm", new[] { isPharm.ToString() });
+        requiresKeycloakUpdate |= SetKeycloakAttribute(user, "is_rnp", new[] { isRnp.ToString() });
+
+        if (requiresKeycloakUpdate)
+        {
+            if (!dryRun)
+            {
+                var success = await this.keycloakClient.UpdateUser(userId, user);
+                if (!success)
+                {
+                    this.logger.LogError("Failed to update Keycloak User ID {UserId}", userId);
+                }
+            }
+            else
+            {
+                this.logger.LogInformation("[DRY RUN] Would update Keycloak User ID {UserId}", userId);
+            }
+        }
+
+        if (!dryRun)
+        {
+            await this.SyncClientRoleAsync(userId, licenceStatusClientId, "MD", mdRole, isMd);
+            await this.SyncClientRoleAsync(userId, licenceStatusClientId, "MOA", moaRole, isMoa);
+            await this.SyncClientRoleAsync(userId, licenceStatusClientId, "PHARM", pharmRole, isPharm);
+            await this.SyncClientRoleAsync(userId, licenceStatusClientId, "RNP", rnpRole, isRnp);
+
+            var hasSaEforms = party.AccessRequests.Any(ar => ar.AccessTypeCode == AccessTypeCode.SAEforms);
+            var hasImms = party.AccessRequests.Any(ar => ar.AccessTypeCode == AccessTypeCode.ImmsBCEforms);
+            var hasInfant = party.AccessRequests.Any(ar => ar.AccessTypeCode == AccessTypeCode.InfantRsvEforms);
+            var hasNpdp = party.AccessRequests.Any(ar => ar.AccessTypeCode == AccessTypeCode.NpdpEforms);
+
+            await this.SyncClientRoleAsync(userId, eformsClientId, "phsa_eforms_sat", saRole, hasSaEforms);
+            await this.SyncClientRoleAsync(userId, eformsClientId, "phsa_eforms_imms", immsRole, hasImms);
+            await this.SyncClientRoleAsync(userId, eformsClientId, "phsa_eforms_infant_rsv", infantRole, hasInfant);
+            await this.SyncClientRoleAsync(userId, eformsClientId, "phsa_eforms_npdp", npdpRole, hasNpdp);
+        }
     }
 
     private async Task SyncClientRoleAsync(Guid userId, string clientId, string roleName, Pidp.Infrastructure.HttpClients.Keycloak.Role? role, bool shouldHaveRole)
@@ -252,7 +262,7 @@ public class ResyncService(
         }
     }
 
-    private static bool SetKeycloakAttribute(Pidp.Infrastructure.HttpClients.Keycloak.UserRepresentation user, string key, IEnumerable<string?> EnumerableNewValue)
+    private static bool SetKeycloakAttribute(Pidp.Infrastructure.HttpClients.Keycloak.UserRepresentation user, string key, IEnumerable<string> EnumerableNewValue)
     {
         var newValueList = EnumerableNewValue.ToList();
         if (user.Attributes.TryGetValue(key, out var currentValue))
@@ -306,7 +316,7 @@ public class ResyncService(
         // 3. Keycloak
         try
         {
-            var kcTest = await this.keycloakClient.GetClient("SAT-EFORMS");
+            await this.keycloakClient.GetClient("SAT-EFORMS");
             Console.WriteLine("Keycloak: PASS");
         }
         catch (Exception ex)

@@ -58,15 +58,15 @@ import { CommonModule } from '@angular/common';
   `]
 })
 export class InviteByEmailDialogComponent {
-  public data = inject<{
+  public readonly data = inject<{
     pharmacyName: string;
     role: string;
   }>(MAT_DIALOG_DATA);
   
-  private dialogRef = inject(MatDialogRef<InviteByEmailDialogComponent>);
-  private fb = inject(FormBuilder);
+  private readonly dialogRef = inject(MatDialogRef<InviteByEmailDialogComponent>);
+  private readonly fb = inject(FormBuilder);
 
-  public form = this.fb.group({
+  public readonly form = this.fb.group({
     emails: ['', [Validators.required, this.emailsValidator.bind(this)]]
   });
 

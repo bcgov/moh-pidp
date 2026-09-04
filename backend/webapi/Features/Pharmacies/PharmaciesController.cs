@@ -203,8 +203,15 @@ public class PharmaciesController(IMediator mediator, PidpDbContext context) : C
     [HttpGet("register-pharmacy")]
     [AllowAnonymous]
     [ProducesResponseType(StatusCodes.Status302Found)]
-    public IActionResult RegisterPharmacy([FromServices] PidpConfiguration config)
+    public IActionResult RegisterPharmacy()
     {
-        return this.Redirect(config.Pharmacy.RegistrationUrl);
+        var config = this.HttpContext.RequestServices.GetRequiredService<PidpConfiguration>();
+        if (Uri.TryCreate(config.Pharmacy.RegistrationUrl, UriKind.Absolute, out var uri) && 
+            (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
+        {
+            return this.Redirect(uri.ToString());
+        }
+
+        return this.BadRequest("Invalid registration URL configured.");
     }
 }

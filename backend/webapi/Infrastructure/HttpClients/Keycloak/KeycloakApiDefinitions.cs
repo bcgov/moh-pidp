@@ -9,20 +9,24 @@ public class MohKeycloakEnrolment
     private static readonly List<MohKeycloakEnrolment> All = [];
     public static readonly MohKeycloakEnrolment DriverFitness = new("DMFT-WEBAPP", AccessTypeCode.DriverFitness, "DMFT_ENROLLED");
     public static readonly MohKeycloakEnrolment HcimWebPcr = new("HCIMWEB", AccessTypeCode.HcimWebPcr, "READ_ONLY_ALL_SRC");
-    public static readonly MohKeycloakEnrolment ImmsBCEforms = new("SAT-EFORMS", AccessTypeCode.ImmsBCEforms, "phsa_eforms_imms");
-    public static readonly MohKeycloakEnrolment InfantRsvEforms = new("SAT-EFORMS", AccessTypeCode.InfantRsvEforms, "phsa_eforms_infant_rsv");
-    public static readonly MohKeycloakEnrolment NpdpEforms = new("SAT-EFORMS", AccessTypeCode.NpdpEforms, "phsa_eforms_npdp");
+    private const string SatEformsClientId = "SAT-EFORMS";
+    private const string LicenceStatusClientId = "LICENCE-STATUS";
+    private const string ImmsbcBcphaClientId = "IMMSBC-BCPHA";
+
+    public static readonly MohKeycloakEnrolment ImmsBCEforms = new(SatEformsClientId, AccessTypeCode.ImmsBCEforms, "phsa_eforms_imms");
+    public static readonly MohKeycloakEnrolment InfantRsvEforms = new(SatEformsClientId, AccessTypeCode.InfantRsvEforms, "phsa_eforms_infant_rsv");
+    public static readonly MohKeycloakEnrolment NpdpEforms = new(SatEformsClientId, AccessTypeCode.NpdpEforms, "phsa_eforms_npdp");
     public static readonly MohKeycloakEnrolment ProviderReportingPortal = new("PRP-SERVICE", AccessTypeCode.ProviderReportingPortal, "MSPQI", "PMP");
-    public static readonly MohKeycloakEnrolment SAEforms = new("SAT-EFORMS", AccessTypeCode.SAEforms, "phsa_eforms_sat");
+    public static readonly MohKeycloakEnrolment SAEforms = new(SatEformsClientId, AccessTypeCode.SAEforms, "phsa_eforms_sat");
 
-    public static readonly MohKeycloakEnrolment MoaLicenceStatus = new("LICENCE-STATUS", "MOA");
-    public static readonly MohKeycloakEnrolment PractitionerLicenceStatus = new("LICENCE-STATUS", "PRACTITIONER");
+    public static readonly MohKeycloakEnrolment MoaLicenceStatus = new(LicenceStatusClientId, "MOA");
+    public static readonly MohKeycloakEnrolment PractitionerLicenceStatus = new(LicenceStatusClientId, "PRACTITIONER");
 
-    public static readonly MohKeycloakEnrolment ImmsBcPhaAdmin = new("IMMSBC-BCPHA", "ADMIN");
-    public static readonly MohKeycloakEnrolment ImmsBcPhaClerk = new("IMMSBC-BCPHA", "CLERK");
-    public static readonly MohKeycloakEnrolment ImmsBcPhaClinician = new("IMMSBC-BCPHA", "CLINICIAN");
-    public static readonly MohKeycloakEnrolment ImmsBcPhaLead = new("IMMSBC-BCPHA", "LEAD");
-    public static readonly MohKeycloakEnrolment ImmsBcPhaEndUser = new("IMMSBC-BCPHA", "CLINIC-END-USER");
+    public static readonly MohKeycloakEnrolment ImmsBcPhaAdmin = new(ImmsbcBcphaClientId, "ADMIN");
+    public static readonly MohKeycloakEnrolment ImmsBcPhaClerk = new(ImmsbcBcphaClientId, "CLERK");
+    public static readonly MohKeycloakEnrolment ImmsBcPhaClinician = new(ImmsbcBcphaClientId, "CLINICIAN");
+    public static readonly MohKeycloakEnrolment ImmsBcPhaLead = new(ImmsbcBcphaClientId, "LEAD");
+    public static readonly MohKeycloakEnrolment ImmsBcPhaEndUser = new(ImmsbcBcphaClientId, "CLINIC-END-USER");
 
     public IEnumerable<string> AccessRoles { get; private set; }
     public AccessTypeCode? AssocatedAccessRequest { get; private set; }

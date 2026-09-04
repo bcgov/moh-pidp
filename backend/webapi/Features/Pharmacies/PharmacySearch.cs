@@ -51,7 +51,7 @@ public class PharmacySearch
                     Fax = pharmacy.Fax,
                     PharmaCareCode = pharmacy.PharmaCareCode
                 })
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
 
             if (matches.Count > 50)
             {
