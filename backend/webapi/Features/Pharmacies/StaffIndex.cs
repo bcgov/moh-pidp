@@ -30,12 +30,12 @@ public class Staff
             var partyIsAdmin = await context.PharmacyPartyRoles
                 .AnyAsync(role => role.PartyId == request.PartyId
                                && role.PharmacyId == request.PharmacyId
-                               && role.Role == PharmacyRole.Admin,
+                               && (role.Role == PharmacyRole.Admin || role.Role == PharmacyRole.Lead),
                           cancellationToken);
 
             if (!partyIsAdmin)
             {
-                return new List<Model>(); // Or throw
+                return new List<Model>();
             }
 
             return await context.PharmacyPartyRoles

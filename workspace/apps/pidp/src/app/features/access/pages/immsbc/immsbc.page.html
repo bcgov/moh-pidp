@@ -4,9 +4,9 @@
     <section class="intro">
       <div class="content-header">
         <h1>ImmsBC</h1>
-        <p>All pharmacies providing publicly funded influenza vaccines are required to use ImmsBC to manage all aspects
-          of the administration of flu and COVID-19 vaccines to British Columbians.
-          ImmsBC is used for scheduling, managing appointments, entering vaccine records and inventory. Patients are
+        <p>All community pharmacies providing publicly funded influenza vaccines are required to use ImmsBC to manage
+          all aspects of the administration of flu and COVID-19 vaccines to British Columbians. ImmsBC is used for
+          scheduling, managing appointments, entering vaccine records and inventory. Patients are
           able to see if your pharmacy provides influenza vaccines, COVID-19 vaccines or both vaccination types prior to
           booking.</p>
         <p>For pharmacies that currently have access to ImmsBC, you can manage your existing pharmacy information.</p>
@@ -96,9 +96,25 @@
             [matTooltip]="bcProviderStatusCode !== StatusCode.COMPLETED ? 'You must create a BCProvider Credential before adding or managing a pharmacy.' : ''">
             <button mat-flat-button type="button" color="primary" class="action-button-large" style="width: 100%;"
               routerLink="/access/immsbc/manage-pharmacy" [disabled]="bcProviderStatusCode !== StatusCode.COMPLETED">
-              Manage Pharmacy
+              Manage Pharmacy Staff
             </button>
           </div>
+          <div style="margin-top: 1rem;"
+            [matTooltip]="bcProviderStatusCode !== StatusCode.COMPLETED ? 'You must create a BCProvider Credential before registering a pharmacy.' : ''">
+            <button mat-flat-button type="button" color="primary" class="action-button-large" style="width: 100%;"
+              routerLink="/access/immsbc/register-pharmacy" [disabled]="bcProviderStatusCode !== StatusCode.COMPLETED">
+              Include your Pharmacy in ImmsBC
+            </button>
+          </div>
+          @if (isPharmacist) {
+          <div style="margin-top: 1rem;"
+            [matTooltip]="bcProviderStatusCode !== StatusCode.COMPLETED ? 'You must create a BCProvider Credential before claiming a pharmacy.' : ''">
+            <button mat-flat-button type="button" color="primary" class="action-button-large" style="width: 100%;"
+              routerLink="/access/immsbc/claim-pharmacy" [disabled]="bcProviderStatusCode !== StatusCode.COMPLETED">
+              Claim your Pharmacy in ImmsBC
+            </button>
+          </div>
+          }
         </div>
       </div>
       <div class="imms-button-container">
