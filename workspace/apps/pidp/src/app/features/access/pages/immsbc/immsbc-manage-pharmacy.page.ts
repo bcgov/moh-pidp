@@ -46,8 +46,7 @@ import { InviteByEmailDialogComponent } from './invite-by-email-dialog.component
     BreadcrumbComponent,
     PillComponent,
     NgxMaskDirective,
-    MatExpansionModule,
-    InviteByEmailDialogComponent,
+    MatExpansionModule
   ],
   templateUrl: './immsbc-manage-pharmacy.page.html',
   styleUrl: './immsbc-manage-pharmacy.page.scss',
@@ -63,7 +62,7 @@ export class ImmsbcManagePharmacyPage implements OnInit {
   public pharmacyProfile$!: Observable<PharmacyProfile>;
   public selectedPharmacy: PharmacyProfile['associations'][0] | null = null;
   public pharmacyDetails: Pharmacy | null = null;
-  
+
   public contactForm!: FormGroup;
   public hasEmail = false;
   public contactPanelExpanded = false;
@@ -94,7 +93,7 @@ export class ImmsbcManagePharmacyPage implements OnInit {
 
   public selectPharmacy(pharmacy: PharmacyProfile['associations'][0]): void {
     this.selectedPharmacy = pharmacy;
-    
+
     // Fetch full pharmacy details for contact info form
     this.resource.getPharmacyDetails(pharmacy.pharmacyId).subscribe({
       next: (response: any) => {

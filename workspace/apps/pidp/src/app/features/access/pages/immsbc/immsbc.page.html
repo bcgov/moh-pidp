@@ -101,10 +101,11 @@
           </div>
           <div style="margin-top: 1rem;"
             [matTooltip]="bcProviderStatusCode !== StatusCode.COMPLETED ? 'You must create a BCProvider Credential before registering a pharmacy.' : ''">
-            <button mat-flat-button type="button" color="primary" class="action-button-large" style="width: 100%;"
-              routerLink="/access/immsbc/register-pharmacy" [disabled]="bcProviderStatusCode !== StatusCode.COMPLETED">
+            <a mat-flat-button color="primary" class="action-button-large" style="width: 100%;"
+              href="/api/pharmacies/register-pharmacy" rel="noreferrer" target="_blank"
+              [disabled]="bcProviderStatusCode !== StatusCode.COMPLETED">
               Include your Pharmacy in ImmsBC
-            </button>
+            </a>
           </div>
           @if (isPharmacist) {
           <div style="margin-top: 1rem;"

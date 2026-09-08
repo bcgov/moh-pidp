@@ -62,12 +62,14 @@ public class StaffCreate
                 throw new InvalidOperationException("User already associated with this pharmacy.");
             }
 
+            var yesterday = now.AddDays(-1);
             var newRole = new PharmacyPartyRole
             {
                 PartyId = request.PartyId,
                 PharmacyId = enrolment.PharmacyId,
                 Role = enrolment.Role,
-                EffectiveStartDate = now,
+                EffectiveStartDate = yesterday,
+                EffectiveEndDate = yesterday,
                 PrivacyTrainingAckDate = now
             };
 

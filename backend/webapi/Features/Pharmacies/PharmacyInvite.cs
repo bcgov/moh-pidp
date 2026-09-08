@@ -1,15 +1,14 @@
 namespace Pidp.Features.Pharmacies;
 
+using DomainResults.Common;
 using FluentValidation;
 using Flurl;
-using DomainResults.Common;
-using Microsoft.EntityFrameworkCore;
-
-using Pidp.Data;
-using Pidp.Models.Lookups;
-using Pidp.Infrastructure.Services;
-using Pidp.Infrastructure.HttpClients.Mail;
 using Mediator;
+using Microsoft.EntityFrameworkCore;
+using Pidp.Data;
+using Pidp.Infrastructure.HttpClients.Mail;
+using Pidp.Infrastructure.Services;
+using Pidp.Models.Lookups;
 
 public class PharmacyInvite
 {
@@ -17,12 +16,12 @@ public class PharmacyInvite
     {
         [System.Text.Json.Serialization.JsonIgnore]
         public int PharmacyId { get; set; }
-        
+
         [System.Text.Json.Serialization.JsonRequired]
         public PharmacyRole RoleToAssign { get; set; }
-        
+
         public List<string> Emails { get; set; } = new();
-        
+
         [System.Text.Json.Serialization.JsonIgnore]
         public int RequestingPartyId { get; set; }
     }
@@ -31,11 +30,9 @@ public class PharmacyInvite
     {
         public CommandValidator()
         {
-            this.RuleFor(x => x.PharmacyId).GreaterThan(0);
             this.RuleFor(x => x.RoleToAssign).IsInEnum();
             this.RuleFor(x => x.Emails).NotEmpty();
             this.RuleForEach(x => x.Emails).EmailAddress();
-            this.RuleFor(x => x.RequestingPartyId).GreaterThan(0);
         }
     }
 
@@ -68,6 +65,11 @@ public class PharmacyInvite
                 return DomainResult.Unauthorized();
             }
 
+            var adminName = await context.Parties
+                .Where(p => p.Id == request.RequestingPartyId)
+                .Select(p => p.FirstName + " " + p.LastName)
+                .SingleOrDefaultAsync(cancellationToken) ?? "an administrator";
+
             var pharmacyParts = pharmacy.Split('-');
             var pharmacyName = pharmacyParts.Length >= 2 ? pharmacyParts[1].Trim() : pharmacy;
 
@@ -81,9 +83,16 @@ public class PharmacyInvite
                 };
 
                 var token = await mediator.Send(tokenCmd, cancellationToken);
-                
-                string url = config.ApplicationUrl.AppendPathSegments("access", "immsbc", "pharmacy-enrol", token);
-                var link = $"<a href=\"{url}\" target=\"_blank\" rel=\"noopener noreferrer\">this link</a>";
+
+                var baseUrl = config.ApplicationUrl;
+                var baseLink = $"<a href=\"{baseUrl}\" target=\"_blank\" rel=\"noopener noreferrer\">here</a>";
+
+                var bcProviderUrl = baseUrl.AppendPathSegments("account", "bc-provider-application");
+                var bcProviderLink = $"<a href=\"{bcProviderUrl}\" target=\"_blank\" rel=\"noopener noreferrer\">here</a>";
+
+                var enrolUrl = baseUrl.AppendPathSegments("access", "immsbc", "pharmacy-enrol", token);
+                var enrolLink = $"<a href=\"{enrolUrl}\" target=\"_blank\" rel=\"noopener noreferrer\">this link</a>";
+
                 var pidpSupportEmail = $"<a href=\"mailto:{EmailService.PidpEmail}\">{EmailService.PidpEmail}</a>";
 
                 var email = new Email(
@@ -91,15 +100,11 @@ public class PharmacyInvite
                     to: emailAddress,
                     subject: $"Invitation to join {pharmacyName} on ImmsBC",
                     body: $@"Hello,
-<br>You are receiving this email because an administrator invited you to join {pharmacyName} on ImmsBC.
+<br>You are receiving this email because {adminName} has added you as a staff member at {pharmacyName}.<br>
+<br>To accept this invitation and registered at {pharmacyName} please complete the following steps:
 <br>
-<br>To accept this invitation and register with ImmsBC, please use {link} to log into the OneHealthID Service with your BC Services Card.
-<br>
-<br>For additional support, contact the OneHealthID Service desk:
-<br>
-<br>&emsp; By email at {pidpSupportEmail}
-<br>
-<br>Thank you.");
+<br>1. Login to OneHealthID with your BC Services Card app {baseLink}.<br>2. If it is your first time logging in, complete the contact information, and license information (for pharmacists).<br>3. Complete the BC Provider account linking {bcProviderLink}. If you're prompted to change your password, your BC Provider account is already linked.<br>4. Confirm you’ve completed privacy and security training from CareConnect and Enrol by clicking on {enrolLink}.<br>5. After clicking on {enrolLink} you will see a success message.<br> 
+<br>For additional support with onboarding contact the OneHealthID Service desk by email at {pidpSupportEmail}. For all ImmsBC related questions please contact the VaxBC.<br>Thank you.");
 
                 await emailService.SendAsync(email);
             }
