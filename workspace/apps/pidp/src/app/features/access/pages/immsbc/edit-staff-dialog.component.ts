@@ -33,9 +33,8 @@ export interface EditStaffDialogData {
         <mat-form-field class="w-100">
           <mat-label>Role</mat-label>
           <mat-select formControlName="role">
-            <mat-option [value]="PharmacyRole.Clinician">Clinician</mat-option>
-            <mat-option [value]="PharmacyRole.Clerk">Clerk</mat-option>
-            <mat-option [value]="PharmacyRole.Admin">Administrator</mat-option>
+            <mat-option [value]="PharmacyRole.EndUser">End User</mat-option>
+            <mat-option [value]="PharmacyRole.Lead">Lead</mat-option>
           </mat-select>
         </mat-form-field>
 

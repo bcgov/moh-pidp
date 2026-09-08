@@ -15,6 +15,8 @@ import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrum
 import { AccessRoutes } from '@app/features/access/access.routes';
 import Keycloak from 'keycloak-js';
 import { catchError, throwError } from 'rxjs';
+import { StatusCode } from '@app/features/portal/enums/status-code.enum';
+import { PortalResource } from '@app/features/portal/portal-resource.service';
 import { PharmacyResource } from './pharmacy-resource.service';
 
 @Component({
@@ -39,6 +41,7 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
   private readonly keycloak = inject(Keycloak);
   private readonly dialog = inject(MatDialog);
   private readonly fb = inject(FormBuilder);
+  private readonly portalResource = inject(PortalResource);
 
   public form!: FormGroup;
   public token: string | null = null;
@@ -64,12 +67,18 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
       return;
     }
 
-    // User is authenticated, proceed with form setup
-    this.form = this.fb.group({
-      privacyTrainingAcknowledged: [false, Validators.requiredTrue]
-    });
+    this.portalResource.getProfileStatus(this.partyService.partyId).subscribe((profileStatus) => {
+      if (profileStatus?.status.bcProvider.statusCode !== StatusCode.COMPLETED) {
+        this.handleMissingBcProviderError('You must link or create a BC Provider account before you can enrol in a pharmacy.');
+      } else {
+        // User is authenticated, proceed with form setup
+        this.form = this.fb.group({
+          privacyTrainingAcknowledged: [false, Validators.requiredTrue]
+        });
 
-    this.message = 'Please acknowledge the privacy and security training to proceed.';
+        this.message = 'Please acknowledge the privacy and security training to proceed.';
+      }
+    });
   }
 
   public onSubmit(): void {

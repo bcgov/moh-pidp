@@ -35,12 +35,12 @@ public class GenerateEnrolmentToken
             var partyIsAdmin = await context.PharmacyPartyRoles
                 .AnyAsync(role => role.PartyId == request.RequestingPartyId
                                && role.PharmacyId == request.PharmacyId
-                               && role.Role == PharmacyRole.Admin,
+                               && (role.Role == PharmacyRole.Admin || role.Role == PharmacyRole.Lead),
                           cancellationToken);
 
             if (!partyIsAdmin)
             {
-                throw new InvalidOperationException("User is not an admin of this pharmacy.");
+                throw new InvalidOperationException("User is not an admin or lead of this pharmacy.");
             }
 
             var token = new PharmacyEnrolment
