@@ -3,6 +3,7 @@ namespace Pidp.Features.AccessRequests;
 using DomainResults.Common;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi;
 using NodaTime;
 
 using Pidp.Data;
@@ -28,6 +29,12 @@ public class HcimWebPcr
     public static bool IsEligible(PlrStandingsDigest partyPlrStanding) => partyPlrStanding.With(AllowedIdentifierTypes).HasGoodStanding;
 
     public static bool IsEligibleByEndorsement(PlrStandingsDigest endorsementPlrStanding) => endorsementPlrStanding.With(AllowedIdentifierTypes).HasGoodStanding;
+
+    private static readonly Dictionary<CollegeCode, (string Id, string Name)> CollegeOrganizations = new()
+    {
+        [CollegeCode.PhysiciansAndSurgeons] = ("0000####", CollegeCode.PhysiciansAndSurgeons.GetDisplayName()),
+        [CollegeCode.NursesAndMidwives] = ("0000####", CollegeCode.NursesAndMidwives.GetDisplayName())
+    };
 
     public static CollegeCode? OrganizationCollegeFor(PlrStandingsDigest digest) => EligibleColleges
         .Where(entry => digest.With(entry.IdentifierType).HasGoodStanding)
@@ -139,21 +146,17 @@ public class HcimWebPcr
         {
             var collegeCode = OrganizationCollegeFor(digest);
 
-            if (collegeCode == null)
+            if (collegeCode == null
+                || !CollegeOrganizations.TryGetValue(collegeCode.Value, out var organization))
             {
                 // Unreachable while the eligibility check above passes: both read the same ordered table.
                 this.logger.LogOrganizationNotResolved(partyId);
                 return false;
             }
 
-            var organization = await this.context.Set<College>()
-                .Where(college => college.Code == collegeCode)
-                .Select(college => college.Name)
-                .SingleAsync();
-
-            if (!await this.keycloakClient.UpdateUser(userId, user => user.SetOrganization(organization)))
+            if (!await this.keycloakClient.UpdateUser(userId, user => user.SetOrgDetails(organization.Id, organization.Name)))
             {
-                this.logger.LogOrganizationAssignmentFailed(partyId, organization);
+                this.logger.LogOrganizationAssignmentFailed(partyId, organization.Name);
                 return false;
             }
 

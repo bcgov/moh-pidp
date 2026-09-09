@@ -97,11 +97,7 @@ public class UserRepresentation
 
     public UserRepresentation SetOpId(string opId) => this.SetAttribute("opId", opId);
 
-    /// <summary>
-    /// The organization the User belongs to, e.g. "College of Physicians and Surgeons of BC". The key must
-    /// match the attribute declared in the Realm's User Profile; an undeclared key is silently unread.
-    /// </summary>
-    public UserRepresentation SetOrganization(string organization) => this.SetAttribute("organization", organization);
+    public UserRepresentation SetOrgDetails(string id, string name) => this.SetAttribute("org_details", JsonSerializer.Serialize(new { id, name }));
 
     public UserRepresentation SetPidpEmail(string pidpEmail) => this.SetAttribute("pidp_email", pidpEmail);
 
