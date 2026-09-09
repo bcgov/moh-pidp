@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -42,6 +42,7 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
   private readonly dialog = inject(MatDialog);
   private readonly fb = inject(FormBuilder);
   private readonly portalResource = inject(PortalResource);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   public form!: FormGroup;
   public token: string | null = null;
@@ -59,24 +60,42 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
       { title: 'Enrolment', path: '' },
     ];
     this.token = this.route.snapshot.paramMap.get('token');
+    console.log('[ImmsbcPharmacyEnrolment] ngOnInit started. Token:', this.token);
 
     if (!this.token) {
       this.handleError(
         'No enrolment token provided. The link may be invalid or expired.',
       );
+      console.warn('[ImmsbcPharmacyEnrolment] No token provided, exiting ngOnInit.');
       return;
     }
 
-    this.portalResource.getProfileStatus(this.partyService.partyId).subscribe((profileStatus) => {
-      if (profileStatus?.status.bcProvider.statusCode !== StatusCode.COMPLETED) {
-        this.handleMissingBcProviderError('You must link or create a BC Provider account before you can enrol in a pharmacy.');
-      } else {
-        // User is authenticated, proceed with form setup
-        this.form = this.fb.group({
-          privacyTrainingAcknowledged: [false, Validators.requiredTrue]
-        });
+    console.log('[ImmsbcPharmacyEnrolment] Fetching profile status for partyId:', this.partyService.partyId);
+    this.portalResource.getProfileStatus(this.partyService.partyId).subscribe({
+      next: (profileStatus) => {
+        console.log('[ImmsbcPharmacyEnrolment] Received profileStatus:', profileStatus);
+        console.log('[ImmsbcPharmacyEnrolment] bcProvider statusCode:', profileStatus?.status?.bcProvider?.statusCode);
+        
+        if (profileStatus?.status?.bcProvider?.statusCode !== StatusCode.COMPLETED) {
+          console.log('[ImmsbcPharmacyEnrolment] BC Provider not completed, handling missing bc provider error');
+          this.handleMissingBcProviderError('You must link or create a BC Provider account before you can enrol in a pharmacy.');
+        } else {
+          console.log('[ImmsbcPharmacyEnrolment] BC Provider is completed, proceeding with form setup');
+          // User is authenticated, proceed with form setup
+          this.form = this.fb.group({
+            privacyTrainingAcknowledged: [false, Validators.requiredTrue]
+          });
+          console.log('[ImmsbcPharmacyEnrolment] Form initialized:', this.form);
 
-        this.message = 'Please acknowledge the privacy and security training to proceed.';
+          this.message = 'Please acknowledge the privacy and security training to proceed.';
+          this.cdr.detectChanges();
+        }
+      },
+      error: (error) => {
+        console.error('[ImmsbcPharmacyEnrolment] Error fetching profile status:', error);
+      },
+      complete: () => {
+        console.log('[ImmsbcPharmacyEnrolment] getProfileStatus observable completed');
       }
     });
   }
