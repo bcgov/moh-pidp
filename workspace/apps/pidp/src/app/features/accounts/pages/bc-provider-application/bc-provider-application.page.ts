@@ -252,7 +252,7 @@ export class BcProviderApplicationPage
         this.loadingOverlayService.close();
         this.isSubmitting = false;
         this.showErrorCard = true;
-        return EMPTY;
+        return '';
       }),
     );
   }
@@ -264,7 +264,7 @@ export class BcProviderApplicationPage
     );
 
     if (matchedRoute) {
-      this.router.navigateByUrl(this.previousUrl);
+      this.router.navigateByUrl(AccessRoutes.routePath(matchedRoute));
     } else {
       this.navigationService.navigateToRoot();
     }
