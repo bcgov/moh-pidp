@@ -8,7 +8,7 @@ public class MohKeycloakEnrolment
 {
     private static readonly List<MohKeycloakEnrolment> All = [];
     public static readonly MohKeycloakEnrolment DriverFitness = new("DMFT-WEBAPP", AccessTypeCode.DriverFitness, "DMFT_ENROLLED");
-    public static readonly MohKeycloakEnrolment HcimWebPcr = new("HCIMWEB", AccessTypeCode.HcimWebPcr, "READ_ONLY_ALL_SRC");
+    public static readonly MohKeycloakEnrolment HcimWebPcr = new("HCIMWEB", AccessTypeCode.HcimWebPcr, "REGR_LTD");
     private const string SatEformsClientId = "SAT-EFORMS";
     private const string LicenceStatusClientId = "LICENCE-STATUS";
     private const string ImmsbcBcphaClientId = "IMMSBC-BCPHA";
@@ -96,6 +96,12 @@ public class UserRepresentation
     public UserRepresentation SetCpn(string cpn) => this.SetAttribute("common_provider_number", cpn);
 
     public UserRepresentation SetOpId(string opId) => this.SetAttribute("opId", opId);
+
+    /// <summary>
+    /// The organization the User belongs to, e.g. "College of Physicians and Surgeons of BC". The key must
+    /// match the attribute declared in the Realm's User Profile; an undeclared key is silently unread.
+    /// </summary>
+    public UserRepresentation SetOrganization(string organization) => this.SetAttribute("organization", organization);
 
     public UserRepresentation SetPidpEmail(string pidpEmail) => this.SetAttribute("pidp_email", pidpEmail);
 

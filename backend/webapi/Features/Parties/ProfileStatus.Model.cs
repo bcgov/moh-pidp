@@ -212,7 +212,8 @@ public partial class ProfileStatus
                     _ when profile.HasEnrolment(AccessTypeCode.HcimWebPcr)
                         && profile.HasBCProviderCredential => StatusCode.Complete,
                     _ when profile.HasBCServicesCardCredential
-                        && profile.PartyPlrStanding.HasGoodStanding => StatusCode.Incomplete,
+                        && (HcimWebPcr.IsEligible(profile.PartyPlrStanding)
+                            || HcimWebPcr.IsEligibleByEndorsement(profile.EndorsementPlrStanding)) => StatusCode.Incomplete,
                     _ => StatusCode.Locked
                 };
             }

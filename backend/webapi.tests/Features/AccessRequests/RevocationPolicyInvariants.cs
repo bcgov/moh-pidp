@@ -31,6 +31,7 @@ public class RevocationPolicyInvariantTests : InMemoryDbTest
 {
     public static TheoryData<AccessTypeCode> AllPolicies() =>
     [
+        AccessTypeCode.HcimWebPcr,
         AccessTypeCode.ImmsBCEforms,
         AccessTypeCode.InfantRsvEforms,
         AccessTypeCode.NpdpEforms,
@@ -158,6 +159,7 @@ public class RevocationPolicyInvariantTests : InMemoryDbTest
         IKeycloakAdministrationClient keycloak,
         IAccessRequestRevocationService revocationService) => accessTypeCode switch
         {
+            AccessTypeCode.HcimWebPcr => this.MockDependenciesFor<HcimWebPcrRevocationPolicy>(plr, keycloak, revocationService),
             AccessTypeCode.ImmsBCEforms => this.MockDependenciesFor<ImmsBCEformsRevocationPolicy>(plr, keycloak, revocationService),
             AccessTypeCode.InfantRsvEforms => this.MockDependenciesFor<InfantRsvEformsRevocationPolicy>(plr, keycloak, revocationService),
             AccessTypeCode.NpdpEforms => this.MockDependenciesFor<NpdpEformsRevocationPolicy>(plr, keycloak, revocationService),

@@ -63,6 +63,7 @@ try
                 .AddTransient<DoWork.Services.ResyncService.IResyncService, DoWork.Services.ResyncService.ResyncService>()
                 .AddTransient<IAccessRoleCleanupService, AccessRoleCleanupService>()
                 .AddTransient<IInfantRsvBulkGrantService, InfantRsvBulkGrantService>()
+                .AddScoped<IAccessRequestRevocationPolicy, HcimWebPcrRevocationPolicy>()
                 .AddScoped<IAccessRequestRevocationPolicy, ImmsBCEformsRevocationPolicy>()
                 .AddScoped<IAccessRequestRevocationPolicy, InfantRsvEformsRevocationPolicy>()
                 .AddScoped<IAccessRequestRevocationPolicy, NpdpEformsRevocationPolicy>()
