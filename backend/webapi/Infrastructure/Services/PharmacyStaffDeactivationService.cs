@@ -110,6 +110,8 @@ public class PharmacyStaffDeactivationService(
                 await this.keycloakClient.RemoveAccessRoles(partyDetails.PrimaryUserId, MohKeycloakEnrolment.ImmsBcPhaAdmin);
                 await this.keycloakClient.RemoveAccessRoles(partyDetails.PrimaryUserId, MohKeycloakEnrolment.ImmsBcPhaClinician);
                 await this.keycloakClient.RemoveAccessRoles(partyDetails.PrimaryUserId, MohKeycloakEnrolment.ImmsBcPhaClerk);
+                await this.keycloakClient.RemoveAccessRoles(partyDetails.PrimaryUserId, MohKeycloakEnrolment.ImmsBcPhaLead);
+                await this.keycloakClient.RemoveAccessRoles(partyDetails.PrimaryUserId, MohKeycloakEnrolment.ImmsBcPhaEndUser);
             }
             else
             {

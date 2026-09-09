@@ -28,15 +28,15 @@ public class StaffUpdate
     {
         public async ValueTask<IDomainResult> Handle(Command request, CancellationToken cancellationToken)
         {
-            var requestingPartyIsAdmin = await context.PharmacyPartyRoles
+            var requestingPartyIsLead = await context.PharmacyPartyRoles
                 .AnyAsync(role => role.PartyId == request.RequestingPartyId
                                && role.PharmacyId == request.PharmacyId
-                               && role.Role == PharmacyRole.Admin,
+                               && (role.Role == PharmacyRole.Lead),
                           cancellationToken);
 
-            if (!requestingPartyIsAdmin)
+            if (!requestingPartyIsLead)
             {
-                throw new InvalidOperationException("User is not an admin of this pharmacy.");
+                throw new InvalidOperationException("User is not a lead of this pharmacy.");
             }
 
             var staffRole = await context.PharmacyPartyRoles
@@ -50,9 +50,9 @@ public class StaffUpdate
                 throw new InvalidOperationException("Staff record not found.");
             }
 
-            if (staffRole.Role == PharmacyRole.Admin && request.Role != PharmacyRole.Admin)
+            if (request.RequestingPartyId == request.PartyId && request.Role != staffRole.Role)
             {
-                throw new InvalidOperationException("Admin role cannot be removed.");
+                throw new InvalidOperationException("You cannot change your own role.");
             }
 
             var pharmacyName = await context.Pharmacies
