@@ -264,7 +264,7 @@ export class BcProviderApplicationPage
     );
 
     if (matchedRoute) {
-      this.router.navigateByUrl(AccessRoutes.routePath(matchedRoute));
+      this.router.navigateByUrl(this.previousUrl);
     } else {
       this.navigationService.navigateToRoot();
     }
