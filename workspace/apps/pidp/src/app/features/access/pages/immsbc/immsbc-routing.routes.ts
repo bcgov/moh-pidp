@@ -8,6 +8,7 @@ import { ImmsbcClaimPharmacyPage } from './immsbc-claim-pharmacy.page';
 import { ImmsbcRegisterPharmacyPage } from './immsbc-register-pharmacy.page';
 
 import { immsbcResolver } from './immsbc.resolver';
+import { partyResolver } from '@app/core/party/party.resolver';
 
 export const routes: Routes = [
   {
@@ -28,6 +29,9 @@ export const routes: Routes = [
   {
     path: 'pharmacy-enrol/:token',
     component: ImmsbcPharmacyEnrolmentPage,
+    resolve: {
+      partyId: partyResolver,
+    }
   },
   {
     path: 'claim-pharmacy',
