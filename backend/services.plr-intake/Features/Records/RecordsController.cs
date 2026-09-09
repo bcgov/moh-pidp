@@ -1,3 +1,5 @@
+#pragma warning disable ASP0018
+
 namespace PlrIntake.Features.Records;
 
 using DomainResults.Common;

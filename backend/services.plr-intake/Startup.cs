@@ -1,5 +1,6 @@
 namespace PlrIntake;
 
+using FluentValidation;
 using FluentValidation.AspNetCore;
 using HealthChecks.ApplicationStatus.DependencyInjection;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -25,8 +26,9 @@ public class Startup
     {
         var config = this.InitializeConfiguration(services);
 
-        services.AddControllers()
-            .AddFluentValidation(options => options.RegisterValidatorsFromAssemblyContaining<Startup>());
+        services.AddControllers();
+        services.AddFluentValidationAutoValidation();
+        services.AddValidatorsFromAssemblyContaining<Startup>();
 
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         services.AddDbContext<PlrDbContext>(options => options
@@ -67,6 +69,16 @@ public class Startup
         {
             app.UseDeveloperExceptionPage();
         }
+
+        app.Use(async (context, next) =>
+        {
+            // enable buffering for requests to the PLRHL7 endpoint so that the request body can be read multiple times / seeked
+            if (context.Request.Path.StartsWithSegments("/api/PLRHL7"))
+            {
+                context.Request.EnableBuffering();
+            }
+            await next();
+        });
 
         app.UseSerilogRequestLogging();
         app.UseRouting();

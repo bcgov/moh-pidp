@@ -47,7 +47,7 @@ public class Profile
             return new Model
             {
                 Associations = associations,
-                IsPharmacyAdmin = associations.Any(a => a.Role == PharmacyRole.Admin)
+                IsPharmacyAdmin = associations.Any(a => a.Role == PharmacyRole.Admin || a.Role == PharmacyRole.Lead)
             };
         }
     }

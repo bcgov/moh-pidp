@@ -194,12 +194,12 @@ containerPorts:
 ## @param resources.requests The requested resources for the NGINX container
 ##
 resources:
-  limits:
-    cpu: 100m
-    memory: 256Mi
   requests:
     cpu: 50m
     memory: 128Mi
+  limits:
+    cpu: 150m
+    memory: 256Mi
 ## NGINX containers' liveness probe.
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
 ## @param livenessProbe.enabled Enable livenessProbe

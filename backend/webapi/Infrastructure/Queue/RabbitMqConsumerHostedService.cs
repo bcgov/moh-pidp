@@ -39,6 +39,10 @@ public class RabbitMqConsumerHostedService(
 
     private async Task SetupConsumerAsync<TMessage>(string exchangeName, string queueName, CancellationToken stoppingToken) where TMessage : class
     {
+        if (_channel == null)
+        {
+            return;
+        }
         await _channel.ExchangeDeclareAsync(exchange: exchangeName, type: ExchangeType.Fanout, cancellationToken: stoppingToken);
         await _channel.QueueDeclareAsync(queue: queueName, durable: true, exclusive: false, autoDelete: false, cancellationToken: stoppingToken);
         await _channel.QueueBindAsync(queue: queueName, exchange: exchangeName, routingKey: string.Empty, cancellationToken: stoppingToken);
@@ -58,17 +62,17 @@ public class RabbitMqConsumerHostedService(
                     if (typeof(TMessage) == typeof(PartyEmailUpdated))
                     {
                         var handler = scope.ServiceProvider.GetRequiredService<PartyEmailUpdatedBcProviderHandler>();
-                        await handler.HandleAsync(message as PartyEmailUpdated);
+                        await handler.HandleAsync((message as PartyEmailUpdated)!);
                     }
                     else if (typeof(TMessage) == typeof(UpdateBcProviderAttributesHandler.UpdateBcProviderAttributes))
                     {
                         var handler = scope.ServiceProvider.GetRequiredService<UpdateBcProviderAttributesHandler>();
-                        await handler.HandleAsync(message as UpdateBcProviderAttributesHandler.UpdateBcProviderAttributes);
+                        await handler.HandleAsync((message as UpdateBcProviderAttributesHandler.UpdateBcProviderAttributes)!);
                     }
                     else if (typeof(TMessage) == typeof(UpdateKeycloakAttributesHandler.UpdateKeycloakAttributes))
                     {
                         var handler = scope.ServiceProvider.GetRequiredService<UpdateKeycloakAttributesHandler>();
-                        await handler.HandleAsync(message as UpdateKeycloakAttributesHandler.UpdateKeycloakAttributes);
+                        await handler.HandleAsync((message as UpdateKeycloakAttributesHandler.UpdateKeycloakAttributes)!);
                     }
                 }
 

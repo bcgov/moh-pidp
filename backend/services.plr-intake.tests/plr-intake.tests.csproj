@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <IsPackable>false</IsPackable>
     <RootNamespace>PlrIntakeTests</RootNamespace>
+    <NoWarn>$(NoWarn);xUnit1042</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="coverlet.msbuild" Version="10.0.1">

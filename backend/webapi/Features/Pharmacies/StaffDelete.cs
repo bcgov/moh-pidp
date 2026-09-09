@@ -17,24 +17,24 @@ public class StaffDelete
         public int RequestingPartyId { get; set; }
     }
 
-    public class CommandHandler(PidpDbContext context, IClock clock, IBCProviderService bcProviderService) : IRequestHandler<Command>
+    public class CommandHandler(PidpDbContext context, IClock clock, IRoleSynchronizationService roleSynchronizationService) : IRequestHandler<Command>
     {
         public async ValueTask<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
             var requestingPartyIsAdmin = await context.PharmacyPartyRoles
                 .AnyAsync(role => role.PartyId == request.RequestingPartyId
                                && role.PharmacyId == request.PharmacyId
-                               && role.Role == PharmacyRole.Admin,
+                               && (role.Role == PharmacyRole.Admin || role.Role == PharmacyRole.Lead),
                           cancellationToken);
 
             if (!requestingPartyIsAdmin)
             {
-                throw new InvalidOperationException("User is not an admin of this pharmacy.");
+                throw new InvalidOperationException("User is not an admin or lead of this pharmacy.");
             }
 
             if (request.PartyId == request.RequestingPartyId)
             {
-                throw new InvalidOperationException("An admin cannot remove themselves from a pharmacy.");
+                throw new InvalidOperationException("A lead cannot remove themselves from a pharmacy.");
             }
 
             var staffRole = await context.PharmacyPartyRoles
@@ -51,10 +51,10 @@ public class StaffDelete
 
                 context.BusinessEvents.Add(PharmacyStaffChanged.Create(request.RequestingPartyId, pharmacyName, clock.GetCurrentInstant()));
 
-                staffRole.EffectiveEndDate = clock.GetCurrentInstant().ToDateTimeUtc();
+                context.PharmacyPartyRoles.Remove(staffRole);
                 await context.SaveChangesAsync(cancellationToken);
 
-                await bcProviderService.UpdatePharmStaffAttributes(request.PartyId, cancellationToken);
+                await roleSynchronizationService.UpdatePharmStaffAttributes(request.PartyId, cancellationToken);
             }
             return Unit.Value;
         }

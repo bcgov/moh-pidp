@@ -89,6 +89,7 @@ export class ImmsbcPage implements OnInit, OnDestroy {
   public selectedIndex: number;
   private readonly lastSelectedIndex: number;
   public hasCpn: boolean | undefined;
+  public isPharmacist = false;
   public Destination = Destination;
   public StatusCode = StatusCode;
   public AccessRoutes = AccessRoutes;
@@ -158,6 +159,7 @@ export class ImmsbcPage implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
         tap((profileStatus: ProfileStatus | null) => {
           this.hasCpn = profileStatus?.status.collegeCertification.hasCpn;
+          this.isPharmacist = profileStatus?.status.dashboardInfo.collegeCode === 2;
           this.immsbcStatusCode = profileStatus?.status.immsBC.statusCode;
           this.bcProviderStatusCode =
             profileStatus?.status.bcProvider.statusCode;

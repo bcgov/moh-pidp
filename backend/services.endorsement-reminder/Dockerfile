@@ -4,6 +4,8 @@ WORKDIR /source
 ENV DOTNET_CLI_HOME="/opt"
 ENV PATH="$PATH:/opt/.dotnet/tools"
 
+RUN apk add --no-cache krb5-libs
+
 COPY services.endorsement-reminder ./services.endorsement-reminder
 COPY ../webapi ./webapi
 
@@ -12,6 +14,8 @@ RUN dotnet publish services.endorsement-reminder/endorsement-reminder.csproj -c 
 #----------------------------------------------------------------#
 FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine
 WORKDIR /app
+
+RUN apk add --no-cache krb5-libs
 
 COPY --from=build-env /app .
 

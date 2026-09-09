@@ -27,9 +27,6 @@ export class AuthenticationGuardService extends AuthGuardService {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    if (this.isPharmacyEnrolRoute(route)) {
-      return true;
-    }
     return super.canActivate(route);
   }
 
@@ -40,34 +37,32 @@ export class AuthenticationGuardService extends AuthGuardService {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    if (this.isPharmacyEnrolRoute(childRoute)) {
-      return true;
-    }
     return super.canActivateChild(childRoute);
-  }
-
-  private isPharmacyEnrolRoute(route: ActivatedRouteSnapshot): boolean {
-    let currentRoute: ActivatedRouteSnapshot | null = route;
-    while (currentRoute) {
-      if (currentRoute.url.some((segment) => segment.path === 'pharmacy-enrol')) {
-        return true;
-      }
-      currentRoute = currentRoute.firstChild;
-    }
-    return false;
   }
 
   protected handleAccessCheck(
     routeRedirect: string | undefined,
   ): (authenticated: boolean) => boolean | UrlTree {
-    return (authenticated: boolean): boolean | UrlTree =>
-      authenticated
-        ? true
-        : this.router.createUrlTree([routeRedirect ?? '/'], {
-            queryParams:
-              this.router.currentNavigation()?.extractedUrl.queryParams,
-            queryParamsHandling: 'merge',
-          });
+    return (authenticated: boolean): boolean | UrlTree => {
+      if (authenticated) {
+        return true;
+      }
+
+      const currentNav = this.router.getCurrentNavigation();
+      const currentUrl = currentNav?.extractedUrl.toString() || this.router.url;
+      const queryParams: Record<string, string> = {
+        ...(currentNav?.extractedUrl.queryParams || {}),
+      };
+
+      if (currentUrl !== '/' && !currentUrl.startsWith('/?')) {
+        queryParams['return-url'] = currentUrl;
+      }
+
+      return this.router.createUrlTree([routeRedirect ?? '/'], {
+        queryParams,
+        queryParamsHandling: 'merge',
+      });
+    };
   }
 
   protected handleAccessError(): boolean {

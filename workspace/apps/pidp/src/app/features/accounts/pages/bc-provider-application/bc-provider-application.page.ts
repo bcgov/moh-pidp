@@ -80,12 +80,11 @@ import { BcProviderApplicationResource } from './bc-provider-application-resourc
     NgTemplateOutlet,
     ReactiveFormsModule,
     SuccessDialogComponent
-],
+  ],
 })
 export class BcProviderApplicationPage
   extends AbstractFormPage<BcProviderApplicationFormState>
-  implements OnInit
-{
+  implements OnInit {
   private readonly config = inject<AppConfig>(APP_CONFIG);
   private readonly authService = inject(AuthService);
   private readonly documentService = inject(DocumentService);
@@ -286,9 +285,8 @@ export class BcProviderApplicationPage
         this.isSubmitting = false;
         this.loadingOverlayService.close();
         return this.authService.logout(
-          `${
-            this.config.applicationUrl +
-            AuthRoutes.routePath(AuthRoutes.AUTO_LOGIN)
+          `${this.config.applicationUrl +
+          AuthRoutes.routePath(AuthRoutes.AUTO_LOGIN)
           }?idp_hint=${IdentityProvider.BC_PROVIDER}`,
         );
       }),

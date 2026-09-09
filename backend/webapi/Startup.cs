@@ -1,4 +1,4 @@
-﻿namespace Pidp;
+namespace Pidp;
 
 using System.Reflection;
 using System.Text.Json;
@@ -86,9 +86,9 @@ public class Startup(IConfiguration configuration)
             .AddScoped<IAccessRequestRevocationPolicy, SAEformsRevocationPolicy>()
             .AddScoped<IPidpAuthorizationService, PidpAuthorizationService>()
             .AddScoped<IPlrStatusUpdateService, PlrStatusUpdateService>()
-            .AddScoped<IBCProviderService, BCProviderService>()
-            .AddScoped<IPharmacyStaffDeactivationService, PharmacyStaffDeactivationService>()
-            .AddHostedService<PharmacyStaffDeactivationHostedService>()
+            .AddScoped<IRoleSynchronizationService, RoleSynchronizationService>()
+            // .AddScoped<IPharmacyStaffDeactivationService, PharmacyStaffDeactivationService>()
+            // .AddHostedService<PharmacyStaffDeactivationHostedService>()
             .AddSingleton<IClock>(SystemClock.Instance)
             .AddSingleton<BackgroundWorkerHealthCheck>();
 
@@ -117,8 +117,7 @@ public class Startup(IConfiguration configuration)
         services.AddHealthChecks()
             .AddApplicationStatus(tags: [HealthCheckTag.Liveness.Value])
             .AddCheck<BackgroundWorkerHealthCheck>("PlrStatusUpdateSchedulingService", tags: [HealthCheckTag.BackgroundServices.Value])
-            .AddDbContextCheck<PidpDbContext>(tags: [HealthCheckTag.Readiness.Value])
-            .AddRabbitMQ(sp => new RabbitMQ.Client.ConnectionFactory { Uri = new Uri(config.RabbitMQ.HostAddress) }.CreateConnectionAsync(), "rabbitmq", null, [HealthCheckTag.Readiness.Value], null);
+            .AddDbContextCheck<PidpDbContext>(tags: [HealthCheckTag.Readiness.Value]);
 
         services.AddSwaggerGen(options =>
         {

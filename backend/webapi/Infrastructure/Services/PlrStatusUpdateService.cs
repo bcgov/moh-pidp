@@ -1,4 +1,4 @@
-﻿namespace Pidp.Infrastructure.Services;
+namespace Pidp.Infrastructure.Services;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -44,6 +44,7 @@ public sealed class PlrStatusUpdateService(
         }
 
         var status = statusChanges.Single();
+        this.logger.LogProcessingStatusUpdateForCpn(status.Cpn);
 
         var party = await this.context.Parties
             .Include(party => party.Credentials)
@@ -71,10 +72,8 @@ public sealed class PlrStatusUpdateService(
             party.DomainEvents.Add(new EndorsementStandingUpdated(relation.PartyId));
         }
 
-        // Every status change is now queued, not just those that flip good standing, so this block
-        // gates itself on the flip it has always depended on.
-        if (party.Upns.Any()
-            && !status.IsGoodStandingUnchanged())
+        // Every update is now queued, we used to have '&& !status.IsGoodStandingUnchanged()'
+        if (party.Upns.Any())
         {
             var bcProviderAttributes = new BCProviderAttributes(this.clientId);
 
@@ -102,14 +101,17 @@ public sealed class PlrStatusUpdateService(
                 bcProviderAttributes.SetIsPharm(status.IsGoodStanding);
             }
 
+            var plrStanding = await this.plrClient.GetStandingsDigestAsync(status.Cpn);
+            bcProviderAttributes.SetPractitionerRole(plrStanding.ProviderRoleTypes);
+
             if (status.MspId != null)
             {
-                var plrStanding = await this.plrClient.GetStandingsDigestAsync(status.Cpn);
                 bcProviderAttributes.SetMspId(plrStanding.MspIds);
             }
 
             foreach (var upn in party.Upns)
             {
+                this.logger.LogApplyingAttributeUpdates(upn);
                 await this.bcProviderClient.UpdateAttributes(upn, bcProviderAttributes.AsAdditionalData());
             }
         }
@@ -150,4 +152,10 @@ public static partial class PlrStatusUpdateServiceLoggingExtensions
 
     [LoggerMessage(3, LogLevel.Error, "Unhandled exception while re-evaluating {accessTypeCode} eligibility for Party {partyId}. The rest of the status update was processed.")]
     public static partial void LogRevocationFailed(this ILogger<PlrStatusUpdateService> logger, AccessTypeCode accessTypeCode, int partyId, Exception e);
+
+    [LoggerMessage(4, LogLevel.Information, "Processing PLR status update for CPN {cpn}. Evaluating attributes for update.")]
+    public static partial void LogProcessingStatusUpdateForCpn(this ILogger<PlrStatusUpdateService> logger, string? cpn);
+
+    [LoggerMessage(5, LogLevel.Information, "Applying PLR-driven attribute updates to BC Provider account for UPN: {upn}")]
+    public static partial void LogApplyingAttributeUpdates(this ILogger<PlrStatusUpdateService> logger, string upn);
 }

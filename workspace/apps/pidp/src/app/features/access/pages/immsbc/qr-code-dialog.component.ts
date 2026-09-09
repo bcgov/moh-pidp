@@ -9,9 +9,9 @@ import { QRCodeComponent } from 'angularx-qrcode';
 @Component({
   selector: 'app-qr-code-dialog',
   template: `
-    <h2 mat-dialog-title>Enrolment Link for {{ data.role }}</h2>
+    <h2 mat-dialog-title>Enrolment Link</h2>
     <mat-dialog-content>
-      <p>Share this link and/or QR code with {{ data.pharmacyName }} {{ data.role }}(s).<br />This link and QR code are valid for 90 days</p>
+      <p>Share this link and/or QR code with {{ data.pharmacyName }}.<br />This link and QR code are valid for 90 days</p>
       <div class="qr-code-container">
         <qrcode [qrdata]="data.link" [width]="200" [errorCorrectionLevel]="'M'"></qrcode>
       </div>
@@ -32,7 +32,7 @@ export class QrCodeDialogComponent {
     link: string;
     pharmacyName: string;
     role: string;
-}>(MAT_DIALOG_DATA);
+  }>(MAT_DIALOG_DATA);
 
 
   public copyLink(link: string): void {

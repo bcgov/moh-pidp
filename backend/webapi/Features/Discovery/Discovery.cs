@@ -1,4 +1,4 @@
-﻿namespace Pidp.Features.Discovery;
+namespace Pidp.Features.Discovery;
 
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
@@ -52,12 +52,16 @@ public class Discovery
 
         public async Task<Model> HandleAsync(Query query)
         {
+#pragma warning disable CA1304, CA1862, CA1311
             var idpId = query.User.GetIdpId()?.ToLower();
+#pragma warning restore CA1304, CA1862, CA1311
 
             var data = await this.context.Credentials
                 .Where(credential => credential.UserId == query.User.GetUserId()
                     || (credential.IdentityProvider == query.User.GetIdentityProvider()
-                        && credential.IdpId.ToLower() == idpId))
+#pragma warning disable CA1304, CA1862, CA1311
+                        && credential.IdpId!.ToLower() == idpId))
+#pragma warning restore CA1304, CA1862, CA1311
                 .Select(credential => new
                 {
                     Credential = credential,

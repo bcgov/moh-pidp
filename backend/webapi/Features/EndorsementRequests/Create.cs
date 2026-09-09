@@ -1,4 +1,4 @@
-﻿namespace Pidp.Features.EndorsementRequests;
+namespace Pidp.Features.EndorsementRequests;
 
 using FluentValidation;
 using Flurl;
@@ -81,7 +81,9 @@ public class Create
             if (command.PreApproved)
             {
                 var possibleRecipients = await this.context.Parties
+#pragma warning disable CA1304, CA1862, CA1311
                     .Where(party => party.Email!.ToLower() == command.RecipientEmail.ToLower())
+#pragma warning restore CA1304, CA1862, CA1311
                     .Select(party => party.Id)
                     .ToListAsync();
 

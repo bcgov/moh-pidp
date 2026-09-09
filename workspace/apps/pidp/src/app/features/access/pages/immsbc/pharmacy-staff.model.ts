@@ -2,6 +2,8 @@ export enum PharmacyRole {
   Clinician = 1,
   Clerk = 2,
   Admin = 3,
+  EndUser = 4,
+  Lead = 5,
   Unknown = 99
 }
 
@@ -18,7 +20,6 @@ export interface Pharmacy {
   id: number;
   name: string;
   address: string;
-  managerName: string;
   email: string;
   phone: string;
   fax: string;

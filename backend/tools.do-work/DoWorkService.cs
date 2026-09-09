@@ -4,9 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using DoWork.Services.BulkEformRoles;
 using DoWork.Services.CredentialDeletionService;
-using DoWork.Services.DataDriftFixService;
-using DoWork.Services.KeycloakClientValidationService;
-using DoWork.Services.RemoveCollegeLicenseInfoService;
+using DoWork.Services.ResyncService;
 
 /// <summary>
 /// Modify this file with custom scripts / helper services.
@@ -19,34 +17,29 @@ public class DoWorkService(IServiceProvider services) : IDoWorkService
     public async Task DoWorkAsync()
     {
         Console.WriteLine("Select a service to run:");
-        Console.WriteLine("1. Data Drift Fix");
-        Console.WriteLine("2. Keycloak Client Validation");
-        Console.WriteLine("3. Remove College License Info");
-        Console.WriteLine("4. Credential Deletion");
-        Console.WriteLine("5. Access Role Cleanup - re-evaluate one card's holders and revoke those who no longer qualify");
-        Console.WriteLine("6. Infant RSV Bulk Grant - back-grant Infant RSV to eligible Imms/SA holders");
-        Console.Write("Enter your choice (1-6): ");
+        Console.WriteLine("1. Credential Deletion");
+        Console.WriteLine("2. Resync Service");
+        Console.WriteLine("3. Access Role Cleanup - re-evaluate one card's holders and revoke those who no longer qualify");
+        Console.WriteLine("4. Infant RSV Bulk Grant - back-grant Infant RSV to eligible Imms/SA holders");
+        Console.Write("Enter your choice (1-4): ");
 
         var choice = Console.ReadLine();
 
         switch (choice)
         {
             case "1":
-                await this.services.GetRequiredService<IDataDriftFixService>().FixDataDriftAsync();
-                break;
-            case "2":
-                await this.services.GetRequiredService<IKeycloakClientValidationService>().ValidateClientsAsync();
-                break;
-            case "3":
-                await this.services.GetRequiredService<IRemoveCollegeLicenseInfoService>().ExecuteAsync();
-                break;
-            case "4":
                 await this.services.GetRequiredService<ICredentialDeletionService>().DeleteCredentialsAsync();
                 break;
-            case "5":
+            case "2":
+                Console.Write("Run in Dry-Run mode? (y/n, default y): ");
+                var dryRunChoice = Console.ReadLine();
+                var dryRun = dryRunChoice?.Trim().ToLower() != "n";
+                await this.services.GetRequiredService<IResyncService>().SynchronizeAsync(dryRun);
+                break;
+            case "3":
                 await this.services.GetRequiredService<IAccessRoleCleanupService>().CleanupAsync();
                 break;
-            case "6":
+            case "4":
                 await this.services.GetRequiredService<IInfantRsvBulkGrantService>().GrantAsync();
                 break;
             default:

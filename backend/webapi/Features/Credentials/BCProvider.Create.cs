@@ -110,6 +110,7 @@ public class BCProviderCreate
                 OpId = party.OpId,
                 UaaDate = party.UaaAgreementDate.ToDateTimeOffset(),
                 IsMoa = !plrStanding.HasGoodStanding && endorsingPlrDigest.HasGoodStanding,
+                PractitionerRole = plrStanding.ProviderRoleTypes,
                 EndorserData = endorsingPlrDigest
                     .WithGoodStanding()
                     .With(BCProviderAttributes.EndorserDataEligibleIdentifierTypes)

@@ -1,5 +1,6 @@
 namespace Pidp.Infrastructure;
 
+#pragma warning disable CS8602
 using Mapster;
 using NodaTime;
 using static NodaTime.Extensions.DateTimeExtensions;

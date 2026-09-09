@@ -85,6 +85,7 @@ export class LoginPage implements OnInit, AfterViewInit {
 
   private endorsementToken: string | null = null;
   private emailVerificationToken: string | null = null;
+  private returnUrl: string | null = null;
 
   public get otherLoginOptionsIcon(): string {
     return this.showOtherLoginOptions ? 'indeterminate_check_box' : 'add_box';
@@ -112,6 +113,8 @@ export class LoginPage implements OnInit, AfterViewInit {
     this.emailVerificationToken = this.route.snapshot.queryParamMap.get(
       'email-verification-token',
     );
+
+    this.returnUrl = this.route.snapshot.queryParamMap.get('return-url');
 
     if (this.endorsementToken) {
       this.clientLogsService
@@ -196,22 +199,30 @@ export class LoginPage implements OnInit, AfterViewInit {
   private login(idpHint: IdentityProvider): Observable<void> {
     return this.linkAccountConfirmResource.cancelLink().pipe(
       switchMap(() => this.createClientLogIfNeeded(idpHint)),
-      switchMap(() =>
-        this.authService.login({
+      switchMap(() => {
+        const queryParams = new URLSearchParams();
+        if (this.endorsementToken) {
+          queryParams.set('endorsement-token', this.endorsementToken);
+        }
+        if (this.emailVerificationToken) {
+          queryParams.set('email-verification-token', this.emailVerificationToken);
+        }
+        if (this.returnUrl) {
+          queryParams.set('return-url', this.returnUrl);
+        }
+
+        const queryString = queryParams.toString() ? `?${queryParams.toString()}` : '';
+
+        return this.authService.login({
           idpHint: idpHint,
           redirectUri:
             this.config.applicationUrl +
             (this.route.snapshot.routeConfig?.path === 'admin'
               ? '/' + AdminRoutes.BASE_PATH
               : '') +
-            (this.endorsementToken
-              ? `?endorsement-token=${this.endorsementToken}`
-              : '') +
-            (this.emailVerificationToken
-              ? `?email-verification-token=${this.emailVerificationToken}`
-              : ''),
-        }),
-      ),
+            queryString,
+        });
+      }),
     );
   }
 }

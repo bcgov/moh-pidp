@@ -19,9 +19,6 @@ public class PharmacyIndex
         public string Phone { get; set; } = string.Empty;
         public string Fax { get; set; } = string.Empty;
         public string PharmaCareCode { get; set; } = string.Empty;
-        public bool IsCareConnectCompleted { get; set; }
-        public DateTime? VerifiedCareConnectCompletedDate { get; set; }
-        public string? VerifiedCareConnectCompleted { get; set; } = string.Empty;
     }
 
     public class Model
@@ -34,9 +31,6 @@ public class PharmacyIndex
         public string Phone { get; set; } = string.Empty;
         public string Fax { get; set; } = string.Empty;
         public string PharmaCareCode { get; set; } = string.Empty;
-        public bool IsCareConnectCompleted { get; set; }
-        public DateTime? VerifiedCareConnectCompletedDate { get; set; }
-        public string? VerifiedCareConnectCompleted { get; set; } = string.Empty;
     }
 
     public class QueryValidator : AbstractValidator<Query>
@@ -55,14 +49,10 @@ public class PharmacyIndex
                 Id = pharmacy.Id,
                 Name = pharmacy.Name,
                 Address = pharmacy.Address,
-                ManagerName = pharmacy.ManagerName,
                 Email = pharmacy.Email,
                 Phone = pharmacy.Phone,
                 Fax = pharmacy.Fax,
-                PharmaCareCode = pharmacy.PharmaCareCode,
-                IsCareConnectCompleted = pharmacy.IsCareConnectCompleted,
-                VerifiedCareConnectCompletedDate = pharmacy.VerifiedCareConnectCompletedDate,
-                VerifiedCareConnectCompleted = pharmacy.VerifiedCareConnectCompleted
+                PharmaCareCode = pharmacy.PharmaCareCode
             }).ToListAsync();
         }
     }

@@ -47,7 +47,7 @@ public class HttpResponseExtensionsTests
     public void SafeAddHeaders_KeyExists_HeaderIsUnchanged()
     {
         var response = new DefaultHttpContext().Response;
-        response.Headers.Add(HeaderKey, HeaderValue);
+        response.Headers.Append(HeaderKey, HeaderValue);
 
         var success = response.SafeAddHeader(HeaderKey, "A NEW VALUE");
 

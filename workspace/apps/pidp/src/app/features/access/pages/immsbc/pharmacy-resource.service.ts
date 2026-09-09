@@ -35,8 +35,23 @@ export class PharmacyResource {
     payload: Partial<Pharmacy>,
   ): Observable<void> {
     payload.id = pharmacyId;
-    console.log("Payloadid: " + payload.id);
     return this.http.put<void>(`${this.apiEndpoint}/${pharmacyId}`, payload);
+  }
+
+  public searchPharmacies(query: string): Observable<Pharmacy[]> {
+    return this.http.get<Pharmacy[]>(`${this.apiEndpoint}/search`, {
+      params: { query },
+    });
+  }
+
+  public searchManager(licenceNumber: string): Observable<{ partyId: number; fullName: string }> {
+    return this.http.get<{ partyId: number; fullName: string }>(`${this.apiEndpoint}/manager-search`, {
+      params: { licenceNumber },
+    });
+  }
+
+  public claimPharmacy(pharmacyId: number): Observable<void> {
+    return this.http.post<void>(`${this.apiEndpoint}/${pharmacyId}/claim`, {});
   }
 
   public getStaff(pharmacyId: number): Observable<IStaff[]> {
@@ -57,6 +72,17 @@ export class PharmacyResource {
     return this.http.get(`${this.apiEndpoint}/${pharmacyId}/enrolment-token`, {
       params: { role: role.toString() },
       responseType: 'text',
+    });
+  }
+
+  public inviteStaff(
+    pharmacyId: number,
+    role: PharmacyRole,
+    emails: string[]
+  ): Observable<void> {
+    return this.http.post<void>(`${this.apiEndpoint}/${pharmacyId}/invite`, {
+      roleToAssign: role,
+      emails: emails
     });
   }
 
