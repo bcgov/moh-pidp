@@ -96,7 +96,7 @@ export class ImmsbcManagePharmacyPage implements OnInit {
 
     // Fetch full pharmacy details for contact info form
     this.resource.getPharmacyDetails(pharmacy.pharmacyId).subscribe({
-      next: (response: any) => {
+      next: (response: Pharmacy | Pharmacy[]) => {
         // Handle array wrap if the backend is bizarrely returning an array
         const details = Array.isArray(response) ? response[0] : response;
         this.pharmacyDetails = details;
@@ -120,7 +120,7 @@ export class ImmsbcManagePharmacyPage implements OnInit {
 
     // Initialize staff stream
     this.staff$ = this.refresh$.pipe(
-      switchMap(() => this.resource.getStaff(this.selectedPharmacy!.pharmacyId)),
+      switchMap(() => this.resource.getStaff(pharmacy.pharmacyId)),
       tap((staff) => (this.dataSource.data = staff)),
     );
   }
@@ -162,10 +162,11 @@ export class ImmsbcManagePharmacyPage implements OnInit {
 
   // Staff Management methods
   public inviteByEmail(role: PharmacyRole): void {
-    if (!this.selectedPharmacy) return;
+    const pharmacy = this.selectedPharmacy;
+    if (!pharmacy) return;
     const dialogRef = this.dialog.open(InviteByEmailDialogComponent, {
       data: {
-        pharmacyName: this.selectedPharmacy.pharmacyName,
+        pharmacyName: pharmacy.pharmacyName,
         role: PharmacyRole[role],
       },
       width: '500px'
@@ -173,7 +174,7 @@ export class ImmsbcManagePharmacyPage implements OnInit {
 
     dialogRef.afterClosed().subscribe((emails: string[]) => {
       if (emails && emails.length > 0) {
-        this.resource.inviteStaff(this.selectedPharmacy!.pharmacyId, role, emails).subscribe({
+        this.resource.inviteStaff(pharmacy.pharmacyId, role, emails).subscribe({
           next: () => {
             this.snackBar.open(`Successfully sent ${emails.length} invitation(s).`, 'Close', { duration: 3000 });
           },
@@ -186,13 +187,14 @@ export class ImmsbcManagePharmacyPage implements OnInit {
   }
 
   public generateLink(role: PharmacyRole): void {
-    if (!this.selectedPharmacy) return;
-    this.resource.generateEnrolmentToken(this.selectedPharmacy.pharmacyId, role).subscribe((token: string) => {
+    const pharmacy = this.selectedPharmacy;
+    if (!pharmacy) return;
+    this.resource.generateEnrolmentToken(pharmacy.pharmacyId, role).subscribe((token: string) => {
       const enrolmentLink = `${window.location.origin}/access/immsbc/pharmacy-enrol/${token}`;
       this.dialog.open(QrCodeDialogComponent, {
         data: {
           link: enrolmentLink,
-          pharmacyName: this.selectedPharmacy!.pharmacyName,
+          pharmacyName: pharmacy.pharmacyName,
           role: PharmacyRole[role],
         },
       });
@@ -211,15 +213,16 @@ export class ImmsbcManagePharmacyPage implements OnInit {
   }
 
   public onEdit(staff: IStaff): void {
-    if (!this.selectedPharmacy) return;
+    const pharmacy = this.selectedPharmacy;
+    if (!pharmacy) return;
     this.resource
-      .getStaffDetails(this.selectedPharmacy.pharmacyId, staff.partyId)
+      .getStaffDetails(pharmacy.pharmacyId, staff.partyId)
       .pipe(
         exhaustMap((staffDetails) =>
           this.dialog.open(EditStaffDialogComponent, {
             data: {
               staff: staffDetails,
-              pharmacyId: this.selectedPharmacy!.pharmacyId,
+              pharmacyId: pharmacy.pharmacyId,
             },
             width: '500px',
           })
@@ -232,7 +235,8 @@ export class ImmsbcManagePharmacyPage implements OnInit {
   }
 
   public onDelete(staff: IStaff): void {
-    if (!this.selectedPharmacy) return;
+    const pharmacy = this.selectedPharmacy;
+    if (!pharmacy) return;
     const confirmData: DialogOptions = {
       title: `Delete Staff Member?`,
       message: `Are you sure you want to delete this ${staff.fullName}?`,
@@ -245,7 +249,7 @@ export class ImmsbcManagePharmacyPage implements OnInit {
       .pipe(
         filter((confirmed: boolean) => confirmed),
         exhaustMap(() =>
-          this.resource.deleteStaff(this.selectedPharmacy!.pharmacyId, staff.partyId).pipe(
+          this.resource.deleteStaff(pharmacy.pharmacyId, staff.partyId).pipe(
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             catchError((error: any) => {
               const firstLine = (error.error as string).split('\n')[0];
@@ -270,7 +274,8 @@ export class ImmsbcManagePharmacyPage implements OnInit {
   }
 
   public onRenew(staff: IStaff): void {
-    if (!this.selectedPharmacy) return;
+    const pharmacy = this.selectedPharmacy;
+    if (!pharmacy) return;
     const today = new Date();
     const currentYear = today.getFullYear();
     const nextAugustFirst = new Date(currentYear, 7, 1);
@@ -298,7 +303,7 @@ export class ImmsbcManagePharmacyPage implements OnInit {
       .pipe(
         filter((confirmed: boolean) => confirmed),
         exhaustMap(() =>
-          this.resource.updateStaff(this.selectedPharmacy!.pharmacyId, staff.partyId, payload).pipe(
+          this.resource.updateStaff(pharmacy.pharmacyId, staff.partyId, payload).pipe(
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             catchError((error: any) => {
               const errorMsg = error.error ? error.error.toString().split('\n')[0] : 'An unexpected error occurred.';
