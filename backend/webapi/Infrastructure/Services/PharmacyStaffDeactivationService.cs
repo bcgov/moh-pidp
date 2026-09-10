@@ -102,42 +102,39 @@ public class PharmacyStaffDeactivationService(
 
             if (this.enableStaffDeactivation)
             {
-                try
-                {
 #pragma warning disable CA1305
-                    var dateStr = roleEnded.EffectiveEndDate!.Value.ToString("yyyyMMdd");
+                var dateStr = roleEnded.EffectiveEndDate!.Value.ToString("yyyyMMdd");
 #pragma warning restore CA1305
-                    var disabledJobTitle = $"disabled (onehealthid,immsbc,{roleEnded.PharmacyId},{dateStr})";
+                var disabledJobTitle = $"disabled (onehealthid,immsbc,{roleEnded.PharmacyId},{dateStr})";
 
-                    var userUpdate = new User
-                    {
-                        JobTitle = disabledJobTitle
-                    };
-
-                    var success = await this.bcProviderClient.UpdateUser(partyDetails.Upn, userUpdate);
-                    if (success)
-                    {
-                        this.logger.LogInformation("Successfully set job title to '{JobTitle}' for user '{Upn}'.", disabledJobTitle, partyDetails.Upn);
-                    }
-
-                    // Remove all Keycloak roles
-                    await this.keycloakClient.RemoveAccessRoles(partyDetails.PrimaryUserId, MohKeycloakEnrolment.ImmsBcPhaAdmin);
-                    await this.keycloakClient.RemoveAccessRoles(partyDetails.PrimaryUserId, MohKeycloakEnrolment.ImmsBcPhaClinician);
-                    await this.keycloakClient.RemoveAccessRoles(partyDetails.PrimaryUserId, MohKeycloakEnrolment.ImmsBcPhaClerk);
-                    await this.keycloakClient.RemoveAccessRoles(partyDetails.PrimaryUserId, MohKeycloakEnrolment.ImmsBcPhaLead);
-                    await this.keycloakClient.RemoveAccessRoles(partyDetails.PrimaryUserId, MohKeycloakEnrolment.ImmsBcPhaEndUser);
-
-
-                    if (this.logger.IsEnabled(LogLevel.Information))
-                    {
-                        this.logger.LogInformation("Updated ImmsBC Roles for keycloak user '{Upn}'.", partyDetails.PrimaryUserId);
-                    }
-                }
-                catch (Exception ex)
+                var userUpdate = new User
                 {
-                    this.logger.LogError(ex, "Error processing ImmsBC deactivation for PartyId {PartyId}. Error: {Message}", partyId, ex.Message);
+                    JobTitle = disabledJobTitle
+                };
+
+                var success = await this.bcProviderClient.UpdateUser(partyDetails.Upn, userUpdate);
+                if (success)
+                {
+                    this.logger.LogInformation("Successfully set job title to '{JobTitle}' for user '{Upn}'.", disabledJobTitle, partyDetails.Upn);
+                }
+
+                // Remove all Keycloak roles
+                await this.keycloakClient.RemoveAccessRoles(partyDetails.PrimaryUserId, MohKeycloakEnrolment.ImmsBcPhaAdmin);
+                await this.keycloakClient.RemoveAccessRoles(partyDetails.PrimaryUserId, MohKeycloakEnrolment.ImmsBcPhaClinician);
+                await this.keycloakClient.RemoveAccessRoles(partyDetails.PrimaryUserId, MohKeycloakEnrolment.ImmsBcPhaClerk);
+                await this.keycloakClient.RemoveAccessRoles(partyDetails.PrimaryUserId, MohKeycloakEnrolment.ImmsBcPhaLead);
+                await this.keycloakClient.RemoveAccessRoles(partyDetails.PrimaryUserId, MohKeycloakEnrolment.ImmsBcPhaEndUser);
+
+
+                if (this.logger.IsEnabled(LogLevel.Information))
+                {
+                    this.logger.LogInformation("Updated ImmsBC Roles for keycloak user '{Upn}'.", partyDetails.PrimaryUserId);
                 }
             }
+        }
+        catch (Exception ex)
+        {
+            this.logger.LogError(ex, "Error processing ImmsBC deactivation for PartyId {PartyId}. Error: {Message}", partyId, ex.Message);
         }
     }
 }
