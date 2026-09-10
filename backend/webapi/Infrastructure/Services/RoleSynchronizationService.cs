@@ -8,14 +8,17 @@ using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Models;
+using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models.Lookups;
 
-public class RoleSynchronizationService(PidpDbContext context, IBCProviderClient bcProviderClient, IClock clock, IKeycloakAdministrationClient keycloakClient) : IRoleSynchronizationService
+public class RoleSynchronizationService(PidpDbContext context, IBCProviderClient bcProviderClient, IClock clock, IKeycloakAdministrationClient keycloakClient, IPlrClient plrClient, PidpConfiguration config) : IRoleSynchronizationService
 {
     private readonly PidpDbContext context = context;
     private readonly IBCProviderClient bcProviderClient = bcProviderClient;
     private readonly IClock clock = clock;
     private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
+    private readonly IPlrClient plrClient = plrClient;
+    private readonly string clientId = config.BCProviderClient.ClientId;
 
     public async Task UpdatePharmStaffAttributes(int partyId, CancellationToken cancellationToken)
     {
@@ -25,7 +28,8 @@ public class RoleSynchronizationService(PidpDbContext context, IBCProviderClient
             {
                 PrimaryUserId = p.PrimaryUserId,
                 LicenceNumber = p.LicenceDeclaration != null ? p.LicenceDeclaration.LicenceNumber : "",
-                Upn = p.Credentials.Where(c => c.IdentityProvider == IdentityProviders.BCProvider).Select(c => c.IdpId).FirstOrDefault()
+                Upn = p.Credentials.Where(c => c.IdentityProvider == IdentityProviders.BCProvider).Select(c => c.IdpId).FirstOrDefault(),
+                Cpn = p.Cpn
             })
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -85,6 +89,15 @@ public class RoleSynchronizationService(PidpDbContext context, IBCProviderClient
                 var details = $"JobTitle: {jobTitle}, Department: {department}, OfficeLocation: {licenceNumber}";
                 this.context.BusinessEvents.Add(BCProviderAttributesUpdated.Create(partyId, details, this.clock.GetCurrentInstant()));
                 await this.context.SaveChangesAsync(cancellationToken);
+            }
+
+            if (!string.IsNullOrEmpty(partyDetails.Cpn))
+            {
+                var plrStanding = await this.plrClient.GetStandingsDigestAsync(partyDetails.Cpn);
+                var bcProviderAttributes = new BCProviderAttributes(this.clientId);
+                bcProviderAttributes.SetPractitionerRole(plrStanding.ProviderRoleTypes);
+                bcProviderAttributes.SetCollegeId(plrStanding.CollegeIds);
+                await this.bcProviderClient.UpdateAttributes(partyDetails.Upn, bcProviderAttributes.AsAdditionalData());
             }
         }
 
