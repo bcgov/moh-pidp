@@ -96,9 +96,10 @@ export class ImmsbcManagePharmacyPage implements OnInit {
 
     // Fetch full pharmacy details for contact info form
     this.resource.getPharmacyDetails(pharmacy.pharmacyId).subscribe({
-      next: (response: Pharmacy | Pharmacy[]) => {
-        // Handle array wrap if the backend is bizarrely returning an array
-        const details = Array.isArray(response) ? response[0] : response;
+      next: (response: Pharmacy | null) => {
+        // Handle array wrap if the backend is returning an array
+        const unknownResponse = response as unknown;
+        const details = Array.isArray(unknownResponse) ? (unknownResponse as Pharmacy[])[0] : response;
         this.pharmacyDetails = details;
         if (details) {
           this.contactForm.patchValue({
