@@ -97,6 +97,13 @@ public class RoleSynchronizationService(PidpDbContext context, IBCProviderClient
                 var bcProviderAttributes = new BCProviderAttributes(this.clientId);
                 bcProviderAttributes.SetPractitionerRole(plrStanding.ProviderRoleTypes);
                 bcProviderAttributes.SetCollegeId(plrStanding.CollegeIds);
+                
+                var pharmacistStanding = plrStanding.With(IdentifierType.Pharmacist);
+                if (pharmacistStanding.Cpns.Any())
+                {
+                    bcProviderAttributes.SetIsPharm(pharmacistStanding.HasGoodStanding);
+                }
+
                 await this.bcProviderClient.UpdateAttributes(partyDetails.Upn, bcProviderAttributes.AsAdditionalData());
             }
         }

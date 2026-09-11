@@ -141,6 +141,12 @@ export class ImmsbcPage implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
+    const pendingEnrolmentToken = localStorage.getItem('pending_pharmacy_enrolment_token');
+    if (pendingEnrolmentToken) {
+      this.router.navigate([`/access/immsbc/pharmacy-enrol/${pendingEnrolmentToken}`]);
+      return;
+    }
+
     const profileStatus$ = this.portalResource.getProfileStatus(
       this.partyService.partyId,
     );

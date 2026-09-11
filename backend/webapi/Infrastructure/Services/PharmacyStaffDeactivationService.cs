@@ -46,14 +46,14 @@ public class PharmacyStaffDeactivationService(
 
         foreach (var partyId in partiesWithExpiredRoles)
         {
-            await this.ProcessPartyDeactivationAsync(partyId, yesterdayStart, yesterdayEnd, cancellationToken);
+            await this.ProcessPartyDeactivationAsync(partyId, yesterdayEnd, cancellationToken);
             Thread.Sleep(5000); // Wait 5 seconds for BCProvider to update the user, be a nice neighbor
         }
 
         this.logger.LogInformation("Finished daily pharmacy staff deactivation task.");
     }
 
-    private async Task ProcessPartyDeactivationAsync(int partyId, DateTime yesterdayStart, DateTime yesterdayEnd, CancellationToken cancellationToken)
+    private async Task ProcessPartyDeactivationAsync(int partyId, DateTime yesterdayEnd, CancellationToken cancellationToken)
     {
         try
         {
