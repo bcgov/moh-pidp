@@ -82,5 +82,6 @@ public class PidpConfiguration
     public class PharmacyConfiguration
     {
         public string RegistrationUrl { get; set; } = string.Empty;
+        public bool EnableStaffDeactivation { get; set; } = false;
     }
 }

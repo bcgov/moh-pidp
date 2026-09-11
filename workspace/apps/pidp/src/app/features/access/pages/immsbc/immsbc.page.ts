@@ -40,7 +40,7 @@ import { BcProviderEditResource } from '../../../accounts/pages/bc-provider-edit
 import { BcProviderEditInitialStateModel } from '../../../accounts/pages/bc-provider-edit/bc-provider-edit.page';
 import { AccessRoutes } from '../../access.routes';
 import { bcProviderTutorialLink } from '../provincial-attachment-system/provincial-attachment-system.constants';
-import { immsbcUATWebsite } from './immsbc-constants';
+import { immsbcProdWebsite, immsbcTestWebsite } from './immsbc-constants';
 
 @Component({
   selector: 'app-immsbc',
@@ -90,6 +90,7 @@ export class ImmsbcPage implements OnInit, OnDestroy {
   private readonly lastSelectedIndex: number;
   public hasCpn: boolean | undefined;
   public isPharmacist = false;
+  public isLead = false;
   public Destination = Destination;
   public StatusCode = StatusCode;
   public AccessRoutes = AccessRoutes;
@@ -128,7 +129,9 @@ export class ImmsbcPage implements OnInit, OnDestroy {
   }
 
   public navigateToPath(): void {
-    window.open(immsbcUATWebsite, '_blank');
+    const isProd = this.config.environmentName === 'prod';
+    const url = isProd ? immsbcProdWebsite : immsbcTestWebsite;
+    window.open(url, '_blank');
   }
 
   public onCopy(): void {
@@ -138,6 +141,12 @@ export class ImmsbcPage implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
+    const pendingEnrolmentToken = localStorage.getItem('pending_pharmacy_enrolment_token');
+    if (pendingEnrolmentToken) {
+      this.router.navigate([`/access/immsbc/pharmacy-enrol/${pendingEnrolmentToken}`]);
+      return;
+    }
+
     const profileStatus$ = this.portalResource.getProfileStatus(
       this.partyService.partyId,
     );
@@ -160,6 +169,7 @@ export class ImmsbcPage implements OnInit, OnDestroy {
         tap((profileStatus: ProfileStatus | null) => {
           this.hasCpn = profileStatus?.status.collegeCertification.hasCpn;
           this.isPharmacist = profileStatus?.status.dashboardInfo.collegeCode === 2;
+          this.isLead = profileStatus?.status.immsBC.isLead || false;
           this.immsbcStatusCode = profileStatus?.status.immsBC.statusCode;
           this.bcProviderStatusCode =
             profileStatus?.status.bcProvider.statusCode;

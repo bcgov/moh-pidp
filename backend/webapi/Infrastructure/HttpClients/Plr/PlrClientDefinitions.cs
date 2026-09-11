@@ -22,6 +22,7 @@ public class ProviderRoleType
 {
     public static readonly ProviderRoleType MedicalDoctor = new("MD");
     public static readonly ProviderRoleType RegisteredNursePractitioner = new("RNP");
+    public static readonly ProviderRoleType Pharmacist = new("PHARM");
 
     public string Value { get; }
 

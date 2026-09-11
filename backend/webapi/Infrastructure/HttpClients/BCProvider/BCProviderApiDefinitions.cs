@@ -83,8 +83,8 @@ public class BCProviderAttributes(string clientId)
     public BCProviderAttributes SetOpId(string opId) => this.SetProperty(nameof(opId), opId);
     public BCProviderAttributes SetPidpEmail(string pidpEmail) => this.SetProperty(nameof(pidpEmail), pidpEmail);
     public BCProviderAttributes SetUaaDate(DateTimeOffset uaaDate) => this.SetProperty(nameof(uaaDate), uaaDate);
-    public BCProviderAttributes SetPractitionerRole(IEnumerable<string> practitionerRole) => this.SetProperty(nameof(practitionerRole), "[" + string.Join(",", practitionerRole.Select(s => $"\"{s}\"")) + "]");
-    public BCProviderAttributes SetCollegeId(IEnumerable<string> collegeId) => this.SetProperty(nameof(collegeId), "[" + string.Join(",", collegeId.Select(s => $"\"{s}\"")) + "]");
+    public BCProviderAttributes SetPractitionerRole(IEnumerable<string> practitionerRole) => this.SetProperty("practitionerRole", "[" + string.Join(",", practitionerRole.Select(s => $"\"{s}\"")) + "]");
+    public BCProviderAttributes SetCollegeId(IEnumerable<string> collegeId) => this.SetProperty("collegeid", "[" + string.Join(",", collegeId.Select(s => $"\"{s}\"")) + "]");
 
     private BCProviderAttributes SetProperty(string propertyName, object value)
     {
