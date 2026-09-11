@@ -103,6 +103,7 @@ public sealed class PlrStatusUpdateService(
 
             var plrStanding = await this.plrClient.GetStandingsDigestAsync(status.Cpn);
             bcProviderAttributes.SetPractitionerRole(plrStanding.ProviderRoleTypes);
+            bcProviderAttributes.SetCollegeId(plrStanding.CollegeIds);
 
             if (status.MspId != null)
             {

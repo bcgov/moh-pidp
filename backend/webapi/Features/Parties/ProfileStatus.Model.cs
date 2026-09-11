@@ -1,4 +1,4 @@
-﻿namespace Pidp.Features.Parties;
+namespace Pidp.Features.Parties;
 
 using Pidp.Features.AccessRequests;
 using Pidp.Infrastructure.HttpClients.Plr;
@@ -281,17 +281,18 @@ public partial class ProfileStatus
         {
             internal override string SectionName => "immsBC";
             public override string[] KeyWords => ["pharmacist"];
+            public bool IsLead { get; set; }
 
             protected override StatusCode Compute(ProfileData profile)
             {
+                this.IsLead = profile.HasActiveImmsBcPhaLeadRole;
+                var isEligible = profile.PartyPlrStanding.With(IdentifierType.Pharmacist).HasGoodStanding
+                    || profile.HasActiveImmsBcPhaRole;
+
                 return profile switch
                 {
-                    _ when profile.PartyPlrStanding
-                            .With(IdentifierType.Pharmacist)
-                            .HasGoodStanding
-                        && profile.HasBCProviderCredential => StatusCode.Complete,
-                    _ when profile.PartyPlrStanding
-                            .With(IdentifierType.Pharmacist).HasGoodStanding => StatusCode.Incomplete,
+                    _ when isEligible && profile.HasBCProviderCredential => StatusCode.Complete,
+                    _ when isEligible => StatusCode.Incomplete,
                     _ => StatusCode.Locked
                 };
             }

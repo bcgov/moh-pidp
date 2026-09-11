@@ -85,13 +85,13 @@ public class PharmacyInvite
                 var token = await mediator.Send(tokenCmd, cancellationToken);
 
                 var baseUrl = config.ApplicationUrl;
-                var baseLink = $"<a href=\"{baseUrl}\" target=\"_blank\" rel=\"noopener noreferrer\">here</a>";
+                var baseLink = $"<a href=\"{baseUrl}\" target=\"_blank\" rel=\"noopener\">here</a>";
 
                 var bcProviderUrl = baseUrl.AppendPathSegments("account", "bc-provider-application");
-                var bcProviderLink = $"<a href=\"{bcProviderUrl}\" target=\"_blank\" rel=\"noopener noreferrer\">here</a>";
+                var bcProviderLink = $"<a href=\"{bcProviderUrl}\" target=\"_blank\" rel=\"noopener\">Link Account</a>";
 
                 var enrolUrl = baseUrl.AppendPathSegments("access", "immsbc", "pharmacy-enrol", token);
-                var enrolLink = $"<a href=\"{enrolUrl}\" target=\"_blank\" rel=\"noopener noreferrer\">this link</a>";
+                var enrolLink = $"<a href=\"{enrolUrl}\" target=\"_blank\" rel=\"noopener\">this link</a>";
 
                 var pidpSupportEmail = $"<a href=\"mailto:{EmailService.PidpEmail}\">{EmailService.PidpEmail}</a>";
 
@@ -103,8 +103,17 @@ public class PharmacyInvite
 <br>You are receiving this email because {adminName} has added you as a staff member at {pharmacyName}.<br>
 <br>To accept this invitation and registered at {pharmacyName} please complete the following steps:
 <br>
-<br>1. Login to OneHealthID with your BC Services Card app {baseLink}.<br>2. If it is your first time logging in, complete the contact information, and license information (for pharmacists).<br>3. Complete the BC Provider account linking {bcProviderLink}. If you're prompted to change your password, your BC Provider account is already linked.<br>4. Confirm you’ve completed privacy and security training from CareConnect and Enrol by clicking on {enrolLink}.<br>5. After clicking on {enrolLink} you will see a success message.<br> 
-<br>For additional support with onboarding contact the OneHealthID Service desk by email at {pidpSupportEmail}. For all ImmsBC related questions please contact the VaxBC.<br>Thank you.");
+<br>For users without a BC Provider Account
+<br>1. Create a BC Provider Account {baseLink}
+<br>2. Select login with BC Services Card app and follow the prompts to create your account.<br>3. At the top right of the page select Account and Account Linking.<br>4. Select the BCProvider time, {bcProviderLink}
+<br>5. Select First Time setup towards the bottom of the page.<br>6. Enter a password for your BC Provider account.<br>7. One logged in select {enrolLink}.<br>8. Confirm you've completed the privacy and security training from CareConnect and Enrol.<br>9. You will see the success message.<br>10. Select OK to confirm you're successfully been added to the pharmacy.<br>
+<br>For users with an existing BC Provider Account
+<br>1. Login to your OneHealthID with your BC Services Card app {baseLink}.<br>
+<br>2. If it is your first time logging in, complete the contact information, and license information (for pharmacists).<br>
+<br>3. Complete the BC Provider {bcProviderLink}. If you're prompted to change your password, your BC Provider account is already linked.<br>
+<br>4. Confirm you’ve completed privacy and security training from CareConnect and Enrol by clicking on {enrolLink}.<br>
+<br>5. You will see the success message.<br>6. Select OK to confirm you're successfully been added to the pharmacy.<br>
+<br>For additional support with onboarding contact the OneHealthID Service desk by email at {pidpSupportEmail}.<br>For all ImmsBC related questions please contact the VaxBC.<br>Thank you.");
 
                 await emailService.SendAsync(email);
             }
