@@ -8,20 +8,24 @@ using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Models;
+using System.Diagnostics;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models.Lookups;
 
-public class RoleSynchronizationService(PidpDbContext context, IBCProviderClient bcProviderClient, IClock clock, IKeycloakAdministrationClient keycloakClient, IPlrClient plrClient, PidpConfiguration config) : IRoleSynchronizationService
+public class RoleSynchronizationService(PidpDbContext context, IBCProviderClient bcProviderClient, IClock clock, IKeycloakAdministrationClient keycloakClient, IPlrClient plrClient, PidpConfiguration config, ILogger<RoleSynchronizationService> logger) : IRoleSynchronizationService
 {
     private readonly PidpDbContext context = context;
     private readonly IBCProviderClient bcProviderClient = bcProviderClient;
     private readonly IClock clock = clock;
     private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
     private readonly IPlrClient plrClient = plrClient;
+    private readonly ILogger<RoleSynchronizationService> logger = logger;
     private readonly string clientId = config.BCProviderClient.ClientId;
 
     public async Task UpdatePharmStaffAttributes(int partyId, CancellationToken cancellationToken)
     {
+        var stopwatch = Stopwatch.StartNew();
+
         var partyDetails = await this.context.Parties
             .Where(p => p.Id == partyId)
             .Select(p => new
@@ -29,6 +33,7 @@ public class RoleSynchronizationService(PidpDbContext context, IBCProviderClient
                 PrimaryUserId = p.PrimaryUserId,
                 LicenceNumber = p.LicenceDeclaration != null ? p.LicenceDeclaration.LicenceNumber : "",
                 Upn = p.Credentials.Where(c => c.IdentityProvider == IdentityProviders.BCProvider).Select(c => c.IdpId).FirstOrDefault(),
+                BcProviderUserId = p.Credentials.Where(c => c.IdentityProvider == IdentityProviders.BCProvider).Select(c => (Guid?)c.UserId).FirstOrDefault(),
                 Cpn = p.Cpn
             })
             .FirstOrDefaultAsync(cancellationToken);
@@ -115,16 +120,28 @@ public class RoleSynchronizationService(PidpDbContext context, IBCProviderClient
             MohKeycloakEnrolment.ImmsBcPhaEndUser
         };
 
+        var userIds = new List<Guid> { partyDetails.PrimaryUserId };
+        if (partyDetails.BcProviderUserId.HasValue && partyDetails.BcProviderUserId.Value != Guid.Empty)
+        {
+            userIds.Add(partyDetails.BcProviderUserId.Value);
+        }
+
         foreach (var enrolment in allImmsBcRoles)
         {
-            if (enrolment == keycloakEnrolmentToAssign)
+            foreach (var userId in userIds)
             {
-                await this.keycloakClient.AssignAccessRoles(partyDetails.PrimaryUserId, enrolment);
-            }
-            else
-            {
-                await this.keycloakClient.RemoveAccessRoles(partyDetails.PrimaryUserId, enrolment);
+                if (enrolment == keycloakEnrolmentToAssign)
+                {
+                    await this.keycloakClient.AssignAccessRoles(userId, enrolment);
+                }
+                else
+                {
+                    await this.keycloakClient.RemoveAccessRoles(userId, enrolment);
+                }
             }
         }
+
+        stopwatch.Stop();
+        this.logger.LogInformation("UpdatePharmStaffAttributes for Party {PartyId} completed in {ElapsedMilliseconds}ms", partyId, stopwatch.ElapsedMilliseconds);
     }
 }
