@@ -12,6 +12,9 @@
     <Watch Remove="logs\**" />
     <Content Remove="logs\**" />
     <None Remove="logs\**" />
+    <Content Include="pharmacy-invite-email.template">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.ApplicationStatus" Version="9.0.0" />

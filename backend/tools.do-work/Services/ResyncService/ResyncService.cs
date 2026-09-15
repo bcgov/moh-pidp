@@ -20,7 +20,7 @@ using Pidp.Models;
 
 public interface IResyncService
 {
-    Task SynchronizeAsync(bool dryRun);
+    Task SynchronizeAsync(bool dryRun, int? partyId = null);
 }
 
 public class ResyncService(
@@ -38,7 +38,7 @@ public class ResyncService(
     private readonly PidpConfiguration config = config;
     private readonly ILogger<ResyncService> logger = logger;
 
-    public async Task SynchronizeAsync(bool dryRun)
+    public async Task SynchronizeAsync(bool dryRun, int? partyId = null)
     {
         Console.WriteLine("--- Starting Resync Service ---");
         
@@ -48,13 +48,7 @@ public class ResyncService(
         } 
         else
         {
-            Console.Write("ARE YOU SURE YOU WANT TO PROCEED WITH THE RESYNC SERVICE? (yes/no): ");
-            var response = Console.ReadLine()?.ToLowerInvariant();
-            if (response != "yes")
-            {
-                Console.WriteLine("Resync service aborted.");
-                return;
-            }
+            Console.WriteLine("LIVE RUN MODE: Updates will be applied to Entra and Keycloak.");
         }
 
         if (!await this.RunConnectivityChecksAsync())
@@ -66,15 +60,20 @@ public class ResyncService(
         var clientId = this.config.BCProviderClient.ClientId;
         var keysToRemove = new[] { "college_license_info", "college_licence_info", "college_certification_info" };
 
-        // Get all parties' CPN from PIDP Database
-        var parties = await this.context.Parties
+        var query = this.context.Parties
             .Include(party => party.Credentials)
             .Include(party => party.AccessRequests)
             .AsSplitQuery()
             .Where(party => party.Cpn != null 
                          || party.Credentials.Any(c => c.IdentityProvider == IdentityProviders.BCProvider)
-                         || this.context.EndorsementRelationships.Any(er => er.PartyId == party.Id))
-            .ToListAsync();
+                         || this.context.EndorsementRelationships.Any(er => er.PartyId == party.Id));
+
+        if (partyId.HasValue)
+        {
+            query = query.Where(party => party.Id == partyId.Value);
+        }
+
+        var parties = await query.ToListAsync();
 
         Console.WriteLine($"Found {parties.Count} parties to synchronize.");
 
@@ -113,6 +112,13 @@ public class ResyncService(
             var isRnp = plrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding;
             var isPharm = plrStanding.With(IdentifierType.Pharmacist).HasGoodStanding;
 
+            if (string.IsNullOrEmpty(party.OpId) && !dryRun)
+            {
+                await party.GenerateOpId(this.context);
+                await this.context.SaveChangesAsync();
+                this.logger.LogInformation("Generated OpId {OpId} for Party {PartyId}", party.OpId, party.Id);
+            }
+
             // Sync BCProvider
             var bcProviderUpns = party.Credentials
                 .Where(c => c.IdentityProvider == IdentityProviders.BCProvider)
@@ -132,9 +138,13 @@ public class ResyncService(
                 bcProviderAttributes.SetPractitionerRole(plrStanding.ProviderRoleTypes);
                 bcProviderAttributes.SetCollegeId(plrStanding.CollegeIds);
                 
-                // Endorser data
                 var endorserDataList = endorsementPlrStanding.WithGoodStanding().With(BCProviderAttributes.EndorserDataEligibleIdentifierTypes).Cpns;
                 bcProviderAttributes.SetEndorserData(endorserDataList);
+
+                if (!string.IsNullOrEmpty(party.OpId))
+                {
+                    bcProviderAttributes.SetOpId(party.OpId);
+                }
 
                 var additionalData = bcProviderAttributes.AsAdditionalData();
 
@@ -240,6 +250,11 @@ public class ResyncService(
         requiresKeycloakUpdate |= SetKeycloakAttribute(user, "is_moa", new[] { ctx.IsMoa.ToString() });
         requiresKeycloakUpdate |= SetKeycloakAttribute(user, "is_pharm", new[] { ctx.IsPharm.ToString() });
         requiresKeycloakUpdate |= SetKeycloakAttribute(user, "is_rnp", new[] { ctx.IsRnp.ToString() });
+
+        if (!string.IsNullOrEmpty(ctx.Party.OpId))
+        {
+            requiresKeycloakUpdate |= SetKeycloakAttribute(user, "opId", new[] { ctx.Party.OpId });
+        }
 
         if (requiresKeycloakUpdate)
         {
