@@ -71,10 +71,12 @@ public class ResyncService(
             .Include(party => party.Credentials)
             .Include(party => party.AccessRequests)
             .AsSplitQuery()
-            .Where(party => party.Cpn != null)
+            .Where(party => party.Cpn != null 
+                         || party.Credentials.Any(c => c.IdentityProvider == IdentityProviders.BCProvider)
+                         || this.context.EndorsementRelationships.Any(er => er.PartyId == party.Id))
             .ToListAsync();
 
-        Console.WriteLine($"Found {parties.Count} parties with a CPN to synchronize.");
+        Console.WriteLine($"Found {parties.Count} parties to synchronize.");
 
         var licenceStatusClientId = "LICENCE-STATUS";
         var mdRole = await this.keycloakClient.GetClientRole(licenceStatusClientId, "MD");
