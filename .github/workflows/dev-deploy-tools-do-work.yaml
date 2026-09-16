@@ -35,6 +35,6 @@ jobs:
           helm list --namespace f088b1-dev
 
           echo installing helm chart...
-          helm upgrade --wait --namespace f088b1-dev --values infra/tools-do-work/values.yaml tools-do-work infra/tools-do-work
+          helm upgrade --install --wait --namespace f088b1-dev --values infra/tools-do-work/values.yaml tools-do-work infra/tools-do-work
 
 
