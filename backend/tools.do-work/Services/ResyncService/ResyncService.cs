@@ -101,7 +101,7 @@ public class ResyncService(
     private readonly PidpConfiguration config = config;
     private readonly ILogger<ResyncService> logger = logger;
 
-    private record KeycloakRolesContext(
+    private sealed record KeycloakRolesContext(
         Pidp.Infrastructure.HttpClients.Keycloak.Role? MdRole,
         Pidp.Infrastructure.HttpClients.Keycloak.Role? MoaRole,
         Pidp.Infrastructure.HttpClients.Keycloak.Role? PharmRole,
@@ -112,7 +112,7 @@ public class ResyncService(
         Pidp.Infrastructure.HttpClients.Keycloak.Role? NpdpRole
     );
 
-    private record GlobalSyncContext(
+    private sealed record GlobalSyncContext(
         bool DryRun,
         Dictionary<string, IEnumerable<PlrRecord>> PlrRecordsByCpn,
         KeycloakRolesContext KeycloakRoles,
@@ -220,10 +220,9 @@ public class ResyncService(
             var records = await this.plrClient.GetRecordsAsync(chunk.ToArray());
             if (records != null)
             {
-                foreach (var group in records.GroupBy(r => r.Cpn))
+                foreach (var group in records.GroupBy(r => r.Cpn).Where(g => !string.IsNullOrEmpty(g.Key)))
                 {
-                    if (!string.IsNullOrEmpty(group.Key))
-                        plrRecordsByCpn[group.Key] = group.ToList();
+                    plrRecordsByCpn[group.Key] = group.ToList();
                 }
             }
         }
@@ -262,7 +261,7 @@ public class ResyncService(
 
         if (!ctx.DryRun)
         {
-            await ApplyUpdatesAsync(party, desired, plrStanding, primaryUserId, bcProviderUpns, ctx);
+            await ApplyUpdatesAsync(party, desired, plrStanding, bcProviderUpns, ctx);
         }
 
         return snapshot;
@@ -370,7 +369,7 @@ public class ResyncService(
         }
     }
 
-    private async Task ApplyUpdatesAsync(Party party, DesiredState desired, PlrStandingsDigest plrStanding, Guid primaryUserId, List<string> bcProviderUpns, GlobalSyncContext ctx)
+    private async Task ApplyUpdatesAsync(Party party, DesiredState desired, PlrStandingsDigest plrStanding, List<string> bcProviderUpns, GlobalSyncContext ctx)
     {
         if (bcProviderUpns.Count > 0)
         {
