@@ -31,6 +31,13 @@ public class PartySyncSnapshot
     public DesiredState Expected { get; set; } = new();
     public ActualBCProviderState? BCProvider { get; set; }
     public ActualKeycloakState? Keycloak { get; set; }
+    public List<PartyCredentialSnapshot> Credentials { get; set; } = new();
+}
+
+public class PartyCredentialSnapshot
+{
+    public string IdentityProvider { get; set; } = string.Empty;
+    public string IdpId { get; set; } = string.Empty;
 }
 
 public class DesiredState
@@ -270,7 +277,12 @@ public class ResyncService(
                 FirstName = party.FirstName,
                 LastName = party.LastName,
                 EndorsementSummary = endorsementSummaryStr,
-                Expected = desired
+                Expected = desired,
+                Credentials = party.Credentials.Select(c => new PartyCredentialSnapshot 
+                { 
+                    IdentityProvider = c.IdentityProvider, 
+                    IdpId = c.IdpId ?? "Unknown"
+                }).ToList()
             };
 
             // Fetch BCProvider State
@@ -399,7 +411,29 @@ public class ResyncService(
         var licenses = expected.CollegeIds.Any() ? string.Join(",", expected.CollegeIds) : "None";
         var roles = expected.ProviderRoleTypes.Any() ? string.Join(",", expected.ProviderRoleTypes) : "None";
 
-        Console.WriteLine($"Party: {snapshot.PartyId} {snapshot.FirstName} {snapshot.LastName} {snapshot.Cpn} {licenses} {roles} {snapshot.EndorsementSummary}".Trim());
+        Console.WriteLine($"Party: {snapshot.PartyId} {snapshot.FirstName} {snapshot.LastName} {snapshot.Cpn} {licenses} {roles}".Trim());
+        if (!string.IsNullOrEmpty(snapshot.EndorsementSummary))
+        {
+            Console.WriteLine($"    {snapshot.EndorsementSummary}");
+        }
+
+        foreach (var cred in snapshot.Credentials)
+        {
+            var providerStr = cred.IdentityProvider == IdentityProviders.BCProvider ? "bcp" : 
+                              cred.IdentityProvider == IdentityProviders.BCServicesCard ? "bcsc" : cred.IdentityProvider;
+
+            var attrsJson = "";
+            if (cred.IdentityProvider == IdentityProviders.BCProvider && snapshot.BCProvider?.Attributes != null)
+            {
+                attrsJson = ", Attributes: " + JsonSerializer.Serialize(snapshot.BCProvider.Attributes);
+            }
+            Console.WriteLine($"    {providerStr}: {cred.IdpId}{attrsJson}");
+        }
+
+        if (snapshot.Keycloak?.Attributes != null)
+        {
+            Console.WriteLine($"    keycloak: {snapshot.UserId}, Attributes: {JsonSerializer.Serialize(snapshot.Keycloak.Attributes)}");
+        }
 
         var bcChanges = new List<string>();
         var kcChanges = new List<string>();
@@ -462,11 +496,11 @@ public class ResyncService(
         
         if (bcChanges.Any())
         {
-            Console.WriteLine($"    BCProvider: {string.Join(", ", bcChanges)}");
+            Console.WriteLine($"    BCProvider Changes: {string.Join(", ", bcChanges)}");
         }
         if (kcChanges.Any())
         {
-            Console.WriteLine($"    Keycloak: {string.Join(", ", kcChanges)}");
+            Console.WriteLine($"    Keycloak Changes: {string.Join(", ", kcChanges)}");
         }
         
         if (!bcChanges.Any() && !kcChanges.Any())
