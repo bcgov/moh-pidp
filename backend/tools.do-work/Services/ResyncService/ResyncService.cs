@@ -25,6 +25,9 @@ public class PartySyncSnapshot
     public int PartyId { get; set; }
     public Guid UserId { get; set; }
     public string? Cpn { get; set; }
+    public string? FirstName { get; set; }
+    public string? LastName { get; set; }
+    public string? EndorsementSummary { get; set; }
     public DesiredState Expected { get; set; } = new();
     public ActualBCProviderState? BCProvider { get; set; }
     public ActualKeycloakState? Keycloak { get; set; }
@@ -147,15 +150,13 @@ public class ResyncService(
         
         // Also fetch all endorsement relations upfront so we can get those CPNs
         Console.WriteLine("Fetching endorsement relationships...");
-        var endorsementDictionary = new Dictionary<int, List<string>>();
+        var endorsementDictionary = new Dictionary<int, List<Party>>();
         foreach (var party in parties)
         {
-            var relations = await this.context.ActiveEndorsingParties(party.Id)
-                .Select(p => p.Cpn)
-                .ToListAsync();
-                
-            var nonNullRelations = relations.Where(c => c != null).Cast<string>().ToList();
-            endorsementDictionary[party.Id] = nonNullRelations;
+            var relations = await this.context.ActiveEndorsingParties(party.Id).ToListAsync();
+            endorsementDictionary[party.Id] = relations;
+            
+            var nonNullRelations = relations.Where(c => c.Cpn != null).Select(c => c.Cpn).Cast<string>().ToList();
             allCpns.AddRange(nonNullRelations);
         }
 
@@ -204,15 +205,27 @@ public class ResyncService(
             }
 
             var endorsementRelations = endorsementDictionary[party.Id];
+            var endorsementSummaries = new List<string>();
             var endorsementRecords = new List<PlrRecord>();
+            
             foreach (var relation in endorsementRelations)
             {
-                if (plrRecordsByCpn.TryGetValue(relation, out var r))
+                if (relation.Cpn != null && plrRecordsByCpn.TryGetValue(relation.Cpn, out var r))
                 {
                     endorsementRecords.AddRange(r);
+                    var standing = PlrStandingsDigest.FromRecords(r).WithGoodStanding().With(BCProviderAttributes.EndorserDataEligibleIdentifierTypes);
+                    if (standing.HasGoodStanding)
+                    {
+                        var identifierType = r.FirstOrDefault()?.IdentifierType;
+                        var collegeId = r.FirstOrDefault()?.CollegeId;
+                        endorsementSummaries.Add($"Endorsement: {relation.Id} {identifierType} {collegeId}");
+                    }
                 }
             }
             
+            var endorsementSummaryStr = string.Join(", ", endorsementSummaries);
+            if (string.IsNullOrEmpty(endorsementSummaryStr)) endorsementSummaryStr = "Endorsement: None";
+
             var endorsementPlrStanding = endorsementRecords.Any() ? PlrStandingsDigest.FromRecords(endorsementRecords) : PlrStandingsDigest.FromEmpty();
 
             var isMoa = !plrStanding.HasGoodStanding && endorsementPlrStanding.HasGoodStanding;
@@ -255,6 +268,9 @@ public class ResyncService(
                 PartyId = party.Id,
                 UserId = primaryUserId,
                 Cpn = party.Cpn,
+                FirstName = party.FirstName,
+                LastName = party.LastName,
+                EndorsementSummary = endorsementSummaryStr,
                 Expected = desired
             };
 
@@ -370,23 +386,27 @@ public class ResyncService(
 
     private static void CompareAndLog(PartySyncSnapshot snapshot)
     {
-        var originalColor = Console.ForegroundColor;
-        Console.WriteLine($"--- Comparing Party {snapshot.PartyId} ---");
+        var expected = snapshot.Expected;
+        var licenses = expected.CollegeIds.Any() ? string.Join(",", expected.CollegeIds) : "None";
+        var roles = expected.ProviderRoleTypes.Any() ? string.Join(",", expected.ProviderRoleTypes) : "None";
 
+        Console.WriteLine($"Party: {snapshot.PartyId}, {snapshot.LastName}, {snapshot.FirstName}, Licenses: {licenses}, PractitionerRole: {roles}, {snapshot.EndorsementSummary}");
+
+        var hasAnomalies = false;
+        
         // Helper
         void Check(string prop, string expectedStr, string actualStr)
         {
             if (expectedStr != actualStr)
             {
+                hasAnomalies = true;
                 if (string.IsNullOrEmpty(actualStr) || actualStr == "null")
                 {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine($"Party {snapshot.PartyId} {prop}: Unset -> {expectedStr}");
+                    Console.WriteLine($"    {prop}: Unset -> {expectedStr}");
                 }
                 else
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Party {snapshot.PartyId} {prop}: {actualStr} -> {expectedStr}");
+                    Console.WriteLine($"    {prop}: {actualStr} -> {expectedStr}");
                 }
             }
         }
@@ -427,8 +447,11 @@ public class ResyncService(
             Check("Keycloak is_rnp", snapshot.Expected.IsRnp.ToString().ToLower(), GetKcValue("is_rnp"));
             Check("Keycloak opId", snapshot.Expected.OpId?.ToLower() ?? "null", GetKcValue("opId"));
         }
-
-        Console.ForegroundColor = originalColor;
+        
+        if (!hasAnomalies)
+        {
+            Console.WriteLine("    No changes required.");
+        }
     }
 
     // Keep the other existing methods below...
