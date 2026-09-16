@@ -38,6 +38,6 @@ jobs:
           helm list --namespace f088b1-test
 
           echo installing helm chart...
-          helm upgrade --wait --namespace f088b1-prod --values infra/tools-do-work/values.yaml --set env=prod --set global.image.tag=main --set aspnetcore.environment=Production  tools-do-work infra/tools-do-work
+          helm upgrade --install --wait --namespace f088b1-prod --values infra/tools-do-work/values.yaml --set env=prod --set global.image.tag=main --set aspnetcore.environment=Production  tools-do-work infra/tools-do-work
 
 
