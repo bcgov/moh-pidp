@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine as build-env
+FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine AS build-env
 WORKDIR /source
 
 ENV DOTNET_CLI_HOME="/opt"
