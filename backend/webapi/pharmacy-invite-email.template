@@ -1,0 +1,31 @@
+Hello,
+<br>You are receiving this email because {adminName} has added you as a staff member at {pharmacyName}.
+<br>
+<br>To accept this invitation and registered at {pharmacyName} please complete the following steps:
+<br><b>For users without a BC Provider account:</b><br>
+<ol>
+  <li>Create a BC Provider account <a href="{baseUrl}" target="_blank" rel="noopener">here</a></li>
+  <li>Select login with BC Services Card app and follow the prompts to create your account, if required.</li>
+  <li>At the top right of the page select Account and Account Linking.</li>
+  <li>Select the BC Provider <a href="{bcProviderUrl}" target="_blank" rel="noopener">Link Account</a></li>
+  <li>Select First time setup towards the bottom of the page.</li>
+  <li>Enter a password for your BC Provider account.</li>
+  <li>Once logged in select this <a href="{enrolUrl}" target="_blank" rel="noopener">link</a>.</li>
+  <li>Confirm you’ve completed privacy and security training from CareConnect and Enrol.</li>
+  <li>You should see the success message.</li>
+  <li>Click OK to confirm you've successfully been added to the pharmacy</li>
+</ol>
+<br><b>For users with an existing BC Provider Account:</b><br>
+<ol>
+  <li>Open a browser and go <a href="{baseUrl}" target="_blank" rel="noopener">here</a></li>
+  <li>Select login with BC Services Card app and follow the prompts to create your account, if required.</li>
+  <li>At the top right of the page select Account and Account Linking.</li>
+  <li>Select the BC Provider <a href="{bcProviderUrl}" target="_blank" rel="noopener">Link Account</a></li>
+  <li>Enter your BC provider account information and "uplift" your account.</li>
+  <li>Once logged in select this <a href="{enrolUrl}" target="_blank" rel="noopener">link</a>.</li>
+  <li>Confirm you’ve completed privacy and security training from CareConnect and Enrol.</li>
+  <li>You should see the success message.</li>
+  <li>Click OK to confirm you've successfully been added to the pharmacy</li>
+</ol>
+<br>For additional support with onboarding contact the OneHealthID Service desk by email at {pidpSupportEmail}.
+<br>For all ImmsBC related questions please contact the VaxBC.

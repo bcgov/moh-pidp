@@ -27,9 +27,9 @@ public class RabbitMqConsumerHostedService(
             _connection = await _connectionFactory.CreateConnectionAsync(stoppingToken);
             _channel = await _connection.CreateChannelAsync(cancellationToken: stoppingToken);
 
-            await SetupConsumerAsync<PartyEmailUpdated>("party-email-updated", "party-email-updated-bc-provider-queue", stoppingToken);
-            await SetupConsumerAsync<UpdateBcProviderAttributesHandler.UpdateBcProviderAttributes>("update-bc-provider-attributes", "update-bc-provider-attributes-queue", stoppingToken);
-            await SetupConsumerAsync<UpdateKeycloakAttributesHandler.UpdateKeycloakAttributes>("update-keycloak-attributes", "update-keycloak-attributes-queue", stoppingToken);
+            await SetupConsumerAsync<PartyEmailUpdated>(typeof(PartyEmailUpdated).Name, "party-email-updated-bc-provider-queue", stoppingToken);
+            await SetupConsumerAsync<UpdateBcProviderAttributesHandler.UpdateBcProviderAttributes>(typeof(UpdateBcProviderAttributesHandler.UpdateBcProviderAttributes).Name, "update-bc-provider-attributes-queue", stoppingToken);
+            await SetupConsumerAsync<UpdateKeycloakAttributesHandler.UpdateKeycloakAttributes>(typeof(UpdateKeycloakAttributesHandler.UpdateKeycloakAttributes).Name, "update-keycloak-attributes-queue", stoppingToken);
         }
         catch (Exception ex)
         {
@@ -61,18 +61,24 @@ public class RabbitMqConsumerHostedService(
                     
                     if (typeof(TMessage) == typeof(PartyEmailUpdated))
                     {
+                        var typedMessage = (message as PartyEmailUpdated)!;
+                        _logger.LogInformation("Received PartyEmailUpdated message for PartyId {PartyId}, UserId {UserId} from queue {QueueName}", typedMessage.PartyId, typedMessage.UserId, queueName);
                         var handler = scope.ServiceProvider.GetRequiredService<PartyEmailUpdatedBcProviderHandler>();
-                        await handler.HandleAsync((message as PartyEmailUpdated)!);
+                        await handler.HandleAsync(typedMessage);
                     }
                     else if (typeof(TMessage) == typeof(UpdateBcProviderAttributesHandler.UpdateBcProviderAttributes))
                     {
+                        var typedMessage = (message as UpdateBcProviderAttributesHandler.UpdateBcProviderAttributes)!;
+                        _logger.LogInformation("Received UpdateBcProviderAttributes message for UPN {Upn} from queue {QueueName}", typedMessage.Upn, queueName);
                         var handler = scope.ServiceProvider.GetRequiredService<UpdateBcProviderAttributesHandler>();
-                        await handler.HandleAsync((message as UpdateBcProviderAttributesHandler.UpdateBcProviderAttributes)!);
+                        await handler.HandleAsync(typedMessage);
                     }
                     else if (typeof(TMessage) == typeof(UpdateKeycloakAttributesHandler.UpdateKeycloakAttributes))
                     {
+                        var typedMessage = (message as UpdateKeycloakAttributesHandler.UpdateKeycloakAttributes)!;
+                        _logger.LogInformation("Received UpdateKeycloakAttributes message for UserId {UserId} from queue {QueueName}", typedMessage.UserId, queueName);
                         var handler = scope.ServiceProvider.GetRequiredService<UpdateKeycloakAttributesHandler>();
-                        await handler.HandleAsync((message as UpdateKeycloakAttributesHandler.UpdateKeycloakAttributes)!);
+                        await handler.HandleAsync(typedMessage);
                     }
                 }
 

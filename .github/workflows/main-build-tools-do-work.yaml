@@ -1,0 +1,57 @@
+name: Promote Endorsement Schedule image - main
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "backend/tools.do-work/**"
+  workflow_dispatch:
+
+env:
+  ORIG_TAG: test
+  PROMOTE_TAG: main
+
+  # This will terminate builds that are previously, but continuing to run.  Saves GHA hours.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  promote-image-to-prod-gold:
+    name: Promote tools-do-work from test to prod
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install oc
+        uses: redhat-actions/openshift-tools-installer@144527c7d98999f2652264c048c7a9bd103f8a82
+        with:
+          oc: "4.9"
+
+      - name: oc login - GOLD
+        env:
+          OPENSHIFT_TOKEN: ${{ secrets.GOLD_PIPELINE_SERVICE_ACCOUNT_TOKEN }}
+          OPENSHIFT_SERVER: ${{ secrets.GOLD_OPENSHIFT_CLUSTER_URL }}
+        run: |
+          oc login --token=$OPENSHIFT_TOKEN --server=$OPENSHIFT_SERVER
+
+      - name: Promote tools-do-work from test to prod - GOLD
+        run: |
+          oc -n f088b1-tools tag \
+          f088b1-tools/tools-do-work:${{ env.ORIG_TAG }} \
+          f088b1-tools/tools-do-work:${{ env.PROMOTE_TAG }}
+
+      - name: oc login - GOLDDR
+        env:
+          OPENSHIFT_TOKEN: ${{ secrets.GOLDDR_PIPELINE_SERVICE_ACCOUNT_TOKEN }}
+          OPENSHIFT_SERVER: ${{ secrets.GOLDDR_OPENSHIFT_CLUSTER_URL }}
+        run: |
+          oc login --token=$OPENSHIFT_TOKEN --server=$OPENSHIFT_SERVER
+
+      - name: Promote tools-do-work from test to prod - GOLDDR
+        run: |
+          oc -n f088b1-tools tag \
+          f088b1-tools/tools-do-work:${{ env.ORIG_TAG }} \
+          f088b1-tools/tools-do-work:${{ env.PROMOTE_TAG }}
+

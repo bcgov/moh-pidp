@@ -95,25 +95,29 @@ public class PharmacyInvite
 
                 var pidpSupportEmail = $"<a href=\"mailto:{EmailService.PidpEmail}\">{EmailService.PidpEmail}</a>";
 
+                var templatePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "pharmacy-invite-email.template");
+                if (!System.IO.File.Exists(templatePath))
+                {
+                    throw new System.IO.FileNotFoundException($"Email template not found at {templatePath}");
+                }
+                var templateBody = await System.IO.File.ReadAllTextAsync(templatePath, cancellationToken);
+
+                var body = templateBody
+                    .Replace("{adminName}", adminName)
+                    .Replace("{pharmacyName}", pharmacyName)
+                    .Replace("{baseUrl}", baseUrl)
+                    .Replace("{baseLink}", baseLink)
+                    .Replace("{bcProviderUrl}", bcProviderUrl)
+                    .Replace("{bcProviderLink}", bcProviderLink)
+                    .Replace("{enrolUrl}", enrolUrl)
+                    .Replace("{enrolLink}", enrolLink)
+                    .Replace("{pidpSupportEmail}", pidpSupportEmail);
+
                 var email = new Email(
                     from: EmailService.PidpEmail,
                     to: emailAddress,
                     subject: $"Invitation to join {pharmacyName} on ImmsBC",
-                    body: $@"Hello,
-<br>You are receiving this email because {adminName} has added you as a staff member at {pharmacyName}.<br>
-<br>To accept this invitation and registered at {pharmacyName} please complete the following steps:
-<br>
-<br>For users without a BC Provider Account
-<br>1. Create a BC Provider Account {baseLink}
-<br>2. Select login with BC Services Card app and follow the prompts to create your account.<br>3. At the top right of the page select Account and Account Linking.<br>4. Select the BCProvider time, {bcProviderLink}
-<br>5. Select First Time setup towards the bottom of the page.<br>6. Enter a password for your BC Provider account.<br>7. One logged in select {enrolLink}.<br>8. Confirm you've completed the privacy and security training from CareConnect and Enrol.<br>9. You will see the success message.<br>10. Select OK to confirm you're successfully been added to the pharmacy.<br>
-<br>For users with an existing BC Provider Account
-<br>1. Login to your OneHealthID with your BC Services Card app {baseLink}.<br>
-<br>2. If it is your first time logging in, complete the contact information, and license information (for pharmacists).<br>
-<br>3. Complete the BC Provider {bcProviderLink}. If you're prompted to change your password, your BC Provider account is already linked.<br>
-<br>4. Confirm you’ve completed privacy and security training from CareConnect and Enrol by clicking on {enrolLink}.<br>
-<br>5. You will see the success message.<br>6. Select OK to confirm you're successfully been added to the pharmacy.<br>
-<br>For additional support with onboarding contact the OneHealthID Service desk by email at {pidpSupportEmail}.<br>For all ImmsBC related questions please contact the VaxBC.<br>Thank you.");
+                    body: body);
 
                 await emailService.SendAsync(email);
             }
