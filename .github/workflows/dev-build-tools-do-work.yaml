@@ -2,7 +2,7 @@ name: Build Tools Do Work - Dev
 
 on:
   push:
-    branches: [develop]
+    branches: [develop, feature/imms2-uat4]
     paths:
       - "backend/tools.do-work/**"
   workflow_dispatch:
@@ -53,5 +53,6 @@ jobs:
       - name: "Push image"
         run: |
           docker push image-registry.apps.golddr.devops.gov.bc.ca/f088b1-tools/tools-do-work:develop
+
 
 

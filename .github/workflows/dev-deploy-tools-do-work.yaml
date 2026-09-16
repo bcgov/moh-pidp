@@ -2,7 +2,7 @@ name: Deploy Dev Helm Charts - Tools Do Work
 
 on:
   push:
-    branches: [develop]
+    branches: [develop, feature/imms2-uat4]
     paths:
       - "infra/tools-do-work/**"
   workflow_dispatch:
@@ -36,4 +36,5 @@ jobs:
 
           echo installing helm chart...
           helm upgrade --wait --namespace f088b1-dev --values infra/tools-do-work/values.yaml tools-do-work infra/tools-do-work
+
 
