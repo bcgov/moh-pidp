@@ -315,9 +315,9 @@ public class ResyncService(
                         Attributes = attributes
                     };
                 }
-                catch (InvalidOperationException)
+                catch (InvalidOperationException ex)
                 {
-                    this.logger.LogError("Party {PartyId} has multiple BCProvider credentials! Cannot fetch a single BCProvider actual state.", party.Id);
+                    this.logger.LogError(ex, "Party {PartyId} has multiple BCProvider credentials! Cannot fetch a single BCProvider actual state.", party.Id);
                 }
             }
 
@@ -419,8 +419,12 @@ public class ResyncService(
 
         foreach (var cred in snapshot.Credentials)
         {
-            var providerStr = cred.IdentityProvider == IdentityProviders.BCProvider ? "bcp" : 
-                              cred.IdentityProvider == IdentityProviders.BCServicesCard ? "bcsc" : cred.IdentityProvider;
+            var providerStr = cred.IdentityProvider switch
+            {
+                IdentityProviders.BCProvider => "bcp",
+                IdentityProviders.BCServicesCard => "bcsc",
+                _ => cred.IdentityProvider
+            };
 
             var attrsJson = "";
             if (cred.IdentityProvider == IdentityProviders.BCProvider && snapshot.BCProvider?.Attributes != null)
@@ -450,11 +454,7 @@ public class ResyncService(
 
         void CheckKc(string prop, string expectedStr, string actualStr)
         {
-            if (expectedStr != actualStr)
-            {
-                var displayActual = (string.IsNullOrEmpty(actualStr) || actualStr == "null") ? "Unset" : actualStr;
-                kcChanges.Add($"{prop}: {displayActual} -> {expectedStr}");
-            }
+            // Unused since we compress Keycloak logging now, but leaving for reference if needed
         }
 
         // Compare BCProvider
@@ -487,23 +487,32 @@ public class ResyncService(
             var attrs = snapshot.Keycloak.Attributes;
             string GetKcValue(string key) => attrs.GetValueOrDefault(key)?.FirstOrDefault()?.ToLower() ?? "null";
 
-            CheckKc("is_moa", snapshot.Expected.IsMoa.ToString().ToLower(), GetKcValue("is_moa"));
-            CheckKc("is_md", snapshot.Expected.IsMd.ToString().ToLower(), GetKcValue("is_md"));
-            CheckKc("is_pharm", snapshot.Expected.IsPharm.ToString().ToLower(), GetKcValue("is_pharm"));
-            CheckKc("is_rnp", snapshot.Expected.IsRnp.ToString().ToLower(), GetKcValue("is_rnp"));
-            // CheckKc("opId", snapshot.Expected.OpId?.ToLower() ?? "null", GetKcValue("opId"));
+            var kcMoa = GetKcValue("is_moa");
+            var kcMd = GetKcValue("is_md");
+            var kcPharm = GetKcValue("is_pharm");
+            var kcRnp = GetKcValue("is_rnp");
+
+            var expMoa = snapshot.Expected.IsMoa.ToString().ToLower();
+            var expMd = snapshot.Expected.IsMd.ToString().ToLower();
+            var expPharm = snapshot.Expected.IsPharm.ToString().ToLower();
+            var expRnp = snapshot.Expected.IsRnp.ToString().ToLower();
+
+            if (kcMoa != expMoa || kcMd != expMd || kcPharm != expPharm || kcRnp != expRnp)
+            {
+                kcChanges.Add($"is_moa: {expMoa}, is_md: {expMd}, is_pharm: {expPharm}, is_rnp: {expRnp}");
+            }
         }
         
-        if (bcChanges.Any())
+        if (bcChanges.Count > 0)
         {
             Console.WriteLine($"    BCProvider Changes: {string.Join(", ", bcChanges)}");
         }
-        if (kcChanges.Any())
+        if (kcChanges.Count > 0)
         {
             Console.WriteLine($"    Keycloak Changes: {string.Join(", ", kcChanges)}");
         }
         
-        if (!bcChanges.Any() && !kcChanges.Any())
+        if (bcChanges.Count == 0 && kcChanges.Count == 0)
         {
             Console.WriteLine("    No changes required.");
         }
