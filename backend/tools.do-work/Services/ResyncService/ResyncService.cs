@@ -218,13 +218,12 @@ public class ResyncService(
                     {
                         var identifierType = r.FirstOrDefault()?.IdentifierType;
                         var collegeId = r.FirstOrDefault()?.CollegeId;
-                        endorsementSummaries.Add($"Endorsement: {relation.Id} {identifierType} {collegeId}");
+                        endorsementSummaries.Add($"Endorsement: {relation.Id} {relation.Cpn} {identifierType} {collegeId}");
                     }
                 }
             }
             
             var endorsementSummaryStr = string.Join(", ", endorsementSummaries);
-            if (string.IsNullOrEmpty(endorsementSummaryStr)) endorsementSummaryStr = "Endorsement: None";
 
             var endorsementPlrStanding = endorsementRecords.Any() ? PlrStandingsDigest.FromRecords(endorsementRecords) : PlrStandingsDigest.FromEmpty();
 
@@ -233,12 +232,12 @@ public class ResyncService(
             var isRnp = plrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding;
             var isPharm = plrStanding.With(IdentifierType.Pharmacist).HasGoodStanding;
 
-            if (string.IsNullOrEmpty(party.OpId) && !dryRun)
-            {
-                await party.GenerateOpId(this.context);
-                await this.context.SaveChangesAsync();
-                this.logger.LogInformation("Generated OpId {OpId} for Party {PartyId}", party.OpId, party.Id);
-            }
+            // if (string.IsNullOrEmpty(party.OpId) && !dryRun)
+            // {
+            //     await party.GenerateOpId(this.context);
+            //     await this.context.SaveChangesAsync();
+            //     this.logger.LogInformation("Generated OpId {OpId} for Party {PartyId}", party.OpId, party.Id);
+            // }
 
             var desired = new DesiredState
             {
@@ -287,7 +286,17 @@ public class ResyncService(
                 try
                 {
                     var upn = bcProviderUpns.Single();
-                    var attributes = await this.bcProviderClient.GetUserAttributes(upn, new BCProviderAttributes(clientId).AsAdditionalData().Keys.ToArray());
+                    var bcpAttributes = new BCProviderAttributes(clientId)
+                        .SetIsMoa(false)
+                        .SetIsMd(false)
+                        .SetIsPharm(false)
+                        .SetIsRnp(false)
+                        .SetMspId([])
+                        .SetPractitionerRole([])
+                        .SetCollegeId([])
+                        .SetEndorserData([]);
+                    
+                    var attributes = await this.bcProviderClient.GetUserAttributes(upn, bcpAttributes.AsAdditionalData().Keys.ToArray());
                     snapshot.BCProvider = new ActualBCProviderState
                     {
                         Upn = upn,
@@ -333,10 +342,10 @@ public class ResyncService(
                     bcProviderAttributes.SetPractitionerRole(plrStanding.ProviderRoleTypes);
                     bcProviderAttributes.SetCollegeId(plrStanding.CollegeIds);
                     bcProviderAttributes.SetEndorserData(desired.EndorserData);
-                    if (!string.IsNullOrEmpty(party.OpId))
-                    {
-                        bcProviderAttributes.SetOpId(party.OpId);
-                    }
+                    // if (!string.IsNullOrEmpty(party.OpId))
+                    // {
+                    //     bcProviderAttributes.SetOpId(party.OpId);
+                    // }
 
                     var additionalData = bcProviderAttributes.AsAdditionalData();
                     foreach (var upn in bcProviderUpns.Where(u => !string.IsNullOrWhiteSpace(u)))
@@ -390,24 +399,27 @@ public class ResyncService(
         var licenses = expected.CollegeIds.Any() ? string.Join(",", expected.CollegeIds) : "None";
         var roles = expected.ProviderRoleTypes.Any() ? string.Join(",", expected.ProviderRoleTypes) : "None";
 
-        Console.WriteLine($"Party: {snapshot.PartyId}, {snapshot.LastName}, {snapshot.FirstName}, Licenses: {licenses}, PractitionerRole: {roles}, {snapshot.EndorsementSummary}");
+        Console.WriteLine($"Party: {snapshot.PartyId} {snapshot.FirstName} {snapshot.LastName} {snapshot.Cpn} {licenses} {roles} {snapshot.EndorsementSummary}".Trim());
 
-        var hasAnomalies = false;
+        var bcChanges = new List<string>();
+        var kcChanges = new List<string>();
         
         // Helper
-        void Check(string prop, string expectedStr, string actualStr)
+        void CheckBc(string prop, string expectedStr, string actualStr)
         {
             if (expectedStr != actualStr)
             {
-                hasAnomalies = true;
-                if (string.IsNullOrEmpty(actualStr) || actualStr == "null")
-                {
-                    Console.WriteLine($"    {prop}: Unset -> {expectedStr}");
-                }
-                else
-                {
-                    Console.WriteLine($"    {prop}: {actualStr} -> {expectedStr}");
-                }
+                var displayActual = (string.IsNullOrEmpty(actualStr) || actualStr == "null") ? "Unset" : actualStr;
+                bcChanges.Add($"{prop}: {displayActual} -> {expectedStr}");
+            }
+        }
+
+        void CheckKc(string prop, string expectedStr, string actualStr)
+        {
+            if (expectedStr != actualStr)
+            {
+                var displayActual = (string.IsNullOrEmpty(actualStr) || actualStr == "null") ? "Unset" : actualStr;
+                kcChanges.Add($"{prop}: {displayActual} -> {expectedStr}");
             }
         }
 
@@ -421,18 +433,18 @@ public class ResyncService(
                 return (key != null && attrs.TryGetValue(key, out var val)) ? (val?.ToString()?.ToLower() ?? "null") : "null";
             }
 
-            Check("BCProvider IsMoa", snapshot.Expected.IsMoa.ToString().ToLower(), GetBcpValue("_isMoa"));
-            Check("BCProvider IsMd", snapshot.Expected.IsMd.ToString().ToLower(), GetBcpValue("_isMd"));
-            Check("BCProvider IsPharm", snapshot.Expected.IsPharm.ToString().ToLower(), GetBcpValue("_isPharm"));
-            Check("BCProvider IsRnp", snapshot.Expected.IsRnp.ToString().ToLower(), GetBcpValue("_isRnp"));
-            Check("BCProvider OpId", snapshot.Expected.OpId?.ToLower() ?? "null", GetBcpValue("_opId"));
+            CheckBc("isMoa", snapshot.Expected.IsMoa.ToString().ToLower(), GetBcpValue("_isMoa"));
+            CheckBc("isMd", snapshot.Expected.IsMd.ToString().ToLower(), GetBcpValue("_isMd"));
+            CheckBc("isPharm", snapshot.Expected.IsPharm.ToString().ToLower(), GetBcpValue("_isPharm"));
+            CheckBc("isRnp", snapshot.Expected.IsRnp.ToString().ToLower(), GetBcpValue("_isRnp"));
+            // CheckBc("OpId", snapshot.Expected.OpId?.ToLower() ?? "null", GetBcpValue("_opId"));
 
             string ArrayToStr(IEnumerable<string> arr) => ("[" + string.Join(",", arr.Select(s => $"\"{s}\"")) + "]").ToLower();
 
-            Check("BCProvider CollegeId", ArrayToStr(snapshot.Expected.CollegeIds), GetBcpValue("_collegeid"));
-            Check("BCProvider MspId", ArrayToStr(snapshot.Expected.MspIds), GetBcpValue("_mspId"));
-            Check("BCProvider PractitionerRole", ArrayToStr(snapshot.Expected.ProviderRoleTypes), GetBcpValue("_practitionerRole"));
-            Check("BCProvider EndorserData", ArrayToStr(snapshot.Expected.EndorserData), GetBcpValue("_endorserData"));
+            CheckBc("CollegeId", ArrayToStr(snapshot.Expected.CollegeIds), GetBcpValue("_collegeid"));
+            CheckBc("MspId", ArrayToStr(snapshot.Expected.MspIds), GetBcpValue("_mspId"));
+            CheckBc("PractitionerRole", ArrayToStr(snapshot.Expected.ProviderRoleTypes), GetBcpValue("_practitionerRole"));
+            CheckBc("EndorserData", ArrayToStr(snapshot.Expected.EndorserData), GetBcpValue("_endorserData"));
         }
 
         // Compare Keycloak
@@ -441,14 +453,23 @@ public class ResyncService(
             var attrs = snapshot.Keycloak.Attributes;
             string GetKcValue(string key) => attrs.GetValueOrDefault(key)?.FirstOrDefault()?.ToLower() ?? "null";
 
-            Check("Keycloak is_moa", snapshot.Expected.IsMoa.ToString().ToLower(), GetKcValue("is_moa"));
-            Check("Keycloak is_md", snapshot.Expected.IsMd.ToString().ToLower(), GetKcValue("is_md"));
-            Check("Keycloak is_pharm", snapshot.Expected.IsPharm.ToString().ToLower(), GetKcValue("is_pharm"));
-            Check("Keycloak is_rnp", snapshot.Expected.IsRnp.ToString().ToLower(), GetKcValue("is_rnp"));
-            Check("Keycloak opId", snapshot.Expected.OpId?.ToLower() ?? "null", GetKcValue("opId"));
+            CheckKc("is_moa", snapshot.Expected.IsMoa.ToString().ToLower(), GetKcValue("is_moa"));
+            CheckKc("is_md", snapshot.Expected.IsMd.ToString().ToLower(), GetKcValue("is_md"));
+            CheckKc("is_pharm", snapshot.Expected.IsPharm.ToString().ToLower(), GetKcValue("is_pharm"));
+            CheckKc("is_rnp", snapshot.Expected.IsRnp.ToString().ToLower(), GetKcValue("is_rnp"));
+            // CheckKc("opId", snapshot.Expected.OpId?.ToLower() ?? "null", GetKcValue("opId"));
         }
         
-        if (!hasAnomalies)
+        if (bcChanges.Any())
+        {
+            Console.WriteLine($"    BCProvider: {string.Join(", ", bcChanges)}");
+        }
+        if (kcChanges.Any())
+        {
+            Console.WriteLine($"    Keycloak: {string.Join(", ", kcChanges)}");
+        }
+        
+        if (!bcChanges.Any() && !kcChanges.Any())
         {
             Console.WriteLine("    No changes required.");
         }
@@ -514,10 +535,10 @@ public class ResyncService(
         requiresKeycloakUpdate |= SetKeycloakAttribute(user, "is_pharm", new[] { ctx.IsPharm.ToString() });
         requiresKeycloakUpdate |= SetKeycloakAttribute(user, "is_rnp", new[] { ctx.IsRnp.ToString() });
 
-        if (!string.IsNullOrEmpty(ctx.Party.OpId))
-        {
-            requiresKeycloakUpdate |= SetKeycloakAttribute(user, "opId", new[] { ctx.Party.OpId });
-        }
+        // if (!string.IsNullOrEmpty(ctx.Party.OpId))
+        // {
+        //     requiresKeycloakUpdate |= SetKeycloakAttribute(user, "opId", new[] { ctx.Party.OpId });
+        // }
 
         if (requiresKeycloakUpdate)
         {
@@ -611,13 +632,12 @@ public class ResyncService(
 
     private async Task<bool> RunConnectivityChecksAsync()
     {
-        Console.WriteLine("Running connectivity checks...");
         var allPassed = true;
 
         try
         {
             var canConnect = await this.context.Database.CanConnectAsync();
-            Console.WriteLine($"Database: {(canConnect ? "PASS" : "FAIL")}");
+            if (!canConnect) Console.WriteLine("Database: FAIL");
             allPassed &= canConnect;
         }
         catch (Exception ex)
@@ -629,7 +649,7 @@ public class ResyncService(
         try
         {
             var plrTest = await this.plrClient.GetProcessableStatusChangesAsync(1);
-            Console.WriteLine($"PLR Webservice: {(plrTest != null ? "PASS" : "FAIL")}");
+            if (plrTest == null) Console.WriteLine("PLR Webservice: FAIL");
             allPassed &= (plrTest != null);
         }
         catch (Exception ex)
@@ -641,7 +661,6 @@ public class ResyncService(
         try
         {
             await this.keycloakClient.GetClient("SAT-EFORMS");
-            Console.WriteLine("Keycloak: PASS");
         }
         catch (Exception ex)
         {
@@ -652,7 +671,6 @@ public class ResyncService(
         try
         {
             await this.bcProviderClient.GetUserAttributes("test-connection@example.com", Array.Empty<string>());
-            Console.WriteLine("BCProvider (Entra ID): PASS");
         }
         catch (Exception ex)
         {
