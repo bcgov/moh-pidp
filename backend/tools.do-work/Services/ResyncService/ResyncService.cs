@@ -376,7 +376,7 @@ public class ResyncService(
 
         // Write JSON representation
         var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-        var filename = $"resync_{timestamp}.json";
+        var filename = $"output/resync_{timestamp}.json";
         var jsonContent = JsonSerializer.Serialize(snapshots, new JsonSerializerOptions { WriteIndented = true });
         await File.WriteAllTextAsync(filename, jsonContent);
         Console.WriteLine($"Wrote JSON output to {filename}");
