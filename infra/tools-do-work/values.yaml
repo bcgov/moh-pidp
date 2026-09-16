@@ -1,0 +1,35 @@
+# By default, the cronjob is suspended (manual trigger only). If enabled, it runs at 2:00 AM.
+cron: "0 2 * * *"
+suspend: true
+
+global:
+  vanityURL: "healthprovideridentityportal.gov.bc.ca"
+  commit_sha: ""
+  license_plate: "f088b1"
+  image:
+    registry: image-registry.openshift-image-registry.svc:5000/f088b1-tools
+    repository: tools-do-work
+    tag: develop
+imagePullSecrets: []
+image:
+  pullPolicy: Always
+  
+aspnetcore:
+  environment: Staging
+env: dev
+
+# By default, run with dry run enabled for safety
+jobArgs:
+  - "--service=resync"
+  - "--dryrun"
+
+nameOverride: ""
+fullnameOverride: ""
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 500Mi
+  requests:
+    cpu: 50m
+    memory: 50Mi

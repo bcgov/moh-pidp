@@ -35,7 +35,7 @@ try
             .AddHttpClients(config)
             // .AddRateLimitedKeycloakClient(config)
             .AddSingleton<IClock>(SystemClock.Instance)
-            .AddMediator()
+            .AddMediator(options => options.ServiceLifetime = Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped)
             .AddTransient<ICredentialDeletionService, CredentialDeletionService>()
             .AddTransient<DoWork.Services.ResyncService.IResyncService, DoWork.Services.ResyncService.ResyncService>()
             .AddTransient<IDoWorkService, DoWorkService>()
