@@ -38,5 +38,5 @@ jobs:
           helm list --namespace f088b1-test
 
           echo installing helm chart...
-          helm upgrade --wait --namespace f088b1-test --values infra/tools-do-work/values.yaml --set global.image.tag=test --set env=test tools-do-work infra/tools-do-work
+          helm upgrade --install --wait --namespace f088b1-test --values infra/tools-do-work/values.yaml --set global.image.tag=test --set env=test tools-do-work infra/tools-do-work
 
