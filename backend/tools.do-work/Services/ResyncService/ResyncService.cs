@@ -101,18 +101,30 @@ public class ResyncService(
     private readonly PidpConfiguration config = config;
     private readonly ILogger<ResyncService> logger = logger;
 
+    private record KeycloakRolesContext(
+        Pidp.Infrastructure.HttpClients.Keycloak.Role? MdRole,
+        Pidp.Infrastructure.HttpClients.Keycloak.Role? MoaRole,
+        Pidp.Infrastructure.HttpClients.Keycloak.Role? PharmRole,
+        Pidp.Infrastructure.HttpClients.Keycloak.Role? RnpRole,
+        Pidp.Infrastructure.HttpClients.Keycloak.Role? SaRole,
+        Pidp.Infrastructure.HttpClients.Keycloak.Role? ImmsRole,
+        Pidp.Infrastructure.HttpClients.Keycloak.Role? InfantRole,
+        Pidp.Infrastructure.HttpClients.Keycloak.Role? NpdpRole
+    );
+
+    private record GlobalSyncContext(
+        bool DryRun,
+        Dictionary<string, IEnumerable<PlrRecord>> PlrRecordsByCpn,
+        KeycloakRolesContext KeycloakRoles,
+        Dictionary<int, List<Party>> EndorsementDictionary
+    );
+
     public async Task SynchronizeAsync(bool dryRun, int? partyId = null)
     {
         Console.WriteLine("--- Starting Resync Service ---");
         
-        if (dryRun)
-        {
-            Console.WriteLine("DRY RUN MODE: No updates will be applied to Entra or Keycloak.");
-        } 
-        else
-        {
-            Console.WriteLine("LIVE RUN MODE: Updates will be applied to Entra and Keycloak.");
-        }
+        if (dryRun) Console.WriteLine("DRY RUN MODE: No updates will be applied to Entra or Keycloak.");
+        else Console.WriteLine("LIVE RUN MODE: Updates will be applied to Entra and Keycloak.");
 
         if (!await this.RunConnectivityChecksAsync())
         {
@@ -120,9 +132,32 @@ public class ResyncService(
             return;
         }
 
-        var clientId = this.config.BCProviderClient.ClientId;
-        var keysToRemove = new[] { "college_license_info", "college_licence_info", "college_certification_info" };
+        var parties = await this.FetchPartiesAsync(partyId);
+        if (parties.Count == 0) return;
 
+        var rolesContext = await this.FetchKeycloakRolesAsync();
+        var endorsementDictionary = await this.FetchEndorsementRelationshipsAsync(parties);
+        var plrRecordsByCpn = await this.FetchPlrRecordsAsync(parties, endorsementDictionary);
+
+        var syncContext = new GlobalSyncContext(dryRun, plrRecordsByCpn, rolesContext, endorsementDictionary);
+        
+        var snapshots = new List<PartySyncSnapshot>();
+        var count = 0;
+        foreach (var party in parties)
+        {
+            count++;
+            if (count % 100 == 0) Console.WriteLine($"Processed {count} / {parties.Count} parties...");
+            
+            var snapshot = await this.ProcessPartyAsync(party, syncContext);
+            if (snapshot != null) snapshots.Add(snapshot);
+        }
+
+        await this.WriteJsonOutputAsync(snapshots);
+        Console.WriteLine($"--- Resync Complete ({count} parties processed) ---");
+    }
+
+    private async Task<List<Party>> FetchPartiesAsync(int? partyId)
+    {
         var query = this.context.Parties
             .Include(party => party.Credentials)
             .Include(party => party.AccessRequests)
@@ -131,281 +166,285 @@ public class ResyncService(
                          || party.Credentials.Any(c => c.IdentityProvider == IdentityProviders.BCProvider)
                          || this.context.EndorsementRelationships.Any(er => er.PartyId == party.Id));
 
-        if (partyId.HasValue)
-        {
-            query = query.Where(party => party.Id == partyId.Value);
-        }
+        if (partyId.HasValue) query = query.Where(party => party.Id == partyId.Value);
 
         var parties = await query.ToListAsync();
-
         Console.WriteLine($"Found {parties.Count} parties to synchronize.");
+        return parties;
+    }
 
+    private async Task<KeycloakRolesContext> FetchKeycloakRolesAsync()
+    {
         var licenceStatusClientId = "LICENCE-STATUS";
-        var mdRole = await this.keycloakClient.GetClientRole(licenceStatusClientId, "MD");
-        var moaRole = await this.keycloakClient.GetClientRole(licenceStatusClientId, "MOA");
-        var pharmRole = await this.keycloakClient.GetClientRole(licenceStatusClientId, "PHARM");
-        var rnpRole = await this.keycloakClient.GetClientRole(licenceStatusClientId, "RNP");
-
         var eformsClientId = "SAT-EFORMS";
-        var saRole = await this.keycloakClient.GetClientRole(eformsClientId, "phsa_eforms_sat");
-        var immsRole = await this.keycloakClient.GetClientRole(eformsClientId, "phsa_eforms_imms");
-        var infantRole = await this.keycloakClient.GetClientRole(eformsClientId, "phsa_eforms_infant_rsv");
-        var npdpRole = await this.keycloakClient.GetClientRole(eformsClientId, "phsa_eforms_npdp");
 
-        // 1. Gather all CPNs
-        var allCpns = parties.Select(p => p.Cpn).Where(c => c != null).Cast<string>().ToList();
-        
-        // Also fetch all endorsement relations upfront so we can get those CPNs
+        return new KeycloakRolesContext(
+            await this.keycloakClient.GetClientRole(licenceStatusClientId, "MD"),
+            await this.keycloakClient.GetClientRole(licenceStatusClientId, "MOA"),
+            await this.keycloakClient.GetClientRole(licenceStatusClientId, "PHARM"),
+            await this.keycloakClient.GetClientRole(licenceStatusClientId, "RNP"),
+            await this.keycloakClient.GetClientRole(eformsClientId, "phsa_eforms_sat"),
+            await this.keycloakClient.GetClientRole(eformsClientId, "phsa_eforms_imms"),
+            await this.keycloakClient.GetClientRole(eformsClientId, "phsa_eforms_infant_rsv"),
+            await this.keycloakClient.GetClientRole(eformsClientId, "phsa_eforms_npdp")
+        );
+    }
+
+    private async Task<Dictionary<int, List<Party>>> FetchEndorsementRelationshipsAsync(List<Party> parties)
+    {
         Console.WriteLine("Fetching endorsement relationships...");
-        var endorsementDictionary = new Dictionary<int, List<Party>>();
+        var dictionary = new Dictionary<int, List<Party>>();
         foreach (var party in parties)
         {
-            var relations = await this.context.ActiveEndorsingParties(party.Id).ToListAsync();
-            endorsementDictionary[party.Id] = relations;
-            
-            var nonNullRelations = relations.Where(c => c.Cpn != null).Select(c => c.Cpn).Cast<string>().ToList();
-            allCpns.AddRange(nonNullRelations);
+            dictionary[party.Id] = await this.context.ActiveEndorsingParties(party.Id).ToListAsync();
+        }
+        return dictionary;
+    }
+
+    private async Task<Dictionary<string, IEnumerable<PlrRecord>>> FetchPlrRecordsAsync(List<Party> parties, Dictionary<int, List<Party>> endorsementDictionary)
+    {
+        var allCpns = parties.Select(p => p.Cpn).Where(c => c != null).Cast<string>().ToList();
+        
+        foreach (var relation in endorsementDictionary.Values)
+        {
+            allCpns.AddRange(relation.Where(c => c.Cpn != null).Select(c => c.Cpn).Cast<string>());
         }
 
         allCpns = allCpns.Distinct().ToList();
 
-        // 2. Fetch all PLR records
         Console.WriteLine($"Fetching PLR records for {allCpns.Count} CPNs...");
         var plrRecordsByCpn = new Dictionary<string, IEnumerable<PlrRecord>>();
         
-        var chunkedCpns = allCpns.Chunk(50);
-        foreach (var chunk in chunkedCpns)
+        foreach (var chunk in allCpns.Chunk(50))
         {
             var records = await this.plrClient.GetRecordsAsync(chunk.ToArray());
             if (records != null)
             {
-                var grouped = records.GroupBy(r => r.Cpn);
-                foreach (var group in grouped)
+                foreach (var group in records.GroupBy(r => r.Cpn))
                 {
                     if (!string.IsNullOrEmpty(group.Key))
-                    {
                         plrRecordsByCpn[group.Key] = group.ToList();
-                    }
                 }
             }
         }
+        return plrRecordsByCpn;
+    }
 
-        var snapshots = new List<PartySyncSnapshot>();
-        var count = 0;
-        foreach (var party in parties)
+    private async Task<PartySyncSnapshot> ProcessPartyAsync(Party party, GlobalSyncContext ctx)
+    {
+        var plrStanding = CalculatePlrStanding(party.Cpn, ctx.PlrRecordsByCpn);
+        var (endorsementSummaryStr, endorsementPlrStanding) = CalculateEndorsements(party, ctx.EndorsementDictionary, ctx.PlrRecordsByCpn);
+
+        var desired = CalculateDesiredState(party, plrStanding, endorsementPlrStanding);
+
+        var primaryUserId = party.Credentials.FirstOrDefault()?.UserId ?? Guid.Empty;
+
+        var snapshot = new PartySyncSnapshot
         {
-            count++;
-            if (count % 100 == 0)
-            {
-                Console.WriteLine($"Processed {count} / {parties.Count} parties...");
-            }
+            PartyId = party.Id,
+            UserId = primaryUserId,
+            Cpn = party.Cpn,
+            FirstName = party.FirstName,
+            LastName = party.LastName,
+            EndorsementSummary = endorsementSummaryStr,
+            Expected = desired,
+            Credentials = party.Credentials.Select(c => new PartyCredentialSnapshot 
+            { 
+                IdentityProvider = c.IdentityProvider, 
+                IdpId = c.IdpId ?? "Unknown"
+            }).ToList()
+        };
 
-            // In memory digest calculation
-            PlrStandingsDigest plrStanding;
-            if (party.Cpn != null && plrRecordsByCpn.TryGetValue(party.Cpn, out var records))
-            {
-                plrStanding = PlrStandingsDigest.FromRecords(records);
-            }
-            else
-            {
-                plrStanding = PlrStandingsDigest.FromEmpty();
-            }
+        var bcProviderUpns = GetBCProviderUpns(party);
+        await FetchActualStatesAsync(snapshot, party, primaryUserId, bcProviderUpns);
 
-            var endorsementRelations = endorsementDictionary[party.Id];
-            var endorsementSummaries = new List<string>();
-            var endorsementRecords = new List<PlrRecord>();
-            
-            foreach (var relation in endorsementRelations)
+        CompareAndLog(snapshot);
+
+        if (!ctx.DryRun)
+        {
+            await ApplyUpdatesAsync(party, desired, plrStanding, primaryUserId, bcProviderUpns, ctx);
+        }
+
+        return snapshot;
+    }
+
+    private static PlrStandingsDigest CalculatePlrStanding(string? cpn, Dictionary<string, IEnumerable<PlrRecord>> plrRecordsByCpn)
+    {
+        if (cpn != null && plrRecordsByCpn.TryGetValue(cpn, out var records))
+            return PlrStandingsDigest.FromRecords(records);
+        return PlrStandingsDigest.FromEmpty();
+    }
+
+    private static (string, PlrStandingsDigest) CalculateEndorsements(Party party, Dictionary<int, List<Party>> endorsementDictionary, Dictionary<string, IEnumerable<PlrRecord>> plrRecordsByCpn)
+    {
+        var endorsementRelations = endorsementDictionary[party.Id];
+        var endorsementSummaries = new List<string>();
+        var endorsementRecords = new List<PlrRecord>();
+        
+        foreach (var relation in endorsementRelations)
+        {
+            if (relation.Cpn != null && plrRecordsByCpn.TryGetValue(relation.Cpn, out var r))
             {
-                if (relation.Cpn != null && plrRecordsByCpn.TryGetValue(relation.Cpn, out var r))
+                endorsementRecords.AddRange(r);
+                var standing = PlrStandingsDigest.FromRecords(r).WithGoodStanding().With(BCProviderAttributes.EndorserDataEligibleIdentifierTypes);
+                if (standing.HasGoodStanding)
                 {
-                    endorsementRecords.AddRange(r);
-                    var standing = PlrStandingsDigest.FromRecords(r).WithGoodStanding().With(BCProviderAttributes.EndorserDataEligibleIdentifierTypes);
-                    if (standing.HasGoodStanding)
-                    {
-                        var identifierType = r.FirstOrDefault()?.IdentifierType;
-                        var collegeId = r.FirstOrDefault()?.CollegeId;
-                        endorsementSummaries.Add($"Endorsement: {relation.Id} {relation.Cpn} {identifierType} {collegeId}");
-                    }
-                }
-            }
-            
-            var endorsementSummaryStr = string.Join(", ", endorsementSummaries);
-
-            var endorsementPlrStanding = endorsementRecords.Any() ? PlrStandingsDigest.FromRecords(endorsementRecords) : PlrStandingsDigest.FromEmpty();
-
-            var isMoa = !plrStanding.HasGoodStanding && endorsementPlrStanding.HasGoodStanding;
-            var isMd = plrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding;
-            var isRnp = plrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding;
-            var isPharm = plrStanding.With(IdentifierType.Pharmacist).HasGoodStanding;
-
-            // if (string.IsNullOrEmpty(party.OpId) && !dryRun)
-            // {
-            //     await party.GenerateOpId(this.context);
-            //     await this.context.SaveChangesAsync();
-            //     this.logger.LogInformation("Generated OpId {OpId} for Party {PartyId}", party.OpId, party.Id);
-            // }
-
-            var desired = new DesiredState
-            {
-                IsMd = isMd,
-                IsMoa = isMoa,
-                IsPharm = isPharm,
-                IsRnp = isRnp,
-                MspIds = plrStanding.MspIds ?? Array.Empty<string>(),
-                ProviderRoleTypes = plrStanding.ProviderRoleTypes.Select(x => x.ToString()).ToList(),
-                CollegeIds = plrStanding.CollegeIds ?? Array.Empty<string>(),
-                EndorserData = endorsementPlrStanding.WithGoodStanding().With(BCProviderAttributes.EndorserDataEligibleIdentifierTypes).Cpns ?? Array.Empty<string>(),
-                OpId = party.OpId,
-                HasMdRole = isMd,
-                HasMoaRole = isMoa,
-                HasPharmRole = isPharm,
-                HasRnpRole = isRnp,
-                HasSaRole = party.AccessRequests.Any(ar => ar.AccessTypeCode == AccessTypeCode.SAEforms),
-                HasImmsRole = party.AccessRequests.Any(ar => ar.AccessTypeCode == AccessTypeCode.ImmsBCEforms),
-                HasInfantRole = party.AccessRequests.Any(ar => ar.AccessTypeCode == AccessTypeCode.InfantRsvEforms),
-                HasNpdpRole = party.AccessRequests.Any(ar => ar.AccessTypeCode == AccessTypeCode.NpdpEforms)
-            };
-
-            var primaryUserId = party.Credentials.FirstOrDefault()?.UserId ?? Guid.Empty;
-
-            var snapshot = new PartySyncSnapshot
-            {
-                PartyId = party.Id,
-                UserId = primaryUserId,
-                Cpn = party.Cpn,
-                FirstName = party.FirstName,
-                LastName = party.LastName,
-                EndorsementSummary = endorsementSummaryStr,
-                Expected = desired,
-                Credentials = party.Credentials.Select(c => new PartyCredentialSnapshot 
-                { 
-                    IdentityProvider = c.IdentityProvider, 
-                    IdpId = c.IdpId ?? "Unknown"
-                }).ToList()
-            };
-
-            // Fetch BCProvider State
-            var bcProviderUpns = party.Credentials
-                .Where(c => c.IdentityProvider == IdentityProviders.BCProvider)
-                .Select(c => c.IdpId)
-                .Where(upn => upn != null)
-                .Select(upn => upn!)
-                .ToList();
-
-            if (bcProviderUpns.Count > 0)
-            {
-                try
-                {
-                    var upn = bcProviderUpns.Single();
-                    var bcpAttributes = new BCProviderAttributes(clientId)
-                        .SetIsMoa(false)
-                        .SetIsMd(false)
-                        .SetIsPharm(false)
-                        .SetIsRnp(false)
-                        .SetMspId([])
-                        .SetPractitionerRole([])
-                        .SetCollegeId([])
-                        .SetEndorserData([]);
-                    
-                    var attributes = await this.bcProviderClient.GetUserAttributes(upn, bcpAttributes.AsAdditionalData().Keys.ToArray());
-                    snapshot.BCProvider = new ActualBCProviderState
-                    {
-                        Upn = upn,
-                        Attributes = attributes
-                    };
-                }
-                catch (InvalidOperationException ex)
-                {
-                    this.logger.LogError(ex, "Party {PartyId} has multiple BCProvider credentials! Cannot fetch a single BCProvider actual state.", party.Id);
-                }
-            }
-
-            // Fetch Keycloak State
-            if (primaryUserId != Guid.Empty)
-            {
-                var kcUser = await this.keycloakClient.GetUser(primaryUserId);
-                if (kcUser != null)
-                {
-                    snapshot.Keycloak = new ActualKeycloakState
-                    {
-                        UserId = primaryUserId,
-                        Attributes = kcUser.Attributes ?? new Dictionary<string, string[]>()
-                    };
-                }
-            }
-
-            snapshots.Add(snapshot);
-            
-            // Compare and log
-            CompareAndLog(snapshot);
-
-            // Apply updates
-            if (!dryRun)
-            {
-                if (bcProviderUpns.Count > 0)
-                {
-                    var bcProviderAttributes = new BCProviderAttributes(clientId);
-                    bcProviderAttributes.SetIsMoa(isMoa);
-                    bcProviderAttributes.SetIsMd(isMd);
-                    bcProviderAttributes.SetIsRnp(isRnp);
-                    bcProviderAttributes.SetIsPharm(isPharm);
-                    bcProviderAttributes.SetMspId(plrStanding.MspIds);
-                    bcProviderAttributes.SetPractitionerRole(plrStanding.ProviderRoleTypes);
-                    bcProviderAttributes.SetCollegeId(plrStanding.CollegeIds);
-                    bcProviderAttributes.SetEndorserData(desired.EndorserData);
-                    // if (!string.IsNullOrEmpty(party.OpId))
-                    // {
-                    //     bcProviderAttributes.SetOpId(party.OpId);
-                    // }
-
-                    var additionalData = bcProviderAttributes.AsAdditionalData();
-                    foreach (var upn in bcProviderUpns.Where(u => !string.IsNullOrWhiteSpace(u)))
-                    {
-                        await this.SyncSingleBCProviderUpnAsync(upn, additionalData, dryRun);
-                    }
-                }
-
-                foreach (var userId in party.Credentials.Select(c => c.UserId))
-                {
-                    var ctx = new KeycloakSyncContext
-                    {
-                        UserId = userId,
-                        Party = party,
-                        KeysToRemove = keysToRemove,
-                        PlrStanding = plrStanding,
-                        IsMd = isMd,
-                        IsMoa = isMoa,
-                        IsPharm = isPharm,
-                        IsRnp = isRnp,
-                        DryRun = dryRun,
-                        LicenceStatusClientId = licenceStatusClientId,
-                        EformsClientId = eformsClientId,
-                        MdRole = mdRole,
-                        MoaRole = moaRole,
-                        PharmRole = pharmRole,
-                        RnpRole = rnpRole,
-                        SaRole = saRole,
-                        ImmsRole = immsRole,
-                        InfantRole = infantRole,
-                        NpdpRole = npdpRole
-                    };
-                    await this.SyncKeycloakUserAsync(ctx);
+                    var identifierType = r.FirstOrDefault()?.IdentifierType;
+                    var collegeId = r.FirstOrDefault()?.CollegeId;
+                    endorsementSummaries.Add($"Endorsement: {relation.Id} {relation.Cpn} {identifierType} {collegeId}");
                 }
             }
         }
+        
+        var endorsementSummaryStr = string.Join(", ", endorsementSummaries);
+        var endorsementPlrStanding = endorsementRecords.Count > 0 ? PlrStandingsDigest.FromRecords(endorsementRecords) : PlrStandingsDigest.FromEmpty();
 
-        // Write JSON representation
+        return (endorsementSummaryStr, endorsementPlrStanding);
+    }
+
+    private static DesiredState CalculateDesiredState(Party party, PlrStandingsDigest plrStanding, PlrStandingsDigest endorsementPlrStanding)
+    {
+        return new DesiredState
+        {
+            IsMd = plrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding,
+            IsMoa = !plrStanding.HasGoodStanding && endorsementPlrStanding.HasGoodStanding,
+            IsPharm = plrStanding.With(IdentifierType.Pharmacist).HasGoodStanding,
+            IsRnp = plrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding,
+            MspIds = plrStanding.MspIds ?? Array.Empty<string>(),
+            ProviderRoleTypes = plrStanding.ProviderRoleTypes.Select(x => x.ToString()).ToList(),
+            CollegeIds = plrStanding.CollegeIds ?? Array.Empty<string>(),
+            EndorserData = endorsementPlrStanding.WithGoodStanding().With(BCProviderAttributes.EndorserDataEligibleIdentifierTypes).Cpns ?? Array.Empty<string>(),
+            OpId = party.OpId,
+            HasMdRole = plrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding,
+            HasMoaRole = !plrStanding.HasGoodStanding && endorsementPlrStanding.HasGoodStanding,
+            HasPharmRole = plrStanding.With(IdentifierType.Pharmacist).HasGoodStanding,
+            HasRnpRole = plrStanding.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding,
+            HasSaRole = party.AccessRequests.Any(ar => ar.AccessTypeCode == AccessTypeCode.SAEforms),
+            HasImmsRole = party.AccessRequests.Any(ar => ar.AccessTypeCode == AccessTypeCode.ImmsBCEforms),
+            HasInfantRole = party.AccessRequests.Any(ar => ar.AccessTypeCode == AccessTypeCode.InfantRsvEforms),
+            HasNpdpRole = party.AccessRequests.Any(ar => ar.AccessTypeCode == AccessTypeCode.NpdpEforms)
+        };
+    }
+
+    private static List<string> GetBCProviderUpns(Party party)
+    {
+        return party.Credentials
+            .Where(c => c.IdentityProvider == IdentityProviders.BCProvider)
+            .Select(c => c.IdpId)
+            .Where(upn => upn != null)
+            .Select(upn => upn!)
+            .ToList();
+    }
+
+    private async Task FetchActualStatesAsync(PartySyncSnapshot snapshot, Party party, Guid primaryUserId, List<string> bcProviderUpns)
+    {
+        if (bcProviderUpns.Count > 0)
+        {
+            try
+            {
+                var upn = bcProviderUpns.Single();
+                var bcpAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId)
+                    .SetIsMoa(false).SetIsMd(false).SetIsPharm(false).SetIsRnp(false)
+                    .SetMspId([]).SetPractitionerRole([]).SetCollegeId([]).SetEndorserData([]);
+                
+                var attributes = await this.bcProviderClient.GetUserAttributes(upn, bcpAttributes.AsAdditionalData().Keys.ToArray());
+                snapshot.BCProvider = new ActualBCProviderState { Upn = upn, Attributes = attributes };
+            }
+            catch (InvalidOperationException ex)
+            {
+                this.logger.LogError(ex, "Party {PartyId} has multiple BCProvider credentials! Cannot fetch a single BCProvider actual state.", party.Id);
+            }
+        }
+
+        if (primaryUserId != Guid.Empty)
+        {
+            var kcUser = await this.keycloakClient.GetUser(primaryUserId);
+            if (kcUser != null)
+            {
+                snapshot.Keycloak = new ActualKeycloakState
+                {
+                    UserId = primaryUserId,
+                    Attributes = kcUser.Attributes ?? new Dictionary<string, string[]>()
+                };
+            }
+        }
+    }
+
+    private async Task ApplyUpdatesAsync(Party party, DesiredState desired, PlrStandingsDigest plrStanding, Guid primaryUserId, List<string> bcProviderUpns, GlobalSyncContext ctx)
+    {
+        if (bcProviderUpns.Count > 0)
+        {
+            var bcProviderAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId);
+            bcProviderAttributes.SetIsMoa(desired.IsMoa);
+            bcProviderAttributes.SetIsMd(desired.IsMd);
+            bcProviderAttributes.SetIsRnp(desired.IsRnp);
+            bcProviderAttributes.SetIsPharm(desired.IsPharm);
+            bcProviderAttributes.SetMspId(plrStanding.MspIds);
+            bcProviderAttributes.SetPractitionerRole(plrStanding.ProviderRoleTypes);
+            bcProviderAttributes.SetCollegeId(plrStanding.CollegeIds);
+            bcProviderAttributes.SetEndorserData(desired.EndorserData);
+
+            var additionalData = bcProviderAttributes.AsAdditionalData();
+            foreach (var upn in bcProviderUpns.Where(u => !string.IsNullOrWhiteSpace(u)))
+            {
+                await this.SyncSingleBCProviderUpnAsync(upn, additionalData, ctx.DryRun);
+            }
+        }
+
+        foreach (var userId in party.Credentials.Select(c => c.UserId))
+        {
+            var kctx = new KeycloakSyncContext
+            {
+                UserId = userId,
+                Party = party,
+                KeysToRemove = new[] { "college_license_info", "college_licence_info", "college_certification_info" },
+                PlrStanding = plrStanding,
+                IsMd = desired.IsMd,
+                IsMoa = desired.IsMoa,
+                IsPharm = desired.IsPharm,
+                IsRnp = desired.IsRnp,
+                DryRun = ctx.DryRun,
+                LicenceStatusClientId = "LICENCE-STATUS",
+                EformsClientId = "SAT-EFORMS",
+                MdRole = ctx.KeycloakRoles.MdRole,
+                MoaRole = ctx.KeycloakRoles.MoaRole,
+                PharmRole = ctx.KeycloakRoles.PharmRole,
+                RnpRole = ctx.KeycloakRoles.RnpRole,
+                SaRole = ctx.KeycloakRoles.SaRole,
+                ImmsRole = ctx.KeycloakRoles.ImmsRole,
+                InfantRole = ctx.KeycloakRoles.InfantRole,
+                NpdpRole = ctx.KeycloakRoles.NpdpRole
+            };
+            await this.SyncKeycloakUserAsync(kctx);
+        }
+    }
+
+    private async Task WriteJsonOutputAsync(List<PartySyncSnapshot> snapshots)
+    {
         var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
         var filename = $"output/resync_{timestamp}.json";
         var jsonContent = JsonSerializer.Serialize(snapshots, new JsonSerializerOptions { WriteIndented = true });
         await File.WriteAllTextAsync(filename, jsonContent);
         Console.WriteLine($"Wrote JSON output to {filename}");
-
-        Console.WriteLine($"--- Resync Complete ({count} parties processed) ---");
     }
 
+    // Refactored CompareAndLog helpers
     private static void CompareAndLog(PartySyncSnapshot snapshot)
+    {
+        LogPartyDetails(snapshot);
+
+        var bcChanges = new List<string>();
+        var kcChanges = new List<string>();
+
+        CompareBCProvider(snapshot, bcChanges);
+        CompareKeycloak(snapshot, kcChanges);
+        
+        if (bcChanges.Count > 0) Console.WriteLine($"    BCProvider Changes: {string.Join(", ", bcChanges)}");
+        if (kcChanges.Count > 0) Console.WriteLine($"    Keycloak Changes: {string.Join(", ", kcChanges)}");
+        if (bcChanges.Count == 0 && kcChanges.Count == 0) Console.WriteLine("    No changes required.");
+    }
+
+    private static void LogPartyDetails(PartySyncSnapshot snapshot)
     {
         var expected = snapshot.Expected;
         var licenses = expected.CollegeIds.Any() ? string.Join(",", expected.CollegeIds) : "None";
@@ -438,11 +477,19 @@ public class ResyncService(
         {
             Console.WriteLine($"    keycloak: {snapshot.UserId}, Attributes: {JsonSerializer.Serialize(snapshot.Keycloak.Attributes)}");
         }
+    }
 
-        var bcChanges = new List<string>();
-        var kcChanges = new List<string>();
+    private static void CompareBCProvider(PartySyncSnapshot snapshot, List<string> bcChanges)
+    {
+        if (snapshot.BCProvider?.Attributes == null) return;
         
-        // Helper
+        var attrs = snapshot.BCProvider.Attributes;
+        string GetBcpValue(string suffix) 
+        {
+            var key = attrs.Keys.FirstOrDefault(k => k.EndsWith(suffix, StringComparison.OrdinalIgnoreCase));
+            return (key != null && attrs.TryGetValue(key, out var val)) ? (val?.ToString()?.ToLower() ?? "null") : "null";
+        }
+
         void CheckBc(string prop, string expectedStr, string actualStr)
         {
             if (expectedStr != actualStr)
@@ -452,74 +499,42 @@ public class ResyncService(
             }
         }
 
-        void CheckKc(string prop, string expectedStr, string actualStr)
+        CheckBc("isMoa", snapshot.Expected.IsMoa.ToString().ToLower(), GetBcpValue("_isMoa"));
+        CheckBc("isMd", snapshot.Expected.IsMd.ToString().ToLower(), GetBcpValue("_isMd"));
+        CheckBc("isPharm", snapshot.Expected.IsPharm.ToString().ToLower(), GetBcpValue("_isPharm"));
+        CheckBc("isRnp", snapshot.Expected.IsRnp.ToString().ToLower(), GetBcpValue("_isRnp"));
+
+        string ArrayToStr(IEnumerable<string> arr) => ("[" + string.Join(",", arr.Select(s => $"\"{s}\"")) + "]").ToLower();
+
+        CheckBc("CollegeId", ArrayToStr(snapshot.Expected.CollegeIds), GetBcpValue("_collegeid"));
+        CheckBc("MspId", ArrayToStr(snapshot.Expected.MspIds), GetBcpValue("_mspId"));
+        CheckBc("PractitionerRole", ArrayToStr(snapshot.Expected.ProviderRoleTypes), GetBcpValue("_practitionerRole"));
+        CheckBc("EndorserData", ArrayToStr(snapshot.Expected.EndorserData), GetBcpValue("_endorserData"));
+    }
+
+    private static void CompareKeycloak(PartySyncSnapshot snapshot, List<string> kcChanges)
+    {
+        if (snapshot.Keycloak == null) return;
+
+        var attrs = snapshot.Keycloak.Attributes;
+        string GetKcValue(string key) => attrs.GetValueOrDefault(key)?.FirstOrDefault()?.ToLower() ?? "null";
+
+        var kcMoa = GetKcValue("is_moa");
+        var kcMd = GetKcValue("is_md");
+        var kcPharm = GetKcValue("is_pharm");
+        var kcRnp = GetKcValue("is_rnp");
+
+        var expMoa = snapshot.Expected.IsMoa.ToString().ToLower();
+        var expMd = snapshot.Expected.IsMd.ToString().ToLower();
+        var expPharm = snapshot.Expected.IsPharm.ToString().ToLower();
+        var expRnp = snapshot.Expected.IsRnp.ToString().ToLower();
+
+        if (kcMoa != expMoa || kcMd != expMd || kcPharm != expPharm || kcRnp != expRnp)
         {
-            // Unused since we compress Keycloak logging now, but leaving for reference if needed
-        }
-
-        // Compare BCProvider
-        if (snapshot.BCProvider?.Attributes != null)
-        {
-            var attrs = snapshot.BCProvider.Attributes;
-            string GetBcpValue(string suffix) 
-            {
-                var key = attrs.Keys.FirstOrDefault(k => k.EndsWith(suffix, StringComparison.OrdinalIgnoreCase));
-                return (key != null && attrs.TryGetValue(key, out var val)) ? (val?.ToString()?.ToLower() ?? "null") : "null";
-            }
-
-            CheckBc("isMoa", snapshot.Expected.IsMoa.ToString().ToLower(), GetBcpValue("_isMoa"));
-            CheckBc("isMd", snapshot.Expected.IsMd.ToString().ToLower(), GetBcpValue("_isMd"));
-            CheckBc("isPharm", snapshot.Expected.IsPharm.ToString().ToLower(), GetBcpValue("_isPharm"));
-            CheckBc("isRnp", snapshot.Expected.IsRnp.ToString().ToLower(), GetBcpValue("_isRnp"));
-            // CheckBc("OpId", snapshot.Expected.OpId?.ToLower() ?? "null", GetBcpValue("_opId"));
-
-            string ArrayToStr(IEnumerable<string> arr) => ("[" + string.Join(",", arr.Select(s => $"\"{s}\"")) + "]").ToLower();
-
-            CheckBc("CollegeId", ArrayToStr(snapshot.Expected.CollegeIds), GetBcpValue("_collegeid"));
-            CheckBc("MspId", ArrayToStr(snapshot.Expected.MspIds), GetBcpValue("_mspId"));
-            CheckBc("PractitionerRole", ArrayToStr(snapshot.Expected.ProviderRoleTypes), GetBcpValue("_practitionerRole"));
-            CheckBc("EndorserData", ArrayToStr(snapshot.Expected.EndorserData), GetBcpValue("_endorserData"));
-        }
-
-        // Compare Keycloak
-        if (snapshot.Keycloak != null)
-        {
-            var attrs = snapshot.Keycloak.Attributes;
-            string GetKcValue(string key) => attrs.GetValueOrDefault(key)?.FirstOrDefault()?.ToLower() ?? "null";
-
-            var kcMoa = GetKcValue("is_moa");
-            var kcMd = GetKcValue("is_md");
-            var kcPharm = GetKcValue("is_pharm");
-            var kcRnp = GetKcValue("is_rnp");
-
-            var expMoa = snapshot.Expected.IsMoa.ToString().ToLower();
-            var expMd = snapshot.Expected.IsMd.ToString().ToLower();
-            var expPharm = snapshot.Expected.IsPharm.ToString().ToLower();
-            var expRnp = snapshot.Expected.IsRnp.ToString().ToLower();
-
-            if (kcMoa != expMoa || kcMd != expMd || kcPharm != expPharm || kcRnp != expRnp)
-            {
-                kcChanges.Add($"is_moa: {expMoa}, is_md: {expMd}, is_pharm: {expPharm}, is_rnp: {expRnp}");
-            }
-        }
-        
-        if (bcChanges.Count > 0)
-        {
-            Console.WriteLine($"    BCProvider Changes: {string.Join(", ", bcChanges)}");
-        }
-        if (kcChanges.Count > 0)
-        {
-            Console.WriteLine($"    Keycloak Changes: {string.Join(", ", kcChanges)}");
-        }
-        
-        if (bcChanges.Count == 0 && kcChanges.Count == 0)
-        {
-            Console.WriteLine("    No changes required.");
+            kcChanges.Add($"is_moa: {expMoa}, is_md: {expMd}, is_pharm: {expPharm}, is_rnp: {expRnp}");
         }
     }
 
-    // Keep the other existing methods below...
-    
     private async Task SyncSingleBCProviderUpnAsync(string upn, Dictionary<string, object> additionalData, bool dryRun)
     {
         var currentAttributes = await this.bcProviderClient.GetUserAttributes(upn, additionalData.Keys.ToArray());
@@ -572,16 +587,16 @@ public class ResyncService(
         requiresKeycloakUpdate |= SetKeycloakAttribute(user, "practitionerrole", new[] { JsonSerializer.Serialize(ctx.PlrStanding.ProviderRoleTypes.Select(t => t.ToString())) });
         requiresKeycloakUpdate |= SetKeycloakAttribute(user, "collegeid", new[] { JsonSerializer.Serialize(ctx.PlrStanding.CollegeIds) });
         requiresKeycloakUpdate |= SetKeycloakAttribute(user, "msp_id", new[] { JsonSerializer.Serialize(ctx.PlrStanding.MspIds) });
-        requiresKeycloakUpdate |= SetKeycloakAttribute(user, "common_provider_number", new[] { ctx.Party.Cpn });
+        
+        if (ctx.Party.Cpn != null)
+        {
+            requiresKeycloakUpdate |= SetKeycloakAttribute(user, "common_provider_number", new[] { ctx.Party.Cpn });
+        }
+
         requiresKeycloakUpdate |= SetKeycloakAttribute(user, "is_md", new[] { ctx.IsMd.ToString() });
         requiresKeycloakUpdate |= SetKeycloakAttribute(user, "is_moa", new[] { ctx.IsMoa.ToString() });
         requiresKeycloakUpdate |= SetKeycloakAttribute(user, "is_pharm", new[] { ctx.IsPharm.ToString() });
         requiresKeycloakUpdate |= SetKeycloakAttribute(user, "is_rnp", new[] { ctx.IsRnp.ToString() });
-
-        // if (!string.IsNullOrEmpty(ctx.Party.OpId))
-        // {
-        //     requiresKeycloakUpdate |= SetKeycloakAttribute(user, "opId", new[] { ctx.Party.OpId });
-        // }
 
         if (requiresKeycloakUpdate)
         {
