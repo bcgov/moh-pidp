@@ -20,6 +20,7 @@ spec:
         spec:
           containers:
           - name: tools-do-work
+            imagePullPolicy: Always
             image: "{{ .Values.global.image.registry }}/{{ .Values.global.image.repository }}:{{ .Values.global.image.tag | default .Chart.AppVersion }}"
             args:
               {{- range .Values.jobArgs }}

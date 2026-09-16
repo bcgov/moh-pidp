@@ -10,6 +10,7 @@ COPY tools.do-work ./tools.do-work
 COPY webapi ./webapi
 
 RUN dotnet publish tools.do-work/do-work.csproj -c Release -o /app -r linux-musl-x64 --self-contained false
+RUN chmod 666 /app/appsettings.json
 
 #----------------------------------------------------------------#
 FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine
@@ -19,4 +20,4 @@ RUN apk add --no-cache krb5-libs
 
 COPY --from=build-env /app .
 
-ENTRYPOINT ["./DoWork"]
+ENTRYPOINT ["./do-work"]
