@@ -22,4 +22,5 @@ RUN apk add --no-cache krb5-libs
 
 COPY --from=build-env /app .
 
+USER app
 ENTRYPOINT ["./do-work"]

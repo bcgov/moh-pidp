@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout Code"
-        uses: actions/checkout@master
+        uses: actions/checkout@61b9e3751b92087fd0b06925ba6dd6314e06f089
 
       - name: "Docker Build GOLD"
         working-directory: "./backend"
@@ -27,7 +27,7 @@ jobs:
 
       # Uses the builder service account token
       - name: "Docker Login to GOLD OCP"
-        uses: docker/login-action@v2
+        uses: docker/login-action@465a07811f14bebb1938fbed4728c6a1ff8901fc
         with:
           registry: image-registry.apps.gold.devops.gov.bc.ca
           username: builder
@@ -44,7 +44,7 @@ jobs:
 
       # Uses the builder service account token
       - name: "Docker Login to GOLDDR OCP"
-        uses: docker/login-action@v2
+        uses: docker/login-action@465a07811f14bebb1938fbed4728c6a1ff8901fc
         with:
           registry: image-registry.apps.golddr.devops.gov.bc.ca
           username: builder
