@@ -83,11 +83,23 @@ public class RoleSynchronizationService(PidpDbContext context, IBCProviderClient
         {
             var userUpdate = new User
             {
-                JobTitle = jobTitle,
-                Department = department,
-                OfficeLocation = licenceNumber,
                 UsageLocation = "CA"
             };
+
+            if (!string.IsNullOrEmpty(jobTitle))
+            {
+                userUpdate.JobTitle = jobTitle;
+            }
+
+            if (!string.IsNullOrEmpty(department))
+            {
+                userUpdate.Department = department;
+            }
+
+            if (!string.IsNullOrEmpty(licenceNumber))
+            {
+                userUpdate.OfficeLocation = licenceNumber;
+            }
 
             var success = await this.bcProviderClient.UpdateUser(partyDetails.Upn, userUpdate);
             if (success)
