@@ -1,4 +1,5 @@
 import { Section } from '../section.model';
+import { ImmsBcSection } from './immsbc-section.model';
 import { SaEformsSection } from './sa-eforms-section.model';
 
 /**
@@ -56,6 +57,6 @@ export interface AccessGroup extends IAccessGroup {
   externalAccounts: Section;
   halo: Section;
   ivf: Section;
-  immsBC: Section;
+  immsBC: ImmsBcSection;
   pemcod: Section;
 }

@@ -8,24 +8,33 @@ using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Models;
+using System.Diagnostics;
+using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models.Lookups;
 
-public class RoleSynchronizationService(PidpDbContext context, IBCProviderClient bcProviderClient, IClock clock, IKeycloakAdministrationClient keycloakClient) : IRoleSynchronizationService
+public class RoleSynchronizationService(PidpDbContext context, IBCProviderClient bcProviderClient, IClock clock, IKeycloakAdministrationClient keycloakClient, IPlrClient plrClient, PidpConfiguration config, ILogger<RoleSynchronizationService> logger) : IRoleSynchronizationService
 {
     private readonly PidpDbContext context = context;
     private readonly IBCProviderClient bcProviderClient = bcProviderClient;
     private readonly IClock clock = clock;
     private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
+    private readonly IPlrClient plrClient = plrClient;
+    private readonly ILogger<RoleSynchronizationService> logger = logger;
+    private readonly string clientId = config.BCProviderClient.ClientId;
 
     public async Task UpdatePharmStaffAttributes(int partyId, CancellationToken cancellationToken)
     {
+        var stopwatch = Stopwatch.StartNew();
+
         var partyDetails = await this.context.Parties
             .Where(p => p.Id == partyId)
             .Select(p => new
             {
                 PrimaryUserId = p.PrimaryUserId,
                 LicenceNumber = p.LicenceDeclaration != null ? p.LicenceDeclaration.LicenceNumber : "",
-                Upn = p.Credentials.Where(c => c.IdentityProvider == IdentityProviders.BCProvider).Select(c => c.IdpId).FirstOrDefault()
+                Upn = p.Credentials.Where(c => c.IdentityProvider == IdentityProviders.BCProvider).Select(c => c.IdpId).FirstOrDefault(),
+                BcProviderUserId = p.Credentials.Where(c => c.IdentityProvider == IdentityProviders.BCProvider).Select(c => (Guid?)c.UserId).FirstOrDefault(),
+                Cpn = p.Cpn
             })
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -48,22 +57,16 @@ public class RoleSynchronizationService(PidpDbContext context, IBCProviderClient
 
         if (roles.Count > 0)
         {
-            if (roles.Any(r => r.Role == PharmacyRole.Admin))
+            if (roles.Any(r => r.Role == PharmacyRole.Lead))
             {
-                jobTitle = "admin";
-                keycloakEnrolmentToAssign = MohKeycloakEnrolment.ImmsBcPhaAdmin;
+                jobTitle = "lead";
+                keycloakEnrolmentToAssign = MohKeycloakEnrolment.ImmsBcPhaLead;
             }
-            else if (roles.Any(r => r.Role == PharmacyRole.Clinician))
+            else if (roles.Any(r => r.Role == PharmacyRole.EndUser))
             {
-                jobTitle = "clinician";
-                keycloakEnrolmentToAssign = MohKeycloakEnrolment.ImmsBcPhaClinician;
+                jobTitle = "end_user";
+                keycloakEnrolmentToAssign = MohKeycloakEnrolment.ImmsBcPhaEndUser;
             }
-            else if (roles.Any(r => r.Role == PharmacyRole.Clerk))
-            {
-                jobTitle = "clerk";
-                keycloakEnrolmentToAssign = MohKeycloakEnrolment.ImmsBcPhaClerk;
-            }
-
             var pharmacyNames = roles.Select(r => r.Pharmacy.Name).Distinct().ToList();
             department = string.Join("|", pharmacyNames);
         }
@@ -92,26 +95,53 @@ public class RoleSynchronizationService(PidpDbContext context, IBCProviderClient
                 this.context.BusinessEvents.Add(BCProviderAttributesUpdated.Create(partyId, details, this.clock.GetCurrentInstant()));
                 await this.context.SaveChangesAsync(cancellationToken);
             }
+
+            if (!string.IsNullOrEmpty(partyDetails.Cpn))
+            {
+                var plrStanding = await this.plrClient.GetStandingsDigestAsync(partyDetails.Cpn);
+                var bcProviderAttributes = new BCProviderAttributes(this.clientId);
+                bcProviderAttributes.SetPractitionerRole(plrStanding.ProviderRoleTypes);
+                bcProviderAttributes.SetCollegeId(plrStanding.CollegeIds);
+                
+                var pharmacistStanding = plrStanding.With(IdentifierType.Pharmacist);
+                if (pharmacistStanding.Cpns.Any())
+                {
+                    bcProviderAttributes.SetIsPharm(pharmacistStanding.HasGoodStanding);
+                }
+
+                await this.bcProviderClient.UpdateAttributes(partyDetails.Upn, bcProviderAttributes.AsAdditionalData());
+            }
         }
 
         // Sync Keycloak roles
         var allImmsBcRoles = new[]
         {
-            MohKeycloakEnrolment.ImmsBcPhaAdmin,
-            MohKeycloakEnrolment.ImmsBcPhaClinician,
-            MohKeycloakEnrolment.ImmsBcPhaClerk
+            MohKeycloakEnrolment.ImmsBcPhaLead,
+            MohKeycloakEnrolment.ImmsBcPhaEndUser
         };
+
+        var userIds = new List<Guid> { partyDetails.PrimaryUserId };
+        if (partyDetails.BcProviderUserId.HasValue && partyDetails.BcProviderUserId.Value != Guid.Empty)
+        {
+            userIds.Add(partyDetails.BcProviderUserId.Value);
+        }
 
         foreach (var enrolment in allImmsBcRoles)
         {
-            if (enrolment == keycloakEnrolmentToAssign)
+            foreach (var userId in userIds)
             {
-                await this.keycloakClient.AssignAccessRoles(partyDetails.PrimaryUserId, enrolment);
-            }
-            else
-            {
-                await this.keycloakClient.RemoveAccessRoles(partyDetails.PrimaryUserId, enrolment);
+                if (enrolment == keycloakEnrolmentToAssign)
+                {
+                    await this.keycloakClient.AssignAccessRoles(userId, enrolment);
+                }
+                else
+                {
+                    await this.keycloakClient.RemoveAccessRoles(userId, enrolment);
+                }
             }
         }
+
+        stopwatch.Stop();
+        this.logger.LogInformation("UpdatePharmStaffAttributes for Party {PartyId} completed in {ElapsedMilliseconds}ms", partyId, stopwatch.ElapsedMilliseconds);
     }
 }

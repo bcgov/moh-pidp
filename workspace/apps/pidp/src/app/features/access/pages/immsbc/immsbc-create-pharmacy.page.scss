@@ -311,6 +311,48 @@
       background-color: #1589be !important;
     }
   }
+
+  .manager-search-section {
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      margin-top: 15px;
+      margin-bottom: 20px;
+
+      label {
+        font-size: 14px;
+        font-weight: 500;
+        color: #666;
+        margin-bottom: 6px;
+      }
+
+      input {
+        height: 44px;
+        border: 1px solid #767676;
+        border-radius: 3px;
+        background: #fff;
+        padding: 0 12px;
+        font-size: 15px;
+        font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+        color: #111;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        box-sizing: border-box;
+
+        &:focus {
+          outline: none;
+          border-color: #0078d4;
+          box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.15);
+        }
+      }
+
+      .helper-text {
+        font-size: 13px;
+        color: #8a8a8a;
+        margin-top: 5px;
+        line-height: 1.4;
+      }
+    }
+  }
 }
 
 // ─── Responsive overrides ──────────────────────────────────────────────────
@@ -338,6 +380,7 @@
   .form-panel {
     padding: 16px !important;
   }
+
   .content-header {
     margin: 0 20px 0 20px;
   }
@@ -354,7 +397,7 @@
     & .card {
       margin-left: 0 !important;
     }
-  }  
+  }
 }
 
 .viewport-small {

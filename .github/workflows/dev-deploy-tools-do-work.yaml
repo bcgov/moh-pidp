@@ -1,0 +1,43 @@
+name: Deploy Dev Helm Charts - Tools Do Work
+
+on:
+  push:
+    branches: [develop, feature/imms2-uat4]
+    paths:
+      - "infra/tools-do-work/**"
+  workflow_dispatch:
+
+# This will terminate builds that are previously, but continuing to run.  Saves GHA hours.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  helm-deployment-tools-do-work-gold:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: actions/checkout@61b9e3751b92087fd0b06925ba6dd6314e06f089
+
+      - name: Install CLI tools from GitHub
+        uses: redhat-actions/openshift-tools-installer@144527c7d98999f2652264c048c7a9bd103f8a82
+        with:  
+          oc: "4"
+
+      - name: Authenticate and set context
+        uses: redhat-actions/oc-login@5eb45e848b168b6bf6b8fe7f1561003c12e3c99d
+        with:
+          openshift_server_url: ${{secrets.GOLD_OPENSHIFT_CLUSTER_URL}}
+          openshift_token: ${{secrets.GOLD_PIPELINE_SERVICE_ACCOUNT_TOKEN}}
+
+      - name: Helm Deploy Upgrade
+        run: |
+          echo current installed helm releases
+          helm list --namespace f088b1-dev
+
+          echo installing helm chart...
+          helm upgrade --install --wait --namespace f088b1-dev --values infra/tools-do-work/values.yaml tools-do-work infra/tools-do-work
+
+

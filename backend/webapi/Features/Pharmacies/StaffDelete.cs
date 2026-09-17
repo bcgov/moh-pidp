@@ -24,17 +24,17 @@ public class StaffDelete
             var requestingPartyIsAdmin = await context.PharmacyPartyRoles
                 .AnyAsync(role => role.PartyId == request.RequestingPartyId
                                && role.PharmacyId == request.PharmacyId
-                               && role.Role == PharmacyRole.Admin,
+                               && (role.Role == PharmacyRole.Admin || role.Role == PharmacyRole.Lead),
                           cancellationToken);
 
             if (!requestingPartyIsAdmin)
             {
-                throw new InvalidOperationException("User is not an admin of this pharmacy.");
+                throw new InvalidOperationException("User is not an admin or lead of this pharmacy.");
             }
 
             if (request.PartyId == request.RequestingPartyId)
             {
-                throw new InvalidOperationException("An admin cannot remove themselves from a pharmacy.");
+                throw new InvalidOperationException("A lead cannot remove themselves from a pharmacy.");
             }
 
             var staffRole = await context.PharmacyPartyRoles

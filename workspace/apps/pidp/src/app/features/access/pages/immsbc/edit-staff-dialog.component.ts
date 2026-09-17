@@ -33,9 +33,8 @@ export interface EditStaffDialogData {
         <mat-form-field class="w-100">
           <mat-label>Role</mat-label>
           <mat-select formControlName="role">
-            <mat-option [value]="PharmacyRole.Clinician">Clinician</mat-option>
-            <mat-option [value]="PharmacyRole.Clerk">Clerk</mat-option>
-            <mat-option [value]="PharmacyRole.Admin">Administrator</mat-option>
+            <mat-option [value]="PharmacyRole.EndUser">End User</mat-option>
+            <mat-option [value]="PharmacyRole.Lead">Lead</mat-option>
           </mat-select>
         </mat-form-field>
 
@@ -89,14 +88,14 @@ export interface EditStaffDialogData {
       </form>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
-      <button mat-button (click)="onCancel()">Cancel</button>
+      <button mat-button (click)="onCancel()" [disabled]="isSaving">Cancel</button>
       <button
         mat-flat-button
         color="primary"
         (click)="onSave()"
-        [disabled]="form.invalid || !form.dirty"
+        [disabled]="form.invalid || !form.dirty || isSaving"
       >
-        Save
+        {{ isSaving ? 'Saving...' : 'Save' }}
       </button>
     </mat-dialog-actions>
   `,
@@ -124,6 +123,7 @@ export class EditStaffDialogComponent implements OnInit {
 
   public form: FormGroup;
   public PharmacyRole = PharmacyRole;
+  public isSaving = false;
 
   public constructor() {
     this.form = this.fb.group({
@@ -181,6 +181,7 @@ export class EditStaffDialogComponent implements OnInit {
 
   public onSave(): void {
     if (this.form.valid && this.form.dirty) {
+      this.isSaving = true;
       const payload = this.form.getRawValue();
 
       // Format dates to YYYY-MM-DD string if they are not null
@@ -195,11 +196,13 @@ export class EditStaffDialogComponent implements OnInit {
         .updateStaff(this.data.pharmacyId, this.data.staff.partyId, payload)
         .pipe(
           catchError(() => {
+            this.isSaving = false;
             this.snackBar.open('An error occurred while updating the staff role.', 'Close', { duration: 10000 });
             return EMPTY;
           })
         )
         .subscribe(() => {
+          this.isSaving = false;
           this.snackBar.open('Staff updated successfully.', 'Close', { duration: 3000 });
           this.dialogRef.close(true);
         });

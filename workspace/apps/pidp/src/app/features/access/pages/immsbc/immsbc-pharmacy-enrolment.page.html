@@ -20,14 +20,17 @@
             </span>
           </label>
           @if (form.get('privacyTrainingAcknowledged')?.invalid && form.get('privacyTrainingAcknowledged')?.touched) {
-          <div class="text-danger mt-2 small">This acknowledgement is required to enrol.</div>
+          <div class="text-danger mt-2 small">This acknowledgement is required to Enrol.</div>
           }
         </div>
       </div>
 
-      <div class="submit-row">
+      <div class="submit-row" style="display: flex; gap: 16px;">
         <button mat-flat-button color="primary" type="submit" class="submit-btn" [disabled]="form.invalid">
           Enrol
+        </button>
+        <button mat-stroked-button type="button" (click)="onCancel()">
+          Cancel
         </button>
       </div>
     </form>
