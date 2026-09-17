@@ -50,9 +50,9 @@ public class RoleSynchronizationService(PidpDbContext context, IBCProviderClient
                      && (r.EffectiveEndDate == null || r.EffectiveEndDate > now))
             .ToListAsync(cancellationToken);
 
-        string jobTitle = "";
-        string department = "";
-        var licenceNumber = partyDetails.LicenceNumber ?? "";
+        string? jobTitle = null;
+        string? department = null;
+        var licenceNumber = string.IsNullOrEmpty(partyDetails.LicenceNumber) ? null : partyDetails.LicenceNumber;
         MohKeycloakEnrolment? keycloakEnrolmentToAssign = null;
 
         if (roles.Count > 0)
@@ -74,8 +74,9 @@ public class RoleSynchronizationService(PidpDbContext context, IBCProviderClient
         {
             // If they have no active roles, we can clear the job title and department
             // In case of deactivation, PharmacyStaffDeactivationService will also override this with a 'disabled' string
-            jobTitle = "";
-            department = "";
+            // We use null instead of empty string because Entra ID (Graph API) rejects empty strings.
+            jobTitle = null;
+            department = null;
         }
 
         if (!string.IsNullOrEmpty(partyDetails.Upn))
