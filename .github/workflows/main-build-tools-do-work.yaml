@@ -1,4 +1,4 @@
-name: Promote Endorsement Schedule image - main
+name: main-build-tools-do-work
 
 on:
   push:

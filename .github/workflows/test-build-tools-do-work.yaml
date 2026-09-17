@@ -1,4 +1,4 @@
-name: Promote Endorsement Schedule image - test
+name: test-build-tools-do-work
 
 on:
   push:

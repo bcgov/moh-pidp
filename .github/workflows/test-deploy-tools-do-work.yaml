@@ -1,4 +1,4 @@
-name: Deploy Test Helm Charts - Tools Do Work
+name: test-deploy-tools-do-work
 
 on:
   push:

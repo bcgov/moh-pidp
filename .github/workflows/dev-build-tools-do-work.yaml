@@ -1,8 +1,8 @@
-name: Build Tools Do Work - Dev
+name: dev-build-tools-do-work
 
 on:
   push:
-    branches: [develop, feature/imms2-uat4]
+    branches: [develop, fix/imms2-uat4]
     paths:
       - "backend/tools.do-work/**"
   workflow_dispatch:

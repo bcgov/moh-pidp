@@ -1,8 +1,8 @@
-name: Deploy Dev Helm Charts - Tools Do Work
+name: dev-deploy-tools-do-work
 
 on:
   push:
-    branches: [develop, feature/imms2-uat4]
+    branches: [develop, fix/imms2-uat4]
     paths:
       - "infra/tools-do-work/**"
   workflow_dispatch:
