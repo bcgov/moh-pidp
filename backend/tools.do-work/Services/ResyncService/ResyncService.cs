@@ -503,7 +503,11 @@ public class ResyncService(
         CheckBc("isPharm", snapshot.Expected.IsPharm.ToString().ToLower(), GetBcpValue("_isPharm"));
         CheckBc("isRnp", snapshot.Expected.IsRnp.ToString().ToLower(), GetBcpValue("_isRnp"));
 
-        string ArrayToStr(IEnumerable<string> arr) => ("[" + string.Join(",", arr.Select(s => $"\"{s}\"")) + "]").ToLower();
+        string ArrayToStr(IEnumerable<string> arr)
+        {
+            var str = ("[" + string.Join(",", arr.Select(s => $"\"{s}\"")) + "]").ToLower();
+            return str == "[]" ? "null" : str;
+        }
 
         CheckBc("CollegeId", ArrayToStr(snapshot.Expected.CollegeIds), GetBcpValue("_collegeid"));
         CheckBc("MspId", ArrayToStr(snapshot.Expected.MspIds), GetBcpValue("_mspId"));
@@ -538,6 +542,7 @@ public class ResyncService(
     {
         var currentAttributes = await this.bcProviderClient.GetUserAttributes(upn, additionalData.Keys.ToArray());
         var hasChanges = currentAttributes == null;
+        var keysToRemove = new List<string>();
 
         if (hasChanges)
         {
@@ -548,6 +553,12 @@ public class ResyncService(
             foreach (var kvp in additionalData)
             {
                 var newValueString = kvp.Value?.ToString()?.ToLowerInvariant() ?? "null";
+                if (newValueString == "[]")
+                {
+                    newValueString = "null";
+                    additionalData[kvp.Key] = null!;
+                }
+
                 var currentValueString = currentAttributes!.TryGetValue(kvp.Key, out var currVal) ? (currVal?.ToString()?.ToLowerInvariant() ?? "null") : "null";
 
                 if (newValueString != currentValueString)
@@ -555,10 +566,19 @@ public class ResyncService(
                     this.logger.LogInformation("UPN {Upn} Attribute {Key} changing from {CurrentValueString} to {NewValueString}", upn, kvp.Key, currentValueString, newValueString);
                     hasChanges = true;
                 }
+                else if (newValueString == "null")
+                {
+                    keysToRemove.Add(kvp.Key);
+                }
             }
         }
 
-        if (hasChanges && !dryRun)
+        foreach (var key in keysToRemove)
+        {
+            additionalData.Remove(key);
+        }
+
+        if (hasChanges && additionalData.Count > 0 && !dryRun)
         {
             await this.bcProviderClient.UpdateAttributes(upn, additionalData);
         }
@@ -670,6 +690,11 @@ public class ResyncService(
     private static bool SetKeycloakAttribute(Pidp.Infrastructure.HttpClients.Keycloak.UserRepresentation user, string key, IEnumerable<string> EnumerableNewValue)
     {
         var newValueList = EnumerableNewValue.ToList();
+        if (newValueList.Count == 1 && newValueList[0] == "[]")
+        {
+            newValueList.Clear();
+        }
+
         if (user.Attributes.TryGetValue(key, out var currentValue))
         {
             var currentValueList = currentValue.ToList();
