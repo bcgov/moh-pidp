@@ -35,7 +35,7 @@ jobs:
         working-directory: "./workspace"
 
     outputs:
-      pr_number: ${{ steps.find-pr.outputs.pr }}
+      pr_number: ${{ steps.find-pr.outputs.pr_number }}
 
     steps:
       - name: "Checkout Code"
@@ -43,16 +43,16 @@ jobs:
       
       - name: find-pr
         id: find-pr
-        uses: jwalton/gh-find-current-pr@v1
-        with:
-          state: open
-
-      - name: job1
-        id: job1
-        run: echo "Your PR is ${PR}"
-        if: success() && steps.find-pr.outputs.number
         env:
-          PR: ${{ steps.find-pr.outputs.pr }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "${{ github.event.number }}" != "" ]; then
+            PR_NUM="${{ github.event.number }}"
+          else
+            PR_NUM=$(gh pr view --json number -q .number || echo "")
+          fi
+          echo "pr_number=$PR_NUM" >> $GITHUB_OUTPUT
+          echo "Your PR is $PR_NUM"
 
   Yarn-Lint:
     name: Frontend Yarn Lint
