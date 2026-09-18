@@ -29,9 +29,9 @@ public partial class BCProviderClient(
 
             return result?.AdditionalData[attributeName];
         }
-        catch
+        catch (Exception ex)
         {
-            this.logger.LogGetAttributeFailure(userPrincipalName);
+            this.logger.LogGetAttributeFailure(userPrincipalName, ex);
             return null;
         }
     }
@@ -50,9 +50,9 @@ public partial class BCProviderClient(
 
             return result?.AdditionalData;
         }
-        catch
+        catch (Exception ex)
         {
-            this.logger.LogGetAttributeFailure(userPrincipalName);
+            this.logger.LogGetAttributeFailure(userPrincipalName, ex);
             return null;
         }
     }
@@ -155,9 +155,9 @@ public partial class BCProviderClient(
             this.logger.LogAttributesUpdated(userPrincipalName);
             return true;
         }
-        catch
+        catch (Exception ex)
         {
-            this.logger.LogAttributesUpdateFailure(userPrincipalName);
+            this.logger.LogAttributesUpdateFailure(userPrincipalName, ex);
             return false;
         }
     }
@@ -179,9 +179,9 @@ public partial class BCProviderClient(
             this.logger.LogPasswordUpdated(userPrincipalName);
             return true;
         }
-        catch
+        catch (Exception ex)
         {
-            this.logger.LogPasswordUpdateFailure(userPrincipalName);
+            this.logger.LogPasswordUpdateFailure(userPrincipalName, ex);
             return false;
         }
     }
@@ -196,9 +196,9 @@ public partial class BCProviderClient(
             this.logger.LogUserUpdated(userPrincipalName);
             return true;
         }
-        catch
+        catch (Exception ex)
         {
-            this.logger.LogUserUpdateFailure(userPrincipalName);
+            this.logger.LogUserUpdateFailure(userPrincipalName, ex);
             return false;
         }
     }
@@ -304,9 +304,9 @@ public partial class BCProviderClient(
 
             return authMethods;
         }
-        catch
+        catch (Exception ex)
         {
-            this.logger.LogGetUserAuthMethodsFailure(userPrincipalName);
+            this.logger.LogGetUserAuthMethodsFailure(userPrincipalName, ex);
             return null;
         }
     }
@@ -392,16 +392,16 @@ public static partial class BCProviderClientLoggingExtensions
     public static partial void LogAccountCreationFailure(this ILogger<BCProviderClient> logger, string userPrincipalName, Exception e);
 
     [LoggerMessage(4, LogLevel.Error, "Failed to update the password of user '{userPrincipalName}'.")]
-    public static partial void LogPasswordUpdateFailure(this ILogger<BCProviderClient> logger, string userPrincipalName);
+    public static partial void LogPasswordUpdateFailure(this ILogger<BCProviderClient> logger, string userPrincipalName, Exception e);
 
     [LoggerMessage(5, LogLevel.Error, "Hit maximum retrys attempting to make a unique User Principal Name for user '{fullName}'.")]
     public static partial void LogNoUniqueUserPrincipalNameFound(this ILogger<BCProviderClient> logger, string fullName);
 
     [LoggerMessage(6, LogLevel.Error, "Failed to update the attributes of user '{userPrincipalName}'.")]
-    public static partial void LogAttributesUpdateFailure(this ILogger<BCProviderClient> logger, string userPrincipalName);
+    public static partial void LogAttributesUpdateFailure(this ILogger<BCProviderClient> logger, string userPrincipalName, Exception e);
 
     [LoggerMessage(7, LogLevel.Error, "Failed to get an attribute of user '{userPrincipalName}'.")]
-    public static partial void LogGetAttributeFailure(this ILogger<BCProviderClient> logger, string userPrincipalName);
+    public static partial void LogGetAttributeFailure(this ILogger<BCProviderClient> logger, string userPrincipalName, Exception e);
 
     [LoggerMessage(8, LogLevel.Warning, "Party's full name contained characters invalid for an AAD Mail Nickname. '{partyFullName}' was shortened to '{partyShortenedName}'.")]
     public static partial void LogPartyNameContainsMailNicknameInvalidCharacters(this ILogger<BCProviderClient> logger, string partyFullName, string partyShortenedName);
@@ -410,10 +410,10 @@ public static partial class BCProviderClientLoggingExtensions
     public static partial void LogPartyNameContainsUpnInvalidCharacters(this ILogger<BCProviderClient> logger, string partyFullName, string partyShortenedName);
 
     [LoggerMessage(10, LogLevel.Error, "Failed to update the user '{userPrincipalName}'.")]
-    public static partial void LogUserUpdateFailure(this ILogger<BCProviderClient> logger, string userPrincipalName);
+    public static partial void LogUserUpdateFailure(this ILogger<BCProviderClient> logger, string userPrincipalName, Exception e);
 
     [LoggerMessage(11, LogLevel.Error, "Failed to retrieve authentication methods for the user '{userPrincipalName}'.")]
-    public static partial void LogGetUserAuthMethodsFailure(this ILogger<BCProviderClient> logger, string userPrincipalName);
+    public static partial void LogGetUserAuthMethodsFailure(this ILogger<BCProviderClient> logger, string userPrincipalName, Exception e);
 
     [LoggerMessage(12, LogLevel.Error, "An error occurred while deleting auth method {oDataType}: {message}")]
     public static partial void LogDeleteUserAuthMethodFailure(this ILogger<BCProviderClient> logger, string? oDataType, string message);
