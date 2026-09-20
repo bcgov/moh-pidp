@@ -85,6 +85,14 @@ public interface IKeycloakAdministrationClient
     Task<UserRepresentation?> GetUser(Guid userId);
 
     /// <summary>
+    /// Gets the Keycloak Client Roles for the user for a specific client.
+    /// Returns null if unsuccessful.
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="clientInternalId"></param>
+    Task<IEnumerable<Role>?> GetUserClientRoles(Guid userId, string clientInternalId);
+
+    /// <summary>
     /// Removes all the Access Roles of the given Enrolment from the User.
     /// Returns true if the operation was successful.
     /// </summary>
