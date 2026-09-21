@@ -63,7 +63,9 @@ try
                 .AddTransient<DoWork.Services.ResyncService.IResyncService, DoWork.Services.ResyncService.ResyncService>()
                 .AddTransient<IAccessRoleCleanupService, AccessRoleCleanupService>()
                 .AddTransient<IInfantRsvBulkGrantService, InfantRsvBulkGrantService>()
-                .AddScoped<IAccessRequestRevocationPolicy, HcimWebPcrRevocationPolicy>()
+                // HcimWebPcrRevocationPolicy is deliberately not registered here. It clears the Keycloak
+                // organization the grant wrote by calling Keycloak itself, which the dry run cannot
+                // intercept
                 .AddScoped<IAccessRequestRevocationPolicy, ImmsBCEformsRevocationPolicy>()
                 .AddScoped<IAccessRequestRevocationPolicy, InfantRsvEformsRevocationPolicy>()
                 .AddScoped<IAccessRequestRevocationPolicy, NpdpEformsRevocationPolicy>()
