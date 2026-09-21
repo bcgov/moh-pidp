@@ -46,7 +46,9 @@ public class DoWorkService(
             return;
         }
 
-        Console.WriteLine("Usage: dotnet run -- --service=<service-name> [options]");
+        var buildTimestamp = System.IO.File.GetLastWriteTime(System.Reflection.Assembly.GetExecutingAssembly().Location);
+        Console.WriteLine($"Usage: dotnet run -- --service=<service-name> [options]");
+        Console.WriteLine($"Last Updated: {buildTimestamp:yyyy-MM-dd HH:mm:ss}");
         Console.WriteLine();
         Console.WriteLine("Available Services:");
         Console.WriteLine("  --service=resync                 Runs the ResyncService.");
