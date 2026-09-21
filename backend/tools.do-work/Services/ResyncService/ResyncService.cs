@@ -7,7 +7,6 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-
 using Pidp;
 using Pidp.Data;
 using Pidp.Extensions;
@@ -15,8 +14,8 @@ using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
-using Pidp.Models.Lookups;
 using Pidp.Models;
+using Pidp.Models.Lookups;
 
 namespace DoWork.Services.ResyncService;
 
@@ -160,12 +159,18 @@ public class ResyncService(
         foreach (var party in parties)
         {
             count++;
-            if (count % 100 == 0) Console.WriteLine($"Processed {count} / {parties.Count} parties...");
-            
+            if (count % 100 == 0)
+            {
+                Console.WriteLine($"Processed {count} / {parties.Count} parties...");
+            }
+
             try
             {
                 var snapshot = await this.ProcessPartyAsync(party, syncContext);
-                if (snapshot != null) snapshots.Add(snapshot);
+                if (snapshot != null)
+                {
+                    snapshots.Add(snapshot);
+                }
             }
             catch (Exception ex)
             {
@@ -175,6 +180,7 @@ public class ResyncService(
             }
         }
 
+        Console.WriteLine("");
         await this.WriteJsonOutputAsync(snapshots);
         await this.WriteEformsDriftOutputAsync(syncContext.EformsDrifts);
         await this.WriteChangesOutputAsync(syncContext.ChangeLogs);
@@ -596,6 +602,14 @@ public class ResyncService(
         var attrs = snapshot.Keycloak.Attributes;
         string GetKcValue(string key) => attrs.GetValueOrDefault(key)?.FirstOrDefault()?.ToLower() ?? "null";
 
+        var obsoleteKeys = new[] { "college_license_info", "college_licence_info", "college_certification_info" };
+        foreach (var key in obsoleteKeys)
+        {
+            if (attrs.ContainsKey(key))
+            {
+                kcChanges.Add($"Remove obsolete key: {key}");
+            }
+        }
     }
 
     private async Task SyncSingleBCProviderUpnAsync(string upn, Dictionary<string, object> additionalData, bool dryRun)
