@@ -3,7 +3,6 @@ namespace Pidp.Features.AccessRequests;
 using DomainResults.Common;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi;
 using NodaTime;
 
 using Pidp.Data;
@@ -32,8 +31,8 @@ public class HcimWebPcr
 
     private static readonly Dictionary<CollegeCode, (string Id, string Name)> CollegeOrganizations = new()
     {
-        [CollegeCode.PhysiciansAndSurgeons] = ("0000####", CollegeCode.PhysiciansAndSurgeons.GetDisplayName()),
-        [CollegeCode.NursesAndMidwives] = ("0000####", CollegeCode.NursesAndMidwives.GetDisplayName())
+        [CollegeCode.PhysiciansAndSurgeons] = ("46013722", "College of Physicians and Surgeons of BC"),
+        [CollegeCode.NursesAndMidwives] = ("12249113", "BC College of Nurses and Midwives")
     };
 
     public static CollegeCode? OrganizationCollegeFor(PlrStandingsDigest digest) => EligibleColleges

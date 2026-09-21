@@ -4,17 +4,21 @@ using Microsoft.EntityFrameworkCore;
 
 using Pidp.Data;
 using Pidp.Extensions;
+using Pidp.Infrastructure.Auth;
+using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Infrastructure.Services;
 using Pidp.Models.Lookups;
 
 public class HcimWebPcrRevocationPolicy(
     IAccessRequestRevocationService revocationService,
+    IKeycloakAdministrationClient keycloakClient,
     ILogger<HcimWebPcrRevocationPolicy> logger,
     IPlrClient plrClient,
     PidpDbContext context) : IAccessRequestRevocationPolicy
 {
     private readonly IAccessRequestRevocationService revocationService = revocationService;
+    private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
     private readonly ILogger<HcimWebPcrRevocationPolicy> logger = logger;
     private readonly IPlrClient plrClient = plrClient;
     private readonly PidpDbContext context = context;
@@ -28,6 +32,10 @@ public class HcimWebPcrRevocationPolicy(
             .Select(party => new
             {
                 HoldsEnrolment = party.AccessRequests.Any(request => request.AccessTypeCode == AccessTypeCode.HcimWebPcr),
+                UserId = party.Credentials
+                    .Where(credential => credential.IdentityProvider == IdentityProviders.BCProvider)
+                    .Select(credential => (Guid?)credential.UserId)
+                    .FirstOrDefault(),
                 party.Cpn,
             })
             .SingleOrDefaultAsync(cancellationToken);
@@ -53,9 +61,21 @@ public class HcimWebPcrRevocationPolicy(
             return RevocationDecision.Eligible(AccessTypeCode.HcimWebPcr);
         }
 
-        return await this.revocationService.RevokeAsync(partyId, AccessTypeCode.HcimWebPcr, reason, statusChange.FormatTrigger(), cancellationToken)
-            ? RevocationDecision.Revoked(AccessTypeCode.HcimWebPcr, reason)
-            : RevocationDecision.RevokeFailed(AccessTypeCode.HcimWebPcr, reason);
+        if (!await this.revocationService.RevokeAsync(partyId, AccessTypeCode.HcimWebPcr, reason, statusChange.FormatTrigger(), cancellationToken))
+        {
+            return RevocationDecision.RevokeFailed(AccessTypeCode.HcimWebPcr, reason);
+        }
+
+        // The organization was written alongside the role and means nothing without it. A failure here is
+        // logged rather than returned: the role is already gone, and failing would keep the Access Request
+        // alive to retry a removal that no longer protects anything.
+        if (dto.UserId != null
+            && !await this.keycloakClient.UpdateUser(dto.UserId.Value, user => user.ClearOrgDetails()))
+        {
+            this.logger.LogOrganizationRemovalFailed(partyId);
+        }
+
+        return RevocationDecision.Revoked(AccessTypeCode.HcimWebPcr, reason);
     }
 
     /// <summary>
@@ -89,4 +109,7 @@ public static partial class HcimWebPcrRevocationLoggingExtensions
 {
     [LoggerMessage(1, LogLevel.Warning, "Could not determine PLR standing for Party {partyId}; Provincial Client Registry access was left in place.")]
     public static partial void LogRevocationSkippedPlrError(this ILogger<HcimWebPcrRevocationPolicy> logger, int partyId);
+
+    [LoggerMessage(2, LogLevel.Error, "Provincial Client Registry access for Party {partyId} was revoked, but the organization could not be cleared from their Keycloak User.")]
+    public static partial void LogOrganizationRemovalFailed(this ILogger<HcimWebPcrRevocationPolicy> logger, int partyId);
 }

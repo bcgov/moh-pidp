@@ -99,6 +99,13 @@ public class UserRepresentation
 
     public UserRepresentation SetOrgDetails(string id, string name) => this.SetAttribute("org_details", JsonSerializer.Serialize(new { id, name }));
 
+    public UserRepresentation ClearOrgDetails()
+    {
+        this.Attributes.Remove("org_details");
+
+        return this;
+    }
+
     public UserRepresentation SetPidpEmail(string pidpEmail) => this.SetAttribute("pidp_email", pidpEmail);
 
     public UserRepresentation SetPidpPhone(string pidpPhone) => this.SetAttribute("pidp_phone", pidpPhone);

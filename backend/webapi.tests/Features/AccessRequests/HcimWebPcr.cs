@@ -13,8 +13,13 @@ using PidpTests.TestingExtensions;
 
 public class HcimWebPcrTests : InMemoryDbTest
 {
-    private const string Cpsbc = "College of Physicians and Surgeons of BC";
-    private const string Bccnm = "BC College of Nurses and Midwives";
+    /// <summary>
+    /// The org_details the Registry reads: the placeholder organization id paired with the college name
+    /// from CollegeLookup. The id is a placeholder; the names are the real ones and must not drift.
+    /// </summary>
+    private const string CpsbcOrgDetails = """{"id":"46013722","name":"College of Physicians and Surgeons of BC"}""";
+
+    private const string BccnmOrgDetails = """{"id":"12249113","name":"BC College of Nurses and Midwives"}""";
 
     [Theory]
     [MemberData(nameof(IdentifierTypeTestData))]
@@ -70,10 +75,10 @@ public class HcimWebPcrTests : InMemoryDbTest
     }
 
     [Theory]
-    [InlineData("CPSID", Cpsbc)]
-    [InlineData("RNID", Bccnm)]
-    [InlineData("RMID", Bccnm)]
-    public async Task CreateHcimWebPcrEnrolment_WritesTheLicensingCollegeAsTheOrganization(string identifierType, string expected)
+    [InlineData("CPSID", CpsbcOrgDetails)]
+    [InlineData("RNID", BccnmOrgDetails)]
+    [InlineData("RMID", BccnmOrgDetails)]
+    public async Task CreateHcimWebPcrEnrolment_WritesTheOrganizationForTheLicensingCollege(string identifierType, string expected)
     {
         var party = this.HasAnEligibleParty();
         var (plr, keycloak, user) = this.SetupFor(AMock.StandingsDigest(true, identifierType));
@@ -82,28 +87,40 @@ public class HcimWebPcrTests : InMemoryDbTest
         var result = await handler.HandleAsync(new HcimWebPcr.Command { PartyId = party.Id });
 
         Assert.True(result.IsSuccess);
-        // The name comes from the CollegeLookup table, so this also pins that the two strings the Registry
-        // expects have not drifted from the lookup data.
-        Assert.Equal([expected], user.Attributes["organization"]);
+        // Pins the exact attribute key and the JSON shape the Registry reads. A plain string, or the key
+        // "organization", would be written happily by Keycloak and read by nobody.
+        Assert.Equal([expected], user.Attributes["org_details"]);
         // Written to the same User that received the role, which is the BC Provider credential's.
         var bcProviderUserId = party.Credentials.Single(credential => credential.IdentityProvider == IdentityProviders.BCProvider).UserId;
         A.CallTo(() => keycloak.UpdateUser(bcProviderUserId, A<Action<UserRepresentation>>._)).MustHaveHappened();
     }
 
     [Fact]
-    public async Task CreateHcimWebPcrEnrolment_RegisteredWithTwoColleges_TakesTheFirstByPrecedence()
+    public void OrganizationCollegeFor_RegisteredWithTwoColleges_TakesTheFirstByPrecedence()
     {
-        // Improbable, but the rule has to be decided rather than left to record order from PLR.
-        var party = this.HasAnEligibleParty();
-        var (plr, keycloak, user) = this.SetupFor(AMock.StandingsDigest(
+        // Improbable, but the rule has to be decided rather than left to record order from PLR. Asserted on
+        // the predicate rather than the written attribute, because both colleges share one placeholder
+        // organization today and the difference would not be visible through Keycloak.
+        var digest = AMock.StandingsDigest(
             (true, IdentifierType.Nurse, null),
-            (true, IdentifierType.PhysiciansAndSurgeons, null)));
-        var handler = this.MockDependenciesFor<HcimWebPcr.CommandHandler>(plr, keycloak);
+            (true, IdentifierType.PhysiciansAndSurgeons, null));
 
-        var result = await handler.HandleAsync(new HcimWebPcr.Command { PartyId = party.Id });
+        Assert.Equal(CollegeCode.PhysiciansAndSurgeons, HcimWebPcr.OrganizationCollegeFor(digest));
+    }
 
-        Assert.True(result.IsSuccess);
-        Assert.Equal([Cpsbc], user.Attributes["organization"]);
+    [Theory]
+    [InlineData("CPSID", (int)CollegeCode.PhysiciansAndSurgeons)]
+    [InlineData("RNID", (int)CollegeCode.NursesAndMidwives)]
+    [InlineData("RMID", (int)CollegeCode.NursesAndMidwives)]
+    public void OrganizationCollegeFor_MapsEachIdentifierTypeToItsCollege(string identifierType, int expected)
+    {
+        Assert.Equal((CollegeCode)expected, HcimWebPcr.OrganizationCollegeFor(AMock.StandingsDigest(true, identifierType)));
+    }
+
+    [Fact]
+    public void OrganizationCollegeFor_IneligibleCollege_IsNull()
+    {
+        Assert.Null(HcimWebPcr.OrganizationCollegeFor(AMock.StandingsDigest(true, IdentifierType.Pharmacist)));
     }
 
     [Fact]
@@ -130,7 +147,8 @@ public class HcimWebPcrTests : InMemoryDbTest
         var result = await handler.HandleAsync(new HcimWebPcr.Command { PartyId = party.Id });
 
         Assert.True(result.IsSuccess);
-        Assert.Equal([Bccnm], user.Attributes["organization"]);
+        // An MOA takes the organization of the college their endorser is registered with - here a Nurse.
+        Assert.Equal([BccnmOrgDetails], user.Attributes["org_details"]);
         // Judged on the endorsement digest; their own standing is never asked for.
         A.CallTo(() => plr.GetAggregateStandingsDigestAsync(A<IEnumerable<string?>>._)).MustHaveHappened();
         A.CallTo(() => plr.GetStandingsDigestAsync(A<string?>._)).MustNotHaveHappened();
