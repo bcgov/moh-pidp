@@ -571,6 +571,11 @@ public class ResyncService(
                 return;
             }
 
+            if (prop == "isPharm" && expectedStr == "false" && actualStr == "null")
+            {
+                return;
+            }
+
             if (expectedStr != actualStr)
             {
                 var displayActual = (string.IsNullOrEmpty(actualStr) || actualStr == "null") ? "Unset" : actualStr;
@@ -628,7 +633,14 @@ public class ResyncService(
             {
                 var newValueString = kvp.Value?.ToString()?.ToLowerInvariant() ?? "null";
                 var isEndorserData = kvp.Key.EndsWith("_endorserData", StringComparison.OrdinalIgnoreCase);
+                var isIsPharm = kvp.Key.EndsWith("_isPharm", StringComparison.OrdinalIgnoreCase);
                 var currentValueString = currentAttributes!.TryGetValue(kvp.Key, out var currVal) ? (currVal?.ToString()?.ToLowerInvariant() ?? "null") : "null";
+
+                if (isIsPharm && newValueString == "false" && currentValueString == "null")
+                {
+                    newValueString = "null";
+                    additionalData[kvp.Key] = null!;
+                }
 
                 if (newValueString == "[]")
                 {
