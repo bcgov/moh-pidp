@@ -21,8 +21,9 @@ public class DoWorkService(
 
         if (serviceArg?.Equals("credential-deletion", StringComparison.OrdinalIgnoreCase) == true)
         {
+            var emailArg = this.configuration["email"] ?? this.configuration["Email"];
             Console.WriteLine("Running CredentialDeletionService");
-            await this.credentialDeletionService.DeleteCredentialsAsync();
+            await this.credentialDeletionService.DeleteCredentialsAsync(emailArg);
             return;
         }
         else if (serviceArg?.Equals("resync", StringComparison.OrdinalIgnoreCase) == true)
@@ -46,7 +47,9 @@ public class DoWorkService(
             return;
         }
 
-        Console.WriteLine("Usage: dotnet run -- --service=<service-name> [options]");
+        var buildTimestamp = System.IO.File.GetLastWriteTime(System.Reflection.Assembly.GetExecutingAssembly().Location);
+        Console.WriteLine($"Usage: dotnet run -- --service=<service-name> [options]");
+        Console.WriteLine($"Last Updated: {buildTimestamp:yyyy-MM-dd HH:mm:ss}");
         Console.WriteLine();
         Console.WriteLine("Available Services:");
         Console.WriteLine("  --service=resync                 Runs the ResyncService.");
@@ -55,6 +58,8 @@ public class DoWorkService(
         Console.WriteLine("                                     --dryrun=false    (Optional) Disable dry-run mode to apply changes. Defaults to true.");
         Console.WriteLine();
         Console.WriteLine("  --service=credential-deletion    Runs the CredentialDeletionService.");
+        Console.WriteLine("                                   Options:");
+        Console.WriteLine("                                     --email=<email>   (Optional) Delete credentials for a specific BC Provider email. Outputs to screen instead of file.");
         Console.WriteLine();
     }
 }
