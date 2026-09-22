@@ -318,13 +318,13 @@ public class ResyncService(
             if (relation.Cpn != null && plrRecordsByCpn.TryGetValue(relation.Cpn, out var r))
             {
                 endorsementRecords.AddRange(r);
-                var standing = PlrStandingsDigest.FromRecords(r).WithGoodStanding().With(BCProviderAttributes.EndorserDataEligibleIdentifierTypes);
-                if (standing.HasGoodStanding)
-                {
-                    var identifierType = r.FirstOrDefault()?.IdentifierType;
-                    var collegeId = r.FirstOrDefault()?.CollegeId;
-                    endorsementSummaries.Add($"Endorsement: {relation.Id} {relation.Cpn} {identifierType} {collegeId}");
-                }
+                var fullStanding = PlrStandingsDigest.FromRecords(r).With(BCProviderAttributes.EndorserDataEligibleIdentifierTypes);
+                
+                var isPracticing = fullStanding.HasGoodStanding ? "Practicing" : "Not Practicing";
+                var identifierType = r.FirstOrDefault()?.IdentifierType;
+                var collegeId = r.FirstOrDefault()?.CollegeId;
+                
+                endorsementSummaries.Add($"Endorsement: {relation.Id} {relation.Cpn} {identifierType} {collegeId} ({isPracticing})");
             }
         }
         
