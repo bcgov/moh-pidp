@@ -23,12 +23,15 @@ public class CredentialDeletionService(
     private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
     private readonly PidpDbContext context = context;
 
-    public async Task DeleteCredentialsAsync()
+    public async Task DeleteCredentialsAsync(string? targetEmail = null)
     {
-        var credentials = ReadCredentialsFromFileAsync();
+        var credentials = string.IsNullOrWhiteSpace(targetEmail) 
+            ? ReadCredentialsFromFileAsync() 
+            : new[] { targetEmail.Trim() };
+
         if (!credentials.Any())
         {
-            Console.WriteLine("ERROR: No Credentials found in CredentialsToDelete file.");
+            Console.WriteLine("ERROR: No Credentials found.");
             return;
         }
 
@@ -37,35 +40,54 @@ public class CredentialDeletionService(
             .OrderBy(credential => credential.IdpId)
             .ToListAsync();
 
-        Console.WriteLine($"{credentials.Count()} Credentials read from file.");
-        Console.WriteLine($"{foundCredentials.Count} Credentials found in database.");
-        if (credentials.Count() != foundCredentials.Count)
+        if (string.IsNullOrWhiteSpace(targetEmail))
         {
-            Console.WriteLine("ERROR: Number of credentials found in CredentialsToDelete does not match number of credentials found in Database.");
-            return;
-        }
+            Console.WriteLine($"{credentials.Count()} Credentials read from file.");
+            Console.WriteLine($"{foundCredentials.Count} Credentials found in database.");
+            if (credentials.Count() != foundCredentials.Count)
+            {
+                Console.WriteLine("ERROR: Number of credentials found in CredentialsToDelete does not match number of credentials found in Database.");
+                return;
+            }
 
-        this.WriteCredentialsToFileAsync(foundCredentials);
-        Console.WriteLine("Details of the Credentials found in the Database have been saved. Re-enter the count to delete them from the database.");
+            this.WriteCredentialsToFileAsync(foundCredentials);
+            Console.WriteLine("Details of the Credentials found in the Database have been saved. Re-enter the count to delete them from the database.");
+        }
+        else
+        {
+            Console.WriteLine($"{foundCredentials.Count} Credentials found in database for email: {targetEmail}");
+            foreach (var credential in foundCredentials)
+            {
+                Console.WriteLine($"{credential.IdpId}\t{credential.UserId}");
+            }
+
+            if (foundCredentials.Count == 0)
+            {
+                Console.WriteLine("No credentials found in Database. Aborting.");
+                return;
+            }
+
+            Console.WriteLine("Details of the Credentials found in the Database have been output to the screen. Re-enter the count to delete them from the database.");
+        }
 
         if (int.TryParse(Console.ReadLine(), out var count) && count == foundCredentials.Count)
         {
-            foreach (var credential in foundCredentials)
-            {
-                if (credential.IdentityProvider == IdentityProviders.BCProvider && !string.IsNullOrEmpty(credential.IdpId))
-                {
-                    await this.bcProviderClient.DeleteBCProviderAccount(credential.IdpId);
-                }
-
-                if (credential.UserId != Guid.Empty)
-                {
-                    await this.keycloakClient.DeleteUser(credential.UserId);
-                }
-            }
+            // foreach (var credential in foundCredentials)
+            // {
+            //     if (credential.IdentityProvider == IdentityProviders.BCProvider && !string.IsNullOrEmpty(credential.IdpId))
+            //     {
+            //         await this.bcProviderClient.DeleteBCProviderAccount(credential.IdpId);
+            //     }
+            //     if (credential.UserId != Guid.Empty)
+            //     {
+            //         await this.keycloakClient.DeleteUser(credential.UserId);
+            //     }
+            // }
 
             this.context.Credentials.RemoveRange(foundCredentials);
             await this.context.SaveChangesAsync();
-            Console.WriteLine($"Credentials deleted from database, Keycloak, and BC Provider AD.");
+            // Console.WriteLine($"Credentials deleted from database, Keycloak, and BC Provider AD.");
+            Console.WriteLine($"Credentials deleted from database.");
         }
         else
         {
@@ -78,12 +100,32 @@ public class CredentialDeletionService(
         var assembly = Assembly.GetExecutingAssembly();
         var resources = assembly.GetManifestResourceNames()
             .Where(name => name.EndsWith("CredentialsToDelete", StringComparison.OrdinalIgnoreCase));
-        if (resources.Count() != 1)
+        
+        Stream? stream = null;
+        if (resources.Count() == 1)
         {
-            throw new InvalidOperationException("Could not find the CredentialsToDelete file.");
+            stream = assembly.GetManifestResourceStream(resources.Single());
+        }
+        else
+        {
+            var outputDir = "output";
+            var path1 = Path.Combine(outputDir, "CredentialsToDelete");
+            var path2 = Path.Combine(outputDir, "CredentialsToDelete.txt");
+
+            if (File.Exists(path1))
+            {
+                stream = File.OpenRead(path1);
+            }
+            else if (File.Exists(path2))
+            {
+                stream = File.OpenRead(path2);
+            }
+            else
+            {
+                throw new InvalidOperationException($"Could not find the CredentialsToDelete file as an embedded resource or in {outputDir} directory.");
+            }
         }
 
-        using var stream = assembly.GetManifestResourceStream(resources.Single());
         using var reader = new StreamReader(stream ?? throw new InvalidOperationException("Could not open stream to read CredentialsToDelete file."));
         while (true)
         {
