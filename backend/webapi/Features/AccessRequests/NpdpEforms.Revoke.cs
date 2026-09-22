@@ -1,9 +1,8 @@
-﻿namespace Pidp.Features.AccessRequests;
+namespace Pidp.Features.AccessRequests;
 
 using Microsoft.EntityFrameworkCore;
 
 using Pidp.Data;
-using Pidp.Extensions;
 using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Infrastructure.Services;
 using Pidp.Models.Lookups;
@@ -38,7 +37,7 @@ public class NpdpEformsRevocationPolicy(
             return RevocationDecision.NotHeld(AccessTypeCode.NpdpEforms);
         }
 
-        var (eligible, standingIsKnown, reason) = await this.EvaluateEligibilityAsync(partyId, dto.Cpn);
+        var (eligible, standingIsKnown, reason) = await this.EvaluateEligibilityAsync(dto.Cpn);
 
         // Fail closed: an unreachable PLR yields a digest with no records, which looks exactly like
         // "not in good standing". Revoking on that would strip every holder during an outage.
@@ -59,29 +58,21 @@ public class NpdpEformsRevocationPolicy(
     }
 
     /// <summary>
-    /// Mirrors the grant-time checks in NpdpEforms.CommandHandler: a Party with a CPN is judged
-    /// on their own standing, one without a CPN (i.e. an MOA) on their endorsements.
+    /// Mirrors the grant-time check in NpdpEforms.CommandHandler: the card is granted on the Party's own
+    /// pharmacist licence and has no endorsement path.
     /// </summary>
-    private async Task<(bool Eligible, bool StandingIsKnown, string Reason)> EvaluateEligibilityAsync(int partyId, string? cpn)
+    private async Task<(bool Eligible, bool StandingIsKnown, string Reason)> EvaluateEligibilityAsync(string? cpn)
     {
         if (cpn == null)
         {
-            var endorsementCpns = await this.context.ActiveEndorsementRelationships(partyId)
-                .Select(relationship => relationship.Party!.Cpn)
-                .ToListAsync();
-
-            var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
-
-            return (NpdpEforms.IsEligibleByEndorsement(endorsementPlrStanding),
-                !endorsementPlrStanding.Error,
-                "no active endorsement from a Medical Doctor, Nurse, or Midwife in good standing");
+            return (false, true, "no CPN on record; NPDP eForms is granted on the Party's own licence and has no endorsement path");
         }
 
         var partyPlrStanding = await this.plrClient.GetStandingsDigestAsync(cpn);
 
         return (NpdpEforms.IsEligible(partyPlrStanding),
             !partyPlrStanding.Error,
-            "licence no longer in good standing and not a CPS postgraduate");
+            "licence no longer in good standing role");
     }
 }
 

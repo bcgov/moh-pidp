@@ -70,95 +70,54 @@ public class NpdpEformsTests : InMemoryDbTest
     }
 
     [Fact]
-    public async Task CreateNpdpEformsEnrolment_CpsPostgradResident_Success()
+    public async Task CreateNpdpEformsEnrolment_PharmacyTechnician_Denied()
     {
-        // Residents hold a CPSID licence in PENDING/NONPRAC, which is not "good standing";
-        // they qualify only through the IsCpsPostgrad clause.
+        // Pharmacy Technicians carry their own identifier type (PHTID) and are deliberately outside this
+        // card, the same line Special Authority eForms draws. Named rather than left to the theory above
+        // because it is a business decision, not a side effect of the list.
         var party = this.TestDb.HasAParty(party =>
         {
             party.Email = "Email@email.com";
             party.Cpn = "Cpn";
             party.Credentials = [new Credential { UserId = Guid.NewGuid(), IdentityProvider = IdentityProviders.BCServicesCard }];
         });
-        var digest = PlrStandingsDigest.FromRecords([
-            new PlrRecord
-            {
-                IdentifierType = IdentifierType.PhysiciansAndSurgeons,
-                StatusCode = PlrStatusCode.Pending,
-                StatusReasonCode = PlrStatusReasonCode.NonPracticing
-            }
-        ]);
-        Assert.False(digest.HasGoodStanding);
-
-        var client = A.Fake<IPlrClient>().ReturningAStandingsDigest(digest);
+        var client = A.Fake<IPlrClient>().ReturningAStandingsDigest(true, IdentifierType.PharmacyTech);
         var keycloak = A.Fake<IKeycloakAdministrationClient>()
             .ReturningTrueWhenAssigingClientRoles();
         var handler = this.MockDependenciesFor<NpdpEforms.CommandHandler>(client, keycloak);
 
         var result = await handler.HandleAsync(new NpdpEforms.Command { PartyId = party.Id });
 
-        Assert.True(result.IsSuccess);
-        A.CallTo(() => keycloak.AssignAccessRoles(A<Guid>._, MohKeycloakEnrolment.NpdpEforms)).MustHaveHappened();
+        Assert.False(result.IsSuccess);
+        keycloak.AssertNoRolesAssigned();
     }
 
     [Fact]
-    public async Task CreateNpdpEformsEnrolment_NursePractitioner_Success()
+    public async Task CreateNpdpEformsEnrolment_NoCpn_Denied()
     {
-        // Nurse Practitioners carry the "RNID" identifier and are distinguished only by the
-        // RNP Provider Role Type, so the AllowedIdentifierTypes list already covers them.
-        var digest = AMock.StandingsDigest((true, IdentifierType.Nurse, ProviderRoleType.RegisteredNursePractitioner));
-        var party = this.TestDb.HasAParty(party =>
-        {
-            party.Email = "Email@email.com";
-            party.Cpn = "Cpn";
-            party.Credentials = [new Credential { UserId = Guid.NewGuid(), IdentityProvider = IdentityProviders.BCServicesCard }];
-        });
-        var client = A.Fake<IPlrClient>().ReturningAStandingsDigest(digest);
-        var keycloak = A.Fake<IKeycloakAdministrationClient>()
-            .ReturningTrueWhenAssigingClientRoles();
-        var handler = this.MockDependenciesFor<NpdpEforms.CommandHandler>(client, keycloak);
-
-        var result = await handler.HandleAsync(new NpdpEforms.Command { PartyId = party.Id });
-
-        Assert.True(result.IsSuccess);
-        A.CallTo(() => keycloak.AssignAccessRoles(A<Guid>._, MohKeycloakEnrolment.NpdpEforms)).MustHaveHappened();
-    }
-
-    [Theory]
-    [MemberData(nameof(EndorsementStandingTestData))]
-    public async Task CreateNpdpEformsEnrolment_NoCpn_UsesEndorsementStanding(PlrStandingsDigest endorsementDigest, bool expected)
-    {
-        // An MOA has no CPN of their own and qualifies only via an endorsement from a
-        // Medical Doctor, a Nurse, or a Midwife - the professions that hold the card themselves.
+        // The card is granted on the Party's own pharmacist licence and has no endorsement path, so a
+        // Party without a CPN cannot qualify however well their endorsers are standing.
         var party = this.TestDb.HasAParty(party =>
         {
             party.Email = "Email@email.com";
             party.Cpn = null;
             party.Credentials = [new Credential { UserId = Guid.NewGuid(), IdentityProvider = IdentityProviders.BCServicesCard }];
         });
-        var client = A.Fake<IPlrClient>().ReturningAStandingsDigest(endorsementDigest);
+        // The endorsement digest is armed with a Pharmacist in good standing precisely to show it is
+        // never consulted; arming it with nothing would prove less.
+        var client = A.Fake<IPlrClient>().ReturningMultipleStandingsDigests(
+            PlrStandingsDigest.FromEmpty(),
+            AMock.StandingsDigest(true, IdentifierType.Pharmacist));
         var keycloak = A.Fake<IKeycloakAdministrationClient>()
             .ReturningTrueWhenAssigingClientRoles();
         var handler = this.MockDependenciesFor<NpdpEforms.CommandHandler>(client, keycloak);
 
         var result = await handler.HandleAsync(new NpdpEforms.Command { PartyId = party.Id });
 
-        Assert.Equal(expected, result.IsSuccess);
-        if (!expected)
-        {
-            keycloak.AssertNoRolesAssigned();
-        }
+        Assert.False(result.IsSuccess);
+        keycloak.AssertNoRolesAssigned();
+        A.CallTo(() => client.GetAggregateStandingsDigestAsync(A<IEnumerable<string?>>._)).MustNotHaveHappened();
     }
-
-    public static TheoryData<PlrStandingsDigest, bool> EndorsementStandingTestData() => new()
-    {
-        { AMock.StandingsDigest(true, providerRoleType: ProviderRoleType.MedicalDoctor), true },
-        { AMock.StandingsDigest(true, IdentifierType.Nurse), true },
-        { AMock.StandingsDigest(true, IdentifierType.Midwife), true },
-        { AMock.StandingsDigest(true, IdentifierType.Pharmacist), false },
-        { AMock.StandingsDigest(false, providerRoleType: ProviderRoleType.MedicalDoctor), false },
-        { PlrStandingsDigest.FromEmpty(), false },
-    };
 
     [Fact]
     public async Task CreateNpdpEformsEnrolment_AlreadyEnroled_Denied()
@@ -171,7 +130,7 @@ public class NpdpEformsTests : InMemoryDbTest
             party.AccessRequests = [new AccessRequest { AccessTypeCode = AccessTypeCode.NpdpEforms, RequestedOn = Instant.FromUtc(2026, 1, 1, 0, 0) }];
         });
         var client = A.Fake<IPlrClient>()
-            .ReturningAStandingsDigest(true, IdentifierType.PhysiciansAndSurgeons);
+            .ReturningAStandingsDigest(true, IdentifierType.Pharmacist);
         var keycloak = A.Fake<IKeycloakAdministrationClient>()
             .ReturningTrueWhenAssigingClientRoles();
         var handler = this.MockDependenciesFor<NpdpEforms.CommandHandler>(client, keycloak);
@@ -195,7 +154,7 @@ public class NpdpEformsTests : InMemoryDbTest
             party.Credentials = [new Credential { UserId = Guid.NewGuid(), IdentityProvider = IdentityProviders.BCProvider }];
         });
         var client = A.Fake<IPlrClient>()
-            .ReturningAStandingsDigest(true, IdentifierType.PhysiciansAndSurgeons);
+            .ReturningAStandingsDigest(true, IdentifierType.Pharmacist);
         var keycloak = A.Fake<IKeycloakAdministrationClient>()
             .ReturningTrueWhenAssigingClientRoles();
         var handler = this.MockDependenciesFor<NpdpEforms.CommandHandler>(client, keycloak);
@@ -217,7 +176,7 @@ public class NpdpEformsTests : InMemoryDbTest
             party.Credentials = [new Credential { UserId = Guid.NewGuid(), IdentityProvider = IdentityProviders.BCServicesCard }];
         });
         var client = A.Fake<IPlrClient>()
-            .ReturningAStandingsDigest(true, IdentifierType.PhysiciansAndSurgeons);
+            .ReturningAStandingsDigest(true, IdentifierType.Pharmacist);
         var keycloak = A.Fake<IKeycloakAdministrationClient>()
             .ReturningTrueWhenAssigingClientRoles();
         var handler = this.MockDependenciesFor<NpdpEforms.CommandHandler>(client, keycloak);

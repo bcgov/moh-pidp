@@ -71,7 +71,9 @@ public class RevocationPolicyInvariantTests : InMemoryDbTest
         // The counterpart: a policy that leaves someone alone must not record a decision either, or a dry
         // run would report a revocation that was never going to happen.
         var party = this.HasAnEnroledParty(accessTypeCode);
-        var plr = A.Fake<IPlrClient>().ReturningAStandingsDigest(AMock.StandingsDigest(true, IdentifierType.PhysiciansAndSurgeons));
+        var plr = A.Fake<IPlrClient>().ReturningAStandingsDigest(AMock.StandingsDigest(
+            (true, IdentifierType.PhysiciansAndSurgeons, null),
+            (true, IdentifierType.Pharmacist, null)));
         var keycloak = A.Fake<IKeycloakAdministrationClient>().ReturningTrueWhenRemovingClientRoles();
         var recorder = new RecordingRevocationService();
         var policy = this.PolicyFor(accessTypeCode, plr, keycloak, recorder);

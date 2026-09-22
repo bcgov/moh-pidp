@@ -1,4 +1,4 @@
-﻿namespace Pidp.Features.AccessRequests;
+namespace Pidp.Features.AccessRequests;
 
 using DomainResults.Common;
 using FluentValidation;
@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 using Pidp.Data;
-using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
@@ -15,20 +14,13 @@ using Pidp.Models.Lookups;
 
 public class NpdpEforms
 {
-    public static IdentifierType[] AllowedIdentifierTypes => [IdentifierType.PhysiciansAndSurgeons, IdentifierType.Nurse, IdentifierType.Midwife];
+    public static IdentifierType[] AllowedIdentifierTypes => [IdentifierType.Pharmacist];
 
     public static bool IsEligible(PlrStandingsDigest partyPlrStanding)
     {
         return partyPlrStanding
             .With(AllowedIdentifierTypes)
-            .HasGoodStanding || partyPlrStanding.IsCpsPostgrad;
-    }
-
-    public static bool IsEligibleByEndorsement(PlrStandingsDigest endorsementPlrStanding)
-    {
-        return endorsementPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding
-            || endorsementPlrStanding.With(IdentifierType.Nurse).HasGoodStanding
-            || endorsementPlrStanding.With(IdentifierType.Midwife).HasGoodStanding;
+            .HasGoodStanding;
     }
 
     public class Command : ICommand<IDomainResult>
@@ -71,36 +63,15 @@ public class NpdpEforms
 
             // UserIds holds only BC Services Card credentials, so an empty set means the
             // Party has none; the role has nowhere to land and the request must be denied.
+            // A null CPN yields an empty digest, which is not good standing, so a Party without a
+            // licence of their own is denied here too - there is no endorsement path onto this card.
             if (dto.AlreadyEnroled
                 || dto.Email == null
-                || !dto.UserIds.Any())
+                || !dto.UserIds.Any()
+                || !IsEligible(await this.plrClient.GetStandingsDigestAsync(dto.Cpn)))
             {
                 this.logger.LogAccessRequestDenied(command.PartyId);
                 return DomainResult.Failed();
-            }
-
-            if (dto.Cpn == null)
-            {
-                // Check status of Endorsements
-                var endorsementCpns = await this.context.ActiveEndorsementRelationships(command.PartyId)
-                    .Select(relationship => relationship.Party!.Cpn)
-                    .ToListAsync();
-
-                var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
-
-                if (!IsEligibleByEndorsement(endorsementPlrStanding))
-                {
-                    this.logger.LogAccessRequestDenied(command.PartyId);
-                    return DomainResult.Failed();
-                }
-            }
-            else
-            {
-                if (!IsEligible(await this.plrClient.GetStandingsDigestAsync(dto.Cpn)))
-                {
-                    this.logger.LogAccessRequestDenied(command.PartyId);
-                    return DomainResult.Failed();
-                }
             }
 
             foreach (var userId in dto.UserIds)
