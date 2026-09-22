@@ -384,7 +384,7 @@ public class ResyncService(
                 var upn = bcProviderUpns.Single();
                 var bcpAttributes = new BCProviderAttributes(this.config.BCProviderClient.ClientId)
                     .SetIsMoa(false).SetIsMd(false).SetIsPharm(false).SetIsRnp(false)
-                    .SetMspId([]).SetPractitionerRole([]).SetCollegeId([]).SetEndorserData([]);
+                    .SetMspId(["unset"]).SetPractitionerRole(["unset"]).SetCollegeId(["unset"]).SetEndorserData(["unset"]);
                 
                 var attributes = await this.bcProviderClient.GetUserAttributes(upn, bcpAttributes.AsAdditionalData().Keys.ToArray());
                 snapshot.BCProvider = new ActualBCProviderState { Upn = upn, Attributes = attributes };
@@ -629,17 +629,22 @@ public class ResyncService(
         }
         else
         {
-            foreach (var kvp in additionalData)
+            var keysToCheck = currentAttributes!.Keys.Union(additionalData.Keys).ToList();
+
+            foreach (var key in keysToCheck)
             {
-                var newValueString = kvp.Value?.ToString()?.ToLowerInvariant() ?? "null";
-                var isEndorserData = kvp.Key.EndsWith("_endorserData", StringComparison.OrdinalIgnoreCase);
-                var isIsPharm = kvp.Key.EndsWith("_isPharm", StringComparison.OrdinalIgnoreCase);
-                var currentValueString = currentAttributes!.TryGetValue(kvp.Key, out var currVal) ? (currVal?.ToString()?.ToLowerInvariant() ?? "null") : "null";
+                additionalData.TryGetValue(key, out var newVal);
+                var newValueString = newVal?.ToString()?.ToLowerInvariant() ?? "null";
+                
+                var isEndorserData = key.EndsWith("_endorserData", StringComparison.OrdinalIgnoreCase);
+                var isIsPharm = key.EndsWith("_isPharm", StringComparison.OrdinalIgnoreCase);
+                
+                var currentValueString = currentAttributes!.TryGetValue(key, out var currVal) ? (currVal?.ToString()?.ToLowerInvariant() ?? "null") : "null";
 
                 if (isIsPharm && newValueString == "false" && currentValueString == "null")
                 {
                     newValueString = "null";
-                    additionalData[kvp.Key] = null!;
+                    newVal = null;
                 }
 
                 if (newValueString == "[]")
@@ -651,18 +656,19 @@ public class ResyncService(
                     else
                     {
                         newValueString = "null";
-                        additionalData[kvp.Key] = null!;
+                        newVal = null;
                     }
                 }
 
                 if (newValueString != currentValueString)
                 {
-                    this.logger.LogInformation("UPN {Upn} Attribute {Key} changing from {CurrentValueString} to {NewValueString}", upn, kvp.Key, currentValueString, newValueString);
+                    this.logger.LogInformation("UPN {Upn} Attribute {Key} changing from {CurrentValueString} to {NewValueString}", upn, key, currentValueString, newValueString);
                     hasChanges = true;
+                    additionalData[key] = newVal!;
                 }
                 else if (newValueString == "null")
                 {
-                    keysToRemove.Add(kvp.Key);
+                    keysToRemove.Add(key);
                 }
             }
         }
