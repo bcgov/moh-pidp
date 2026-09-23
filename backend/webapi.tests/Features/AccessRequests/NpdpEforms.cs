@@ -49,11 +49,13 @@ public class NpdpEformsTests : InMemoryDbTest
             }
             Assert.Contains(this.TestDb.AccessRequests, request => request.PartyId == party.Id
                 && request.AccessTypeCode == AccessTypeCode.NpdpEforms);
+            Assert.Contains(this.TestDb.BusinessEvents, businessEvent => businessEvent is AccessRequestSubmitted);
         }
         else
         {
             keycloak.AssertNoRolesAssigned();
             Assert.DoesNotContain(this.TestDb.AccessRequests, request => request.PartyId == party.Id);
+            Assert.Contains(this.TestDb.BusinessEvents, businessEvent => businessEvent is AccessRequestFailed);
         }
     }
 
@@ -185,5 +187,55 @@ public class NpdpEformsTests : InMemoryDbTest
 
         Assert.False(result.IsSuccess);
         keycloak.AssertNoRolesAssigned();
+    }
+
+    [Fact]
+    public async Task CreateNpdpEformsEnrolment_AlsoGrantsSAEforms()
+    {
+        // No licence check is needed in this direction: the card is Pharmacists only, so anyone who
+        // gets it qualifies for Special Authority too.
+        var bcsc = new Credential { UserId = Guid.NewGuid(), IdentityProvider = IdentityProviders.BCServicesCard };
+        var bcProvider = new Credential { UserId = Guid.NewGuid(), IdentityProvider = IdentityProviders.BCProvider };
+        var party = this.TestDb.HasAParty(party =>
+        {
+            party.Email = "Email@email.com";
+            party.Cpn = "Cpn";
+            party.Credentials = [bcsc, bcProvider];
+        });
+        var client = A.Fake<IPlrClient>().ReturningAStandingsDigest(true, IdentifierType.Pharmacist);
+        var keycloak = A.Fake<IKeycloakAdministrationClient>().ReturningTrueWhenAssigingClientRoles();
+        var handler = this.MockDependenciesFor<NpdpEforms.CommandHandler>(client, keycloak);
+
+        var result = await handler.HandleAsync(new NpdpEforms.Command { PartyId = party.Id });
+
+        Assert.True(result.IsSuccess);
+        Assert.Contains(this.TestDb.AccessRequests, request => request.PartyId == party.Id
+            && request.AccessTypeCode == AccessTypeCode.SAEforms);
+        // Special Authority reaches BC Provider credentials as well, unlike NPDP itself.
+        A.CallTo(() => keycloak.AssignAccessRoles(bcsc.UserId, MohKeycloakEnrolment.SAEforms)).MustHaveHappened();
+        A.CallTo(() => keycloak.AssignAccessRoles(bcProvider.UserId, MohKeycloakEnrolment.SAEforms)).MustHaveHappened();
+        // ...while NPDP itself reaches only the BC Services Card one.
+        A.CallTo(() => keycloak.AssignAccessRoles(bcProvider.UserId, MohKeycloakEnrolment.NpdpEforms)).MustNotHaveHappened();
+    }
+
+    [Fact]
+    public async Task CreateNpdpEformsEnrolment_AlreadyHoldsSAEforms_DoesNotGrantItTwice()
+    {
+        var party = this.TestDb.HasAParty(party =>
+        {
+            party.Email = "Email@email.com";
+            party.Cpn = "Cpn";
+            party.Credentials = [new Credential { UserId = Guid.NewGuid(), IdentityProvider = IdentityProviders.BCServicesCard }];
+            party.AccessRequests = [new AccessRequest { AccessTypeCode = AccessTypeCode.SAEforms, RequestedOn = Instant.FromUtc(2026, 1, 1, 0, 0) }];
+        });
+        var client = A.Fake<IPlrClient>().ReturningAStandingsDigest(true, IdentifierType.Pharmacist);
+        var keycloak = A.Fake<IKeycloakAdministrationClient>().ReturningTrueWhenAssigingClientRoles();
+        var handler = this.MockDependenciesFor<NpdpEforms.CommandHandler>(client, keycloak);
+
+        var result = await handler.HandleAsync(new NpdpEforms.Command { PartyId = party.Id });
+
+        Assert.True(result.IsSuccess);
+        Assert.Single(this.TestDb.AccessRequests, request => request.AccessTypeCode == AccessTypeCode.SAEforms);
+        A.CallTo(() => keycloak.AssignAccessRoles(A<Guid>._, MohKeycloakEnrolment.SAEforms)).MustNotHaveHappened();
     }
 }
