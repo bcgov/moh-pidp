@@ -11,7 +11,8 @@ export const routes: Routes = [
       npdpEformsStatusCode: npdpEformsResolver,
     },
     data: {
-      title: 'Exceptional Coverage: National PharmaCare and Mifepristone/Misoprostol and OneHealthID',
+      title:
+        'Exceptional Coverage: Plan NP (National Pharmacare) and mifepristone-misoprostol and OneHealthID',
       routes: {
         root: '../../',
       },
