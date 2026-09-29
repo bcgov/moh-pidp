@@ -2,7 +2,7 @@ name: dev-tools-do-work
 
 on:
   push:
-    branches: [develop, fix/imms2-uat4]
+    branches: [develop, fix/imms2-uat5]
     paths:
       - "backend/tools.do-work/**"
       - "infra/tools-do-work/**"

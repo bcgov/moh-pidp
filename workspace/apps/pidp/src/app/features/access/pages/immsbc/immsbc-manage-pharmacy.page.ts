@@ -177,10 +177,24 @@ export class ImmsbcManagePharmacyPage implements OnInit {
       if (emails && emails.length > 0) {
         this.resource.inviteStaff(pharmacy.pharmacyId, role, emails).subscribe({
           next: () => {
-            this.snackBar.open(`Successfully sent ${emails.length} invitation(s).`, 'Close', { duration: 3000 });
+            this.dialog.open(ConfirmDialogComponent, {
+              data: {
+                title: 'Success',
+                message: `Successfully sent ${emails.length} invitation(s).`,
+                actionText: 'OK',
+                cancelHide: true,
+              }
+            });
           },
           error: () => {
-            this.snackBar.open('Failed to send some or all invitations.', 'Close', { duration: 5000 });
+            this.dialog.open(ConfirmDialogComponent, {
+              data: {
+                title: 'Error',
+                message: 'Failed to send some or all invitations.',
+                actionText: 'OK',
+                cancelHide: true,
+              }
+            });
           }
         });
       }
