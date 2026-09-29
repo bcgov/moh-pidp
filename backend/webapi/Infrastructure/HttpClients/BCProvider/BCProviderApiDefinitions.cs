@@ -69,7 +69,7 @@ public class BCProviderAttributes(string clientId)
     /// <summary>
     /// A comma-separated list containing the CPN(s) of Parties Endorsing the User, who have licences from the College of Physicians and Surgeons and the College of Nurses and Midwives.
     /// </summary>
-    public BCProviderAttributes SetEndorserData(IEnumerable<string> endorserData) => this.SetProperty(nameof(endorserData), "[" + string.Join(",", endorserData.Select(s => $"\"{s}\"")) + "]");
+    public BCProviderAttributes SetEndorserData(IEnumerable<string> endorserData) => endorserData.Any() ? this.SetProperty(nameof(endorserData), "[" + string.Join(",", endorserData.Select(s => $"\"{s}\"")) + "]") : this;
     public BCProviderAttributes SetHpdid(string hpdid) => this.SetProperty(nameof(hpdid), hpdid);
     public BCProviderAttributes SetIsMd(bool isMd) => this.SetProperty(nameof(isMd), isMd);
     public BCProviderAttributes SetIsMoa(bool isMoa) => this.SetProperty(nameof(isMoa), isMoa);
@@ -79,12 +79,12 @@ public class BCProviderAttributes(string clientId)
     /// Level Of Assurance. Is 3 for a BC Provider created from a BC Services Card.
     /// </summary>
     public BCProviderAttributes SetLoa(int loa) => this.SetProperty(nameof(loa), loa);
-    public BCProviderAttributes SetMspId(IEnumerable<string> mspId) => this.SetProperty(nameof(mspId), "[" + string.Join(",", mspId.Select(s => $"\"{s}\"")) + "]");
+    public BCProviderAttributes SetMspId(IEnumerable<string> mspId) => mspId.Any() ? this.SetProperty(nameof(mspId), "[" + string.Join(",", mspId.Select(s => $"\"{s}\"")) + "]") : this;
     public BCProviderAttributes SetOpId(string opId) => this.SetProperty(nameof(opId), opId);
     public BCProviderAttributes SetPidpEmail(string pidpEmail) => this.SetProperty(nameof(pidpEmail), pidpEmail);
     public BCProviderAttributes SetUaaDate(DateTimeOffset uaaDate) => this.SetProperty(nameof(uaaDate), uaaDate);
-    public BCProviderAttributes SetPractitionerRole(IEnumerable<string> practitionerRole) => this.SetProperty("practitionerRole", "[" + string.Join(",", practitionerRole.Select(s => $"\"{s}\"")) + "]");
-    public BCProviderAttributes SetCollegeId(IEnumerable<string> collegeId) => this.SetProperty("collegeid", "[" + string.Join(",", collegeId.Select(s => $"\"{s}\"")) + "]");
+    public BCProviderAttributes SetPractitionerRole(IEnumerable<string> practitionerRole) => practitionerRole.Any() ? this.SetProperty("practitionerRole", "[" + string.Join(",", practitionerRole.Select(s => $"\"{s}\"")) + "]") : this;
+    public BCProviderAttributes SetCollegeId(IEnumerable<string> collegeId) => collegeId.Any() ? this.SetProperty("collegeid", "[" + string.Join(",", collegeId.Select(s => $"\"{s}\"")) + "]") : this;
 
     private BCProviderAttributes SetProperty(string propertyName, object value)
     {

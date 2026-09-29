@@ -218,6 +218,17 @@ public class KeycloakAdministrationClient(HttpClient httpClient, ILogger<Keycloa
         return result.Value;
     }
 
+    public async Task<IEnumerable<Role>?> GetUserClientRoles(Guid userId, string clientInternalId)
+    {
+        var result = await this.GetAsync<IEnumerable<Role>>($"users/{userId}/role-mappings/clients/{clientInternalId}");
+        if (!result.IsSuccess)
+        {
+            return null;
+        }
+
+        return result.Value;
+    }
+
     public async Task<bool> RemoveAccessRoles(Guid userId, MohKeycloakEnrolment enrolment)
     {
         if (!enrolment.AccessRoles.Any())
