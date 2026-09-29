@@ -32,7 +32,7 @@ await Host.CreateDefaultBuilder(args)
 
         services
             .AddSingleton<IClock>(SystemClock.Instance)
-            .AddMediator()
+            .AddMediator(options => options.ServiceLifetime = Microsoft.Extensions.DependencyInjection.ServiceLifetime.Scoped)
             .AddTransient<IEmailService, EmailService>()
             .AddTransient<IEndorsementMaintenanceService, EndorsementMaintenanceService>()
             .AddHostedService<HostedServiceWrapper>()
