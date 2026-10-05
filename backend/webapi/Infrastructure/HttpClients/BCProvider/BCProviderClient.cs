@@ -65,13 +65,16 @@ public partial class BCProviderClient(
             return null;
         }
 
+        var displayName = $"{userRepresentation.FirstName} {userRepresentation.LastName}";
+        var mailNickname = this.RemoveMailNicknameInvalidCharacters($"{userRepresentation.FirstName}{userRepresentation.LastName}");
+
         var bcProviderAccount = new User()
         {
             AccountEnabled = true,
-            DisplayName = $"{userRepresentation.FirstName} {userRepresentation.LastName}", // Required
-            GivenName = userRepresentation.FirstName,
-            MailNickname = this.RemoveMailNicknameInvalidCharacters($"{userRepresentation.FirstName}{userRepresentation.LastName}"), // Required
-            Surname = userRepresentation.LastName,
+            DisplayName = displayName.Length > 256 ? displayName[..256] : displayName, // Required
+            GivenName = userRepresentation.FirstName?.Length > 64 ? userRepresentation.FirstName[..64] : userRepresentation.FirstName,
+            MailNickname = mailNickname.Length > 64 ? mailNickname[..64] : mailNickname, // Required
+            Surname = userRepresentation.LastName?.Length > 64 ? userRepresentation.LastName[..64] : userRepresentation.LastName,
             UserPrincipalName = userPrincipal,
             PasswordProfile = new PasswordProfile
             {
@@ -188,6 +191,21 @@ public partial class BCProviderClient(
 
     public async Task<bool> UpdateUser(string userPrincipalName, User user)
     {
+        if (user.Department?.Length > 64)
+        {
+            user.Department = user.Department[..64];
+        }
+
+        if (user.JobTitle?.Length > 128)
+        {
+            user.JobTitle = user.JobTitle[..128];
+        }
+
+        if (user.OfficeLocation?.Length > 128)
+        {
+            user.OfficeLocation = user.OfficeLocation[..128];
+        }
+
         try
         {
             await this.client.Users[userPrincipalName]
