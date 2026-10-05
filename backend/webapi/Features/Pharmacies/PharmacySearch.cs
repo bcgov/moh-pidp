@@ -5,6 +5,8 @@ using Mediator;
 using Microsoft.EntityFrameworkCore;
 using DomainResults.Common;
 
+using Microsoft.Extensions.Logging;
+
 using Pidp.Data;
 
 public class PharmacySearch
@@ -31,9 +33,10 @@ public class PharmacySearch
         public QueryValidator() => this.RuleFor(x => x.QueryString).MinimumLength(3).WithMessage("Search query must be at least 3 characters.");
     }
 
-    public class QueryHandler(PidpDbContext context) : IRequestHandler<Query, IDomainResult<List<Model>>>
+    public class QueryHandler(PidpDbContext context, ILogger<QueryHandler> logger) : IRequestHandler<Query, IDomainResult<List<Model>>>
     {
         private readonly PidpDbContext context = context;
+        private readonly ILogger<QueryHandler> logger = logger;
 
         public async ValueTask<IDomainResult<List<Model>>> Handle(Query query, CancellationToken cancellationToken)
         {
@@ -57,6 +60,7 @@ public class PharmacySearch
 
             if (matches.Count > 50)
             {
+                this.logger.LogWarning("Pharmacy search failed: Search query '{QueryString}' matched over 50 pharmacies.", query.QueryString);
                 return DomainResult.Failed<List<Model>>("too many to list");
             }
 

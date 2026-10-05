@@ -29,6 +29,7 @@ export class ServerErrorInterceptor implements HttpInterceptor {
         return errors.pipe(
           tap((error: HttpErrorResponse) => {
             if (
+              request.headers.get('No-Retry') ||
               error.headers.get('No-Retry') ||
               error.status.toString().startsWith('5') ||
               httpRetryAttempts >= MAX_HTTP_RETRY_ATTEMPTS

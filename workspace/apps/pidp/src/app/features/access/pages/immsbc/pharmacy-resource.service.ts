@@ -40,6 +40,7 @@ export class PharmacyResource {
 
   public searchPharmacies(query: string): Observable<Pharmacy[]> {
     return this.http.get<Pharmacy[]>(`${this.apiEndpoint}/search`, {
+      headers: { 'No-Retry': 'true' },
       params: { query },
     });
   }

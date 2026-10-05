@@ -27,7 +27,23 @@ public partial class BCProviderClient(
             var result = await this.client.Users[userPrincipalName]
                 .GetAsync(request => request.QueryParameters.Select = [attributeName]);
 
-            return result?.AdditionalData[attributeName];
+            if (result == null)
+            {
+                return null;
+            }
+
+            var property = typeof(User).GetProperty(attributeName, System.Reflection.BindingFlags.IgnoreCase | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+            if (property != null)
+            {
+                return property.GetValue(result);
+            }
+
+            if (result.AdditionalData != null && result.AdditionalData.TryGetValue(attributeName, out var value))
+            {
+                return value;
+            }
+
+            return null;
         }
         catch (Exception ex)
         {
@@ -48,7 +64,31 @@ public partial class BCProviderClient(
             var result = await this.client.Users[userPrincipalName]
                 .GetAsync(request => request.QueryParameters.Select = attributeNames);
 
-            return result?.AdditionalData;
+            if (result == null)
+            {
+                return null;
+            }
+
+            var attributes = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var attributeName in attributeNames)
+            {
+                var property = typeof(User).GetProperty(attributeName, System.Reflection.BindingFlags.IgnoreCase | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+                if (property != null)
+                {
+                    var val = property.GetValue(result);
+                    if (val != null)
+                    {
+                        attributes[attributeName] = val;
+                    }
+                }
+                else if (result.AdditionalData != null && result.AdditionalData.TryGetValue(attributeName, out var value))
+                {
+                    attributes[attributeName] = value;
+                }
+            }
+
+            return attributes;
         }
         catch (Exception ex)
         {
