@@ -23,6 +23,7 @@ public class PharmacySearch
         public string Phone { get; set; } = string.Empty;
         public string Fax { get; set; } = string.Empty;
         public string PharmaCareCode { get; set; } = string.Empty;
+        public bool IsClaimed { get; set; }
     }
 
     public class QueryValidator : AbstractValidator<Query>
@@ -39,7 +40,7 @@ public class PharmacySearch
             var searchString = query.QueryString.ToLower();
             
             var matches = await this.context.Pharmacies
-                .Where(pharmacy => pharmacy.ManagerId == null && (pharmacy.Name.ToLower().Contains(searchString) || pharmacy.PharmaCareCode.ToLower().Contains(searchString)))
+                .Where(pharmacy => pharmacy.Name.ToLower().Contains(searchString) || pharmacy.PharmaCareCode.ToLower().Contains(searchString))
                 .Take(51) // Take one extra to see if we exceed 50
                 .Select(pharmacy => new Model
                 {
@@ -49,7 +50,8 @@ public class PharmacySearch
                     Email = pharmacy.Email,
                     Phone = pharmacy.Phone,
                     Fax = pharmacy.Fax,
-                    PharmaCareCode = pharmacy.PharmaCareCode
+                    PharmaCareCode = pharmacy.PharmaCareCode,
+                    IsClaimed = pharmacy.ManagerId != null
                 })
                 .ToListAsync(cancellationToken);
 

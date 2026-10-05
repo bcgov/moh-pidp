@@ -34,7 +34,11 @@
               <div class="pharmacy-name">{{ pharmacy.name }}</div>
               <div class="pharmacy-code">PharmaCare Code: {{ pharmacy.pharmaCareCode }}</div>
             </div>
-            <button mat-flat-button color="primary" (click)="onClaim(pharmacy.id)">Claim</button>
+            @if (pharmacy.isClaimed) {
+              <div class="claimed-text">CLAIMED</div>
+            } @else {
+              <button mat-flat-button color="primary" (click)="onClaim(pharmacy.id)">Claim</button>
+            }
           </mat-card>
           }
         </div>
