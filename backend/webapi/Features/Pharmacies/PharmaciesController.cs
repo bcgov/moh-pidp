@@ -102,8 +102,12 @@ public class PharmaciesController(IMediator mediator, PidpDbContext context) : C
     {
         command.Token = new Guid(token);
         command.PartyId = this.User.GetPartyId(this.context);
-        await this.mediator.Send(command);
-        return this.NoContent();
+        var result = await this.mediator.Send(command);
+        if (result.IsSuccess)
+        {
+            return this.NoContent();
+        }
+        return result.ToActionResult();
     }
 
     [HttpGet("{pharmacyId}/staff")]
