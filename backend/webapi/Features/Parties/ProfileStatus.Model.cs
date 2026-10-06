@@ -282,10 +282,15 @@ public partial class ProfileStatus
             internal override string SectionName => "immsBC";
             public override string[] KeyWords => ["pharmacist"];
             public bool IsLead { get; set; }
+            public bool IsEndUser { get; set; }
+            public bool IsPending { get; set; }
 
             protected override StatusCode Compute(ProfileData profile)
             {
                 this.IsLead = profile.HasActiveImmsBcPhaLeadRole;
+                this.IsEndUser = profile.HasActiveImmsBcPhaEndUserRole;
+                this.IsPending = profile.HasPendingImmsBcPhaRole;
+                
                 var isEligible = profile.PartyPlrStanding.With(IdentifierType.Pharmacist).HasGoodStanding
                     || profile.HasActiveImmsBcPhaRole;
 

@@ -3,14 +3,19 @@
   <div class="content">
     <section class="page-intro">
       <h1>Claim Pharmacy</h1>
-      <p>Search for a pharmacy by name or PharmaCare code to claim it.</p>
+      <p>Search for a pharmacy by name or PharmaCare code to claim it.
+        <br />
+        If a pharmacy is already claimed in error, contact <a href="mailto:OneHealthID@gov.bc.ca">OneHealthID</a> for
+        assistance.
+      </p>
     </section>
 
     <div class="page-container">
       <div class="search-section">
         <mat-form-field appearance="outline" class="search-field">
           <mat-label>Search (min 3 characters)</mat-label>
-          <input matInput id="pharmacySearchInput" aria-label="Search (min 3 characters)" [formControl]="searchControl" placeholder="Enter Pharmacy Name or PharmaCare Code" />
+          <input matInput id="pharmacySearchInput" aria-label="Search (min 3 characters)" [formControl]="searchControl"
+            placeholder="Enter Pharmacy Name or PharmaCare Code" />
           <mat-icon matPrefix>search</mat-icon>
         </mat-form-field>
       </div>
@@ -35,9 +40,9 @@
               <div class="pharmacy-code">PharmaCare Code: {{ pharmacy.pharmaCareCode }}</div>
             </div>
             @if (pharmacy.isClaimed) {
-              <div class="claimed-text">CLAIMED</div>
+            <div class="claimed-text">CLAIMED</div>
             } @else {
-              <button mat-flat-button color="primary" (click)="onClaim(pharmacy.id)">Claim</button>
+            <button mat-flat-button color="primary" (click)="onClaim(pharmacy.id)">Claim</button>
             }
           </mat-card>
           }

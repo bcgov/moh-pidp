@@ -113,6 +113,9 @@ public partial class ProfileStatus
         public bool HasActiveImmsBcPhaRole { get; set; }
         public bool HasActiveImmsBcPhaLeadRole { get; set; }
 
+        public bool HasPendingImmsBcPhaRole { get; set; }
+        public bool HasActiveImmsBcPhaEndUserRole { get; set; }
+
         public bool HasEnrolment(AccessTypeCode accessTypeCode) => this.CompletedEnrolments.Contains(accessTypeCode);
         public bool HasNoLicence => this.LicenceDeclarationComplete && this.CollegeCode == null;
         public bool UserIsBCProvider => this.userIdentityProvider == IdentityProviders.BCProvider;
@@ -142,15 +145,23 @@ public partial class ProfileStatus
                     || (request.RequestingPartyId == this.Id && request.Status == EndorsementRequestStatus.Approved));
 
             var now = DateTime.UtcNow;
-            this.HasActiveImmsBcPhaRole = await context.PharmacyPartyRoles
-                .AnyAsync(r => r.PartyId == this.Id
-                            && (r.Role == PharmacyRole.Lead || r.Role == PharmacyRole.EndUser)
-                            && (r.EffectiveEndDate == null || r.EffectiveEndDate > now));
+            var pharmacyRoles = await context.PharmacyPartyRoles
+                .Where(r => r.PartyId == this.Id)
+                .ToListAsync();
 
-            this.HasActiveImmsBcPhaLeadRole = await context.PharmacyPartyRoles
-                .AnyAsync(r => r.PartyId == this.Id
-                            && r.Role == PharmacyRole.Lead
-                            && (r.EffectiveEndDate == null || r.EffectiveEndDate > now));
+            this.HasActiveImmsBcPhaRole = pharmacyRoles
+                .Any(r => (r.Role == PharmacyRole.Lead || r.Role == PharmacyRole.EndUser)
+                       && (r.EffectiveEndDate == null || r.EffectiveEndDate > now));
+
+            this.HasActiveImmsBcPhaLeadRole = pharmacyRoles
+                .Any(r => r.Role == PharmacyRole.Lead
+                       && (r.EffectiveEndDate == null || r.EffectiveEndDate > now));
+
+            this.HasActiveImmsBcPhaEndUserRole = pharmacyRoles
+                .Any(r => r.Role == PharmacyRole.EndUser
+                       && (r.EffectiveEndDate == null || r.EffectiveEndDate > now));
+
+            this.HasPendingImmsBcPhaRole = pharmacyRoles.Any() && !this.HasActiveImmsBcPhaRole;
         }
     }
 }
