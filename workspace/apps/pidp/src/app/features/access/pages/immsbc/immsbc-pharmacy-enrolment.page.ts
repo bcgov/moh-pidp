@@ -116,9 +116,12 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
           let errorMessage = 'An unexpected error occurred during enrolment.';
           if (typeof error.error === 'string') {
             errorMessage = error.error;
+          } else if (error.error?.errors && Object.keys(error.error.errors).length > 0) {
+            const firstKey = Object.keys(error.error.errors)[0];
+            errorMessage = error.error.errors[firstKey][0] || error.error.title || 'Validation error';
           } else if (error.error?.detail) {
             errorMessage = error.error.detail;
-          } else if (error.error?.title) {
+          } else if (error.error?.title && error.error?.title !== 'One or more validation errors occurred.' && error.error?.title !== 'Bad Request') {
             errorMessage = error.error.title;
           } else if (error.message) {
             errorMessage = error.message;

@@ -24,6 +24,7 @@ export interface Pharmacy {
   phone: string;
   fax: string;
   pharmaCareCode: string;
+  isClaimed: boolean;
 }
 
 export interface IStaff {

@@ -58,6 +58,30 @@
             </div>
           </mat-step>
 
+          <mat-step [state]="isLead || isEndUser || isPharmacist ? 'done' : 'number'"
+            [completed]="isLead || isEndUser || isPharmacist">
+            <ng-template matStepLabel>
+              Register as Pharmacy Staff
+            </ng-template>
+            <div>
+              <p class="guide-information">
+                @if (isPending) {
+                You are linked, but the pharmacy lead has not approved your access
+                } @else if (isLead) {
+                You are registered with LEAD access to ImmsBC Portal
+                } @else if (isEndUser) {
+                You are registered with access to ImmsBC Portal
+                } @else if (isPharmacist) {
+                You are a pharmacist and may login to ImmsBC Portal
+                }
+              </p>
+            </div>
+            <div class="stepper-buttons">
+              <button mat-stroked-button matStepperPrevious>Back</button>
+              <button mat-stroked-button matStepperNext>Next</button>
+            </div>
+          </mat-step>
+
           <mat-step [completed]="false">
             <ng-template matStepLabel>
               Login to the ImmsBC portal with your BCProvider
@@ -143,5 +167,10 @@
         </div>
       </div>
     </section>
+
+    <div style="text-align: center; margin-top: 2rem; margin-bottom: 2rem; color: #666;">
+      Please contact <a href="mailto:bcvax-support@gov.bc.ca">bcvax-support@gov.bc.ca</a> with any questions regarding
+      the tools above.
+    </div>
   </div>
 </div>
