@@ -1,4 +1,4 @@
-namespace DoWork.Services.BulkEformRoles;
+﻿namespace DoWork.Services.BulkEformRoles;
 
 /// <summary>
 /// How a bulk tool run was invoked. Dry run is the default and requires no arguments, so the only way
@@ -19,6 +19,12 @@ namespace DoWork.Services.BulkEformRoles;
 public sealed record BulkRunOptions(bool Apply, string? FromCsv, string? AccessType = null)
 {
     public static BulkRunOptions DryRun { get; } = new(false, null);
+
+    /// <summary>
+    /// Arguments that select and configure a service in DoWorkService rather than describing a bulk run.
+    /// Accepted here and ignored; DoWorkService resolves them from IConfiguration itself.
+    /// </summary>
+    private static readonly string[] DispatchArguments = ["service", "email", "partyid", "dryrun"];
 
     public string ModeBanner => this.Apply
         ? $"*** APPLY - this run WILL change live access, limited to the proposed changes in {Path.GetFileName(this.FromCsv)} ***"
@@ -81,9 +87,26 @@ public sealed record BulkRunOptions(bool Apply, string? FromCsv, string? AccessT
 
                 accessType = args[++i].Trim('"');
             }
+            else if (DispatchArguments.Any(name =>
+                arg.StartsWith($"--{name}=", StringComparison.OrdinalIgnoreCase)))
+            {
+                // DoWorkService reads these straight off IConfiguration to pick a service and configure it.
+                // They are no business of this type's, but it is the gate every invocation passes through,
+                // so it has to let them by rather than fail the run.
+            }
+            else if (DispatchArguments.Any(name =>
+                arg.Equals($"--{name}", StringComparison.OrdinalIgnoreCase)))
+            {
+                // The space-separated spelling of the same thing, which AddCommandLine also accepts. Its
+                // value is skipped so it is not read as an argument in its own right.
+                if (i + 1 < args.Length && !args[i + 1].StartsWith("--", StringComparison.Ordinal))
+                {
+                    i++;
+                }
+            }
             else
             {
-                error = $"Unrecognised argument '{arg}'. Valid arguments are --apply, --from <path> and --access-type <name>.";
+                error = $"Unrecognised argument '{arg}'. Valid arguments are --apply, --from <path>, --access-type <name>, and the service arguments --service, --email, --partyid and --dryrun.";
                 return false;
             }
         }

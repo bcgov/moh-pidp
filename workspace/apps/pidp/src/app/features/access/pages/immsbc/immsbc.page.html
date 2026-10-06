@@ -92,6 +92,7 @@
       </div>
       <div class="card action-buttons-card">
         <div class="action-buttons-group">
+          @if (isPharmacist || isLead) {
           <div
             [matTooltip]="bcProviderStatusCode !== StatusCode.COMPLETED ? 'You must create a BCProvider Credential before adding or managing a pharmacy.' : ''">
             <button mat-flat-button type="button" color="primary" class="action-button-large" style="width: 100%;"
@@ -99,6 +100,8 @@
               Manage Pharmacy Staff
             </button>
           </div>
+          }
+          @if (isPharmacist) {
           <div style="margin-top: 1rem;"
             [matTooltip]="bcProviderStatusCode !== StatusCode.COMPLETED ? 'You must create a BCProvider Credential before registering a pharmacy.' : ''">
             <a mat-flat-button color="primary" class="action-button-large" style="width: 100%;"
@@ -107,7 +110,6 @@
               Include your Pharmacy in ImmsBC
             </a>
           </div>
-          @if (isPharmacist) {
           <div style="margin-top: 1rem;"
             [matTooltip]="bcProviderStatusCode !== StatusCode.COMPLETED ? 'You must create a BCProvider Credential before claiming a pharmacy.' : ''">
             <button mat-flat-button type="button" color="primary" class="action-button-large" style="width: 100%;"

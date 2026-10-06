@@ -22,6 +22,7 @@ public class ProviderRoleType
 {
     public static readonly ProviderRoleType MedicalDoctor = new("MD");
     public static readonly ProviderRoleType RegisteredNursePractitioner = new("RNP");
+    public static readonly ProviderRoleType Pharmacist = new("PHARM");
 
     public string Value { get; }
 
@@ -117,7 +118,11 @@ public class PlrStandingsDigest
             && record.PlrStatusCode == PlrStatusCode.Pending
             && record.PlrStatusReasonCode == PlrStatusReasonCode.NonPracticing);
 
-    public IEnumerable<string> Cpns => this.records.Select(record => record.Cpn);
+    public IEnumerable<string> Cpns => this.records
+        .Select(record => record.Cpn)
+        .Where(cpn => !string.IsNullOrWhiteSpace(cpn))
+        .Distinct()
+        .OrderBy(c => c);
 
     public IEnumerable<string> MspIds => this.records
         .Select(record => record.MspId)

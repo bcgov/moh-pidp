@@ -1,4 +1,4 @@
-﻿namespace Pidp.Features.Parties;
+namespace Pidp.Features.Parties;
 
 using Mapster;
 using FluentValidation;
@@ -110,6 +110,8 @@ public partial class ProfileStatus
         public bool HasMSTeamsClinicEndorsement { get; set; }
         public bool HasPendingEndorsementRequest { get; set; }
         public PlrStandingsDigest PartyPlrStanding { get; set; } = default!;
+        public bool HasActiveImmsBcPhaRole { get; set; }
+        public bool HasActiveImmsBcPhaLeadRole { get; set; }
 
         public bool HasEnrolment(AccessTypeCode accessTypeCode) => this.CompletedEnrolments.Contains(accessTypeCode);
         public bool HasNoLicence => this.LicenceDeclarationComplete && this.CollegeCode == null;
@@ -138,6 +140,17 @@ public partial class ProfileStatus
             this.HasPendingEndorsementRequest = await context.EndorsementRequests
                 .AnyAsync(request => (request.ReceivingPartyId == this.Id && request.Status == EndorsementRequestStatus.Received)
                     || (request.RequestingPartyId == this.Id && request.Status == EndorsementRequestStatus.Approved));
+
+            var now = DateTime.UtcNow;
+            this.HasActiveImmsBcPhaRole = await context.PharmacyPartyRoles
+                .AnyAsync(r => r.PartyId == this.Id
+                            && (r.Role == PharmacyRole.Lead || r.Role == PharmacyRole.EndUser)
+                            && (r.EffectiveEndDate == null || r.EffectiveEndDate > now));
+
+            this.HasActiveImmsBcPhaLeadRole = await context.PharmacyPartyRoles
+                .AnyAsync(r => r.PartyId == this.Id
+                            && r.Role == PharmacyRole.Lead
+                            && (r.EffectiveEndDate == null || r.EffectiveEndDate > now));
         }
     }
 }

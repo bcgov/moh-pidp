@@ -37,11 +37,20 @@ public class Program
     {
         var fourDigitCardId = card.Id.ToString("D4", CultureInfo.InvariantCulture);
 
+        string? providerRoleType = collegeIdentifier switch
+        {
+            "PHID" => "PHARM",
+            "CPSID" => "MD",
+            "RNID" => "RNP",
+            _ => null
+        };
+
         return new PlrRecord
         {
             Ipc = $"IPC.PIDP0{fourDigitCardId}.{collegeIdentifier}.{plrStatus.StatusName}",
             Cpn = $"CPN.PIDP0{fourDigitCardId}.{collegeIdentifier}.{plrStatus.StatusName}",
             IdentifierType = collegeIdentifier,
+            ProviderRoleType = providerRoleType,
             CollegeId = plrStatus.CollegeIdPrefix + fourDigitCardId,
             FirstName = card.FirstName,
             LastName = card.LastName,

@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -33,11 +33,7 @@ if (!BulkRunOptions.TryParse(args, out var bulkRunOptions, out var argumentError
 {
     Console.WriteLine($"ERROR: {argumentError}");
     Console.WriteLine();
-    Console.WriteLine("Usage:");
-    Console.WriteLine("  dotnet run                                                 dry run - report only, writes nothing");
-    Console.WriteLine("  dotnet run -- --access-type ImmsBCEforms                    dry run for one card");
-    Console.WriteLine("  dotnet run -- --access-type ImmsBCEforms --apply --from <report.csv>");
-    Console.WriteLine("                                                             act on the Parties in a reviewed report");
+    Console.WriteLine("Run with no arguments for the list of services and their options.");
     Log.CloseAndFlush();
     return 1;
 }

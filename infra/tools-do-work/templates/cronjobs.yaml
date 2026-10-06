@@ -1,0 +1,64 @@
+{{ $ocEnv := regexFind "([^-]*$)" .Release.Namespace }}
+{{ $domain := .Values.global.vanityURL }}
+{{ $env := .Values.env }}
+## Derived release name
+{{ $isProd := contains "prod" $ocEnv }}
+#
+
+kind: CronJob
+apiVersion: batch/v1
+metadata:
+  name: tools-do-work
+spec:
+  schedule: {{ .Values.cron | quote }}
+  timeZone: America/Vancouver
+  concurrencyPolicy: Forbid
+  suspend: {{ .Values.suspend }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: tools-do-work
+            imagePullPolicy: Always
+            image: "{{ .Values.global.image.registry }}/{{ .Values.global.image.repository }}:{{ .Values.global.image.tag | default .Chart.AppVersion }}"
+            args:
+              {{- range .Values.jobArgs }}
+              - {{ . | quote }}
+              {{- end }}
+            env:
+              - name: ASPNETCORE_ENVIRONMENT
+                value: {{ .Values.aspnetcore.environment }}
+              - name: DB_HOST
+                valueFrom:
+                  configMapKeyRef:
+                    name: database-cm
+                    key: database-host
+              - name: POSTGRESQL_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ .Values.env }}-patroni-secret
+                    key: app-db-password
+              - name: POSTGRESQL_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ .Values.env }}-patroni-secret
+                    key: app-db-username
+              - name: POSTGRESQL_DATABASE
+                valueFrom:
+                  secretKeyRef:
+                    name: {{ .Values.env }}-patroni-secret
+                    key: app-db-name
+              - name: ConnectionStrings__PidpDatabase
+                value: >-
+                  Host=$(DB_HOST);Port=5432;Database=$(POSTGRESQL_DATABASE);Username=$(POSTGRESQL_USER);Password=$(POSTGRESQL_PASSWORD)
+              - name: PlrClient__Url
+                value: http://{{ $env }}-plr-intake:8080/api
+            envFrom:
+              - secretRef:
+                  name: keycloak-secrets
+              - secretRef:
+                  name: bc-provider
+            resources: 
+              {{- toYaml .Values.resources | nindent 14 }}
+          restartPolicy: Never

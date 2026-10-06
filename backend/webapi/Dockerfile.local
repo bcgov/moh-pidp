@@ -5,8 +5,8 @@ WORKDIR /vsdbg
 RUN dotnet tool install --global dotnet-ef --version "10.*"
 ENV PATH="${PATH}:/root/.dotnet/tools"
 
-ENV DOTNET_USE_POLLING_FILE_WATCHER 1
-ENV API_PORT 8080
+ENV DOTNET_USE_POLLING_FILE_WATCHER=1
+ENV API_PORT=8080
 
 WORKDIR /app
 

@@ -8,24 +8,33 @@ using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.BCProvider;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Models;
+using System.Diagnostics;
+using Pidp.Infrastructure.HttpClients.Plr;
 using Pidp.Models.Lookups;
 
-public class RoleSynchronizationService(PidpDbContext context, IBCProviderClient bcProviderClient, IClock clock, IKeycloakAdministrationClient keycloakClient) : IRoleSynchronizationService
+public class RoleSynchronizationService(PidpDbContext context, IBCProviderClient bcProviderClient, IClock clock, IKeycloakAdministrationClient keycloakClient, IPlrClient plrClient, PidpConfiguration config, ILogger<RoleSynchronizationService> logger) : IRoleSynchronizationService
 {
     private readonly PidpDbContext context = context;
     private readonly IBCProviderClient bcProviderClient = bcProviderClient;
     private readonly IClock clock = clock;
     private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
+    private readonly IPlrClient plrClient = plrClient;
+    private readonly ILogger<RoleSynchronizationService> logger = logger;
+    private readonly string clientId = config.BCProviderClient.ClientId;
 
     public async Task UpdatePharmStaffAttributes(int partyId, CancellationToken cancellationToken)
     {
+        var stopwatch = Stopwatch.StartNew();
+
         var partyDetails = await this.context.Parties
             .Where(p => p.Id == partyId)
             .Select(p => new
             {
                 PrimaryUserId = p.PrimaryUserId,
                 LicenceNumber = p.LicenceDeclaration != null ? p.LicenceDeclaration.LicenceNumber : "",
-                Upn = p.Credentials.Where(c => c.IdentityProvider == IdentityProviders.BCProvider).Select(c => c.IdpId).FirstOrDefault()
+                Upn = p.Credentials.Where(c => c.IdentityProvider == IdentityProviders.BCProvider).Select(c => c.IdpId).FirstOrDefault(),
+                BcProviderUserId = p.Credentials.Where(c => c.IdentityProvider == IdentityProviders.BCProvider).Select(c => (Guid?)c.UserId).FirstOrDefault(),
+                Cpn = p.Cpn
             })
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -41,9 +50,9 @@ public class RoleSynchronizationService(PidpDbContext context, IBCProviderClient
                      && (r.EffectiveEndDate == null || r.EffectiveEndDate > now))
             .ToListAsync(cancellationToken);
 
-        string jobTitle = "";
-        string department = "";
-        var licenceNumber = partyDetails.LicenceNumber ?? "";
+        string? jobTitle = null;
+        string? department = null;
+        var licenceNumber = string.IsNullOrEmpty(partyDetails.LicenceNumber) ? null : partyDetails.LicenceNumber;
         MohKeycloakEnrolment? keycloakEnrolmentToAssign = null;
 
         if (roles.Count > 0)
@@ -65,19 +74,32 @@ public class RoleSynchronizationService(PidpDbContext context, IBCProviderClient
         {
             // If they have no active roles, we can clear the job title and department
             // In case of deactivation, PharmacyStaffDeactivationService will also override this with a 'disabled' string
-            jobTitle = "";
-            department = "";
+            // We use null instead of empty string because Entra ID (Graph API) rejects empty strings.
+            jobTitle = null;
+            department = null;
         }
 
         if (!string.IsNullOrEmpty(partyDetails.Upn))
         {
             var userUpdate = new User
             {
-                JobTitle = jobTitle,
-                Department = department,
-                OfficeLocation = licenceNumber,
                 UsageLocation = "CA"
             };
+
+            if (!string.IsNullOrEmpty(jobTitle))
+            {
+                userUpdate.JobTitle = jobTitle;
+            }
+
+            if (!string.IsNullOrEmpty(department))
+            {
+                userUpdate.Department = department;
+            }
+
+            if (!string.IsNullOrEmpty(licenceNumber))
+            {
+                userUpdate.OfficeLocation = licenceNumber;
+            }
 
             var success = await this.bcProviderClient.UpdateUser(partyDetails.Upn, userUpdate);
             if (success)
@@ -85,6 +107,22 @@ public class RoleSynchronizationService(PidpDbContext context, IBCProviderClient
                 var details = $"JobTitle: {jobTitle}, Department: {department}, OfficeLocation: {licenceNumber}";
                 this.context.BusinessEvents.Add(BCProviderAttributesUpdated.Create(partyId, details, this.clock.GetCurrentInstant()));
                 await this.context.SaveChangesAsync(cancellationToken);
+            }
+
+            if (!string.IsNullOrEmpty(partyDetails.Cpn))
+            {
+                var plrStanding = await this.plrClient.GetStandingsDigestAsync(partyDetails.Cpn);
+                var bcProviderAttributes = new BCProviderAttributes(this.clientId);
+                bcProviderAttributes.SetPractitionerRole(plrStanding.ProviderRoleTypes);
+                bcProviderAttributes.SetCollegeId(plrStanding.CollegeIds);
+                
+                var pharmacistStanding = plrStanding.With(IdentifierType.Pharmacist);
+                if (pharmacistStanding.Cpns.Any())
+                {
+                    bcProviderAttributes.SetIsPharm(pharmacistStanding.HasGoodStanding);
+                }
+
+                await this.bcProviderClient.UpdateAttributes(partyDetails.Upn, bcProviderAttributes.AsAdditionalData());
             }
         }
 
@@ -95,16 +133,28 @@ public class RoleSynchronizationService(PidpDbContext context, IBCProviderClient
             MohKeycloakEnrolment.ImmsBcPhaEndUser
         };
 
+        var userIds = new List<Guid> { partyDetails.PrimaryUserId };
+        if (partyDetails.BcProviderUserId.HasValue && partyDetails.BcProviderUserId.Value != Guid.Empty)
+        {
+            userIds.Add(partyDetails.BcProviderUserId.Value);
+        }
+
         foreach (var enrolment in allImmsBcRoles)
         {
-            if (enrolment == keycloakEnrolmentToAssign)
+            foreach (var userId in userIds)
             {
-                await this.keycloakClient.AssignAccessRoles(partyDetails.PrimaryUserId, enrolment);
-            }
-            else
-            {
-                await this.keycloakClient.RemoveAccessRoles(partyDetails.PrimaryUserId, enrolment);
+                if (enrolment == keycloakEnrolmentToAssign)
+                {
+                    await this.keycloakClient.AssignAccessRoles(userId, enrolment);
+                }
+                else
+                {
+                    await this.keycloakClient.RemoveAccessRoles(userId, enrolment);
+                }
             }
         }
+
+        stopwatch.Stop();
+        this.logger.LogInformation("UpdatePharmStaffAttributes for Party {PartyId} completed in {ElapsedMilliseconds}ms", partyId, stopwatch.ElapsedMilliseconds);
     }
 }

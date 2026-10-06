@@ -147,6 +147,7 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
   }
 
   private handleSuccess(): void {
+    localStorage.removeItem('pending_pharmacy_enrolment_token');
     const data: DialogOptions = {
       title: 'Enrolment Successful',
       message:
@@ -175,14 +176,17 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
       .afterClosed()
       .subscribe((result) => {
         if (result) {
+          localStorage.setItem('pending_pharmacy_enrolment_token', this.token as string);
           this.router.navigate(['/account/bc-provider-application']);
         } else {
+          localStorage.removeItem('pending_pharmacy_enrolment_token');
           this.router.navigate(['/']);
         }
       });
   }
 
   private handleError(message: string): void {
+    localStorage.removeItem('pending_pharmacy_enrolment_token');
     this.message = message;
     this.isError = true;
     const data: DialogOptions = {
@@ -195,5 +199,10 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
       .open(ConfirmDialogComponent, { data })
       .afterClosed()
       .subscribe(() => this.router.navigate(['/']));
+  }
+
+  public onCancel(): void {
+    localStorage.removeItem('pending_pharmacy_enrolment_token');
+    this.router.navigate(['/']);
   }
 }

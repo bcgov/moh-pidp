@@ -24,7 +24,7 @@ public class StaffUpdate
         public int RequestingPartyId { get; set; } = 0;
     }
 
-    public class CommandHandler(IClock clock, PidpDbContext context, IRoleSynchronizationService roleSynchronizationService, IPlrClient plrClient) : ICommandHandler<Command, IDomainResult>
+    public class CommandHandler(IClock clock, PidpDbContext context, IRoleSynchronizationService roleSynchronizationService) : ICommandHandler<Command, IDomainResult>
     {
         public async ValueTask<IDomainResult> Handle(Command request, CancellationToken cancellationToken)
         {
