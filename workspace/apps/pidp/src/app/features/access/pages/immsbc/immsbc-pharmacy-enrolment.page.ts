@@ -42,8 +42,8 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
   private readonly portalResource = inject(PortalResource);
   private readonly cdr = inject(ChangeDetectorRef);
 
-  public pharmacyName: string = '';
-  public fullName: string = '';
+  public pharmacyName = '';
+  public fullName = '';
   public token: string | null = null;
   public breadcrumbsData: Array<{ title: string; path: string }> = [];
 
