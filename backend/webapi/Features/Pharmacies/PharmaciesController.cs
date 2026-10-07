@@ -52,7 +52,6 @@ public class PharmaciesController(IMediator mediator, PidpDbContext context, ILo
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdatePharmacy([FromRoute] int pharmacyId, [FromBody] PharmacyUpdate.Command command)
     {
-        this.logger.LogInformation("Updating pharmacy {PharmacyId} with data: {Command}", pharmacyId, command);
         command.PharmacyId = pharmacyId;
         command.RequestingPartyId = this.User.GetPartyId(this.context);
         await this.mediator.Send(command);
