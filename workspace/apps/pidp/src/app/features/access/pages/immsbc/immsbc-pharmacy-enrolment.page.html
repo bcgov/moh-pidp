@@ -7,26 +7,22 @@
       <p class="mb-4 lead" [class.text-danger]="isError">{{ message }}</p>
     </section>
 
-    @if (!isError && form) {
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="account-form" novalidate>
+    @if (!isError && fullName && pharmacyName) {
+    <form (ngSubmit)="onSubmit()" class="account-form" novalidate>
       <div class="form-panel">
         <div class="acknowledgement-group mb-4 p-4 border rounded bg-light">
-          <h3 class="ack-heading h5 mb-3">Privacy, Confidentiality and Security Acknowledgement</h3>
-          <label class="checkbox-label d-flex align-items-start">
-            <input type="checkbox" formControlName="privacyTrainingAcknowledged" class="mt-1 me-2" />
-            <span>
-              I have completed the privacy and security training from CareConnect related to PII (personal identifiable
-              information) & PHI (personal health information) in compliance with government regulations.
-            </span>
-          </label>
-          @if (form.get('privacyTrainingAcknowledged')?.invalid && form.get('privacyTrainingAcknowledged')?.touched) {
-          <div class="text-danger mt-2 small">This acknowledgement is required to Enrol.</div>
-          }
+          <p>
+            <strong>{{ fullName }}</strong> in association with <strong>{{ pharmacyName }}</strong> is requesting access
+            to the ImmsBC Portal.
+          </p>
+          <p>
+            Your request for access needs to be approved by a Pharmacy lead before you can login.
+          </p>
         </div>
       </div>
 
       <div class="submit-row" style="display: flex; gap: 16px;">
-        <button mat-flat-button color="primary" type="submit" class="submit-btn" [disabled]="form.invalid">
+        <button mat-flat-button color="primary" type="submit" class="submit-btn">
           Enrol
         </button>
         <button mat-stroked-button type="button" (click)="onCancel()">

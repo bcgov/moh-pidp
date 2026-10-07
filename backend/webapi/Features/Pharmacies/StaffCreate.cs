@@ -19,7 +19,6 @@ public class StaffCreate
         public Guid Token { get; set; }
         [System.Text.Json.Serialization.JsonIgnore]
         public int PartyId { get; set; }
-        public bool PrivacyTrainingAcknowledged { get; set; }
     }
 
     public class CommandHandler : IRequestHandler<Command, IDomainResult>
@@ -45,10 +44,7 @@ public class StaffCreate
                 return DomainResult.NotFound("Enrolment token not found.");
             }
 
-            if (!request.PrivacyTrainingAcknowledged)
-            {
-                return DomainResult.Failed("Privacy and security training must be acknowledged.");
-            }
+
 
             var now = this.clock.GetCurrentInstant().ToDateTimeUtc();
             if (enrolment.EffectiveEndDate < now)
