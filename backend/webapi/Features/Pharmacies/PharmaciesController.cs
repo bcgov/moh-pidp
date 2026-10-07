@@ -13,10 +13,11 @@ using Pidp.Models;
 using Pidp.Models.Lookups;
 
 [Route("api/[controller]")]
-public class PharmaciesController(IMediator mediator, PidpDbContext context) : ControllerBase
+public class PharmaciesController(IMediator mediator, PidpDbContext context, ILogger<PharmaciesController> logger) : ControllerBase
 {
     private readonly IMediator mediator = mediator;
     private readonly PidpDbContext context = context;
+    private readonly ILogger<PharmaciesController> logger = logger;
 
     [HttpGet("profile")]
     [Authorize(Policy = Policies.BcscAuthentication)]
@@ -51,7 +52,7 @@ public class PharmaciesController(IMediator mediator, PidpDbContext context) : C
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdatePharmacy([FromRoute] int pharmacyId, [FromBody] PharmacyUpdate.Command command)
     {
-        Console.WriteLine($"Updating pharmacy {pharmacyId} with data: {command}");
+        this.logger.LogInformation("Updating pharmacy {PharmacyId} with data: {Command}", pharmacyId, command);
         command.PharmacyId = pharmacyId;
         command.RequestingPartyId = this.User.GetPartyId(this.context);
         await this.mediator.Send(command);
@@ -94,7 +95,7 @@ public class PharmaciesController(IMediator mediator, PidpDbContext context) : C
     }
 
     [HttpPost("enrolments/{token}")]
-    [Authorize(Policy = Policies.BcscAuthentication)]
+    [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
