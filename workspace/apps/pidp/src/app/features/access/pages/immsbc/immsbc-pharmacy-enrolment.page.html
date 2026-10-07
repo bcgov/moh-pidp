@@ -8,28 +8,30 @@
     </section>
 
     @if (!isError && fullName && pharmacyName) {
-    <form (ngSubmit)="onSubmit()" class="account-form" novalidate>
+    <div class="account-form">
       <div class="form-panel">
         <div class="acknowledgement-group mb-4 p-4 border rounded bg-light">
           <p>
-            <strong>{{ fullName }}</strong> in association with <strong>{{ pharmacyName }}</strong> is requesting access
+            By clicking <b>Enrol</b>, <strong>{{ fullName }}</strong>, in association with <strong>{{ pharmacyName
+              }}</strong> will be requesting access
             to the ImmsBC Portal.
           </p>
           <p>
-            Your request for access needs to be approved by a Pharmacy lead before you can login.
+            After clicking <b>Enrol</b>, your request needs to be approved by a Pharmacy lead before you can login to
+            the portal.
           </p>
         </div>
       </div>
 
       <div class="submit-row" style="display: flex; gap: 16px;">
-        <button mat-flat-button color="primary" type="submit" class="submit-btn">
+        <button mat-flat-button color="primary" type="button" class="submit-btn" (click)="onSubmit()">
           Enrol
         </button>
         <button mat-stroked-button type="button" (click)="onCancel()">
           Cancel
         </button>
       </div>
-    </form>
+    </div>
     }
 
     @if (!isError && (!fullName || !pharmacyName)) {
