@@ -8,7 +8,7 @@ import {
   DialogOptions,
   InjectViewportCssClassDirective,
 } from '@bcgov/shared/ui';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+
 import { MatButtonModule } from '@angular/material/button';
 import { PartyService } from '@app/core/party/party.service';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
@@ -26,7 +26,6 @@ import { PharmacyResource } from './pharmacy-resource.service';
     CommonModule,
     MatDialogModule,
     MatProgressBarModule,
-    ReactiveFormsModule,
     MatButtonModule,
     InjectViewportCssClassDirective,
     BreadcrumbComponent,
@@ -40,7 +39,6 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
   private readonly resource = inject(PharmacyResource);
   private readonly keycloak = inject(Keycloak);
   private readonly dialog = inject(MatDialog);
-  private readonly fb = inject(FormBuilder);
   private readonly portalResource = inject(PortalResource);
   private readonly cdr = inject(ChangeDetectorRef);
 

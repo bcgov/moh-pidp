@@ -98,7 +98,7 @@ public class PharmaciesController(IMediator mediator, PidpDbContext context, ILo
     [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
     [ProducesResponseType(typeof(EnrolmentTokenDetails.Model), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<EnrolmentTokenDetails.Model>> GetEnrolmentTokenDetails([FromRoute] Guid token)
+    public async Task<IActionResult> GetEnrolmentTokenDetails([FromRoute] Guid token)
     {
         var result = await this.mediator.Send(new EnrolmentTokenDetails.Query { Token = token });
         if (result.IsSuccess)
