@@ -90,6 +90,8 @@ export class ImmsbcPage implements OnInit, OnDestroy {
   private readonly lastSelectedIndex: number;
   public hasCpn: boolean | undefined;
   public isPharmacist = false;
+  public isEndUser = false;
+  public isPending = false;
   public isLead = false;
   public Destination = Destination;
   public StatusCode = StatusCode;
@@ -112,7 +114,7 @@ export class ImmsbcPage implements OnInit, OnDestroy {
     this.selectedIndex = -1;
     this.logoutRedirectUrl = `${this.config.applicationUrl}/`;
     this.bcProviderTutorial = bcProviderTutorialLink;
-    this.lastSelectedIndex = 2;
+    this.lastSelectedIndex = 3;
     this.destination$ = this.discoveryResource.getDestination(
       this.partyService.partyId,
     );
@@ -170,6 +172,8 @@ export class ImmsbcPage implements OnInit, OnDestroy {
           this.hasCpn = profileStatus?.status.collegeCertification.hasCpn;
           this.isPharmacist = profileStatus?.status.dashboardInfo.collegeCode === 2;
           this.isLead = profileStatus?.status.immsBC.isLead || false;
+          this.isEndUser = profileStatus?.status.immsBC.isEndUser || false;
+          this.isPending = profileStatus?.status.immsBC.isPending || false;
           this.immsbcStatusCode = profileStatus?.status.immsBC.statusCode;
           this.bcProviderStatusCode =
             profileStatus?.status.bcProvider.statusCode;
@@ -179,8 +183,12 @@ export class ImmsbcPage implements OnInit, OnDestroy {
             selectedIndex === this.lastSelectedIndex &&
             this.bcProviderStatusCode === StatusCode.COMPLETED
           ) {
-            // ImmsBC step
-            selectedIndex = 1;
+            if (this.isPending) {
+              selectedIndex = 2;
+            } else {
+              // ImmsBC step
+              selectedIndex = 1;
+            }
           }
           this.selectedIndex = selectedIndex;
         }),

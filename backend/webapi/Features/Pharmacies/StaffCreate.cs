@@ -3,6 +3,8 @@ namespace Pidp.Features.Pharmacies;
 using Mediator;
 using Microsoft.EntityFrameworkCore;
 using NodaTime;
+using DomainResults.Common;
+
 using Pidp.Data;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.Services;
@@ -11,16 +13,15 @@ using Pidp.Models.Lookups;
 
 public class StaffCreate
 {
-    public class Command : IRequest
+    public class Command : IRequest<IDomainResult>
     {
         [System.Text.Json.Serialization.JsonIgnore]
         public Guid Token { get; set; }
         [System.Text.Json.Serialization.JsonIgnore]
         public int PartyId { get; set; }
-        public bool PrivacyTrainingAcknowledged { get; set; }
     }
 
-    public class CommandHandler : IRequestHandler<Command>
+    public class CommandHandler : IRequestHandler<Command, IDomainResult>
     {
         private readonly PidpDbContext context;
         private readonly IClock clock;
@@ -33,25 +34,22 @@ public class StaffCreate
             this.roleSynchronizationService = roleSynchronizationService;
         }
 
-        public async ValueTask<Unit> Handle(Command request, CancellationToken cancellationToken)
+        public async ValueTask<IDomainResult> Handle(Command request, CancellationToken cancellationToken)
         {
             var enrolment = await this.context.PharmacyEnrolments
                 .SingleOrDefaultAsync(enrolment => enrolment.Token == request.Token, cancellationToken);
 
             if (enrolment == null)
             {
-                throw new KeyNotFoundException("Enrolment token not found or has already been used.");
+                return DomainResult.NotFound("Enrolment token not found.");
             }
 
-            if (!request.PrivacyTrainingAcknowledged)
-            {
-                throw new InvalidOperationException("Privacy and security training must be acknowledged.");
-            }
+
 
             var now = this.clock.GetCurrentInstant().ToDateTimeUtc();
             if (enrolment.EffectiveEndDate < now)
             {
-                throw new InvalidOperationException("Enrolment token has expired.");
+                return DomainResult.Failed("Enrolment token has expired.");
             }
 
             var existingRole = await this.context.PharmacyPartyRoles
@@ -59,7 +57,7 @@ public class StaffCreate
 
             if (existingRole)
             {
-                throw new InvalidOperationException("User already associated with this pharmacy.");
+                return DomainResult.Success();
             }
 
             var yesterday = now.AddDays(-1);
@@ -89,11 +87,11 @@ public class StaffCreate
 
             if (!hasBcProvider)
             {
-                throw new InvalidOperationException("Please link a BC Provider credential via /account/bc-provider-application.");
+                return DomainResult.Failed("Please link a BC Provider credential via /account/bc-provider-application.");
             }
 
             await this.roleSynchronizationService.UpdatePharmStaffAttributes(request.PartyId, cancellationToken);
-            return Unit.Value;
+            return DomainResult.Success();
         }
     }
 }

@@ -5,6 +5,8 @@ using Mediator;
 using Microsoft.EntityFrameworkCore;
 using DomainResults.Common;
 
+using Microsoft.Extensions.Logging;
+
 using Pidp.Data;
 
 public class PharmacySearch
@@ -23,6 +25,7 @@ public class PharmacySearch
         public string Phone { get; set; } = string.Empty;
         public string Fax { get; set; } = string.Empty;
         public string PharmaCareCode { get; set; } = string.Empty;
+        public bool IsClaimed { get; set; }
     }
 
     public class QueryValidator : AbstractValidator<Query>
@@ -30,16 +33,17 @@ public class PharmacySearch
         public QueryValidator() => this.RuleFor(x => x.QueryString).MinimumLength(3).WithMessage("Search query must be at least 3 characters.");
     }
 
-    public class QueryHandler(PidpDbContext context) : IRequestHandler<Query, IDomainResult<List<Model>>>
+    public class QueryHandler(PidpDbContext context, ILogger<QueryHandler> logger) : IRequestHandler<Query, IDomainResult<List<Model>>>
     {
         private readonly PidpDbContext context = context;
+        private readonly ILogger<QueryHandler> logger = logger;
 
         public async ValueTask<IDomainResult<List<Model>>> Handle(Query query, CancellationToken cancellationToken)
         {
             var searchString = query.QueryString.ToLower();
             
             var matches = await this.context.Pharmacies
-                .Where(pharmacy => pharmacy.ManagerId == null && (pharmacy.Name.ToLower().Contains(searchString) || pharmacy.PharmaCareCode.ToLower().Contains(searchString)))
+                .Where(pharmacy => pharmacy.Name.ToLower().Contains(searchString) || pharmacy.PharmaCareCode.ToLower().Contains(searchString))
                 .Take(51) // Take one extra to see if we exceed 50
                 .Select(pharmacy => new Model
                 {
@@ -49,12 +53,14 @@ public class PharmacySearch
                     Email = pharmacy.Email,
                     Phone = pharmacy.Phone,
                     Fax = pharmacy.Fax,
-                    PharmaCareCode = pharmacy.PharmaCareCode
+                    PharmaCareCode = pharmacy.PharmaCareCode,
+                    IsClaimed = pharmacy.ManagerId != null
                 })
                 .ToListAsync(cancellationToken);
 
             if (matches.Count > 50)
             {
+                this.logger.LogWarning("Pharmacy search failed: Search query '{QueryString}' matched over 50 pharmacies.", query.QueryString);
                 return DomainResult.Failed<List<Model>>("too many to list");
             }
 
