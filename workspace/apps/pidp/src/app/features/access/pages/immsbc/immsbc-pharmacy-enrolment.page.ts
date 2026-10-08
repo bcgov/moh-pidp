@@ -8,13 +8,13 @@ import {
   DialogOptions,
   InjectViewportCssClassDirective,
 } from '@bcgov/shared/ui';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+
 import { MatButtonModule } from '@angular/material/button';
 import { PartyService } from '@app/core/party/party.service';
 import { BreadcrumbComponent } from '@app/shared/components/breadcrumb/breadcrumb.component';
 import { AccessRoutes } from '@app/features/access/access.routes';
 import Keycloak from 'keycloak-js';
-import { catchError, throwError } from 'rxjs';
+import { catchError, forkJoin, throwError } from 'rxjs';
 import { StatusCode } from '@app/features/portal/enums/status-code.enum';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 import { PharmacyResource } from './pharmacy-resource.service';
@@ -26,7 +26,6 @@ import { PharmacyResource } from './pharmacy-resource.service';
     CommonModule,
     MatDialogModule,
     MatProgressBarModule,
-    ReactiveFormsModule,
     MatButtonModule,
     InjectViewportCssClassDirective,
     BreadcrumbComponent,
@@ -40,11 +39,12 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
   private readonly resource = inject(PharmacyResource);
   private readonly keycloak = inject(Keycloak);
   private readonly dialog = inject(MatDialog);
-  private readonly fb = inject(FormBuilder);
   private readonly portalResource = inject(PortalResource);
   private readonly cdr = inject(ChangeDetectorRef);
 
-  public form!: FormGroup;
+  public pharmacyName = '';
+  public fullName = '';
+  public isPharmacist = false;
   public token: string | null = null;
   public breadcrumbsData: Array<{ title: string; path: string }> = [];
 
@@ -69,30 +69,26 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
       console.warn('[ImmsbcPharmacyEnrolment] No token provided, exiting ngOnInit.');
       return;
     }
+    forkJoin({
+      profileStatus: this.portalResource.getProfileStatus(this.partyService.partyId),
+      enrolmentDetails: this.resource.getEnrolmentTokenDetails(this.token)
+    }).subscribe({
+      next: ({ profileStatus, enrolmentDetails }) => {
 
-    console.log('[ImmsbcPharmacyEnrolment] Fetching profile status for partyId:', this.partyService.partyId);
-    this.portalResource.getProfileStatus(this.partyService.partyId).subscribe({
-      next: (profileStatus) => {
-        console.log('[ImmsbcPharmacyEnrolment] Received profileStatus:', profileStatus);
-        console.log('[ImmsbcPharmacyEnrolment] bcProvider statusCode:', profileStatus?.status?.bcProvider?.statusCode);
-        
         if (profileStatus?.status?.bcProvider?.statusCode !== StatusCode.COMPLETED) {
           console.log('[ImmsbcPharmacyEnrolment] BC Provider not completed, handling missing bc provider error');
           this.handleMissingBcProviderError('You must link or create a BC Provider account before you can enrol in a pharmacy.');
         } else {
-          console.log('[ImmsbcPharmacyEnrolment] BC Provider is completed, proceeding with form setup');
-          // User is authenticated, proceed with form setup
-          this.form = this.fb.group({
-            privacyTrainingAcknowledged: [false, Validators.requiredTrue]
-          });
-          console.log('[ImmsbcPharmacyEnrolment] Form initialized:', this.form);
-
-          this.message = 'Please acknowledge the privacy and security training to proceed.';
+          this.fullName = profileStatus?.status?.dashboardInfo?.displayFullName || '';
+          this.pharmacyName = enrolmentDetails?.pharmacyName || '';
+          this.isPharmacist = profileStatus?.status?.dashboardInfo?.collegeCode === 2;
+          this.message = '';
           this.cdr.detectChanges();
         }
       },
       error: (error) => {
-        console.error('[ImmsbcPharmacyEnrolment] Error fetching profile status:', error);
+        console.error('[ImmsbcPharmacyEnrolment] Error fetching profile status or enrolment details:', error);
+        this.handleError('The enrolment link may be invalid or expired.');
       },
       complete: () => {
         console.log('[ImmsbcPharmacyEnrolment] getProfileStatus observable completed');
@@ -101,8 +97,7 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
   }
 
   public onSubmit(): void {
-    if (this.form.invalid || !this.token) {
-      this.form.markAllAsTouched();
+    if (!this.token) {
       return;
     }
 
@@ -110,7 +105,7 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
     this.isError = false;
 
     this.resource
-      .enrolStaff(this.token, { privacyTrainingAcknowledged: true })
+      .enrolStaff(this.token)
       .pipe(
         catchError((error) => {
           let errorMessage = 'An unexpected error occurred during enrolment.';
@@ -154,7 +149,7 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
     const data: DialogOptions = {
       title: 'Enrolment Successful',
       message:
-        'You have been successfully associated with the pharmacy. You can now request access to ImmsBC from the access request page.',
+        `You have been successfully associated with ${this.pharmacyName}.`,
       actionText: 'OK',
       cancelHide: true,
     };

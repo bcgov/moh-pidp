@@ -183,8 +183,12 @@ export class ImmsbcPage implements OnInit, OnDestroy {
             selectedIndex === this.lastSelectedIndex &&
             this.bcProviderStatusCode === StatusCode.COMPLETED
           ) {
-            // ImmsBC step
-            selectedIndex = 1;
+            if (this.isPending) {
+              selectedIndex = 2;
+            } else {
+              // ImmsBC step
+              selectedIndex = 1;
+            }
           }
           this.selectedIndex = selectedIndex;
         }),
