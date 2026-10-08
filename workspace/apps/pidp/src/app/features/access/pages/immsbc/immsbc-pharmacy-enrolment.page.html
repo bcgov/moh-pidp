@@ -12,13 +12,14 @@
       <div class="form-panel">
         <div class="acknowledgement-group mb-4 p-4 border rounded bg-light">
           <p>
-            By clicking the <b>Enrol</b> button, <strong>{{ fullName }}</strong>, in association with <strong>
-              {{ pharmacyName }}</strong> will be requesting access to the ImmsBC Portal.
+            Click <b>Enrol</b> to request access to the ImmsBC Portal for <strong>{{ fullName }}</strong> at <strong>{{
+              pharmacyName }}</strong>.
           </p>
+          @if (!isPharmacist) {
           <p>
-            After clicking Enrol your request needs to be approved by a Pharmacy lead before you can login to
-            the portal.
+            Your request must be approved by a Pharmacy Lead before you can log in to the portal.
           </p>
+          }
         </div>
       </div>
 

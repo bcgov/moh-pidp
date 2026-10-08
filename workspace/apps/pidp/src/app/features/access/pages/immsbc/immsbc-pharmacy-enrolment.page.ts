@@ -44,6 +44,7 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
 
   public pharmacyName = '';
   public fullName = '';
+  public isPharmacist = false;
   public token: string | null = null;
   public breadcrumbsData: Array<{ title: string; path: string }> = [];
 
@@ -80,6 +81,7 @@ export class ImmsbcPharmacyEnrolmentPage implements OnInit {
         } else {
           this.fullName = profileStatus?.status?.dashboardInfo?.displayFullName || '';
           this.pharmacyName = enrolmentDetails?.pharmacyName || '';
+          this.isPharmacist = profileStatus?.status?.dashboardInfo?.collegeCode === 2;
           this.message = '';
           this.cdr.detectChanges();
         }
