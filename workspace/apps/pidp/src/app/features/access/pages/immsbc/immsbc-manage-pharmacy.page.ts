@@ -1,8 +1,8 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { BehaviorSubject, EMPTY, Observable, catchError, exhaustMap, filter, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, Subject, catchError, exhaustMap, filter, switchMap, takeUntil, tap, timer } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -51,12 +51,13 @@ import { InviteByEmailDialogComponent } from './invite-by-email-dialog.component
   templateUrl: './immsbc-manage-pharmacy.page.html',
   styleUrl: './immsbc-manage-pharmacy.page.scss',
 })
-export class ImmsbcManagePharmacyPage implements OnInit {
+export class ImmsbcManagePharmacyPage implements OnInit, OnDestroy {
   private readonly resource = inject(PharmacyResource);
   private readonly snackBar = inject(MatSnackBar);
   private readonly dialog = inject(MatDialog);
   private readonly fb = inject(FormBuilder);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly destroy$ = new Subject<void>();
 
   public breadcrumbsData: Array<{ title: string; path: string }> = [];
   public pharmacyProfile$!: Observable<PharmacyProfile>;
@@ -89,6 +90,20 @@ export class ImmsbcManagePharmacyPage implements OnInit {
     });
 
     this.pharmacyProfile$ = this.resource.getPharmacyAdminProfile();
+
+    // refresh the staff table every 5 minutes
+    timer(300000, 300000)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        if (this.selectedPharmacy) {
+          this.refresh$.next();
+        }
+      });
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   public selectPharmacy(pharmacy: PharmacyProfile['associations'][0]): void {
@@ -132,6 +147,10 @@ export class ImmsbcManagePharmacyPage implements OnInit {
     this.hasEmail = false;
     this.contactForm.reset();
     this.dataSource.data = [];
+  }
+
+  public refreshStaff(): void {
+    this.refresh$.next();
   }
 
   public onSubmitContactInfo(): void {

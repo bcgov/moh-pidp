@@ -87,8 +87,12 @@ export class PharmacyResource {
     });
   }
 
-  public enrolStaff(token: string, payload: { privacyTrainingAcknowledged: boolean }): Observable<void> {
-    return this.http.post<void>(`${this.apiEndpoint}/enrolments/${token}`, payload);
+  public enrolStaff(token: string): Observable<void> {
+    return this.http.post<void>(`${this.apiEndpoint}/enrolments/${token}`, {});
+  }
+
+  public getEnrolmentTokenDetails(token: string): Observable<{ pharmacyName: string }> {
+    return this.http.get<{ pharmacyName: string }>(`${this.apiEndpoint}/enrolments/${token}`);
   }
 
   public deleteStaff(

@@ -19,8 +19,7 @@ public class PharmacyCreate
         public string Phone { get; set; } = string.Empty;
         public string Fax { get; set; } = string.Empty;
         public string PharmaCareCode { get; set; } = string.Empty;
-        [System.Text.Json.Serialization.JsonRequired]
-        public int ManagerId { get; set; }
+        public int? ManagerId { get; set; }
 
     }
 
@@ -61,17 +60,19 @@ public class PharmacyCreate
 
             this.context.Pharmacies.Add(pharmacy);
 
-            var partyPharmacyRole = new PharmacyPartyRole
+            if (request.ManagerId.HasValue)
             {
-                PartyId = request.ManagerId,
-                Pharmacy = pharmacy,
-                Role = PharmacyRole.Lead,
-                EffectiveStartDate = DateTime.UtcNow,
-                EffectiveEndDate = DateTime.UtcNow.AddYears(10)
-            };
-            this.context.PharmacyPartyRoles.Add(partyPharmacyRole);
-            this.context.BusinessEvents.Add(PharmacyAdded.Create(request.ManagerId, request.Name, this.clock.GetCurrentInstant()));
-
+                var partyPharmacyRole = new PharmacyPartyRole
+                {
+                    PartyId = request.ManagerId.Value,
+                    Pharmacy = pharmacy,
+                    Role = PharmacyRole.Lead,
+                    EffectiveStartDate = DateTime.UtcNow,
+                    EffectiveEndDate = DateTime.UtcNow.AddYears(10)
+                };
+                this.context.PharmacyPartyRoles.Add(partyPharmacyRole);
+                this.context.BusinessEvents.Add(PharmacyAdded.Create(request.ManagerId.Value, request.Name, this.clock.GetCurrentInstant()));
+            }
 
             await this.context.SaveChangesAsync(cancellationToken);
 
