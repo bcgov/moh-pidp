@@ -297,7 +297,7 @@ public partial class ProfileStatus
                 return profile switch
                 {
                     _ when isEligible && profile.HasBCProviderCredential => StatusCode.Complete,
-                    _ when isEligible => StatusCode.Incomplete,
+                    _ when isEligible || profile.HasPendingImmsBcPhaRole => StatusCode.Incomplete,
                     _ => StatusCode.Locked
                 };
             }
