@@ -47,9 +47,10 @@ public class StaffCreate
 
 
             var now = this.clock.GetCurrentInstant().ToDateTimeUtc();
-            if (enrolment.EffectiveEndDate < now)
+            if ((enrolment.EffectiveStartDate != null && enrolment.EffectiveStartDate > now) ||
+                (enrolment.EffectiveEndDate != null && enrolment.EffectiveEndDate < now))
             {
-                return DomainResult.Failed("Enrolment token has expired.");
+                return DomainResult.Failed("Enrolment token is inactive or expired.");
             }
 
             var existingRole = await this.context.PharmacyPartyRoles
