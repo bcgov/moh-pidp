@@ -210,7 +210,8 @@ public class PharmaciesController(IMediator mediator, PidpDbContext context, ILo
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> ClaimPharmacy([FromRoute] int pharmacyId)
     {
-        var result = await this.mediator.Send(new PharmacyClaim.Command { PharmacyId = pharmacyId, RequestingPartyId = this.User.GetPartyId(this.context) });
+        var partyId = this.User.GetPartyId(this.context);
+        var result = await this.mediator.Send(new PharmacyClaim.Command { PharmacyId = pharmacyId, RequestingPartyId = partyId });
         if (result.IsSuccess)
         {
             return this.NoContent();

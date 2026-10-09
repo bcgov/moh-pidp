@@ -28,10 +28,13 @@ public class StaffUpdate
     {
         public async ValueTask<IDomainResult> Handle(Command request, CancellationToken cancellationToken)
         {
+            var now = DateTime.UtcNow;
             var requestingPartyIsLead = await context.PharmacyPartyRoles
                 .AnyAsync(role => role.PartyId == request.RequestingPartyId
                                && role.PharmacyId == request.PharmacyId
-                               && (role.Role == PharmacyRole.Lead),
+                               && role.Role == PharmacyRole.Lead
+                               && (role.EffectiveStartDate == null || role.EffectiveStartDate <= now)
+                               && (role.EffectiveEndDate == null || role.EffectiveEndDate > now),
                           cancellationToken);
 
             if (!requestingPartyIsLead)
