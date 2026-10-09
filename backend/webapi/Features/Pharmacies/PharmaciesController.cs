@@ -212,14 +212,12 @@ public class PharmaciesController(IMediator mediator, PidpDbContext context, ILo
     {
         var partyId = this.User.GetPartyId(this.context);
         this.logger.LogInformation("V2 ClaimPharmacy2 requested for PharmacyId {PharmacyId}. Resolved PartyId from token: {PartyId}. Raw IDP ID: {IdpId}", pharmacyId, partyId, this.User.GetIdpId());
-
         var result = await this.mediator.Send(new PharmacyClaim.Command { PharmacyId = pharmacyId, RequestingPartyId = partyId });
         if (result.IsSuccess)
         {
             return this.NoContent();
         }
-        
-        this.logger.LogWarning("V2 ClaimPharmacy failed for PharmacyId {PharmacyId} and PartyId {PartyId}. Errors: {Errors}", pharmacyId, partyId, string.Join(", ", result.Errors.Select(e => e.Message)));
+        this.logger.LogWarning("V2 ClaimPharmacy failed for PharmacyId {PharmacyId} and PartyId {PartyId}", pharmacyId, partyId);
         return result.ToActionResult();
     }
 
