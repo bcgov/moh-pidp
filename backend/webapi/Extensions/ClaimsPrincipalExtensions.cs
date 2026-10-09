@@ -27,12 +27,14 @@ public static class ClaimsPrincipalExtensions
         {
             return 0;
         }
-        
+
         var partyId = context.Credentials
+#pragma warning disable CA1304, CA1862, CA1311
             .Where(c => c.IdpId != null && c.IdpId.ToLower() == idpId.ToLower())
+#pragma warning restore CA1304, CA1862, CA1311
             .Select(c => c.PartyId)
             .FirstOrDefault();
-            
+
         return partyId;
     }
 
