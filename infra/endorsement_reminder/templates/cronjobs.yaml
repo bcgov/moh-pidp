@@ -13,8 +13,13 @@ spec:
   schedule: {{ .Values.cron }}
   timeZone: America/Vancouver
   concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 5
+  failedJobsHistoryLimit: 1
   jobTemplate:
     spec:
+      backoffLimit: 2
+      activeDeadlineSeconds: 1800
+      ttlSecondsAfterFinished: 86400
       template:
         spec:
           containers:
