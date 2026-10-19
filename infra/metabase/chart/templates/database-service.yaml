@@ -18,5 +18,6 @@ spec:
       protocol: TCP
       targetPort: 5432
   selector:
-    name: {{ include "metabase.fullname" . }}-database
+    app.kubernetes.io/name: {{ include "metabase.fullname" . }}-database
+    app.kubernetes.io/instance: {{ .Release.Name }}
   type: ClusterIP
