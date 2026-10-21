@@ -55,6 +55,13 @@ public class StaffUpdate
                 throw new InvalidOperationException("You cannot change your own role.");
             }
 
+            if (request.RequestingPartyId == request.PartyId 
+                && request.EffectiveEndDate.HasValue 
+                && request.EffectiveEndDate.Value.ToUniversalTime().Date < DateTime.UtcNow.Date)
+            {
+                throw new InvalidOperationException("You cannot set your own effective end date in the past.");
+            }
+
             var pharmacyName = await context.Pharmacies
                 .Where(p => p.Id == request.PharmacyId)
                 .Select(p => p.Name)

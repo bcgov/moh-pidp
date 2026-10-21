@@ -8,6 +8,6 @@ public class PharmacyConfiguration : IEntityTypeConfiguration<Pharmacy>
 {
     public void Configure(EntityTypeBuilder<Pharmacy> builder)
     {
-        // Empty configuration for Pharmacy
+        builder.HasIndex(x => x.PharmaCareCode).IsUnique();
     }
 }

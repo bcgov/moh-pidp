@@ -73,16 +73,16 @@ public class PharmacyInvite
             var pharmacyParts = pharmacy.Split('-');
             var pharmacyName = pharmacyParts.Length >= 2 ? pharmacyParts[1].Trim() : pharmacy;
 
+            var tokenCmd = new GenerateEnrolmentToken.Command
+            {
+                PharmacyId = request.PharmacyId,
+                RoleToAssign = request.RoleToAssign,
+                RequestingPartyId = request.RequestingPartyId
+            };
+            var token = await mediator.Send(tokenCmd, cancellationToken);
+
             foreach (var emailAddress in request.Emails)
             {
-                var tokenCmd = new GenerateEnrolmentToken.Command
-                {
-                    PharmacyId = request.PharmacyId,
-                    RoleToAssign = request.RoleToAssign,
-                    RequestingPartyId = request.RequestingPartyId
-                };
-
-                var token = await mediator.Send(tokenCmd, cancellationToken);
 
                 var baseUrl = config.ApplicationUrl;
                 var baseLink = $"<a href=\"{baseUrl}\" target=\"_blank\" rel=\"noopener\">here</a>";

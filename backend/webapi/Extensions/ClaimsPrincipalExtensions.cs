@@ -22,8 +22,8 @@ public static class ClaimsPrincipalExtensions
             return 0;
         }
 
-        var username = user.FindFirstValue("preferred_username");
-        var partyId = context.Credentials.Where(c => c.IdpId == username).Select(c => c.PartyId).FirstOrDefault();
+        var idpId = user.GetIdpId();
+        var partyId = context.Credentials.Where(c => c.IdpId == idpId).Select(c => c.PartyId).FirstOrDefault();
         return partyId;
     }
 

@@ -58,6 +58,10 @@ export class ImmsbcPortalSection implements IPortalSection {
   }
 
   public get status(): string {
+    if (this.profileStatus.status.immsBC.isPending) {
+      return 'Pending';
+    }
+
     switch (this.getStatusCode()) {
       case StatusCode.AVAILABLE:
         return 'You are eligible to access ImmsBC services';

@@ -59,7 +59,7 @@ export class ImmsbcCreatePharmacyPage implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       pharmaCareCode: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(10), Validators.pattern(/^BC/)]],
       managerLicenceNumber: [''],
-      managerId: [null as number | null, Validators.required],
+      managerId: [null as number | null],
     });
   }
 

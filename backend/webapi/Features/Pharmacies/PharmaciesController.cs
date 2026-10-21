@@ -13,13 +13,14 @@ using Pidp.Models;
 using Pidp.Models.Lookups;
 
 [Route("api/[controller]")]
-public class PharmaciesController(IMediator mediator, PidpDbContext context) : ControllerBase
+public class PharmaciesController(IMediator mediator, PidpDbContext context, ILogger<PharmaciesController> logger) : ControllerBase
 {
     private readonly IMediator mediator = mediator;
     private readonly PidpDbContext context = context;
+    private readonly ILogger<PharmaciesController> logger = logger;
 
     [HttpGet("profile")]
-    [Authorize(Policy = Policies.BcscAuthentication)]
+    [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
     [ProducesResponseType(typeof(Profile.Model), StatusCodes.Status200OK)]
     public async Task<ActionResult<Profile.Model>> GetPharmacyAdminProfile()
     {
@@ -38,20 +39,19 @@ public class PharmaciesController(IMediator mediator, PidpDbContext context) : C
     }
 
     [HttpGet("{pharmacyId}")]
-    [Authorize(Policy = Policies.BcscAuthentication)]
+    [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
     [ProducesResponseType(typeof(PharmacyDetails.Model), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<PharmacyDetails.Model?>> GetPharmacyDetails([FromRoute] int pharmacyId)
         => await this.mediator.Send(new PharmacyDetails.Query { PharmacyId = pharmacyId, PartyId = this.User.GetPartyId(this.context) });
 
     [HttpPut("{pharmacyId}")]
-    [Authorize(Policy = Policies.BcscAuthentication)]
+    [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdatePharmacy([FromRoute] int pharmacyId, [FromBody] PharmacyUpdate.Command command)
     {
-        Console.WriteLine($"Updating pharmacy {pharmacyId} with data: {command}");
         command.PharmacyId = pharmacyId;
         command.RequestingPartyId = this.User.GetPartyId(this.context);
         await this.mediator.Send(command);
@@ -59,7 +59,7 @@ public class PharmaciesController(IMediator mediator, PidpDbContext context) : C
     }
 
     [HttpGet("{pharmacyId}/enrolment-token")]
-    [Authorize(Policy = Policies.BcscAuthentication)]
+    [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
     // [Authorize(Policy = Policies.PharmacyAdmin)]
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -76,7 +76,7 @@ public class PharmaciesController(IMediator mediator, PidpDbContext context) : C
     }
 
     [HttpPost("{pharmacyId}/invite")]
-    [Authorize(Policy = Policies.BcscAuthentication)]
+    [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -93,8 +93,22 @@ public class PharmaciesController(IMediator mediator, PidpDbContext context) : C
         return result.ToActionResult();
     }
 
+    [HttpGet("enrolments/{token}")]
+    [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
+    [ProducesResponseType(typeof(EnrolmentTokenDetails.Model), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetEnrolmentTokenDetails([FromRoute] Guid token)
+    {
+        var result = await this.mediator.Send(new EnrolmentTokenDetails.Query { Token = token });
+        if (result.IsSuccess)
+        {
+            return this.Ok(result.Value);
+        }
+        return result.ToActionResult();
+    }
+
     [HttpPost("enrolments/{token}")]
-    [Authorize(Policy = Policies.BcscAuthentication)]
+    [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -102,12 +116,16 @@ public class PharmaciesController(IMediator mediator, PidpDbContext context) : C
     {
         command.Token = new Guid(token);
         command.PartyId = this.User.GetPartyId(this.context);
-        await this.mediator.Send(command);
-        return this.NoContent();
+        var result = await this.mediator.Send(command);
+        if (result.IsSuccess)
+        {
+            return this.NoContent();
+        }
+        return result.ToActionResult();
     }
 
     [HttpGet("{pharmacyId}/staff")]
-    [Authorize(Policy = Policies.BcscAuthentication)]
+    [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
     // [Authorize(Policy = Policies.PharmacyAdmin)]
     [ProducesResponseType(typeof(List<Staff.Model>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -117,7 +135,7 @@ public class PharmaciesController(IMediator mediator, PidpDbContext context) : C
     }
 
     [HttpGet("{pharmacyId}/staff/{partyId}")]
-    [Authorize(Policy = Policies.BcscAuthentication)]
+    [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
     // [Authorize(Policy = Policies.PharmacyAdmin)]
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -127,7 +145,7 @@ public class PharmaciesController(IMediator mediator, PidpDbContext context) : C
     }
 
     [HttpPut("{pharmacyId}/staff/{partyId}")]
-    [Authorize(Policy = Policies.BcscAuthentication)]
+    [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
     // [Authorize(Policy = Policies.PharmacyAdmin)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -146,7 +164,7 @@ public class PharmaciesController(IMediator mediator, PidpDbContext context) : C
     }
 
     [HttpDelete("{pharmacyId}/staff/{partyId}")]
-    [Authorize(Policy = Policies.BcscAuthentication)]
+    [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
     // [Authorize(Policy = Policies.PharmacyAdmin)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -157,7 +175,7 @@ public class PharmaciesController(IMediator mediator, PidpDbContext context) : C
     }
     
     [HttpGet("search")]
-    [Authorize(Policy = Policies.BcscAuthentication)]
+    [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
     [ProducesResponseType(typeof(List<PharmacySearch.Model>), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SearchPharmacies([FromQuery] string query)
@@ -171,7 +189,7 @@ public class PharmaciesController(IMediator mediator, PidpDbContext context) : C
     }
 
     [HttpGet("manager-search")]
-    [Authorize(Policy = Policies.BcscAuthentication)]
+    [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
     [ProducesResponseType(typeof(ManagerSearch.Model), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -186,7 +204,7 @@ public class PharmaciesController(IMediator mediator, PidpDbContext context) : C
     }
 
     [HttpPost("{pharmacyId}/claim")]
-    [Authorize(Policy = Policies.BcscAuthentication)]
+    [Authorize(Policy = Policies.AnyPartyIdentityProvider)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

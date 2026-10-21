@@ -1304,6 +1304,9 @@ namespace Pidp.Data.Migrations
 
                     b.HasIndex("ManagerId");
 
+                    b.HasIndex("PharmaCareCode")
+                        .IsUnique();
+
                     b.ToTable("Pharmacies");
                 });
 
