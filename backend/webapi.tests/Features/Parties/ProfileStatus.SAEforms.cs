@@ -140,4 +140,38 @@ public class ProfileStatusSAEformsTests : ProfileStatusTest
         Assert.Equal(StatusCode.Complete, eforms.StatusCode);
         Assert.False(eforms.IncorrectLicenceType);
     }
+
+    [Fact]
+    public async Task HandleAsync_BcscNurseWithTerminatedRNAndActiveRNP_Incomplete()
+    {
+        var party = this.TestDb.Has(AParty.WithLicenceDeclared(cpn: "CPN.00154054.BC.PRS"));
+        var digest = PlrStandingsDigest.FromRecords([
+            new PlrRecord
+            {
+                Cpn = party.Cpn!,
+                IdentifierType = IdentifierType.Nurse,
+                ProviderRoleType = "RN",
+                StatusCode = PlrStatusCode.Terminated,
+                StatusReasonCode = "RESDISC",
+            },
+            new PlrRecord
+            {
+                Cpn = party.Cpn!,
+                IdentifierType = IdentifierType.Nurse,
+                ProviderRoleType = ProviderRoleType.RegisteredNursePractitioner,
+                StatusCode = PlrStatusCode.Active,
+                StatusReasonCode = PlrStatusReasonCode.Practicing,
+            }
+        ]);
+        var client = A.Fake<IPlrClient>()
+            .ReturningAStandingsDigest(digest);
+        var handler = this.MockDependenciesFor<QueryHandler>(client);
+
+        var profile = await handler.HandleAsync(new Query { Id = party.Id, User = AMock.BcscUser() });
+
+        var eforms = profile.Section<SAEformsSection>();
+        eforms.AssertNoAlerts();
+        Assert.Equal(StatusCode.Incomplete, eforms.StatusCode);
+        Assert.False(eforms.IncorrectLicenceType);
+    }
 }

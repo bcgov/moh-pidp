@@ -63,4 +63,55 @@ public class SAEformsTests : InMemoryDbTest
 
         return testData;
     }
+
+    [Fact]
+    public async Task CreateSAEformsEnrolment_NurseWithTerminatedRNAndActiveRNP_Success()
+    {
+        var party = this.TestDb.HasAParty(party =>
+        {
+            party.FirstName = "FirstName";
+            party.LastName = "LastName";
+            party.Birthdate = LocalDate.FromDateTime(DateTime.Today);
+            party.Email = "Email@email.com";
+            party.Phone = "5551234567";
+            party.Cpn = "CPN.00154054.BC.PRS";
+            party.Credentials = [
+                new Credential { UserId = Guid.NewGuid(), IdentityProvider = IdentityProviders.BCServicesCard},
+                new Credential { UserId = Guid.NewGuid(), IdentityProvider = IdentityProviders.BCProvider},
+            ];
+        });
+
+        var digest = PlrStandingsDigest.FromRecords([
+            new PlrRecord
+            {
+                Cpn = party.Cpn!,
+                IdentifierType = IdentifierType.Nurse,
+                ProviderRoleType = "RN",
+                StatusCode = PlrStatusCode.Terminated,
+                StatusReasonCode = "RESDISC",
+            },
+            new PlrRecord
+            {
+                Cpn = party.Cpn!,
+                IdentifierType = IdentifierType.Nurse,
+                ProviderRoleType = ProviderRoleType.RegisteredNursePractitioner,
+                StatusCode = PlrStatusCode.Active,
+                StatusReasonCode = PlrStatusReasonCode.Practicing,
+            }
+        ]);
+
+        var client = A.Fake<IPlrClient>()
+            .ReturningAStandingsDigest(digest);
+        var keycloak = A.Fake<IKeycloakAdministrationClient>()
+            .ReturningTrueWhenAssigingClientRoles();
+        var handler = this.MockDependenciesFor<SAEforms.CommandHandler>(client, keycloak);
+
+        var result = await handler.HandleAsync(new SAEforms.Command { PartyId = party.Id });
+
+        Assert.True(result.IsSuccess);
+        foreach (var credential in party.Credentials)
+        {
+            A.CallTo(() => keycloak.AssignAccessRoles(credential.UserId, MohKeycloakEnrolment.SAEforms)).MustHaveHappened();
+        }
+    }
 }
