@@ -50,6 +50,8 @@ public class EndorsementMaintenanceService : IEndorsementMaintenanceService
 
             if (!string.IsNullOrEmpty(email))
             {
+                var expiresAt = request.StatusDate.Plus(Duration.FromDays(30));
+                this.logger.LogSendingExpiryEmail(email, request.Id, request.StatusDate, expiresAt);
                 await this.SendExpireOldEndorsementRequestsEmailAsync(email);
                 request.Status = EndorsementRequestStatus.Expired;
                 request.StatusDate = now;
@@ -79,6 +81,8 @@ public class EndorsementMaintenanceService : IEndorsementMaintenanceService
             .OrderByDescending(request => request.Status)
             .Select(request => new
             {
+                Id = request.Id,
+                StatusDate = request.StatusDate,
                 Token = request.Status == EndorsementRequestStatus.Created
                     ? (Guid?)request.Token
                     : null,
@@ -92,6 +96,8 @@ public class EndorsementMaintenanceService : IEndorsementMaintenanceService
 
         foreach (var recipient in uniqueRecipients)
         {
+            var expiresAt = recipient.StatusDate.Plus(Duration.FromDays(30));
+            this.logger.LogSendingReminderEmail(recipient.Email, recipient.Id, recipient.StatusDate, expiresAt);
             await this.SendEmailAsync(recipient.Email, recipient.Token);
         }
 
@@ -175,9 +181,15 @@ Or contact the OneHealthID Service desk:
 
 public static partial class EndorsementReminderServiceLoggingExtensions
 {
-    [LoggerMessage(1, LogLevel.Information, "Sent {emailCount} Endorsement Reminder Emails.")]
+    [LoggerMessage(1, LogLevel.Information, "Sent {EmailCount} Endorsement Reminder Emails.")]
     public static partial void LogSentEmailCount(this ILogger logger, int emailCount);
 
-    [LoggerMessage(2, LogLevel.Information, "Expired {expiryCount} Endorsement Requests.")]
+    [LoggerMessage(2, LogLevel.Information, "Expired {ExpiryCount} Endorsement Requests.")]
     public static partial void LogExpiredRequestCount(this ILogger logger, int expiryCount);
+
+    [LoggerMessage(3, LogLevel.Information, "Sending endorsement reminder email to {ToAddress} for Endorsement Request #{RequestId}. Last actioned: {LastActioned}, Expires: {ExpiresAt}.")]
+    public static partial void LogSendingReminderEmail(this ILogger logger, string toAddress, int requestId, Instant lastActioned, Instant expiresAt);
+
+    [LoggerMessage(4, LogLevel.Information, "Sending endorsement expiry email to {ToAddress} for Endorsement Request #{RequestId}. Last actioned: {LastActioned}, Expired: {ExpiresAt}.")]
+    public static partial void LogSendingExpiryEmail(this ILogger logger, string toAddress, int requestId, Instant lastActioned, Instant expiresAt);
 }
