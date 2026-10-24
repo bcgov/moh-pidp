@@ -16,8 +16,8 @@ metadata:
         {
           "from": {
             "kind": "ImageStreamTag",
-            "namespace": "openshift",
-            "name": "postgresql:{{ .Values.database.postgresql_version }}"
+            "namespace": "{{ .Values.database.namespace | default (printf "%s-tools" .Values.license_plate) }}",
+            "name": "{{ .Values.database.image_stream_name | default "postgresql" }}:{{ .Values.database.postgresql_version }}"
           },
           "fieldPath": "spec.template.spec.containers[0].image"
         }

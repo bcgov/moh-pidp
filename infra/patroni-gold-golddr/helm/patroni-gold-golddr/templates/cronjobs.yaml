@@ -45,8 +45,8 @@ spec:
                   mountPath: /get-ts-port.sh
                   subPath: get-ts-port.sh
             - name: {{ .Values.app_name }}-probe
-              # This container will attempt a connection to the PSQL on Gold through the TS service
-              image: image-registry.openshift-image-registry.svc:5000/bcgov/patroni-postgres:12.4-latest
+              image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+              imagePullPolicy: {{ .Values.image.pullPolicy | default "Always" }}
               args:
                 - /bin/sh
                 - '-c'
