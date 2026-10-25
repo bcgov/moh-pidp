@@ -16,12 +16,14 @@ using Pidp.Models.Lookups;
 public class HcimWebPcr
 {
 
-    private static readonly (IdentifierType IdentifierType, CollegeCode College)[] EligibleColleges =
+    private static readonly (IdentifierType IdentifierType, Organization Organization)[] EligibleColleges =
     [
-        (IdentifierType.PhysiciansAndSurgeons, CollegeCode.PhysiciansAndSurgeons),
-        (IdentifierType.Nurse,                 CollegeCode.NursesAndMidwives),
-        (IdentifierType.Midwife,               CollegeCode.NursesAndMidwives)
+        (IdentifierType.PhysiciansAndSurgeons, new Organization("00001909", "College of Physicians & Surgeons of BC")),
+        (IdentifierType.Nurse,                 new Organization("00002524", "British Columbia College of Nursing Professionals")),
+        (IdentifierType.Midwife,               new Organization("00011626", "The College of Midwives of British Columbia"))
     ];
+
+    public sealed record Organization(string Id, string Name);
 
     public static IdentifierType[] AllowedIdentifierTypes => EligibleColleges.Select(entry => entry.IdentifierType).ToArray();
 
@@ -29,15 +31,9 @@ public class HcimWebPcr
 
     public static bool IsEligibleByEndorsement(PlrStandingsDigest endorsementPlrStanding) => endorsementPlrStanding.With(AllowedIdentifierTypes).HasGoodStanding;
 
-    private static readonly Dictionary<CollegeCode, (string Id, string Name)> CollegeOrganizations = new()
-    {
-        [CollegeCode.PhysiciansAndSurgeons] = ("46013722", "College of Physicians and Surgeons of BC"),
-        [CollegeCode.NursesAndMidwives] = ("12249113", "BC College of Nurses and Midwives")
-    };
-
-    public static CollegeCode? OrganizationCollegeFor(PlrStandingsDigest digest) => EligibleColleges
+    public static Organization? OrganizationFor(PlrStandingsDigest digest) => EligibleColleges
         .Where(entry => digest.With(entry.IdentifierType).HasGoodStanding)
-        .Select(entry => (CollegeCode?)entry.College)
+        .Select(entry => entry.Organization)
         .FirstOrDefault();
 
     public class Command : ICommand<IDomainResult>
@@ -143,10 +139,9 @@ public class HcimWebPcr
 
         private async Task<bool> AssignOrganizationAsync(int partyId, Guid userId, PlrStandingsDigest digest)
         {
-            var collegeCode = OrganizationCollegeFor(digest);
+            var organization = OrganizationFor(digest);
 
-            if (collegeCode == null
-                || !CollegeOrganizations.TryGetValue(collegeCode.Value, out var organization))
+            if (organization == null)
             {
                 // Unreachable while the eligibility check above passes: both read the same ordered table.
                 this.logger.LogOrganizationNotResolved(partyId);
