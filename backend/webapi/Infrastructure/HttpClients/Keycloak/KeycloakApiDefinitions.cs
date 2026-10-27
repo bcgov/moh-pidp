@@ -9,7 +9,7 @@ public class MohKeycloakEnrolment
     private static readonly List<MohKeycloakEnrolment> All = [];
     public static readonly MohKeycloakEnrolment DriverFitness = new("DMFT-WEBAPP", AccessTypeCode.DriverFitness, "DMFT_ENROLLED");
     private const string DefaultHcimClientId = "HCIMWEB";
-    public static readonly MohKeycloakEnrolment HcimWebPcr = new(DefaultHcimClientId, AccessTypeCode.HcimWebPcr, "REGR_LTD");
+    public static readonly MohKeycloakEnrolment HcimWebPcr = new(DefaultHcimClientId, AccessTypeCode.HcimWebPcr, "REGR_LTD"); 
     private const string SatEformsClientId = "SAT-EFORMS";
     private const string LicenceStatusClientId = "LICENCE-STATUS";
     private const string ImmsbcBcphaClientId = "IMMSBC-BCPHA";
