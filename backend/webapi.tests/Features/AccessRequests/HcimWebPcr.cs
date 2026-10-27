@@ -21,7 +21,7 @@ public class HcimWebPcrTests : InMemoryDbTest
 
     private const string BccnpOrgDetails = """{"id":"00002524","name":"British Columbia College of Nursing Professionals"}""";
 
-    private const string CmbcOrgDetails = """{"id":"00011626","name":"The College of Midwives of British Columbia"}""";
+    private const string CmbcOrgDetails = """{"id":"00011626","name":"The College of Midwives of British Columbia - CMBC"}""";
 
     [Theory]
     [MemberData(nameof(IdentifierTypeTestData))]

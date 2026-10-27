@@ -22,6 +22,7 @@ using Pidp.Infrastructure;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HealthChecks;
 using Pidp.Infrastructure.HttpClients;
+using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.Queue;
 using Pidp.Infrastructure.Services;
 using Serilog;
@@ -35,6 +36,9 @@ public class Startup(IConfiguration configuration)
     public void ConfigureServices(IServiceCollection services)
     {
         var config = this.InitializeConfiguration(services);
+
+        // The Client Registry's Keycloak Client is named differently per environment
+        MohKeycloakEnrolment.ConfigureHcimClientId(config.Keycloak.HcimClientId);
 
         MapsterSetup.Configure();
 

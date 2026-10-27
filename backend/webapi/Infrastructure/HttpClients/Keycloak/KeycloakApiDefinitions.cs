@@ -8,7 +8,8 @@ public class MohKeycloakEnrolment
 {
     private static readonly List<MohKeycloakEnrolment> All = [];
     public static readonly MohKeycloakEnrolment DriverFitness = new("DMFT-WEBAPP", AccessTypeCode.DriverFitness, "DMFT_ENROLLED");
-    public static readonly MohKeycloakEnrolment HcimWebPcr = new("HCIMWEB", AccessTypeCode.HcimWebPcr, "REGR_LTD");
+    private const string DefaultHcimClientId = "HCIMWEB";
+    public static readonly MohKeycloakEnrolment HcimWebPcr = new(DefaultHcimClientId, AccessTypeCode.HcimWebPcr, "REGR_LTD");
     private const string SatEformsClientId = "SAT-EFORMS";
     private const string LicenceStatusClientId = "LICENCE-STATUS";
     private const string ImmsbcBcphaClientId = "IMMSBC-BCPHA";
@@ -45,6 +46,14 @@ public class MohKeycloakEnrolment
     }
 
     public static MohKeycloakEnrolment? FromAssociatedAccessRequest(AccessTypeCode associatedEnrolment) => All.SingleOrDefault(enrolment => enrolment.AssocatedAccessRequest == associatedEnrolment);
+
+    public static void ConfigureHcimClientId(string? clientId)
+    {
+        if (!string.IsNullOrWhiteSpace(clientId))
+        {
+            HcimWebPcr.ClientId = clientId;
+        }
+    }
 }
 
 /// <summary>

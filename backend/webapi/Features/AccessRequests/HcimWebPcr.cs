@@ -20,7 +20,7 @@ public class HcimWebPcr
     [
         (IdentifierType.PhysiciansAndSurgeons, new Organization("00001909", "College of Physicians & Surgeons of BC")),
         (IdentifierType.Nurse,                 new Organization("00002524", "British Columbia College of Nursing Professionals")),
-        (IdentifierType.Midwife,               new Organization("00011626", "The College of Midwives of British Columbia"))
+        (IdentifierType.Midwife,               new Organization("00011626", "The College of Midwives of British Columbia - CMBC"))
     ];
 
     public sealed record Organization(string Id, string Name);
