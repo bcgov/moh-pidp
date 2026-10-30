@@ -24,6 +24,13 @@ public class ImmsBCEforms
             .With(AllowedIdentifierTypes)
             .HasGoodStanding;
     }
+
+    public static bool IsEligibleByEndorsement(PlrStandingsDigest endorsementPlrStanding)
+    {
+        return endorsementPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding
+            || endorsementPlrStanding.With(IdentifierType.Nurse).HasGoodStanding;
+    }
+
     public class Command : ICommand<IDomainResult>
     {
         public int PartyId { get; set; }
@@ -89,8 +96,7 @@ public class ImmsBCEforms
 
                 var endorsementPlrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
 
-                isEligible = endorsementPlrStanding.With(ProviderRoleType.MedicalDoctor).HasGoodStanding ||
-                             endorsementPlrStanding.With(IdentifierType.Nurse).HasGoodStanding;
+                isEligible = IsEligibleByEndorsement(endorsementPlrStanding);
             }
 
             if (!isEligible)

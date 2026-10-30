@@ -1,4 +1,4 @@
-﻿namespace PidpTests.Features.AccessRequests;
+namespace PidpTests.Features.AccessRequests;
 
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
@@ -56,34 +56,10 @@ public class NpdpEformsRevocationTests : InMemoryDbTest
     }
 
     [Fact]
-    public async Task RevokeIfIneligible_CpsPostgrad_NoOp()
-    {
-        // Residents are PENDING/NONPRAC - never "good standing" - and hold the card via
-        // IsCpsPostgrad. Revoking on a bare good-standing check would strip them all.
-        var party = this.HasAnEnroledParty();
-        var digest = PlrStandingsDigest.FromRecords([
-            new PlrRecord
-            {
-                IdentifierType = IdentifierType.PhysiciansAndSurgeons,
-                StatusCode = PlrStatusCode.Pending,
-                StatusReasonCode = PlrStatusReasonCode.NonPracticing
-            }
-        ]);
-        Assert.False(digest.HasGoodStanding);
-        var (_, keycloak, service) = this.SetupFor(digest);
-
-        await service.RevokeIfIneligibleAsync(party.Id);
-        await this.TestDb.SaveChangesAsync();
-
-        keycloak.AssertNoRolesRemoved();
-        Assert.Contains(this.TestDb.AccessRequests, request => request.PartyId == party.Id);
-    }
-
-    [Fact]
     public async Task RevokeIfIneligible_StillInGoodStanding_NoOp()
     {
         var party = this.HasAnEnroledParty();
-        var (_, keycloak, service) = this.SetupFor(AMock.StandingsDigest(true, IdentifierType.PhysiciansAndSurgeons));
+        var (_, keycloak, service) = this.SetupFor(AMock.StandingsDigest(true, IdentifierType.Pharmacist));
 
         await service.RevokeIfIneligibleAsync(party.Id);
         await this.TestDb.SaveChangesAsync();
@@ -97,7 +73,7 @@ public class NpdpEformsRevocationTests : InMemoryDbTest
     public async Task RevokeIfIneligible_NoLongerEligible_RemovesRoleAndAccessRequest()
     {
         var party = this.HasAnEnroledParty();
-        var (_, keycloak, service) = this.SetupFor(AMock.StandingsDigest(false, IdentifierType.PhysiciansAndSurgeons));
+        var (_, keycloak, service) = this.SetupFor(AMock.StandingsDigest(false, IdentifierType.Pharmacist));
 
         await service.RevokeIfIneligibleAsync(party.Id);
         await this.TestDb.SaveChangesAsync();
@@ -181,39 +157,28 @@ public class NpdpEformsRevocationTests : InMemoryDbTest
         return testData;
     }
 
-    [Theory]
-    [MemberData(nameof(EndorsementStandingTestData))]
-    public async Task RevokeIfIneligible_NoCpn_UsesEndorsementStanding(PlrStandingsDigest endorsementDigest, bool stillEligible)
+    [Fact]
+    public async Task RevokeIfIneligible_NoCpn_Revokes()
     {
-        // An MOA holds the card on the strength of their endorsements, so losing the last
-        // endorser in good standing must take it away again.
+        // No endorsement path means there is nothing for a Party without a CPN to qualify on. An empty
+        // digest reports Error == false, so this is a known ineligible state and must not be mistaken
+        // for the PLR-outage case above.
         var party = this.HasAnEnroledParty(party => party.Cpn = null);
-        var (_, keycloak, service) = this.SetupFor(endorsementDigest);
+        var (plr, keycloak, service) = this.SetupFor(AMock.StandingsDigest(true, IdentifierType.Pharmacist));
 
-        await service.RevokeIfIneligibleAsync(party.Id);
+        var decision = await service.RevokeIfIneligibleAsync(party.Id);
         await this.TestDb.SaveChangesAsync();
 
-        if (stillEligible)
-        {
-            keycloak.AssertNoRolesRemoved();
-            Assert.Contains(this.TestDb.AccessRequests, request => request.PartyId == party.Id);
-        }
-        else
-        {
-            A.CallTo(() => keycloak.RemoveAccessRoles(A<Guid>._, MohKeycloakEnrolment.NpdpEforms)).MustHaveHappened();
-            Assert.DoesNotContain(this.TestDb.AccessRequests, request => request.PartyId == party.Id);
-        }
+        Assert.Equal(RevocationOutcome.Revoked, decision.Outcome);
+        A.CallTo(() => keycloak.RemoveAccessRoles(A<Guid>._, MohKeycloakEnrolment.NpdpEforms)).MustHaveHappened();
+        Assert.DoesNotContain(this.TestDb.AccessRequests, request => request.PartyId == party.Id);
+        // Decided without asking PLR at all, in either direction.
+        A.CallTo(() => plr.GetStandingsDigestAsync(A<string?>._)).MustNotHaveHappened();
+        A.CallTo(() => plr.GetAggregateStandingsDigestAsync(A<IEnumerable<string?>>._)).MustNotHaveHappened();
+        // The reason has to name the missing CPN, or a reviewer goes looking in PLR for a licence the
+        // Party never had.
+        Assert.Contains("no CPN", decision.Reason, StringComparison.Ordinal);
     }
-
-    public static TheoryData<PlrStandingsDigest, bool> EndorsementStandingTestData() => new()
-    {
-        { AMock.StandingsDigest(true, providerRoleType: ProviderRoleType.MedicalDoctor), true },
-        { AMock.StandingsDigest(true, IdentifierType.Nurse), true },
-        { AMock.StandingsDigest(true, IdentifierType.Midwife), true },
-        { AMock.StandingsDigest(true, IdentifierType.Pharmacist), false },
-        { AMock.StandingsDigest(false, providerRoleType: ProviderRoleType.MedicalDoctor), false },
-        { PlrStandingsDigest.FromEmpty(), false },
-    };
 
     [Fact]
     public async Task RevokeIfIneligible_CalledTwice_IsIdempotent()

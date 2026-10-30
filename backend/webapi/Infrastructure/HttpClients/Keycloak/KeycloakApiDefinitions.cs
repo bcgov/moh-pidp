@@ -8,7 +8,8 @@ public class MohKeycloakEnrolment
 {
     private static readonly List<MohKeycloakEnrolment> All = [];
     public static readonly MohKeycloakEnrolment DriverFitness = new("DMFT-WEBAPP", AccessTypeCode.DriverFitness, "DMFT_ENROLLED");
-    public static readonly MohKeycloakEnrolment HcimWebPcr = new("HCIMWEB", AccessTypeCode.HcimWebPcr, "READ_ONLY_ALL_SRC");
+    private const string DefaultHcimClientId = "HCIMWEB";
+    public static readonly MohKeycloakEnrolment HcimWebPcr = new(DefaultHcimClientId, AccessTypeCode.HcimWebPcr, "REGR_LTD"); 
     private const string SatEformsClientId = "SAT-EFORMS";
     private const string LicenceStatusClientId = "LICENCE-STATUS";
     private const string ImmsbcBcphaClientId = "IMMSBC-BCPHA";
@@ -45,6 +46,14 @@ public class MohKeycloakEnrolment
     }
 
     public static MohKeycloakEnrolment? FromAssociatedAccessRequest(AccessTypeCode associatedEnrolment) => All.SingleOrDefault(enrolment => enrolment.AssocatedAccessRequest == associatedEnrolment);
+
+    public static void ConfigureHcimClientId(string? clientId)
+    {
+        if (!string.IsNullOrWhiteSpace(clientId))
+        {
+            HcimWebPcr.ClientId = clientId;
+        }
+    }
 }
 
 /// <summary>
@@ -96,6 +105,15 @@ public class UserRepresentation
     public UserRepresentation SetCpn(string cpn) => this.SetAttribute("common_provider_number", cpn);
 
     public UserRepresentation SetOpId(string opId) => this.SetAttribute("opId", opId);
+
+    public UserRepresentation SetOrgDetails(string id, string name) => this.SetAttribute("org_details", JsonSerializer.Serialize(new { id, name }));
+
+    public UserRepresentation ClearOrgDetails()
+    {
+        this.Attributes.Remove("org_details");
+
+        return this;
+    }
 
     public UserRepresentation SetPidpEmail(string pidpEmail) => this.SetAttribute("pidp_email", pidpEmail);
 
