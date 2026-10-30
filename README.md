@@ -35,13 +35,14 @@ The table below outlines the services and integrations available through OneHeal
 | **In Vitro Fertilization (IVF Funding Portal)** | ✓ | ✗ | ✓ | ✗ | ✗ | ✗ | ✓* |
 | **Exceptional Coverage (NPDP eForms)** | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ✗ |
 | **Provider Reporting Portal (PRP)** | ✓ | ✗ | ✗ | ✗ | ✓ | ✗ | ✗ |
-| **ImmsBC (Pharmacy Practice)** | ✗ | ✗ | ✗ | ✗ | ✓ | ✓** | ✓** |
+| **ImmsBC (Community Pharmacy Vaccine Rollout)** | ✗ | ✗ | ✗ | ✗ | ✓ | ✓** | ✓** |
 | **MS Teams for Clinical Use - Privacy Officer** | ✓ | ✓ | ✓ | ✗ | ✗ | ✗ | ✗ |
 | **MS Teams for Clinical Use - Clinic Member** | ✓* | ✓* | ✓* | ✓* | ✓* | ✓* | ✓* |
-| **BCProvider Credential** | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| **BCProvider Credential Management (MFA/Password Reset)** | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | **HALO (PAS EMR Integration)** | ✓ | ✓ | ✓ | ✗ | ✗ | ✗ | ✗ |
 
 > \* Access available via **Endorsement delegation** from an eligible practitioner (e.g. Medical Doctor or Nurse Practitioner).
+
 > \** Pharmacy Technicians and administrative assistants access ImmsBC through role delegation by a designated Pharmacy Lead.
 
 ### Codebase Overview:
