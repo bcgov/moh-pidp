@@ -3,7 +3,7 @@ set -e
 
 echo "Running post_init.sh..."
 
-if [ -n "$APP_USER" ] && [ -n "$APP_PASSWORD" ]; then
+if [[ -n "$APP_USER" && -n "$APP_PASSWORD" ]]; then
     DB="${APP_DATABASE:-$APP_USER}"
     echo "Creating application user '$APP_USER' and database '$DB'..."
     psql -v ON_ERROR_STOP=1 --username "postgres" <<-EOSQL

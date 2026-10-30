@@ -791,47 +791,50 @@ public class ResyncService(
             var currentUserLicenceRoles = await this.keycloakClient.GetUserClientRoles(ctx.UserId, licenceStatusClientInternalId);
             var currentLicenceRoleNames = currentUserLicenceRoles?.Select(r => r.Name).ToHashSet() ?? new HashSet<string>();
 
-            var addLicenceList = new List<string>();
-            var removeLicenceList = new List<string>();
-
-            void CheckLicenceRole(string roleName, bool shouldHave)
+            var expectedLicenceRoles = new Dictionary<string, bool>
             {
-                var hasRole = currentLicenceRoleNames.Contains(roleName);
-                if (shouldHave && !hasRole) addLicenceList.Add(roleName);
-                if (!shouldHave && hasRole) removeLicenceList.Add(roleName);
-            }
+                ["MD"] = ctx.IsMd,
+                ["MOA"] = ctx.IsMoa,
+                ["PHARM"] = ctx.IsPharm,
+                ["RNP"] = ctx.IsRnp,
+            };
 
-            CheckLicenceRole("MD", ctx.IsMd);
-            CheckLicenceRole("MOA", ctx.IsMoa);
-            CheckLicenceRole("PHARM", ctx.IsPharm);
-            CheckLicenceRole("RNP", ctx.IsRnp);
+            var addLicenceList = expectedLicenceRoles
+                .Where(kvp => kvp.Value && !currentLicenceRoleNames.Contains(kvp.Key))
+                .Select(kvp => kvp.Key)
+                .ToList();
 
-            if (!ctx.DryRun)
+            var removeLicenceList = expectedLicenceRoles
+                .Where(kvp => !kvp.Value && currentLicenceRoleNames.Contains(kvp.Key))
+                .Select(kvp => kvp.Key)
+                .ToList();
+
+            if (addLicenceList.Count > 0 || removeLicenceList.Count > 0)
             {
-                foreach (var roleName in addLicenceList)
+                if (!ctx.DryRun)
                 {
-                    await this.keycloakClient.AssignClientRole(ctx.UserId, ctx.LicenceStatusClientId, roleName);
-                }
-
-                foreach (var roleName in removeLicenceList)
-                {
-                    var roleToRemove = currentUserLicenceRoles?.FirstOrDefault(r => r.Name == roleName);
-                    if (roleToRemove != null)
+                    foreach (var roleName in addLicenceList)
                     {
-                        await this.keycloakClient.RemoveClientRole(ctx.UserId, roleToRemove);
+                        await this.keycloakClient.AssignClientRole(ctx.UserId, ctx.LicenceStatusClientId, roleName);
                     }
-                }
 
-                if (addLicenceList.Count > 0 || removeLicenceList.Count > 0)
-                {
+                    foreach (var roleName in removeLicenceList)
+                    {
+                        var roleToRemove = currentUserLicenceRoles?.FirstOrDefault(r => r.Name == roleName);
+                        if (roleToRemove != null)
+                        {
+                            await this.keycloakClient.RemoveClientRole(ctx.UserId, roleToRemove);
+                        }
+                    }
+
                     this.logger.LogInformation("Keycloak User ID {UserId} LICENCE-STATUS role updates: Add [{Add}], Remove [{Remove}]",
                         ctx.UserId, string.Join(", ", addLicenceList), string.Join(", ", removeLicenceList));
                 }
-            }
-            else if (addLicenceList.Count > 0 || removeLicenceList.Count > 0)
-            {
-                this.logger.LogInformation("[DRY RUN] Keycloak User ID {UserId} LICENCE-STATUS role updates: Add [{Add}], Remove [{Remove}]",
-                    ctx.UserId, string.Join(", ", addLicenceList), string.Join(", ", removeLicenceList));
+                else
+                {
+                    this.logger.LogInformation("[DRY RUN] Keycloak User ID {UserId} LICENCE-STATUS role updates: Add [{Add}], Remove [{Remove}]",
+                        ctx.UserId, string.Join(", ", addLicenceList), string.Join(", ", removeLicenceList));
+                }
             }
         }
 
@@ -847,20 +850,23 @@ public class ResyncService(
             var currentUserRoles = await this.keycloakClient.GetUserClientRoles(ctx.UserId, eformsClientInternalId);
             var currentRoleNames = currentUserRoles?.Select(r => r.Name).ToHashSet() ?? new HashSet<string>();
 
-            var addList = new List<string>();
-            var removeList = new List<string>();
-
-            void CheckRole(string roleName, bool shouldHave)
+            var expectedEformsRoles = new Dictionary<string, bool>
             {
-                var hasRole = currentRoleNames.Contains(roleName);
-                if (shouldHave && !hasRole) addList.Add(roleName);
-                if (!shouldHave && hasRole) removeList.Add(roleName);
-            }
+                ["phsa_eforms_sat"] = hasSaEforms,
+                ["phsa_eforms_imms"] = hasImms,
+                ["phsa_eforms_infant_rsv"] = hasInfant,
+                ["phsa_eforms_npdp"] = hasNpdp,
+            };
 
-            CheckRole("phsa_eforms_sat", hasSaEforms);
-            CheckRole("phsa_eforms_imms", hasImms);
-            CheckRole("phsa_eforms_infant_rsv", hasInfant);
-            CheckRole("phsa_eforms_npdp", hasNpdp);
+            var addList = expectedEformsRoles
+                .Where(kvp => kvp.Value && !currentRoleNames.Contains(kvp.Key))
+                .Select(kvp => kvp.Key)
+                .ToList();
+
+            var removeList = expectedEformsRoles
+                .Where(kvp => !kvp.Value && currentRoleNames.Contains(kvp.Key))
+                .Select(kvp => kvp.Key)
+                .ToList();
 
             if (addList.Count > 0 || removeList.Count > 0)
             {
@@ -870,34 +876,31 @@ public class ResyncService(
                     Add = addList.Count > 0 ? string.Join(",", addList) : null,
                     Remove = removeList.Count > 0 ? string.Join(",", removeList) : null
                 });
-            }
 
-            if (!ctx.DryRun)
-            {
-                foreach (var roleName in addList)
+                if (!ctx.DryRun)
                 {
-                    await this.keycloakClient.AssignClientRole(ctx.UserId, ctx.EformsClientId, roleName);
-                }
-
-                foreach (var roleName in removeList)
-                {
-                    var roleToRemove = currentUserRoles?.FirstOrDefault(r => r.Name == roleName);
-                    if (roleToRemove != null)
+                    foreach (var roleName in addList)
                     {
-                        await this.keycloakClient.RemoveClientRole(ctx.UserId, roleToRemove);
+                        await this.keycloakClient.AssignClientRole(ctx.UserId, ctx.EformsClientId, roleName);
                     }
-                }
 
-                if (addList.Count > 0 || removeList.Count > 0)
-                {
+                    foreach (var roleName in removeList)
+                    {
+                        var roleToRemove = currentUserRoles?.FirstOrDefault(r => r.Name == roleName);
+                        if (roleToRemove != null)
+                        {
+                            await this.keycloakClient.RemoveClientRole(ctx.UserId, roleToRemove);
+                        }
+                    }
+
                     this.logger.LogInformation("Keycloak User ID {UserId} SAT-EFORMS role updates: Add [{Add}], Remove [{Remove}]",
                         ctx.UserId, string.Join(", ", addList), string.Join(", ", removeList));
                 }
-            }
-            else if (addList.Count > 0 || removeList.Count > 0)
-            {
-                this.logger.LogInformation("[DRY RUN] Keycloak User ID {UserId} SAT-EFORMS role updates: Add [{Add}], Remove [{Remove}]",
-                    ctx.UserId, string.Join(", ", addList), string.Join(", ", removeList));
+                else
+                {
+                    this.logger.LogInformation("[DRY RUN] Keycloak User ID {UserId} SAT-EFORMS role updates: Add [{Add}], Remove [{Remove}]",
+                        ctx.UserId, string.Join(", ", addList), string.Join(", ", removeList));
+                }
             }
         }
     }

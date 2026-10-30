@@ -1,24 +1,17 @@
 // Format Yarn Audit Output into actionable Markdown
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+const fs = require('node:fs');
 
-const workspaceDir = process.argv[2] || path.resolve(__dirname, '../../../../workspace');
-
+const inputFile = process.argv[2];
 let rawOutput = '';
 try {
-  rawOutput = execSync('yarn audit --json', {
-    cwd: workspaceDir,
-    maxBuffer: 50 * 1024 * 1024,
-    stdio: ['ignore', 'pipe', 'ignore']
-  }).toString();
-} catch (err) {
-  if (err.stdout) {
-    rawOutput = err.stdout.toString();
+  if (inputFile && fs.existsSync(inputFile) && fs.statSync(inputFile).isFile()) {
+    rawOutput = fs.readFileSync(inputFile, 'utf8');
   } else {
-    console.error('Failed to run yarn audit:', err.message);
-    process.exit(1);
+    rawOutput = fs.readFileSync(0, 'utf8');
   }
+} catch (err) {
+  console.error('Failed to read yarn audit input:', err.message);
+  process.exit(1);
 }
 
 const advisories = new Map();
@@ -53,7 +46,9 @@ for (const line of lines) {
         }
       }
     }
-  } catch (_) {}
+  } catch (_ignored) {
+    // Non-JSON or informational lines from yarn audit output are intentionally ignored
+  }
 }
 
 const list = Array.from(advisories.values());
@@ -65,68 +60,77 @@ for (const item of list) {
   if (counts[item.severity] !== undefined) counts[item.severity]++;
 }
 
-let md = [];
-md.push('### Overview');
-md.push(`Found **${list.length}** distinct security advisories.`);
-md.push('');
-md.push('| Severity | Unique Advisories |');
-md.push('| :--- | :--- |');
-md.push(`| **Critical** | ${counts.critical} |`);
-md.push(`| **High** | ${counts.high} |`);
-md.push(`| **Moderate** | ${counts.moderate} |`);
-md.push(`| **Low** | ${counts.low} |`);
-md.push('');
+const md = [
+  '### Overview',
+  `Found **${list.length}** distinct security advisories.`,
+  '',
+  '| Severity | Unique Advisories |',
+  '| :--- | :--- |',
+  `| **Critical** | ${counts.critical} |`,
+  `| **High** | ${counts.high} |`,
+  `| **Moderate** | ${counts.moderate} |`,
+  `| **Low** | ${counts.low} |`,
+  ''
+];
 
 const criticalAndHigh = list.filter(a => a.severity === 'critical' || a.severity === 'high');
 const other = list.filter(a => a.severity !== 'critical' && a.severity !== 'high');
 
 if (criticalAndHigh.length > 0) {
-  md.push('### Priority Action Items (Critical & High)');
-  md.push('');
-  md.push('| Severity | Package | Vulnerable | Patched | Recommendation & Advisory |');
-  md.push('| :--- | :--- | :--- | :--- | :--- |');
+  md.push(
+    '### Priority Action Items (Critical & High)',
+    '',
+    '| Severity | Package | Vulnerable | Patched | Recommendation & Advisory |',
+    '| :--- | :--- | :--- | :--- | :--- |'
+  );
   for (const item of criticalAndHigh) {
     const sevLabel = item.severity === 'critical' ? '**CRITICAL**' : '**HIGH**';
     const link = item.url ? `[${item.title}](${item.url})` : item.title;
-    const cleanRec = item.recommendation.replace(/\|/g, '\\|');
+    const cleanRec = item.recommendation.replaceAll('|', '\\|');
     md.push(`| ${sevLabel} | \`${item.module}\` | \`${item.vulnerable_versions}\` | \`${item.patched_versions}\` | ${cleanRec} <br> -> ${link} |`);
   }
   md.push('');
 }
 
 if (other.length > 0) {
-  md.push('<details>');
-  md.push(`<summary><b>View Moderate & Low Advisories (${other.length})</b></summary>`);
-  md.push('');
-  md.push('| Severity | Package | Vulnerable | Patched | Recommendation & Advisory |');
-  md.push('| :--- | :--- | :--- | :--- | :--- |');
+  md.push(
+    '<details>',
+    `<summary><b>View Moderate & Low Advisories (${other.length})</b></summary>`,
+    '',
+    '| Severity | Package | Vulnerable | Patched | Recommendation & Advisory |',
+    '| :--- | :--- | :--- | :--- | :--- |'
+  );
   for (const item of other) {
     const sevLabel = item.severity === 'moderate' ? 'Moderate' : 'Low';
     const link = item.url ? `[${item.title}](${item.url})` : item.title;
-    const cleanRec = item.recommendation.replace(/\|/g, '\\|');
+    const cleanRec = item.recommendation.replaceAll('|', '\\|');
     md.push(`| ${sevLabel} | \`${item.module}\` | \`${item.vulnerable_versions}\` | \`${item.patched_versions}\` | ${cleanRec} <br> -> ${link} |`);
   }
-  md.push('</details>');
-  md.push('');
+  md.push('</details>', '');
 }
 
-md.push('### Suggested Remediation Steps');
-md.push('1. **Direct Package Updates**:');
-md.push('   For direct dependencies in `workspace/package.json`:');
-md.push('   ```bash');
-md.push('   cd workspace');
+md.push(
+  '### Suggested Remediation Steps',
+  '1. **Direct Package Updates**:',
+  '   For direct dependencies in `workspace/package.json`:',
+  '   ```bash',
+  '   cd workspace'
+);
+
 const topPackagesToUpgrade = [...new Set(criticalAndHigh.map(a => a.module))].slice(0, 8);
 if (topPackagesToUpgrade.length > 0) {
   md.push(`   yarn upgrade ${topPackagesToUpgrade.join(' ')}`);
 } else {
   md.push('   yarn upgrade <package-name>');
 }
-md.push('   ```');
-md.push('');
-md.push('2. **Transitive Dependency Overrides (`resolutions`)**:');
-md.push('   For nested dependencies locked by third-party packages, add override entries in `workspace/package.json`:');
-md.push('   ```json');
-md.push('   "resolutions": {');
+md.push(
+  '   ```',
+  '',
+  '2. **Transitive Dependency Overrides (`resolutions`)**:',
+  '   For nested dependencies locked by third-party packages, add override entries in `workspace/package.json`:',
+  '   ```json',
+  '   "resolutions": {'
+);
 
 const uniqueResolutions = new Map();
 for (const a of criticalAndHigh) {
@@ -140,12 +144,14 @@ for (const a of criticalAndHigh) {
 const entries = Array.from(uniqueResolutions.entries()).slice(0, 10);
 const resLines = entries.map(([mod, ver], i) => `     "${mod}": "${ver}"${i < entries.length - 1 ? ',' : ''}`);
 md.push(resLines.join('\n'));
-md.push('   }');
-md.push('   ```');
-md.push('   Then update the lockfile:');
-md.push('   ```bash');
-md.push('   cd workspace && yarn install');
-md.push('   ```');
-md.push('');
+md.push(
+  '   }',
+  '   ```',
+  '   Then update the lockfile:',
+  '   ```bash',
+  '   cd workspace && yarn install',
+  '   ```',
+  ''
+);
 
 console.log(md.join('\n'));

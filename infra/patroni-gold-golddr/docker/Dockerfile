@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Install modern Patroni with Kubernetes DCS support (v3.3+)
-RUN pip3 install --no-cache-dir --break-system-packages "patroni[kubernetes]>=3.3.0"
+RUN pip3 install --no-cache-dir --break-system-packages --only-binary :all: "patroni[kubernetes]==4.1.5"
 
 # Set environment variables for Postgres and Patroni
 ENV HOME=/home/postgres \

@@ -44,21 +44,21 @@ $workspacePath = Join-Path $rootDir "workspace"
 $formatScript = Join-Path $PSScriptRoot "format-yarn-audit.js"
 
 if (Test-Path $workspacePath) {
-    if (Test-Path $formatScript) {
-        Write-Host "Running detailed yarn audit parser..." -ForegroundColor Gray
-        $formattedYarnAudit = node $formatScript $workspacePath 2>&1 | Out-String
-        $report += $formattedYarnAudit.Trim()
-    } else {
-        Push-Location $workspacePath
-        try {
+    Push-Location $workspacePath
+    try {
+        if (Test-Path $formatScript) {
+            Write-Host "Running detailed yarn audit parser..." -ForegroundColor Gray
+            $formattedYarnAudit = yarn audit --json 2>$null | node $formatScript 2>&1 | Out-String
+            $report += $formattedYarnAudit.Trim()
+        } else {
             Write-Host "Running yarn audit..." -ForegroundColor Gray
             $yarnAudit = yarn audit 2>&1 | Out-String
             $report += '```text'
             $report += $yarnAudit.Trim()
             $report += '```'
-        } finally {
-            Pop-Location
         }
+    } finally {
+        Pop-Location
     }
 }
 $report += ""
