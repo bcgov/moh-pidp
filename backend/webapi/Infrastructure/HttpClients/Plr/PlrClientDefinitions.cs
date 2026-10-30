@@ -153,10 +153,11 @@ public class PlrStandingsDigest
     /// <param name="identifierTypes"></param>
     public PlrStandingsDigest Excluding(params IdentifierType[] identifierTypes)
     {
+        var excluded = identifierTypes.Select(t => (string)t).ToHashSet();
         return new PlrStandingsDigest
         (
             this.Error,
-            this.records.ExceptBy(identifierTypes.Select(t => (string)t), record => record.IdentifierType)
+            this.records.Where(record => record.IdentifierType == null || !excluded.Contains(record.IdentifierType))
         );
     }
 
@@ -166,10 +167,11 @@ public class PlrStandingsDigest
     /// <param name="identifierTypes"></param>
     public PlrStandingsDigest With(params IdentifierType[] identifierTypes)
     {
+        var included = identifierTypes.Select(t => (string)t).ToHashSet();
         return new PlrStandingsDigest
         (
             this.Error,
-            this.records.IntersectBy(identifierTypes.Select(t => (string)t), record => record.IdentifierType)
+            this.records.Where(record => record.IdentifierType != null && included.Contains(record.IdentifierType))
         );
     }
 
@@ -179,10 +181,11 @@ public class PlrStandingsDigest
     /// <param name="providerRoleTypes"></param>
     public PlrStandingsDigest With(params ProviderRoleType[] providerRoleTypes)
     {
+        var included = providerRoleTypes.Select(t => (string)t).ToHashSet();
         return new PlrStandingsDigest
         (
             this.Error,
-            this.records.IntersectBy(providerRoleTypes.Select(t => (string)t), record => record.ProviderRoleType)
+            this.records.Where(record => record.ProviderRoleType != null && included.Contains(record.ProviderRoleType))
         );
     }
 
@@ -192,10 +195,11 @@ public class PlrStandingsDigest
     /// <param name="statusCode"></param>
     public PlrStandingsDigest With(params PlrStatusCode[] statusCodes)
     {
+        var included = statusCodes.Select(t => (string)t).ToHashSet();
         return new PlrStandingsDigest
         (
             this.Error,
-            this.records.IntersectBy(statusCodes.Select(t => (string)t), record => record.PlrStatusCode)
+            this.records.Where(record => record.PlrStatusCode != null && included.Contains(record.PlrStatusCode))
         );
     }
 
@@ -205,10 +209,11 @@ public class PlrStandingsDigest
     /// <param name="statusReasonCode"></param>
     public PlrStandingsDigest With(params PlrStatusReasonCode[] statusReasonCodes)
     {
+        var included = statusReasonCodes.Select(t => (string)t).ToHashSet();
         return new PlrStandingsDigest
         (
             this.Error,
-            this.records.IntersectBy(statusReasonCodes.Select(t => (string)t), record => record.PlrStatusReasonCode)
+            this.records.Where(record => record.PlrStatusReasonCode != null && included.Contains(record.PlrStatusReasonCode))
         );
     }
 

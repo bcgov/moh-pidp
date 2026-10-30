@@ -19,7 +19,7 @@ spec:
     dockerStrategy:
       from:
         kind: DockerImage
-        name: 'quay.io/fedora/postgresql-14:14'
+        name: 'quay.io/fedora/postgresql-16:16'
       dockerfilePath: Dockerfile
   postCommit: {}
   source:

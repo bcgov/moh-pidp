@@ -3,7 +3,11 @@ license_plate: f088b1
 environment: dev
 cluster: gold
 replicas: 1
-image_registry: artifacts.developer.gov.bc.ca/bcgov-docker-local/patroni-postgres
+image:
+  registry: image-registry.openshift-image-registry.svc:5000/f088b1-tools
+  repository: patroni-postgres
+  tag: "16"
+  pullPolicy: Always
 stateful_requests_cpu: 200m
 stateful_requests_memory: 250Mi
 stateful_initrequests_cpu: 200m

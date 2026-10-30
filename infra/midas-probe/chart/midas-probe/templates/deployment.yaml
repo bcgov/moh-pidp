@@ -74,6 +74,12 @@ spec:
           env:
             - name: SERVER_LOGFILE
               value: /tmp/*.log
+            - name: SLACK_WEBHOOK
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.fluentbit.secret.name | default "slack-error-notification-webhook" }}
+                  key: {{ .Values.fluentbit.secret.key | default "url" }}
+                  optional: true
           ports:
             - name: metrics
               containerPort: 2020

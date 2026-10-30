@@ -72,6 +72,7 @@ public class ActualKeycloakState
 {
     public Guid UserId { get; set; }
     public Dictionary<string, string[]> Attributes { get; set; } = new();
+    public List<string> LicenceStatusRoles { get; set; } = new();
 }
 
 public class SnapshotComparisonResult
@@ -99,8 +100,13 @@ public class ResyncService(
     private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
     private readonly PidpConfiguration config = config;
     private readonly ILogger<ResyncService> logger = logger;
+    private const string OutputDirectory = "output";
 
     private sealed record KeycloakRolesContext(
+        Pidp.Infrastructure.HttpClients.Keycloak.Role? MdRole,
+        Pidp.Infrastructure.HttpClients.Keycloak.Role? MoaRole,
+        Pidp.Infrastructure.HttpClients.Keycloak.Role? PharmRole,
+        Pidp.Infrastructure.HttpClients.Keycloak.Role? RnpRole,
         Pidp.Infrastructure.HttpClients.Keycloak.Role? SaRole,
         Pidp.Infrastructure.HttpClients.Keycloak.Role? ImmsRole,
         Pidp.Infrastructure.HttpClients.Keycloak.Role? InfantRole,
@@ -212,9 +218,14 @@ public class ResyncService(
 
     private async Task<KeycloakRolesContext> FetchKeycloakRolesAsync()
     {
+        var licenceStatusClientId = "LICENCE-STATUS";
         var eformsClientId = "SAT-EFORMS";
 
         return new KeycloakRolesContext(
+            await this.keycloakClient.GetClientRole(licenceStatusClientId, "MD"),
+            await this.keycloakClient.GetClientRole(licenceStatusClientId, "MOA"),
+            await this.keycloakClient.GetClientRole(licenceStatusClientId, "PHARM"),
+            await this.keycloakClient.GetClientRole(licenceStatusClientId, "RNP"),
             await this.keycloakClient.GetClientRole(eformsClientId, "phsa_eforms_sat"),
             await this.keycloakClient.GetClientRole(eformsClientId, "phsa_eforms_imms"),
             await this.keycloakClient.GetClientRole(eformsClientId, "phsa_eforms_infant_rsv"),
@@ -287,15 +298,12 @@ public class ResyncService(
         };
 
         var bcProviderUpns = GetBCProviderUpns(party);
-        await FetchActualStatesAsync(snapshot, party, primaryUserId, bcProviderUpns);
+        await FetchActualStatesAsync(snapshot, party, primaryUserId, bcProviderUpns, ctx);
 
         var changeLog = CompareAndLog(snapshot);
         ctx.ChangeLogs.Add(changeLog);
 
-        if (!ctx.DryRun)
-        {
-            await ApplyUpdatesAsync(party, desired, plrStanding, bcProviderUpns, ctx);
-        }
+        await ApplyUpdatesAsync(party, desired, plrStanding, bcProviderUpns, ctx);
 
         return snapshot;
     }
@@ -375,7 +383,7 @@ public class ResyncService(
         return upns;
     }
 
-    private async Task FetchActualStatesAsync(PartySyncSnapshot snapshot, Party party, Guid primaryUserId, List<string> bcProviderUpns)
+    private async Task FetchActualStatesAsync(PartySyncSnapshot snapshot, Party party, Guid primaryUserId, List<string> bcProviderUpns, GlobalSyncContext ctx)
     {
         if (bcProviderUpns.Count > 0)
         {
@@ -400,11 +408,27 @@ public class ResyncService(
             var kcUser = await this.keycloakClient.GetUser(primaryUserId);
             if (kcUser != null)
             {
-                snapshot.Keycloak = new ActualKeycloakState
+                var actualKc = new ActualKeycloakState
                 {
                     UserId = primaryUserId,
                     Attributes = kcUser.Attributes ?? new Dictionary<string, string[]>()
                 };
+
+                var licenceStatusClientInternalId = ctx.KeycloakRoles.MdRole?.ContainerId 
+                    ?? ctx.KeycloakRoles.MoaRole?.ContainerId 
+                    ?? ctx.KeycloakRoles.PharmRole?.ContainerId 
+                    ?? ctx.KeycloakRoles.RnpRole?.ContainerId;
+
+                if (licenceStatusClientInternalId != null)
+                {
+                    var userLicenceRoles = await this.keycloakClient.GetUserClientRoles(primaryUserId, licenceStatusClientInternalId);
+                    if (userLicenceRoles != null)
+                    {
+                        actualKc.LicenceStatusRoles = userLicenceRoles.Select(r => r.Name).ToList();
+                    }
+                }
+
+                snapshot.Keycloak = actualKc;
             }
         }
     }
@@ -445,6 +469,10 @@ public class ResyncService(
                 DryRun = ctx.DryRun,
                 LicenceStatusClientId = "LICENCE-STATUS",
                 EformsClientId = "SAT-EFORMS",
+                MdRole = ctx.KeycloakRoles.MdRole,
+                MoaRole = ctx.KeycloakRoles.MoaRole,
+                PharmRole = ctx.KeycloakRoles.PharmRole,
+                RnpRole = ctx.KeycloakRoles.RnpRole,
                 SaRole = ctx.KeycloakRoles.SaRole,
                 ImmsRole = ctx.KeycloakRoles.ImmsRole,
                 InfantRole = ctx.KeycloakRoles.InfantRole,
@@ -457,8 +485,9 @@ public class ResyncService(
 
     private async Task WriteJsonOutputAsync(List<PartySyncSnapshot> snapshots)
     {
+        Directory.CreateDirectory(OutputDirectory);
         var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-        var filename = $"output/resync_{timestamp}.json";
+        var filename = $"{OutputDirectory}/resync_{timestamp}.json";
         var jsonContent = JsonSerializer.Serialize(snapshots, new JsonSerializerOptions { WriteIndented = true });
         await File.WriteAllTextAsync(filename, jsonContent);
         Console.WriteLine($"Wrote JSON output to {filename}");
@@ -466,16 +495,18 @@ public class ResyncService(
 
     private async Task WriteExceptionsOutputAsync(List<string> exceptions)
     {
+        Directory.CreateDirectory(OutputDirectory);
         var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-        var filename = $"output/exceptions_{timestamp}.log";
+        var filename = $"{OutputDirectory}/exceptions_{timestamp}.log";
         await File.WriteAllLinesAsync(filename, exceptions);
         Console.WriteLine($"Wrote Exceptions output to {filename}");
     }
 
     private async Task WriteEformsDriftOutputAsync(List<EformsDrift> drifts)
     {
+        Directory.CreateDirectory(OutputDirectory);
         var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-        var filename = $"output/eforms-drift_{timestamp}.json";
+        var filename = $"{OutputDirectory}/eforms-drift_{timestamp}.json";
         var jsonContent = JsonSerializer.Serialize(drifts, new JsonSerializerOptions { WriteIndented = true, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull });
         await File.WriteAllTextAsync(filename, jsonContent);
         Console.WriteLine($"Wrote Eforms Drift output to {filename}");
@@ -483,8 +514,9 @@ public class ResyncService(
 
     private async Task WriteChangesOutputAsync(List<PartyChangeLog> logs)
     {
+        Directory.CreateDirectory(OutputDirectory);
         var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-        var filename = $"output/changes_{timestamp}.json";
+        var filename = $"{OutputDirectory}/changes_{timestamp}.json";
         var jsonContent = JsonSerializer.Serialize(logs, new JsonSerializerOptions { WriteIndented = true, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull });
         await File.WriteAllTextAsync(filename, jsonContent);
         Console.WriteLine($"Wrote Changes output to {filename}");
@@ -547,7 +579,8 @@ public class ResyncService(
 
         if (snapshot.Keycloak?.Attributes != null)
         {
-            Console.WriteLine($"    keycloak: {snapshot.UserId}, Attributes: {JsonSerializer.Serialize(snapshot.Keycloak.Attributes)}");
+            var rolesStr = snapshot.Keycloak.LicenceStatusRoles.Count > 0 ? $", LicenceStatus: [{string.Join(", ", snapshot.Keycloak.LicenceStatusRoles)}]" : "";
+            Console.WriteLine($"    keycloak: {snapshot.UserId}, Attributes: {JsonSerializer.Serialize(snapshot.Keycloak.Attributes)}{rolesStr}");
         }
 
         return header;
@@ -615,6 +648,20 @@ public class ResyncService(
                 kcChanges.Add($"Remove obsolete key: {key}");
             }
         }
+
+        var actualLicenceRoles = (snapshot.Keycloak.LicenceStatusRoles ?? new List<string>()).ToHashSet();
+
+        void CheckLicenceRole(string roleName, bool shouldHave)
+        {
+            var hasRole = actualLicenceRoles.Contains(roleName);
+            if (shouldHave && !hasRole) kcChanges.Add($"Add LICENCE-STATUS role: {roleName}");
+            if (!shouldHave && hasRole) kcChanges.Add($"Remove LICENCE-STATUS role: {roleName}");
+        }
+
+        CheckLicenceRole("MD", snapshot.Expected.IsMd);
+        CheckLicenceRole("MOA", snapshot.Expected.IsMoa);
+        CheckLicenceRole("PHARM", snapshot.Expected.IsPharm);
+        CheckLicenceRole("RNP", snapshot.Expected.IsRnp);
     }
 
     private async Task SyncSingleBCProviderUpnAsync(string upn, Dictionary<string, object> additionalData, bool dryRun)
@@ -678,9 +725,17 @@ public class ResyncService(
             additionalData.Remove(key);
         }
 
-        if (hasChanges && additionalData.Count > 0 && !dryRun)
+        if (hasChanges && additionalData.Count > 0)
         {
-            await this.bcProviderClient.UpdateAttributes(upn, additionalData);
+            if (!dryRun)
+            {
+                await this.bcProviderClient.UpdateAttributes(upn, additionalData);
+                this.logger.LogInformation("Updated BCProvider attributes for UPN {Upn}: {Attributes}", upn, JsonSerializer.Serialize(additionalData));
+            }
+            else
+            {
+                this.logger.LogInformation("[DRY RUN] Would update BCProvider attributes for UPN {Upn}: {Attributes}", upn, JsonSerializer.Serialize(additionalData));
+            }
         }
     }
 
@@ -700,7 +755,14 @@ public class ResyncService(
         {
             user.Attributes.Remove(key);
             requiresKeycloakUpdate = true;
-            this.logger.LogInformation("Keycloak User ID {UserId}: Removing obsolete key '{Key}'", ctx.UserId, key);
+            if (!ctx.DryRun)
+            {
+                this.logger.LogInformation("Keycloak User ID {UserId}: Removing obsolete key '{Key}'", ctx.UserId, key);
+            }
+            else
+            {
+                this.logger.LogInformation("[DRY RUN] Keycloak User ID {UserId}: Would remove obsolete key '{Key}'", ctx.UserId, key);
+            }
         }
 
         if (requiresKeycloakUpdate)
@@ -712,6 +774,10 @@ public class ResyncService(
                 {
                     this.logger.LogError("Failed to update Keycloak User ID {UserId}", ctx.UserId);
                 }
+                else
+                {
+                    this.logger.LogInformation("Updated Keycloak User ID {UserId}", ctx.UserId);
+                }
             }
             else
             {
@@ -719,53 +785,124 @@ public class ResyncService(
             }
         }
 
-            var hasSaEforms = ctx.Party.AccessRequests.Any(ar => ar.AccessTypeCode == AccessTypeCode.SAEforms);
-            var hasImms = ctx.Party.AccessRequests.Any(ar => ar.AccessTypeCode == AccessTypeCode.ImmsBCEforms);
-            var hasInfant = ctx.Party.AccessRequests.Any(ar => ar.AccessTypeCode == AccessTypeCode.InfantRsvEforms);
-            var hasNpdp = ctx.Party.AccessRequests.Any(ar => ar.AccessTypeCode == AccessTypeCode.NpdpEforms);
+        // Sync LICENCE-STATUS roles
+        var licenceStatusClientInternalId = ctx.MdRole?.ContainerId ?? ctx.MoaRole?.ContainerId ?? ctx.PharmRole?.ContainerId ?? ctx.RnpRole?.ContainerId;
+        if (licenceStatusClientInternalId != null)
+        {
+            var currentUserLicenceRoles = await this.keycloakClient.GetUserClientRoles(ctx.UserId, licenceStatusClientInternalId);
+            var currentLicenceRoleNames = currentUserLicenceRoles?.Select(r => r.Name).ToHashSet() ?? new HashSet<string>();
 
-            var eformsClientInternalId = ctx.SaRole?.ContainerId ?? ctx.ImmsRole?.ContainerId ?? ctx.InfantRole?.ContainerId ?? ctx.NpdpRole?.ContainerId;
-            if (eformsClientInternalId != null)
+            var expectedLicenceRoles = new Dictionary<string, bool>
             {
-                var currentUserRoles = await this.keycloakClient.GetUserClientRoles(ctx.UserId, eformsClientInternalId);
-                var currentRoleNames = currentUserRoles?.Select(r => r.Name).ToHashSet() ?? new HashSet<string>();
+                ["MD"] = ctx.IsMd,
+                ["MOA"] = ctx.IsMoa,
+                ["PHARM"] = ctx.IsPharm,
+                ["RNP"] = ctx.IsRnp,
+            };
 
-                var addList = new List<string>();
-                var removeList = new List<string>();
+            var addLicenceList = expectedLicenceRoles
+                .Where(kvp => kvp.Value && !currentLicenceRoleNames.Contains(kvp.Key))
+                .Select(kvp => kvp.Key)
+                .ToList();
 
-                void CheckRole(string roleName, bool shouldHave)
+            var removeLicenceList = expectedLicenceRoles
+                .Where(kvp => !kvp.Value && currentLicenceRoleNames.Contains(kvp.Key))
+                .Select(kvp => kvp.Key)
+                .ToList();
+
+            if (addLicenceList.Count > 0 || removeLicenceList.Count > 0)
+            {
+                if (!ctx.DryRun)
                 {
-                    var hasRole = currentRoleNames.Contains(roleName);
-                    if (shouldHave && !hasRole) addList.Add(roleName);
-                    if (!shouldHave && hasRole) removeList.Add(roleName);
-                }
-
-                CheckRole("phsa_eforms_sat", hasSaEforms);
-                CheckRole("phsa_eforms_imms", hasImms);
-                CheckRole("phsa_eforms_infant_rsv", hasInfant);
-                CheckRole("phsa_eforms_npdp", hasNpdp);
-
-                if (addList.Count > 0 || removeList.Count > 0)
-                {
-                    ctx.GlobalContext.EformsDrifts.Add(new EformsDrift
+                    foreach (var roleName in addLicenceList)
                     {
-                        PartyId = ctx.Party.Id,
-                        Add = addList.Count > 0 ? string.Join(",", addList) : null,
-                        Remove = removeList.Count > 0 ? string.Join(",", removeList) : null
-                    });
+                        await this.keycloakClient.AssignClientRole(ctx.UserId, ctx.LicenceStatusClientId, roleName);
+                    }
+
+                    foreach (var roleName in removeLicenceList)
+                    {
+                        var roleToRemove = currentUserLicenceRoles?.FirstOrDefault(r => r.Name == roleName);
+                        if (roleToRemove != null)
+                        {
+                            await this.keycloakClient.RemoveClientRole(ctx.UserId, roleToRemove);
+                        }
+                    }
+
+                    this.logger.LogInformation("Keycloak User ID {UserId} LICENCE-STATUS role updates: Add [{Add}], Remove [{Remove}]",
+                        ctx.UserId, string.Join(", ", addLicenceList), string.Join(", ", removeLicenceList));
+                }
+                else
+                {
+                    this.logger.LogInformation("[DRY RUN] Keycloak User ID {UserId} LICENCE-STATUS role updates: Add [{Add}], Remove [{Remove}]",
+                        ctx.UserId, string.Join(", ", addLicenceList), string.Join(", ", removeLicenceList));
                 }
             }
-    }
-
-    private async Task SyncClientRoleAsync(Guid userId, string clientId, string roleName, Pidp.Infrastructure.HttpClients.Keycloak.Role? role, bool shouldHaveRole)
-    {
-        if (shouldHaveRole)
-        {
-            await this.keycloakClient.AssignClientRole(userId, clientId, roleName);
         }
-        else if (role != null)
+
+        // Sync SAT-EFORMS roles
+        var hasSaEforms = ctx.Party.AccessRequests.Any(ar => ar.AccessTypeCode == AccessTypeCode.SAEforms);
+        var hasImms = ctx.Party.AccessRequests.Any(ar => ar.AccessTypeCode == AccessTypeCode.ImmsBCEforms);
+        var hasInfant = ctx.Party.AccessRequests.Any(ar => ar.AccessTypeCode == AccessTypeCode.InfantRsvEforms);
+        var hasNpdp = ctx.Party.AccessRequests.Any(ar => ar.AccessTypeCode == AccessTypeCode.NpdpEforms);
+
+        var eformsClientInternalId = ctx.SaRole?.ContainerId ?? ctx.ImmsRole?.ContainerId ?? ctx.InfantRole?.ContainerId ?? ctx.NpdpRole?.ContainerId;
+        if (eformsClientInternalId != null)
         {
-            await this.keycloakClient.RemoveClientRole(userId, role);
+            var currentUserRoles = await this.keycloakClient.GetUserClientRoles(ctx.UserId, eformsClientInternalId);
+            var currentRoleNames = currentUserRoles?.Select(r => r.Name).ToHashSet() ?? new HashSet<string>();
+
+            var expectedEformsRoles = new Dictionary<string, bool>
+            {
+                ["phsa_eforms_sat"] = hasSaEforms,
+                ["phsa_eforms_imms"] = hasImms,
+                ["phsa_eforms_infant_rsv"] = hasInfant,
+                ["phsa_eforms_npdp"] = hasNpdp,
+            };
+
+            var addList = expectedEformsRoles
+                .Where(kvp => kvp.Value && !currentRoleNames.Contains(kvp.Key))
+                .Select(kvp => kvp.Key)
+                .ToList();
+
+            var removeList = expectedEformsRoles
+                .Where(kvp => !kvp.Value && currentRoleNames.Contains(kvp.Key))
+                .Select(kvp => kvp.Key)
+                .ToList();
+
+            if (addList.Count > 0 || removeList.Count > 0)
+            {
+                ctx.GlobalContext.EformsDrifts.Add(new EformsDrift
+                {
+                    PartyId = ctx.Party.Id,
+                    Add = addList.Count > 0 ? string.Join(",", addList) : null,
+                    Remove = removeList.Count > 0 ? string.Join(",", removeList) : null
+                });
+
+                if (!ctx.DryRun)
+                {
+                    foreach (var roleName in addList)
+                    {
+                        await this.keycloakClient.AssignClientRole(ctx.UserId, ctx.EformsClientId, roleName);
+                    }
+
+                    foreach (var roleName in removeList)
+                    {
+                        var roleToRemove = currentUserRoles?.FirstOrDefault(r => r.Name == roleName);
+                        if (roleToRemove != null)
+                        {
+                            await this.keycloakClient.RemoveClientRole(ctx.UserId, roleToRemove);
+                        }
+                    }
+
+                    this.logger.LogInformation("Keycloak User ID {UserId} SAT-EFORMS role updates: Add [{Add}], Remove [{Remove}]",
+                        ctx.UserId, string.Join(", ", addList), string.Join(", ", removeList));
+                }
+                else
+                {
+                    this.logger.LogInformation("[DRY RUN] Keycloak User ID {UserId} SAT-EFORMS role updates: Add [{Add}], Remove [{Remove}]",
+                        ctx.UserId, string.Join(", ", addList), string.Join(", ", removeList));
+                }
+            }
         }
     }
 
@@ -782,6 +919,10 @@ public class ResyncService(
         public bool DryRun { get; set; }
         public string LicenceStatusClientId { get; set; } = string.Empty;
         public string EformsClientId { get; set; } = string.Empty;
+        public Pidp.Infrastructure.HttpClients.Keycloak.Role? MdRole { get; set; }
+        public Pidp.Infrastructure.HttpClients.Keycloak.Role? MoaRole { get; set; }
+        public Pidp.Infrastructure.HttpClients.Keycloak.Role? PharmRole { get; set; }
+        public Pidp.Infrastructure.HttpClients.Keycloak.Role? RnpRole { get; set; }
         public Pidp.Infrastructure.HttpClients.Keycloak.Role? SaRole { get; set; }
         public Pidp.Infrastructure.HttpClients.Keycloak.Role? ImmsRole { get; set; }
         public Pidp.Infrastructure.HttpClients.Keycloak.Role? InfantRole { get; set; }

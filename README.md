@@ -4,11 +4,11 @@ This document serves as a guide for new developers joining the project, providin
 ### Introduction:
 The OneHealth ID app serves as a crucial tool for doctors, nurses, and various healthcare professionals, streamlining their access to multiple services and logins. Within this application, users encounter different types of logins tailored to the operational structure of the BC government and its associated health authorities.
 ### Technical Environment:
-**Backend:** .NET framework (8.0) & Entity Framework
+**Backend:** .NET (10.0) & Entity Framework Core
 
-**Frontend:** Nx workspace, Angular framework (v17), Angular material
+**Frontend:** Nx workspace, Angular framework (v22), Angular Material, Node.js (22.x)
 
-**Database:** Postgres SQL Npgsql ([Entity Framework Core provider for PostgreSQL](https://github.com/npgsql/efcore.pg))
+**Database:** PostgreSQL 16, Npgsql ([Entity Framework Core provider for PostgreSQL](https://github.com/npgsql/efcore.pg))
 
 **Containerization:** Docker (Docker Desktop is an application installed to provide an Interface to manage the containers)
 
@@ -19,6 +19,31 @@ The OneHealth ID app serves as a crucial tool for doctors, nurses, and various h
 **Database Management Tool:** DBeaver (for managing and interacting with the database)
 
 **Hosting:** Red Hat OpenShift, deployed using GitHub Actions.
+
+### Integrations & Role Access Matrix:
+The table below outlines the services and integrations available through OneHealthID (PIDP) and the user groups eligible for access based on their regulatory college credentials and role types:
+
+| Integration Name | MD | RN | NP | Midwife | Pharmacist | Pharmacy Technician | MOA / Clinical Staff* |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Special Authority eForms (SA eForms)** | ✓ | ✓ | ✓ | ✓ | ✓ | ✗ | ✗ |
+| **Provincial Client Registry (HCIMWeb PCR)** | ✓ | ✓ | ✓ | ✓ | ✗ | ✗ | ✓* |
+| **Immunization Entry eForm (ImmsBC eForms)** | ✓ | ✓ | ✓ | ✓ | ✗ | ✗ | ✓* |
+| **Infant RSV Immunization Request eForm** | ✓ | ✓ | ✓ | ✓ | ✗ | ✗ | ✓* |
+| **Driver Medical Fitness** | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ | ✓* |
+| **Provincial Attachment System (PAS)** | ✓ | ✗ | ✓ | ✗ | ✗ | ✗ | ✓* |
+| **Medical Certification of Death (PEMCOD / eMCOD)** | ✓ | ✗ | ✓ | ✗ | ✗ | ✗ | ✗ |
+| **In Vitro Fertilization (IVF Funding Portal)** | ✓ | ✗ | ✓ | ✗ | ✗ | ✗ | ✓* |
+| **Exceptional Coverage (NPDP eForms)** | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ | ✗ |
+| **Provider Reporting Portal (PRP)** | ✓ | ✗ | ✗ | ✗ | ✓ | ✗ | ✗ |
+| **ImmsBC (Community Pharmacy Vaccine Rollout)** | ✗ | ✗ | ✗ | ✗ | ✓ | ✓** | ✓** |
+| **MS Teams for Clinical Use - Privacy Officer** | ✓ | ✓ | ✓ | ✗ | ✗ | ✗ | ✗ |
+| **MS Teams for Clinical Use - Clinic Member** | ✓* | ✓* | ✓* | ✓* | ✓* | ✓* | ✓* |
+| **BCProvider Credential Management (MFA/Password Reset)** | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| **HALO (PAS EMR Integration)** | ✓ | ✓ | ✓ | ✗ | ✗ | ✗ | ✗ |
+
+> \* Access available via **Endorsement delegation** from an eligible practitioner (e.g. Medical Doctor or Nurse Practitioner).
+
+> \** Pharmacy Technicians and administrative assistants access ImmsBC through role delegation by a designated Pharmacy Lead.
 
 ### Codebase Overview:
 #### Architecture Overview:

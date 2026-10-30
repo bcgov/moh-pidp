@@ -1,0 +1,48 @@
+name: Weekly Security Patch Audit
+
+on:
+  schedule:
+    # Runs every Tuesday at 12:00 PM UTC
+    - cron: '0 12 * * 2'
+  workflow_dispatch:
+
+jobs:
+  security-audit:
+    name: Audit Vulnerabilities & Dependencies
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Setup Node.js & Yarn
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+
+      - name: Run Security Patch Audit
+        shell: pwsh
+        run: |
+          mkdir -p reports
+          $reportFile = "reports/security-audit-$(Get-Date -Format 'yyyyMMdd_HHmmss').md"
+          & .agents/skills/security-patch-audit/scripts/run-security-audit.ps1 -OutputPath $reportFile
+          
+          # Render to GitHub Actions Step Summary
+          if (Test-Path $reportFile) {
+            Get-Content $reportFile | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
+          }
+
+      - name: Upload Audit Report Artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: security-patch-audit-report
+          path: reports/*.md
+          retention-days: 30

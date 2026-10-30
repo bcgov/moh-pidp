@@ -14,6 +14,7 @@ import { AuthService } from '@app/features/auth/services/auth.service';
 import { PortalResource } from '@app/features/portal/portal-resource.service';
 import { PortalService } from '@app/features/portal/portal.service';
 
+import { pemcodProdWebsite, pemcodUATWebsite } from './pemcod.constants';
 import { PemcodPage } from './pemcod.page';
 
 describe('PemcodPage', () => {
@@ -60,5 +61,29 @@ describe('PemcodPage', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('navigateToPath', () => {
+    let windowOpenSpy: jest.SpyInstance;
+
+    beforeEach(() => {
+      windowOpenSpy = jest.spyOn(window, 'open').mockImplementation();
+    });
+
+    afterEach(() => {
+      windowOpenSpy.mockRestore();
+    });
+
+    it('should open pemcodProdWebsite when environment is prod', () => {
+      (component as any).config.environmentName = 'prod';
+      component.navigateToPath();
+      expect(windowOpenSpy).toHaveBeenCalledWith(pemcodProdWebsite, '_blank');
+    });
+
+    it('should open pemcodUATWebsite when environment is not prod', () => {
+      (component as any).config.environmentName = 'dev';
+      component.navigateToPath();
+      expect(windowOpenSpy).toHaveBeenCalledWith(pemcodUATWebsite, '_blank');
+    });
   });
 });
