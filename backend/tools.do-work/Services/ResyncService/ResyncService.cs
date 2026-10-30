@@ -100,6 +100,7 @@ public class ResyncService(
     private readonly IKeycloakAdministrationClient keycloakClient = keycloakClient;
     private readonly PidpConfiguration config = config;
     private readonly ILogger<ResyncService> logger = logger;
+    private const string OutputDirectory = "output";
 
     private sealed record KeycloakRolesContext(
         Pidp.Infrastructure.HttpClients.Keycloak.Role? MdRole,
@@ -484,9 +485,9 @@ public class ResyncService(
 
     private async Task WriteJsonOutputAsync(List<PartySyncSnapshot> snapshots)
     {
-        Directory.CreateDirectory("output");
+        Directory.CreateDirectory(OutputDirectory);
         var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-        var filename = $"output/resync_{timestamp}.json";
+        var filename = $"{OutputDirectory}/resync_{timestamp}.json";
         var jsonContent = JsonSerializer.Serialize(snapshots, new JsonSerializerOptions { WriteIndented = true });
         await File.WriteAllTextAsync(filename, jsonContent);
         Console.WriteLine($"Wrote JSON output to {filename}");
@@ -494,18 +495,18 @@ public class ResyncService(
 
     private async Task WriteExceptionsOutputAsync(List<string> exceptions)
     {
-        Directory.CreateDirectory("output");
+        Directory.CreateDirectory(OutputDirectory);
         var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-        var filename = $"output/exceptions_{timestamp}.log";
+        var filename = $"{OutputDirectory}/exceptions_{timestamp}.log";
         await File.WriteAllLinesAsync(filename, exceptions);
         Console.WriteLine($"Wrote Exceptions output to {filename}");
     }
 
     private async Task WriteEformsDriftOutputAsync(List<EformsDrift> drifts)
     {
-        Directory.CreateDirectory("output");
+        Directory.CreateDirectory(OutputDirectory);
         var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-        var filename = $"output/eforms-drift_{timestamp}.json";
+        var filename = $"{OutputDirectory}/eforms-drift_{timestamp}.json";
         var jsonContent = JsonSerializer.Serialize(drifts, new JsonSerializerOptions { WriteIndented = true, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull });
         await File.WriteAllTextAsync(filename, jsonContent);
         Console.WriteLine($"Wrote Eforms Drift output to {filename}");
@@ -513,9 +514,9 @@ public class ResyncService(
 
     private async Task WriteChangesOutputAsync(List<PartyChangeLog> logs)
     {
-        Directory.CreateDirectory("output");
+        Directory.CreateDirectory(OutputDirectory);
         var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-        var filename = $"output/changes_{timestamp}.json";
+        var filename = $"{OutputDirectory}/changes_{timestamp}.json";
         var jsonContent = JsonSerializer.Serialize(logs, new JsonSerializerOptions { WriteIndented = true, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull });
         await File.WriteAllTextAsync(filename, jsonContent);
         Console.WriteLine($"Wrote Changes output to {filename}");

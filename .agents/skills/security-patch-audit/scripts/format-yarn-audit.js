@@ -86,7 +86,7 @@ if (criticalAndHigh.length > 0) {
   for (const item of criticalAndHigh) {
     const sevLabel = item.severity === 'critical' ? '**CRITICAL**' : '**HIGH**';
     const link = item.url ? `[${item.title}](${item.url})` : item.title;
-    const cleanRec = item.recommendation.replaceAll('|', '\\|');
+    const cleanRec = item.recommendation.replaceAll('|', String.raw`\|`);
     md.push(`| ${sevLabel} | \`${item.module}\` | \`${item.vulnerable_versions}\` | \`${item.patched_versions}\` | ${cleanRec} <br> -> ${link} |`);
   }
   md.push('');
@@ -103,34 +103,16 @@ if (other.length > 0) {
   for (const item of other) {
     const sevLabel = item.severity === 'moderate' ? 'Moderate' : 'Low';
     const link = item.url ? `[${item.title}](${item.url})` : item.title;
-    const cleanRec = item.recommendation.replaceAll('|', '\\|');
+    const cleanRec = item.recommendation.replaceAll('|', String.raw`\|`);
     md.push(`| ${sevLabel} | \`${item.module}\` | \`${item.vulnerable_versions}\` | \`${item.patched_versions}\` | ${cleanRec} <br> -> ${link} |`);
   }
   md.push('</details>', '');
 }
 
-md.push(
-  '### Suggested Remediation Steps',
-  '1. **Direct Package Updates**:',
-  '   For direct dependencies in `workspace/package.json`:',
-  '   ```bash',
-  '   cd workspace'
-);
-
 const topPackagesToUpgrade = [...new Set(criticalAndHigh.map(a => a.module))].slice(0, 8);
-if (topPackagesToUpgrade.length > 0) {
-  md.push(`   yarn upgrade ${topPackagesToUpgrade.join(' ')}`);
-} else {
-  md.push('   yarn upgrade <package-name>');
-}
-md.push(
-  '   ```',
-  '',
-  '2. **Transitive Dependency Overrides (`resolutions`)**:',
-  '   For nested dependencies locked by third-party packages, add override entries in `workspace/package.json`:',
-  '   ```json',
-  '   "resolutions": {'
-);
+const upgradeCmd = topPackagesToUpgrade.length > 0
+  ? `   yarn upgrade ${topPackagesToUpgrade.join(' ')}`
+  : '   yarn upgrade <package-name>';
 
 const uniqueResolutions = new Map();
 for (const a of criticalAndHigh) {
@@ -143,8 +125,21 @@ for (const a of criticalAndHigh) {
 
 const entries = Array.from(uniqueResolutions.entries()).slice(0, 10);
 const resLines = entries.map(([mod, ver], i) => `     "${mod}": "${ver}"${i < entries.length - 1 ? ',' : ''}`);
-md.push(resLines.join('\n'));
+
 md.push(
+  '### Suggested Remediation Steps',
+  '1. **Direct Package Updates**:',
+  '   For direct dependencies in `workspace/package.json`:',
+  '   ```bash',
+  '   cd workspace',
+  upgradeCmd,
+  '   ```',
+  '',
+  '2. **Transitive Dependency Overrides (`resolutions`)**:',
+  '   For nested dependencies locked by third-party packages, add override entries in `workspace/package.json`:',
+  '   ```json',
+  '   "resolutions": {',
+  resLines.join('\n'),
   '   }',
   '   ```',
   '   Then update the lockfile:',

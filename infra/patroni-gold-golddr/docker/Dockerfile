@@ -3,18 +3,17 @@ FROM postgres:16-bookworm
 LABEL maintainer="BC Gov MoH PIDP"
 LABEL description="Patroni HA PostgreSQL 16 container for OpenShift"
 
-# Install Python 3, pip, and utilities needed by Patroni and OpenShift probes
+# Install Python 3, pip, Patroni with Kubernetes DCS support (v3.3+), and utilities needed by OpenShift probes
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3 \
-    python3-pip \
-    python3-psycopg2 \
     curl \
     jq \
     procps \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install modern Patroni with Kubernetes DCS support (v3.3+)
-RUN pip3 install --no-cache-dir --break-system-packages --only-binary :all: "patroni[kubernetes]==4.1.5"
+    python3 \
+    python3-pip \
+    python3-psycopg2 \
+    python3-ydiff \
+    && rm -rf /var/lib/apt/lists/* \
+    && pip3 install --no-cache-dir --break-system-packages --only-binary :all: "patroni[kubernetes]==4.1.5"
 
 # Set environment variables for Postgres and Patroni
 ENV HOME=/home/postgres \
