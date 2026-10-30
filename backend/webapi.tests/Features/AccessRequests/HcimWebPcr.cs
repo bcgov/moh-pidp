@@ -17,9 +17,11 @@ public class HcimWebPcrTests : InMemoryDbTest
     /// The org_details the Registry reads: the placeholder organization id paired with the college name
     /// from CollegeLookup. The id is a placeholder; the names are the real ones and must not drift.
     /// </summary>
-    private const string CpsbcOrgDetails = """{"id":"46013722","name":"College of Physicians and Surgeons of BC"}""";
+    private const string CpsbcOrgDetails = """{"id":"00001909","name":"College of Physicians \u0026 Surgeons of BC"}""";
 
-    private const string BccnmOrgDetails = """{"id":"12249113","name":"BC College of Nurses and Midwives"}""";
+    private const string BccnpOrgDetails = """{"id":"00002524","name":"British Columbia College of Nursing Professionals"}""";
+
+    private const string CmbcOrgDetails = """{"id":"00011626","name":"The College of Midwives of British Columbia - CMBC"}""";
 
     [Theory]
     [MemberData(nameof(IdentifierTypeTestData))]
@@ -76,8 +78,8 @@ public class HcimWebPcrTests : InMemoryDbTest
 
     [Theory]
     [InlineData("CPSID", CpsbcOrgDetails)]
-    [InlineData("RNID", BccnmOrgDetails)]
-    [InlineData("RMID", BccnmOrgDetails)]
+    [InlineData("RNID", BccnpOrgDetails)]
+    [InlineData("RMID", CmbcOrgDetails)]
     public async Task CreateHcimWebPcrEnrolment_WritesTheOrganizationForTheLicensingCollege(string identifierType, string expected)
     {
         var party = this.HasAnEligibleParty();
@@ -96,31 +98,45 @@ public class HcimWebPcrTests : InMemoryDbTest
     }
 
     [Fact]
-    public void OrganizationCollegeFor_RegisteredWithTwoColleges_TakesTheFirstByPrecedence()
+    public void OrganizationFor_RegisteredWithTwoColleges_TakesTheFirstByPrecedence()
     {
-        // Improbable, but the rule has to be decided rather than left to record order from PLR. Asserted on
-        // the predicate rather than the written attribute, because both colleges share one placeholder
-        // organization today and the difference would not be visible through Keycloak.
+        // Improbable, but the rule has to be decided rather than left to record order from PLR. Nurse is
+        // listed first in the digest and still loses, which is the point: the table's order decides.
         var digest = AMock.StandingsDigest(
             (true, IdentifierType.Nurse, null),
             (true, IdentifierType.PhysiciansAndSurgeons, null));
 
-        Assert.Equal(CollegeCode.PhysiciansAndSurgeons, HcimWebPcr.OrganizationCollegeFor(digest));
+        Assert.Equal("00001909", HcimWebPcr.OrganizationFor(digest)!.Id);
     }
 
     [Theory]
-    [InlineData("CPSID", (int)CollegeCode.PhysiciansAndSurgeons)]
-    [InlineData("RNID", (int)CollegeCode.NursesAndMidwives)]
-    [InlineData("RMID", (int)CollegeCode.NursesAndMidwives)]
-    public void OrganizationCollegeFor_MapsEachIdentifierTypeToItsCollege(string identifierType, int expected)
+    [InlineData("CPSID", "00001909")]
+    [InlineData("RNID", "00002524")]
+    [InlineData("RMID", "00011626")]
+    public void OrganizationFor_MapsEachIdentifierTypeToItsOwnOrganization(string identifierType, string expected)
     {
-        Assert.Equal((CollegeCode)expected, HcimWebPcr.OrganizationCollegeFor(AMock.StandingsDigest(true, identifierType)));
+        // Nurses and Midwives share a college but not an organization, so this is three ids and not two.
+        Assert.Equal(expected, HcimWebPcr.OrganizationFor(AMock.StandingsDigest(true, identifierType))!.Id);
     }
 
     [Fact]
-    public void OrganizationCollegeFor_IneligibleCollege_IsNull()
+    public void OrganizationFor_LeadingZeroesAreKeptAsPartOfTheId()
     {
-        Assert.Null(HcimWebPcr.OrganizationCollegeFor(AMock.StandingsDigest(true, IdentifierType.Pharmacist)));
+        // The ids are the Registry's and are strings. Anything that parses them as a number, here or
+        // downstream, sends 1909 for a physician and gets nothing back.
+        foreach (var identifierType in HcimWebPcr.AllowedIdentifierTypes)
+        {
+            var organization = HcimWebPcr.OrganizationFor(AMock.StandingsDigest(true, identifierType))!;
+
+            Assert.StartsWith("0", organization.Id, StringComparison.Ordinal);
+            Assert.Equal(8, organization.Id.Length);
+        }
+    }
+
+    [Fact]
+    public void OrganizationFor_IneligibleCollege_IsNull()
+    {
+        Assert.Null(HcimWebPcr.OrganizationFor(AMock.StandingsDigest(true, IdentifierType.Pharmacist)));
     }
 
     [Fact]
@@ -148,7 +164,7 @@ public class HcimWebPcrTests : InMemoryDbTest
 
         Assert.True(result.IsSuccess);
         // An MOA takes the organization of the college their endorser is registered with - here a Nurse.
-        Assert.Equal([BccnmOrgDetails], user.Attributes["org_details"]);
+        Assert.Equal([BccnpOrgDetails], user.Attributes["org_details"]);
         // Judged on the endorsement digest; their own standing is never asked for.
         A.CallTo(() => plr.GetAggregateStandingsDigestAsync(A<IEnumerable<string?>>._)).MustHaveHappened();
         A.CallTo(() => plr.GetStandingsDigestAsync(A<string?>._)).MustNotHaveHappened();
