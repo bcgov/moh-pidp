@@ -1,18 +1,19 @@
-using Microsoft.Extensions.Configuration;
-
 namespace DoWork;
+
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
+using DoWork.Services.BulkEformRoles;
+using DoWork.Services.CredentialDeletionService;
+using DoWork.Services.ResyncService;
 
 /// <summary>
 /// Modify this file with custom scripts / helper services.
 /// Remember to check that any dependencies you need (like the Keycloak or BC Provider client) are registered in the Program.cs file and the nessisary environment variables have been added or modified in appsettings.json.
 /// </summary>
-public class DoWorkService(
-    DoWork.Services.CredentialDeletionService.ICredentialDeletionService credentialDeletionService,
-    DoWork.Services.ResyncService.IResyncService resyncService,
-    IConfiguration configuration) : IDoWorkService
+public class DoWorkService(IServiceProvider services, IConfiguration configuration) : IDoWorkService
 {
-    private readonly DoWork.Services.CredentialDeletionService.ICredentialDeletionService credentialDeletionService = credentialDeletionService;
-    private readonly DoWork.Services.ResyncService.IResyncService resyncService = resyncService;
+    private readonly IServiceProvider services = services;
     private readonly IConfiguration configuration = configuration;
 
     public async Task DoWorkAsync()
@@ -23,7 +24,7 @@ public class DoWorkService(
         {
             var emailArg = this.configuration["email"] ?? this.configuration["Email"];
             Console.WriteLine("Running CredentialDeletionService");
-            await this.credentialDeletionService.DeleteCredentialsAsync(emailArg);
+            await this.services.GetRequiredService<ICredentialDeletionService>().DeleteCredentialsAsync(emailArg);
             return;
         }
         else if (serviceArg?.Equals("resync", StringComparison.OrdinalIgnoreCase) == true)
@@ -43,7 +44,19 @@ public class DoWorkService(
             // Give the user time to abort
             Thread.Sleep(5000);
 
-            await this.resyncService.SynchronizeAsync(dryRunParsed, parsedPartyId);
+            await this.services.GetRequiredService<IResyncService>().SynchronizeAsync(dryRunParsed, parsedPartyId);
+            return;
+        }
+        else if (serviceArg?.Equals("access-role-cleanup", StringComparison.OrdinalIgnoreCase) == true)
+        {
+            // Dry run unless --apply --from <report> was passed; BulkRunOptions owns those flags and
+            // Program.cs has already validated them before the host was built.
+            await this.services.GetRequiredService<IAccessRoleCleanupService>().CleanupAsync();
+            return;
+        }
+        else if (serviceArg?.Equals("infant-rsv-bulk-grant", StringComparison.OrdinalIgnoreCase) == true)
+        {
+            await this.services.GetRequiredService<IInfantRsvBulkGrantService>().GrantAsync();
             return;
         }
 
@@ -60,6 +73,15 @@ public class DoWorkService(
         Console.WriteLine("  --service=credential-deletion    Runs the CredentialDeletionService.");
         Console.WriteLine("                                   Options:");
         Console.WriteLine("                                     --email=<email>   (Optional) Delete credentials for a specific BC Provider email. Outputs to screen instead of file.");
+        Console.WriteLine();
+        Console.WriteLine("  --service=access-role-cleanup    Re-evaluates one card's holders and revokes those who no longer qualify.");
+        Console.WriteLine("                                   Options:");
+        Console.WriteLine("                                     --access-type=<name>  (Optional) Limit to one Access Type, e.g. ImmsBCEforms.");
+        Console.WriteLine("                                     --apply --from=<csv>  (Optional) Act on the Parties in a reviewed report. Dry run without it.");
+        Console.WriteLine();
+        Console.WriteLine("  --service=infant-rsv-bulk-grant  Back-grants Infant RSV to eligible Imms/SA holders.");
+        Console.WriteLine("                                   Options:");
+        Console.WriteLine("                                     --apply --from=<csv>  (Optional) Act on the Parties in a reviewed report. Dry run without it.");
         Console.WriteLine();
     }
 }

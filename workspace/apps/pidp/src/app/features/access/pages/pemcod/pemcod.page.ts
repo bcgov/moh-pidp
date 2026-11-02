@@ -40,7 +40,7 @@ import { BcProviderEditResource } from '../../../accounts/pages/bc-provider-edit
 import { BcProviderEditInitialStateModel } from '../../../accounts/pages/bc-provider-edit/bc-provider-edit.page';
 import { AccessRoutes } from '../../access.routes';
 import { bcProviderTutorialLink } from '../provincial-attachment-system/provincial-attachment-system.constants';
-import { pemcodUATWebsite } from './pemcod.constants';
+import { pemcodProdWebsite } from './pemcod.constants';
 
 @Component({
   selector: 'app-pemcod',
@@ -127,7 +127,7 @@ export class PemcodPage implements OnInit, OnDestroy {
   }
 
   public navigateToPath(): void {
-    window.open(pemcodUATWebsite, '_blank');
+    window.open(pemcodProdWebsite, '_blank');
   }
 
   public onCopy(): void {

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using NodaTime;
 
 using Pidp.Data;
+using Pidp.Extensions;
 using Pidp.Infrastructure.Auth;
 using Pidp.Infrastructure.HttpClients.Keycloak;
 using Pidp.Infrastructure.HttpClients.Plr;
@@ -14,6 +15,27 @@ using Pidp.Models.Lookups;
 
 public class HcimWebPcr
 {
+
+    private static readonly (IdentifierType IdentifierType, Organization Organization)[] EligibleColleges =
+    [
+        (IdentifierType.PhysiciansAndSurgeons, new Organization("00001909", "College of Physicians & Surgeons of BC")),
+        (IdentifierType.Nurse,                 new Organization("00002524", "British Columbia College of Nursing Professionals")),
+        (IdentifierType.Midwife,               new Organization("00011626", "The College of Midwives of British Columbia - CMBC"))
+    ];
+
+    public sealed record Organization(string Id, string Name);
+
+    public static IdentifierType[] AllowedIdentifierTypes => EligibleColleges.Select(entry => entry.IdentifierType).ToArray();
+
+    public static bool IsEligible(PlrStandingsDigest partyPlrStanding) => partyPlrStanding.With(AllowedIdentifierTypes).HasGoodStanding;
+
+    public static bool IsEligibleByEndorsement(PlrStandingsDigest endorsementPlrStanding) => endorsementPlrStanding.With(AllowedIdentifierTypes).HasGoodStanding;
+
+    public static Organization? OrganizationFor(PlrStandingsDigest digest) => EligibleColleges
+        .Where(entry => digest.With(entry.IdentifierType).HasGoodStanding)
+        .Select(entry => entry.Organization)
+        .FirstOrDefault();
+
     public class Command : ICommand<IDomainResult>
     {
         public required int PartyId { get; set; }
@@ -55,20 +77,48 @@ public class HcimWebPcr
 
             if (dto.AlreadyEnroled
                 || !dto.HasBCServicesCardCredential
-                || dto.UserId == null
-                || !(await this.plrClient.GetStandingsDigestAsync(dto.Cpn)).HasGoodStanding)
+                || dto.UserId == null)
             {
-                this.logger.LogAccessRequestDenied();
+                return await this.DenyAccess(command.PartyId);
+            }
 
-                this.context.BusinessEvents.Add(AccessRequestFailed.Create(command.PartyId, AccessTypeCode.HcimWebPcr.ToString(), this.clock.GetCurrentInstant()));
-                await this.context.SaveChangesAsync();
+            // Held onto after the eligibility check because it also decides the organization below.
+            PlrStandingsDigest plrStanding;
 
-                return DomainResult.Failed();
+            if (dto.Cpn == null)
+            {
+                // Check status of Endorsements
+                var endorsementCpns = await this.context.ActiveEndorsementRelationships(command.PartyId)
+                    .Select(relationship => relationship.Party!.Cpn)
+                    .ToListAsync();
+
+                plrStanding = await this.plrClient.GetAggregateStandingsDigestAsync(endorsementCpns);
+
+                if (!IsEligibleByEndorsement(plrStanding))
+                {
+                    return await this.DenyAccess(command.PartyId);
+                }
+            }
+            else
+            {
+                plrStanding = await this.plrClient.GetStandingsDigestAsync(dto.Cpn);
+
+                if (!IsEligible(plrStanding))
+                {
+                    return await this.DenyAccess(command.PartyId);
+                }
             }
 
             if (!await this.keycloakClient.AssignAccessRoles(dto.UserId.Value, MohKeycloakEnrolment.HcimWebPcr))
             {
                 this.logger.LogKeycloakRoleAssignmentFailed(command.PartyId);
+                return DomainResult.Failed();
+            }
+
+            // Recorded before the Access Request is saved: a failure here leaves the Party un-enroled and
+            // able to retry, rather than enroled with no organization for the Registry to read.
+            if (!await this.AssignOrganizationAsync(command.PartyId, dto.UserId.Value, plrStanding))
+            {
                 return DomainResult.Failed();
             }
 
@@ -85,6 +135,35 @@ public class HcimWebPcr
 
             return DomainResult.Success();
         }
+
+
+        private async Task<bool> AssignOrganizationAsync(int partyId, Guid userId, PlrStandingsDigest digest)
+        {
+            var organization = OrganizationFor(digest);
+
+            if (organization == null)
+            {
+                // Unreachable while the eligibility check above passes: both read the same ordered table.
+                this.logger.LogOrganizationNotResolved(partyId);
+                return false;
+            }
+
+            if (!await this.keycloakClient.UpdateUser(userId, user => user.SetOrgDetails(organization.Id, organization.Name)))
+            {
+                this.logger.LogOrganizationAssignmentFailed(partyId, organization.Name);
+                return false;
+            }
+
+            return true;
+        }
+
+        private async Task<IDomainResult> DenyAccess(int partyId)
+        {
+            this.logger.LogAccessRequestDenied();
+            this.context.BusinessEvents.Add(AccessRequestFailed.Create(partyId, AccessTypeCode.HcimWebPcr.ToString(), this.clock.GetCurrentInstant()));
+            await this.context.SaveChangesAsync();
+            return DomainResult.Failed();
+        }
     }
 }
 
@@ -95,4 +174,10 @@ public static partial class HcimWebPcrLoggingExtensions
 
     [LoggerMessage(2, LogLevel.Error, "Provincial Client Registry Access Request failed; could not assign the Keycloak Access Roles for Party #{partyId}.")]
     public static partial void LogKeycloakRoleAssignmentFailed(this ILogger<HcimWebPcr.CommandHandler> logger, int partyId);
+
+    [LoggerMessage(3, LogLevel.Error, "Provincial Client Registry Access Request failed; could not set the organization {organization} on the Keycloak User for Party #{partyId}.")]
+    public static partial void LogOrganizationAssignmentFailed(this ILogger<HcimWebPcr.CommandHandler> logger, int partyId, string organization);
+
+    [LoggerMessage(4, LogLevel.Error, "Provincial Client Registry Access Request failed; Party #{partyId} passed the eligibility check but no eligible college could be resolved for their organization.")]
+    public static partial void LogOrganizationNotResolved(this ILogger<HcimWebPcr.CommandHandler> logger, int partyId);
 }
