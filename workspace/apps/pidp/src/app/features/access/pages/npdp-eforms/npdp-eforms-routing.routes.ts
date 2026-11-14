@@ -12,7 +12,7 @@ export const routes: Routes = [
     },
     data: {
       title:
-        'Exceptional Coverage: Plan NP (National Pharmacare) and mifepristone-misoprostol and OneHealthID',
+        'Exceptional PharmaCare Plan Coverage: Plan NP (National Pharmacare) and mifepristone-misoprostol and OneHealthID',
       routes: {
         root: '../../',
       },

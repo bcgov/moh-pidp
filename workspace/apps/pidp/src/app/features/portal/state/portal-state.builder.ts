@@ -93,8 +93,7 @@ export class AccessStateBuilder {
         () => [new SaEformsPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
-        this.insertSection('hcimWebPcr', profileStatus) &&
-          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        this.insertSection('hcimWebPcr', profileStatus),
         () => [new HcimWebPcrPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
@@ -136,8 +135,7 @@ export class AccessStateBuilder {
         () => [new InfantRsvEformsPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
-        this.insertSection('npdpEforms', profileStatus) &&
-          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        this.insertSection('npdpEforms', profileStatus),
         () => [new NpdpEformsPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IAccessSection>(
@@ -242,8 +240,7 @@ export class PortalStateBuilder {
         () => [new BcProviderPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.insertSection('hcimWebPcr', profileStatus) &&
-          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        this.insertSection('hcimWebPcr', profileStatus),
         () => [new HcimWebPcrPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
@@ -286,8 +283,7 @@ export class PortalStateBuilder {
         () => [new InfantRsvEformsPortalSection(profileStatus, this.router)],
       ),
       ...ArrayUtils.insertResultIf<IPortalSection>(
-        this.insertSection('npdpEforms', profileStatus) &&
-          this.permissionsService.hasRole([Role.FEATURE_PIDP_DEMO]),
+        this.insertSection('npdpEforms', profileStatus),
         () => [new NpdpEformsPortalSection(profileStatus, this.router)],
       ),
     ];

@@ -31,8 +31,8 @@ export class NpdpEformsPortalSection implements IPortalSection {
     private readonly router: Router,
   ) {
     this.key = 'npdpEforms';
-    this.heading = 'Exceptional PharmaCare Coverage';
-    this.description = `Apply for exceptional coverage for Plan NP benefits and mifepristone-misoprostol`;
+    this.heading = 'Exceptional PharmaCare Plan Coverage';
+    this.description = `Apply for exceptional pharmaCare plan coverage for Plan NP benefits and mifepristone-misoprostol`;
     this.keyWords = profileStatus.status.npdpEforms.keyWords || [];
     this.completedMessage = Constants.accessGrantedText;
   }
@@ -63,7 +63,7 @@ export class NpdpEformsPortalSection implements IPortalSection {
 
     switch (statusCode) {
       case StatusCode.AVAILABLE:
-        return 'You are eligible to use Exceptional PharmaCare Coverage';
+        return 'You are eligible to use Exceptional PharmaCare Plan Coverage';
       case StatusCode.COMPLETED:
         return 'Completed';
       default:
