@@ -1,14 +1,14 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
-import { IsActiveMatchOptions } from '@angular/router';
+import { type IsActiveMatchOptions } from '@angular/router';
 
 import { Observable, map, tap } from 'rxjs';
 
 import {
-  DashboardHeaderConfig,
+  type DashboardHeaderConfig,
   DashboardMenuItem,
   DashboardRouteMenuItem,
-  IDashboard,
+  type IDashboard,
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';

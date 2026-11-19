@@ -47,6 +47,7 @@ public class RoleSynchronizationService(PidpDbContext context, IBCProviderClient
         var roles = await this.context.PharmacyPartyRoles
             .Include(r => r.Pharmacy)
             .Where(r => r.PartyId == partyId
+                     && (r.EffectiveStartDate == null || r.EffectiveStartDate <= now)
                      && (r.EffectiveEndDate == null || r.EffectiveEndDate > now))
             .ToListAsync(cancellationToken);
 

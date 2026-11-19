@@ -14,7 +14,7 @@ using Pidp.Infrastructure.Services;
 
 
 await Host.CreateDefaultBuilder(args)
-    .UseContentRoot(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location))
+    .UseContentRoot(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? AppContext.BaseDirectory)
     .ConfigureServices((hostContext, services) =>
     {
         var config = InitializeConfiguration(services);

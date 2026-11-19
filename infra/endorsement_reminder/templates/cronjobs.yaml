@@ -13,12 +13,18 @@ spec:
   schedule: {{ .Values.cron }}
   timeZone: America/Vancouver
   concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 5
+  failedJobsHistoryLimit: 1
   jobTemplate:
     spec:
+      backoffLimit: 2
+      activeDeadlineSeconds: 1800
+      ttlSecondsAfterFinished: 86400
       template:
         spec:
           containers:
           - name: endorsement-reminder
+            imagePullPolicy: {{ .Values.global.image.pullPolicy | default "Always" }}
             image: "{{ .Values.global.image.registry }}/{{ .Values.global.image.repository }}:{{ .Values.global.image.tag | default .Chart.AppVersion }}"
             env:
               - name: ChesClient__TokenUrl

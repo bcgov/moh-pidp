@@ -1,13 +1,13 @@
 import {
   HTTP_INTERCEPTORS,
-  HttpEvent,
+  type HttpEvent,
   HttpHandler,
-  HttpInterceptor,
+  type HttpInterceptor,
   HttpRequest,
   HttpResponse,
   HttpStatusCode,
 } from '@angular/common/http';
-import { Injectable, Provider, inject } from '@angular/core';
+import { Injectable, type Provider, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { Observable, catchError, of, throwError } from 'rxjs';

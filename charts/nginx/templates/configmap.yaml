@@ -69,7 +69,7 @@ data:
     [OUTPUT]
       name                 slack
       match                app
-      webhook             {{ .Values.fluentbit.slack_webhook }}
+      webhook              {{ .Values.fluentbit.slack_webhook | default "${SLACK_WEBHOOK}" }}
 
     [OUTPUT]
       Name    stdout

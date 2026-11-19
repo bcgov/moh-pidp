@@ -67,9 +67,13 @@ public class PharmacyStaffDeactivationService(
                 return;
             }
 
-            // Only disable the user if ALL of their roles have ended.
-            // If they have any active roles (null end date, or end date in the future), we should not disable their account.
-            bool shouldDisable = allRoles.All(r => r.EffectiveEndDate != null && r.EffectiveEndDate < yesterdayEnd);
+            // Only disable the user if they have NO currently active roles.
+            // An active role is one that has started (or has no start date) and has not ended (or has no end date).
+            bool hasActiveRoles = allRoles.Any(r => 
+                (r.EffectiveStartDate == null || r.EffectiveStartDate <= yesterdayEnd) &&
+                (r.EffectiveEndDate == null || r.EffectiveEndDate > yesterdayEnd));
+
+            bool shouldDisable = !hasActiveRoles;
 
             if (!shouldDisable)
             {

@@ -1,5 +1,5 @@
 # This image provides a postgres installation from which to run backups
-FROM --platform=linux/amd64 quay.io/fedora/postgresql-14:14
+FROM --platform=linux/amd64 quay.io/fedora/postgresql-16:16
 
 # Change timezone to PST for convenience
 ENV TZ=PST8PDT
@@ -33,7 +33,7 @@ RUN chmod +x /usr/bin/go-crond
 RUN echo $TZ > /etc/timezone
 # ========================================================================================================
 
-# The column command is missing from quay.io/fedora/postgresql-14:14
+# The column command is missing from quay.io/fedora/postgresql-16:16
 RUN dnf install -y util-linux
 
 # Important - Reset to the base image's user account.

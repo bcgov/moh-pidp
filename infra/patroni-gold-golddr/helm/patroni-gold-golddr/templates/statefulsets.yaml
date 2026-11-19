@@ -128,9 +128,8 @@ spec:
               value: 0.0.0.0:8008
             - name: CLUSTER
               value: {{ .Values.cluster }}
-          # image: {{ .Values.image_registry }}/{{ .Values.license_plate }}-tools/patroni-postgres:latest
-          image: 'public.ecr.aws/h0h9t7p1/patroni-postgres:12.4-latest'
-          imagePullPolicy: Always
+          image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy | default "Always" }}
           name: patroni
           ports:
             - containerPort: 8008
@@ -154,7 +153,6 @@ spec:
             failureThreshold: 3
             initialDelaySeconds: 10
             timeoutSeconds: 5
-          name: postgresql
           lifecycle:
             preStop:
               exec:

@@ -23,7 +23,18 @@ public static class ClaimsPrincipalExtensions
         }
 
         var idpId = user.GetIdpId();
-        var partyId = context.Credentials.Where(c => c.IdpId == idpId).Select(c => c.PartyId).FirstOrDefault();
+        if (string.IsNullOrEmpty(idpId))
+        {
+            return 0;
+        }
+
+        var partyId = context.Credentials
+#pragma warning disable CA1304, CA1862, CA1311
+            .Where(c => c.IdpId != null && c.IdpId.ToLower() == idpId.ToLower())
+#pragma warning restore CA1304, CA1862, CA1311
+            .Select(c => c.PartyId)
+            .FirstOrDefault();
+
         return partyId;
     }
 
