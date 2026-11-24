@@ -8,7 +8,9 @@ The OneHealth ID app serves as a crucial tool for doctors, nurses, and various h
 
 **Frontend:** Nx workspace, Angular framework (v22), Angular Material, Node.js (22.x)
 
-**Database:** PostgreSQL 16, Npgsql ([Entity Framework Core provider for PostgreSQL](https://github.com/npgsql/efcore.pg))
+**Database:** PostgreSQL 16 (Patroni 4.1.5 HA), Npgsql ([Entity Framework Core provider for PostgreSQL](https://github.com/npgsql/efcore.pg))
+
+**Reverse Proxy / Ingress:** NGINX (`docker.io/nginx/nginx-unprivileged`, versioned in [`nginx-ver.properties`](./nginx-ver.properties); PostgreSQL/Patroni versions tracked in [`postgres-ver.properties`](./postgres-ver.properties))
 
 **Containerization:** Docker (Docker Desktop is an application installed to provide an Interface to manage the containers)
 
