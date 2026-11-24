@@ -1,7 +1,11 @@
-FROM postgres:16-bookworm
+ARG POSTGRES_VERSION=16
+FROM postgres:${POSTGRES_VERSION}-bookworm
+
+ARG POSTGRES_VERSION=16
+ARG PATRONI_VERSION=4.1.5
 
 LABEL maintainer="BC Gov MoH PIDP"
-LABEL description="Patroni HA PostgreSQL 16 container for OpenShift"
+LABEL description="Patroni HA PostgreSQL ${POSTGRES_VERSION} container for OpenShift"
 
 # Install Python 3, pip, Patroni with Kubernetes DCS support (v3.3+), and utilities needed by OpenShift probes
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -13,12 +17,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-psycopg2 \
     python3-ydiff \
     && rm -rf /var/lib/apt/lists/* \
-    && pip3 install --no-cache-dir --break-system-packages --only-binary :all: "patroni[kubernetes]==4.1.5"
+    && pip3 install --no-cache-dir --break-system-packages --only-binary :all: "patroni[kubernetes]==${PATRONI_VERSION}"
 
 # Set environment variables for Postgres and Patroni
 ENV HOME=/home/postgres \
     PGDATA=/home/postgres/pgdata/pgroot/data \
-    PATH="/usr/lib/postgresql/16/bin:${PATH}"
+    PATH="/usr/lib/postgresql/${POSTGRES_VERSION}/bin:${PATH}"
 
 # Copy bootstrap init script
 COPY post_init.sh /usr/share/scripts/patroni/post_init.sh
@@ -34,4 +38,5 @@ USER 1001
 WORKDIR /home/postgres
 EXPOSE 5432 8008
 
-CMD ["patroni"]
+ENTRYPOINT []
+CMD ["/usr/bin/entrypoint.sh"]

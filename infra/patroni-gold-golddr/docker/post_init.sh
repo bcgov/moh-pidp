@@ -22,5 +22,9 @@ if [[ -n "$APP_USER" && -n "$APP_PASSWORD" ]]; then
 
         GRANT ALL PRIVILEGES ON DATABASE "${DB}" TO "${APP_USER}";
 EOSQL
+    psql -v ON_ERROR_STOP=1 --username "postgres" --dbname "${DB}" <<-EOSQL
+        ALTER SCHEMA public OWNER TO "${APP_USER}";
+        GRANT ALL ON SCHEMA public TO "${APP_USER}";
+EOSQL
     echo "Application user and database configured successfully."
 fi

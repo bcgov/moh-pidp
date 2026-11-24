@@ -20,15 +20,6 @@ redis:
 
 nginx:
   replicaCount: 3
-  image:
-    registry: image-registry.openshift-image-registry.svc:5000/f088b1-tools
-    repository: bitnami-nginx
-    tag: 1.31.1
-  metrics:
-    image:
-      registry: image-registry.openshift-image-registry.svc:5000/f088b1-tools
-      repository: bitnami-nginx-exporter
-      tag: 1.5.1
   fluentbit:
     enabled: true
 

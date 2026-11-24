@@ -5,6 +5,7 @@ on:
     branches: [develop]
     paths:
       - "workspace/**"
+      - "nginx-ver.properties"
   workflow_dispatch:
 
 # This will terminate builds that are previously, but continuing to run.  Saves GHA hours.
@@ -38,7 +39,8 @@ jobs:
 
       - name: "Docker Build GOLD"
         run: |
-          docker build -t image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-frontend:develop .
+          set -a && source <(tr -d '\r' < ../nginx-ver.properties) && set +a
+          docker build --pull --build-arg NGINX_VERSION="$NGINX_VERSION" -t image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/pidp-frontend:develop .
 
       # Uses the Artifactory service account's username and password 
       - name: "Docker Login to GOLD OCP"

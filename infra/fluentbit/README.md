@@ -6,15 +6,15 @@ You can read about a common-service-showcase in BCGOV which has deployed a Fluen
 
 ## Implementing Fluent-bit for PIDP application on OpenShift
 
-We deploy a Fluent-bit sidecar container in both backend/webapi and ingress/nginx applications to collect/process/monitor Logs inside the apps and alert the PIDP team if certain keywords, regular expressions, etc. are matched in the log stream. Each release of Fluent-bit comes with a debug version (for example: fluent-bit:2.X-debug) that includes some other Linux tools such as busybox, bash, etc. and make testing the installation easier. In this example, we use `fluent-bit:3.0.3-debug`. We forward alerts to a private Slack channel (a webhook). So our overall flow of logs is: 
+We deploy a Fluent-bit sidecar container in both backend/webapi and ingress/nginx applications to collect/process/monitor logs inside the apps and alert the PIDP team if certain keywords, regular expressions, etc. are matched in the log stream. For production ingress deployments, we use the non-debug image `docker.io/fluent/fluent-bit:3.2.10` (versioned in [`nginx-ver.properties`](../../nginx-ver.properties)); a `-debug` variant (`fluent-bit:3.2.10-debug`) is also available when busybox/bash tools are needed for troubleshooting. We forward alerts to a private Slack channel (a webhook). So our overall flow of logs is: 
 
 `logs from nginx and webapi app > fluentbit sidecar > webhook (Slack channel)`.
 
 
 ### Fluent-bit for nginx/ingress app
 
-Our nginx app outputs error logs to a configurable path (`/tmp/error.log`) that can be set in [server-block-configmap](../../charts/nginx/templates/server-block-configmap.yaml). Our Fluent-bit container will mount the directory `/tmp/` from nginx app and read the log file `error.log`.
-Fluent-bit has its own configuration file that we can create using an OpenShift [configmap template](/charts/nginx/templates/configmap.yaml). This config of the Fluent-bit uses `tail` plugin in the `INPUT` section to receive logs from nginx log file (/tmp/error_flentbit.log), and uses a `parsers` to define the log formats by providing a Path in the SERVICE section that links to a separate file parser.conf `(Parsers_File  parsers.conf)`. It also uses `grep` plugin in the `FILTER` section to filter logs based on specific keywords (e.g. error). At the end it uses the `SLACK` plugin in the `OUTPUT` section to communicate with our Slack webhook and outputs error notifications to the PIDP Team's Slack channel.
+Our nginx app outputs error logs to a configurable path (`/tmp/error.log`) configured in [server-block-configmap](../../charts/nginx/templates/server-block-configmap.yaml). Our Fluent-bit container mounts `/tmp/` from the nginx container and reads `/tmp/*.log`.
+Fluent-bit has its own configuration file created via an OpenShift [configmap template](../../charts/nginx/templates/configmap.yaml). This config uses the `tail` plugin in the `INPUT` section to read `/tmp/*.log`, uses a `parsers` file (`Parsers_File parsers.conf`) to parse log formats, uses the `grep` plugin in the `FILTER` section to filter logs based on specific keywords (e.g. `error`, `crit`, `alert`, `emerg`), and uses the `SLACK` plugin in the `OUTPUT` section to send notifications to the PIDP Team's Slack channel.
 
 ### Fluent-bit for backend/webapi app
 

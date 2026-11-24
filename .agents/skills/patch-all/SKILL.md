@@ -55,7 +55,12 @@ Follow the procedure in [patch-workspace](../patch-workspace/SKILL.md):
    yarn build
    ```
 
-### Phase 3: Post-Patch Verification & Audit
+### Phase 3: Patch NGINX & PostgreSQL Container Versions
+1. Check [`nginx-ver.properties`](https://github.com/bcgov/moh-pidp/nginx-ver.properties) (`NGINX_VERSION`, `NGINX_EXPORTER_VERSION`, `NGINX_FLUENTBIT_VERSION`) against the latest upstream NGINX stable release (`docker.io/nginx/nginx-unprivileged`) and exporter (`docker.io/nginx/nginx-prometheus-exporter`).
+   - Update [`nginx-ver.properties`](https://github.com/bcgov/moh-pidp/nginx-ver.properties) and keep fallback defaults aligned in `charts/nginx/values.yaml` and `charts/nginx/Chart.yaml` (`workspace/Dockerfile` defaults to `stable` locally and uses `nginx-ver.properties` in CI).
+2. Check [`postgres-ver.properties`](https://github.com/bcgov/moh-pidp/postgres-ver.properties) (`POSTGRES_VERSION`, `PATRONI_VERSION`) against PostgreSQL/Patroni advisories (keep defaults aligned in `charts/pidp/values.yaml`, `infra/patroni-gold-golddr/`, `infra/backup-container/`, and `infra/metabase/`).
+
+### Phase 4: Post-Patch Verification & Audit
 Run the automated security audit script to verify that reported vulnerabilities are eliminated:
 ```powershell
 pwsh -File .agents/skills/security-patch-audit/scripts/run-security-audit.ps1

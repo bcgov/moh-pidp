@@ -73,7 +73,7 @@ spec:
                   apiVersion: v1
                   fieldPath: metadata.namespace
             - name: PATRONI_KUBERNETES_LABELS
-              value: '{"cluster-name": "{{ .Values.license_plate }}", "app.kubernetes.io/name": "patroni"}'
+              value: '{"cluster-name": "{{ .Values.app_name }}", "app.kubernetes.io/name": "patroni"}'
             - name: PATRONI_SUPERUSER_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -130,6 +130,8 @@ spec:
               value: {{ .Values.cluster }}
           image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy | default "Always" }}
+          command:
+            - /usr/bin/entrypoint.sh
           name: patroni
           ports:
             - containerPort: 8008
@@ -149,7 +151,7 @@ spec:
               - bash
               - -c
               - |
-                set -Eeuo pipefail && df "${PATRONI_POSTGRESQL_DATA_DIR:-/home/postgres/pgdata}" --output=pcent | tail -n 1 | awk '{if ($1+0 > 90) exit 1; else exit 0;}' && pg_isready -q && curl -s localhost:8008/readiness | jq -e ". | select(.state == \"running\")"
+                set -Eeuo pipefail && df "${PATRONI_POSTGRESQL_DATA_DIR:-/home/postgres/pgdata}" --output=pcent | tail -n 1 | awk '{if ($1+0 > 90) exit 1; else exit 0;}' && pg_isready -q && curl -sf localhost:8008/readiness
             failureThreshold: 3
             initialDelaySeconds: 10
             timeoutSeconds: 5
@@ -162,8 +164,8 @@ spec:
                   - '-c'
                   - |
                     # switch leader pod if the current pod is the leader
-                    if curl --fail http://localhost:8008/read-write; then
-                      patronictl switchover --force
+                    if curl -sf http://localhost:8008/read-write; then
+                      patronictl -c /home/postgres/patroni.yml switchover --force
                     fi
           livenessProbe:
             exec:
@@ -172,7 +174,7 @@ spec:
                 - bash
                 - '-c'
                 - |
-                  set -Eeuo pipefail && curl -s localhost:8008/liveness | jq -e ". | select(.state == \"running\")"
+                  set -Eeuo pipefail && curl -sf localhost:8008/liveness
             initialDelaySeconds: 10
             timeoutSeconds: 5
             periodSeconds: 10
@@ -204,9 +206,6 @@ spec:
         configMap:
           name: {{ .Values.app_name }}-get-ts-port
           defaultMode: 0555
-      - name: postgresql
-        persistentVolumeClaim:
-          claimName: postgresql
   volumeClaimTemplates:
     - metadata:
         annotations:
@@ -224,8 +223,6 @@ spec:
           requests:
             storage: {{ .Values.volume_size }}
         volumeMode: Filesystem
-      status:
-        phase: Pending
   replicas: {{ .Values.replicas }}
   updateStrategy:
     type: RollingUpdate

@@ -2,6 +2,8 @@
 
 # NGINX
 
+> **PIDP Customization Note:** This chart was originally vendored from Bitnami and has been migrated to the official **`docker.io/nginx/nginx-unprivileged`** image and **`docker.io/nginx/nginx-prometheus-exporter`** sidecar. Image versions (`NGINX_VERSION`, `NGINX_EXPORTER_VERSION`, `NGINX_FLUENTBIT_VERSION`) are centrally managed in [`nginx-ver.properties`](../../nginx-ver.properties) and injected by GitHub Actions during Helm deployments.
+
 [NGINX](https://nginx.org) (pronounced "engine-x") is an open source reverse proxy server for HTTP, HTTPS, SMTP, POP3, and IMAP protocols, as well as a load balancer, HTTP cache, and a web server (origin server).
 
 ## TL;DR
@@ -74,9 +76,9 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                 | Description                                                          | Value                 |
 | -------------------- | -------------------------------------------------------------------- | --------------------- |
-| `image.registry`     | NGINX image registry                                                 | `docker.io`           |
-| `image.repository`   | NGINX image repository                                               | `bitnami/nginx`       |
-| `image.tag`          | NGINX image tag (immutable tags are recommended)                     | `1.21.5-debian-10-r3` |
+| `image.registry`     | NGINX image registry                                                 | `docker.io`                |
+| `image.repository`   | NGINX image repository                                               | `nginx/nginx-unprivileged` |
+| `image.tag`          | NGINX image tag (overridden in CI from `nginx-ver.properties`)       | `1.30.8`                   |
 | `image.pullPolicy`   | NGINX image pull policy                                              | `IfNotPresent`        |
 | `image.pullSecrets`  | Specify docker-registry secret names as an array                     | `[]`                  |
 | `image.debug`        | Set to true if you would like to see extra information on logs       | `false`               |
@@ -246,9 +248,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `metrics.enabled`                          | Start a Prometheus exporter sidecar container                                                                                             | `false`                  |
 | `metrics.port`                             | NGINX Container Status Port scraped by Prometheus Exporter                                                                                | `""`                     |
-| `metrics.image.registry`                   | NGINX Prometheus exporter image registry                                                                                                  | `docker.io`              |
-| `metrics.image.repository`                 | NGINX Prometheus exporter image repository                                                                                                | `bitnami/nginx-exporter` |
-| `metrics.image.tag`                        | NGINX Prometheus exporter image tag (immutable tags are recommended)                                                                      | `0.10.0-debian-10-r8`    |
+| `metrics.image.registry`                   | NGINX Prometheus exporter image registry                                                                                                  | `docker.io`                        |
+| `metrics.image.repository`                 | NGINX Prometheus exporter image repository                                                                                                | `nginx/nginx-prometheus-exporter`  |
+| `metrics.image.tag`                        | NGINX Prometheus exporter image tag (overridden in CI from `nginx-ver.properties`)                                                        | `1.5.3`                            |
 | `metrics.image.pullPolicy`                 | NGINX Prometheus exporter image pull policy                                                                                               | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                          | `[]`                     |
 | `metrics.podAnnotations`                   | Additional annotations for NGINX Prometheus exporter pod(s)                                                                               | `{}`                     |

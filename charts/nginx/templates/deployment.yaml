@@ -142,9 +142,8 @@ spec:
           {{- if .Values.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- end }}
+          {{- if or .Values.fluentbit.enabled .Values.extraEnvVars }}
           env:
-            - name: BITNAMI_DEBUG
-              value: {{ ternary "true" "false" .Values.image.debug | quote }}
             {{- if .Values.fluentbit.enabled }}
             - name: SERVER_LOGFILE
               value: /tmp/*.log
@@ -152,6 +151,7 @@ spec:
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
+          {{- end }}
           {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret }}
           envFrom:
             {{- if .Values.extraEnvVarsCM }}
@@ -201,15 +201,15 @@ spec:
           volumeMounts:
             {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap .Values.ldapDaemon.enabled }}
             - name: nginx-server-block-paths
-              mountPath: /opt/bitnami/nginx/conf/server_blocks
+              mountPath: /etc/nginx/conf.d
             {{- end }}
             {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
             - name: nginx-server-block
-              mountPath: /opt/bitnami/nginx/conf/server_blocks/common
+              mountPath: /etc/nginx/conf.d/common
             {{- end }}
             {{- if .Values.ldapDaemon.enabled }}
             - name: nginx-server-block-ldap
-              mountPath: /opt/bitnami/nginx/conf/server_blocks/ldap
+              mountPath: /etc/nginx/conf.d/ldap
             {{- end }}
             {{- if (include "nginx.useStaticSite" .) }}
             - name: staticsite
@@ -280,7 +280,8 @@ spec:
           {{- if .Values.metrics.securityContext.enabled }}
           securityContext: {{- omit .Values.metrics.securityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          command: ['/usr/bin/exporter', '-nginx.scrape-uri', 'http://127.0.0.1:{{- default .Values.containerPorts.http .Values.metrics.port }}/status']
+          args:
+            - --nginx.scrape-uri=http://127.0.0.1:{{- default .Values.containerPorts.http .Values.metrics.port }}/status
           ports:
             - name: metrics
               containerPort: 9113

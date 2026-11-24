@@ -56,13 +56,20 @@ For any vulnerable package identified:
    npx nx run-many --target=test --all
    ```
 
-### C. Docker Base Images & Helm Charts
-1. Review base image tags in:
+### C. Docker Base Images, NGINX, PostgreSQL & Helm Charts
+1. Review centralized NGINX & sidecar versions in [`nginx-ver.properties`](https://github.com/bcgov/moh-pidp/nginx-ver.properties) (`NGINX_VERSION`, `NGINX_EXPORTER_VERSION`, `NGINX_FLUENTBIT_VERSION`) against the latest upstream NGINX stable releases and advisories.
+   - Bumping [`nginx-ver.properties`](https://github.com/bcgov/moh-pidp/nginx-ver.properties) automatically triggers the frontend build/promotion workflows (`workspace/Dockerfile` via `--build-arg NGINX_VERSION`) and Helm chart deployment workflows (`--set nginx.image.tag=...`) across PR, dev, test, demo, and prod.
+   - Keep local fallback defaults in `charts/nginx/values.yaml` and `charts/nginx/Chart.yaml` aligned with `nginx-ver.properties` (`workspace/Dockerfile` defaults to `stable` locally and uses `nginx-ver.properties` in CI).
+2. Review centralized PostgreSQL & Patroni versions in [`postgres-ver.properties`](https://github.com/bcgov/moh-pidp/postgres-ver.properties) (`POSTGRES_VERSION`, `PATRONI_VERSION`).
+   - Bumping `postgres-ver.properties` updates `charts/pidp` `createdb`/`dropdb` helper jobs automatically (without triggering frontend builds); major PostgreSQL upgrades and Patroni/backup-container/Metabase deployments remain manual maintenance operations.
+2. Review base image tags in:
    - [`backend/webapi/Dockerfile`](https://github.com/bcgov/moh-pidp/backend/webapi/Dockerfile)
+   - [`backend/services.plr-intake/Dockerfile`](https://github.com/bcgov/moh-pidp/backend/services.plr-intake/Dockerfile)
+   - [`backend/services.endorsement-reminder/Dockerfile`](https://github.com/bcgov/moh-pidp/backend/services.endorsement-reminder/Dockerfile)
    - [`backend/tools.do-work/Dockerfile`](https://github.com/bcgov/moh-pidp/backend/tools.do-work/Dockerfile)
    - [`workspace/Dockerfile`](https://github.com/bcgov/moh-pidp/workspace/Dockerfile)
-2. Ensure Alpine/Debian base versions receive security point updates (e.g. `10.0-alpine` point releases).
-3. Review Bitnami chart dependencies in [`infra/rabbitmq/`](https://github.com/bcgov/moh-pidp/infra/rabbitmq/) and [`charts/`](https://github.com/bcgov/moh-pidp/charts/).
+3. Ensure Alpine/Debian base versions receive security point updates (e.g. `10.0-alpine` point releases).
+4. Review Bitnami chart dependencies in [`infra/rabbitmq/`](https://github.com/bcgov/moh-pidp/infra/rabbitmq/) and [`charts/`](https://github.com/bcgov/moh-pidp/charts/).
 
 ---
 

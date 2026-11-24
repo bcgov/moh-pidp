@@ -1,16 +1,11 @@
-## Fail Back From GOLDDR to GOLD
+## Fail Back From GOLDDR to GOLD (PostgreSQL 16 / Patroni 4.x)
 
-TODO: This procedure needs to be properly tested and validated. This procedure is currently theoretical.
+For the full, up-to-date copy-paste failback runbook (including Patroni 4.x `Primary` vs legacy `master` terminology, suspending `patroni-probe` on GoldDR, and dynamic TSC port lookups), see [docs/distaster_recovery/Readme.md](../../../../docs/distaster_recovery/Readme.md).
 
-# To failback from GoldDR to Gold after an incident.
-- Turn off Gold's PSQL to zero pods
-- Update the patroni-config configmap on gold to add `"standby_cluster":{"host": "patroni-master-golddr",
-"port": $tsc_port}}` and remove the annotations and history. Remove the annotations in patroni-leader configmap as well. You can find a sample of this in (here)[./README.md]. It will likely need to be altered to use the correct TS as the tsc_ports are different.
-- turn on Gold's PSQL to 1 pod
-- terminal into the PSQL and validate the config with ```patronictl list```. It should be `Standby Leader`.
-- confirm the synchronization is occuring and/or complete
-- once the sync is complete you'll need to work out the timing of the DB fail back and the application failback.
-- to toggle the DB back to Gold, NULL the "standby_cluster" field in patroni-config configmap on GOLD (you can find a sample (here)[./README.md]). This will promote Gold back to being a Leader. But the app is still running on GOLDDR and GSLB still hits the midas-probe on GOLDDR. So make sure you don't scale down patroni on GOLDDR before switching the apps on GOLD.
-- Once GSLB hits the midas-probe on GOLD and the app is running on gold, you'll need to get GoldDR back into sync. Add `"standby_cluster":{"host": "patroni-master-gold",
-"port": $tsc_port}` to patroni-config on GOLDDR. This will promote GoldDr to being a Standby Leader
-- once patroni Gold is the leader and patroni GoldDR is the standby leader, you can update the (midas-probe)[/infra/midas-probe] and add `notouch=200` to the environment variables to force the return code to be 200 and manually control the GSLB to toggle from GoldDR to Gold. Once GSLB hits the midas-probe on Gold, you can remove `notouch=200` variable.
+### High-Level Summary
+- Suspend the `patroni-probe` CronJob on GoldDR (`oc patch cronjob patroni-probe -p '{"spec":{"suspend":true}}'`).
+- Take a safety backup from the live GoldDR `Primary` pod.
+- Scale down Gold's Patroni StatefulSet to 0 pods, delete Gold's stale PVCs, clear `patroni-leader` annotations, and update Gold's `patroni-config` ConfigMap with `"standby_cluster":{"host":"patroni-master-golddr","port":<gold_tsc_port>}` (using Gold's live `patroni-master-golddr` service port).
+- Scale up Gold's Patroni StatefulSet and verify sync with `patronictl -c /home/postgres/patroni.yml list` (`Standby Leader` + `Replica` pods, zero lag).
+- Set `notouch=200` on Gold's `midas-probe` deployment and remove `standby_cluster` from Gold's `patroni-config` to promote Gold to **`Primary`** *(formerly `Leader`/`master` in Patroni < 4.0)*. Remove `notouch=200` once GSLB is routing to Gold.
+- Scale down GoldDR's Patroni to 0, delete GoldDR's PVCs, configure GoldDR's `patroni-config` with `"standby_cluster":{"host":"patroni-master-gold","port":<dr_tsc_port>}`, scale GoldDR back up, verify `Standby Leader` status, and unsuspend `patroni-probe` on GoldDR.

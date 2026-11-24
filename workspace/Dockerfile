@@ -1,4 +1,5 @@
-FROM docker.io/nginxinc/nginx-unprivileged:stable
+ARG NGINX_VERSION=stable
+FROM docker.io/nginx/nginx-unprivileged:${NGINX_VERSION}
 
 WORKDIR /app
 
