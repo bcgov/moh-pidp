@@ -39,27 +39,35 @@ oc tag metabase:<image-version> metabase:latest -n f088b1-tools
 
 Choose **Option A** (direct OpenShift import — recommended) or **Option B** (Docker pull & push):
 
-### Option A: Direct OpenShift ImageStream Import (Recommended - No Docker push needed)
-Run directly via the `oc` CLI to import Red Hat's PostgreSQL 16 container into `f088b1-tools`:
+### Option A: Tag from OpenShift's Built-In `openshift` Namespace (Recommended)
+Check if `16-el9` is already available in the cluster's `openshift` namespace (backed by Red Hat's `registry.redhat.io/rhel9/postgresql-16` image):
+```bash
+oc get is postgresql -n openshift
+oc tag openshift/postgresql:16-el9 f088b1-tools/postgresql:16
+oc tag openshift/postgresql:16-el9 f088b1-tools/postgresql:16-el9
+```
+
+### Option B: Direct OpenShift ImageStream Import from Quay.io (Public SCLorg Image)
+If `16-el9` is not in the `openshift` namespace, import Red Hat SCLorg's public PostgreSQL 16 image directly into `f088b1-tools`:
 ```bash
 # Switch to tools project
 oc project f088b1-tools
 
-# Import PostgreSQL 16 from Red Hat container registry
-oc import-image postgresql:16 --from=registry.access.redhat.com/ubi9/postgresql-16:latest --confirm -n f088b1-tools
+# Import PostgreSQL 16 from Quay.io (public Red Hat SCLorg CentOS Stream 9 image)
+oc import-image postgresql:16 --from=quay.io/sclorg/postgresql-16-c9s:latest --confirm -n f088b1-tools
 
 # (Optional) Add 16-el9 alias
 oc tag postgresql:16 postgresql:16-el9 -n f088b1-tools
 ```
 
-### Option B: Docker Pull & Push
+### Option C: Docker Pull & Push
 If importing directly is restricted by firewall or cluster egress:
 ```bash
-# 1. Pull the official image
-docker pull registry.access.redhat.com/ubi9/postgresql-16:latest
+# 1. Pull the official SCLorg image
+docker pull quay.io/sclorg/postgresql-16-c9s:latest
 
 # 2. Tag for the OpenShift internal registry via external route
-docker tag registry.access.redhat.com/ubi9/postgresql-16:latest image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/postgresql:16
+docker tag quay.io/sclorg/postgresql-16-c9s:latest image-registry.apps.gold.devops.gov.bc.ca/f088b1-tools/postgresql:16
 
 # 3. Login to registry
 docker login -u $(oc whoami) -p $(oc whoami -t) image-registry.apps.gold.devops.gov.bc.ca
