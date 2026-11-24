@@ -15,7 +15,7 @@ image:
   repository: postgresql
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: 12
+  tag: "16"
 
 replicaCount: 1
 
@@ -24,16 +24,12 @@ database:
 
 nginx:
   nameOverride: ingress
-  image:
-    registry: public.ecr.aws
   containerPorts:
     http: 8080
     https: 8443
     mtls: 8543
   metrics:
     enabled: true
-    image:
-      registry: public.ecr.aws
   service:
     type: ClusterIP
     port: 8080
@@ -49,10 +45,10 @@ nginx:
   extraVolumeMounts:
     - name: tls-certs
       readOnly: true
-      mountPath: /opt/bitnami/nginx/conf/certs
+      mountPath: /etc/nginx/certs
     - name: plr-integration
       readOnly: true
-      mountPath: /opt/bitnami/nginx/conf/certs/plr
+      mountPath: /etc/nginx/certs/plr
   serverBlock: |-
     server {
       listen 8080;
@@ -92,11 +88,11 @@ nginx:
     server {
       listen 8443 ssl;
       server_name localhost *.gov.bc.ca;
-      ssl_certificate certs/tls.crt;
-      ssl_certificate_key certs/tls.key;
+      ssl_certificate /etc/nginx/certs/tls.crt;
+      ssl_certificate_key /etc/nginx/certs/tls.key;
       ssl_verify_client optional_no_ca;
       ssl_protocols TLSv1.2 TLSv1.3;
-      ssl_client_certificate certs/plr/trusted-ca-certs.pem;
+      ssl_client_certificate /etc/nginx/certs/plr/trusted-ca-certs.pem;
 
       set $CSP_style  "style-src    'self' 'unsafe-inline' *.googleapis.com *.gstatic.com https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css";
       set $CSP_font   "font-src     'self' data: *.googleapis.com *.gstatic.com";
@@ -144,11 +140,11 @@ nginx:
     server {
       listen 8543 ssl;
       server_name localhost *.gov.bc.ca;
-      ssl_certificate certs/tls.crt;
-      ssl_certificate_key certs/tls.key;
+      ssl_certificate /etc/nginx/certs/tls.crt;
+      ssl_certificate_key /etc/nginx/certs/tls.key;
       ssl_verify_client optional_no_ca;
       ssl_protocols TLSv1.2 TLSv1.3;
-      ssl_client_certificate certs/plr/trusted-ca-certs.pem;
+      ssl_client_certificate /etc/nginx/certs/plr/trusted-ca-certs.pem;
 
       set $CSP_style  "style-src    'self' 'unsafe-inline' *.googleapis.com *.gstatic.com; ";
       set $CSP_font   "font-src     'self' data: *.googleapis.com *.gstatic.com; ";

@@ -8,22 +8,22 @@ TODO Notes:
 
  ``` psql -U postgres {app_db_name} < /tmp/backup/pidp_prod.sql ```
 
-```
+```bash
 #!/bin/bash
 # run this cron as a job 0 */1 * * *
 set -e
 set -o pipefail
 
+PGPASSWORD="${root_password}" pg_dump -U postgres "${app_db_name}" | gzip > /backup/$(date +%F)_application.sql.gz
 
-/location/of/command/pg_dump -U postgres -p"${root_password}" "${app_db_name}" | gzip > /backup/$(date +%F)_application.sql.gz
-
-# cleann up files > 7 days
+# clean up files > 7 days
 find /backup -type f -mtime +7 -delete > /dev/null 2>&1
-
 ```
 
 
 # CLI help
+> **Patroni 4.x Note:** The active leader role is named **`primary`** (`Primary` in `patronictl -c /home/postgres/patroni.yml list` and `role: primary` on pods / `patroni-master` Service selector), replacing `master` from Patroni < 4.0.
+
 OC Command to get the leader that's listed in the configmap:
 ```
 leader=`oc get configmap patroni-leader -o "jsonpath={.metadata.annotations.leader}"|cut -c1-`

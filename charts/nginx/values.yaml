@@ -40,8 +40,8 @@ commonAnnotations: {}
 
 ## @section NGINX parameters
 
-## Bitnami NGINX image version
-## ref: https://hub.docker.com/r/bitnami/nginx/tags/
+## Official NGINX Unprivileged image version
+## ref: https://hub.docker.com/r/nginx/nginx-unprivileged/tags/
 ## @param image.registry NGINX image registry
 ## @param image.repository NGINX image repository
 ## @param image.tag NGINX image tag (immutable tags are recommended)
@@ -51,8 +51,8 @@ commonAnnotations: {}
 ##
 image:
   registry: docker.io
-  repository: bitnami/nginx
-  tag: 1.31.0-debian-12-r1
+  repository: nginx/nginx-unprivileged
+  tag: "1.30.8"
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -758,8 +758,8 @@ metrics:
   ## @param metrics.port NGINX Container Status Port scraped by Prometheus Exporter
   ## Defaults to specified http port
   port: ""
-  ## Bitnami NGINX Prometheus Exporter image
-  ## ref: https://hub.docker.com/r/bitnami/nginx-exporter/tags/
+  ## Official NGINX Prometheus Exporter image
+  ## ref: https://hub.docker.com/r/nginx/nginx-prometheus-exporter/tags/
   ## @param metrics.image.registry NGINX Prometheus exporter image registry
   ## @param metrics.image.repository NGINX Prometheus exporter image repository
   ## @param metrics.image.tag NGINX Prometheus exporter image tag (immutable tags are recommended)
@@ -768,8 +768,8 @@ metrics:
   ##
   image:
     registry: docker.io
-    repository: bitnami/nginx-exporter
-    tag: 1.4.2-debian-12-r9
+    repository: nginx/nginx-prometheus-exporter
+    tag: "1.5.3"
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -885,10 +885,13 @@ metrics:
 # fluentbit must be enabled for prod environment
 fluentbit:
   enabled: false
-  imageRegistry: docker.io/fluent/fluent-bit:3.2.10-debug
+  imageRegistry: docker.io/fluent/fluent-bit:3.2.10
   imagePullPolicy: IfNotPresent
-  # The value of slack_webhook parameter is stored in a secret called `slack-error-notification-webhook` in OpenShift.
+  # The value of slack_webhook parameter is read from secret `slack-error-notification-webhook` (key `url`) by default, or can be overridden here.
   slack_webhook: ""
+  secret:
+    name: "slack-error-notification-webhook"
+    key: "url"
   securityContext:
     enabled: false
     runAsUser: 1001

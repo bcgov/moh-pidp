@@ -5,9 +5,9 @@ import { Observable, map } from 'rxjs';
 
 import {
   DashboardComponent,
-  DashboardHeaderTheme,
+  type DashboardHeaderTheme,
   DashboardImageComponent,
-  IDashboard,
+  type IDashboard,
 } from '@bcgov/shared/ui';
 
 import { APP_CONFIG, AppConfig } from '@app/app.config';

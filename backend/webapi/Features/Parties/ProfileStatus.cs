@@ -151,14 +151,17 @@ public partial class ProfileStatus
 
             this.HasActiveImmsBcPhaRole = pharmacyRoles
                 .Any(r => (r.Role == PharmacyRole.Lead || r.Role == PharmacyRole.EndUser)
+                       && (r.EffectiveStartDate == null || r.EffectiveStartDate <= now)
                        && (r.EffectiveEndDate == null || r.EffectiveEndDate > now));
 
             this.HasActiveImmsBcPhaLeadRole = pharmacyRoles
                 .Any(r => r.Role == PharmacyRole.Lead
+                       && (r.EffectiveStartDate == null || r.EffectiveStartDate <= now)
                        && (r.EffectiveEndDate == null || r.EffectiveEndDate > now));
 
             this.HasActiveImmsBcPhaEndUserRole = pharmacyRoles
                 .Any(r => r.Role == PharmacyRole.EndUser
+                       && (r.EffectiveStartDate == null || r.EffectiveStartDate <= now)
                        && (r.EffectiveEndDate == null || r.EffectiveEndDate > now));
 
             this.HasPendingImmsBcPhaRole = pharmacyRoles.Any() && !this.HasActiveImmsBcPhaRole;

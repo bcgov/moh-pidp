@@ -7,7 +7,7 @@ metadata:
     {{- include "metabase.labels" . | nindent 4 }}
   annotations:
     app.openshift.io/connects-to: >-
-      [{"apiVersion":"apps.openshift.io/v1","kind":"Deployment","name":"{{ include "metabase.fullname" . }}-database"}]  
+      [{"apiVersion":"apps/v1","kind":"Deployment","name":"{{ include "metabase.fullname" . }}-database"}]
     image.openshift.io/triggers: |-
       [
         {

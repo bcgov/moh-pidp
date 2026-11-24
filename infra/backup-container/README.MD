@@ -5,9 +5,9 @@ The following outlines the deployment of a simple backup of a PostgreSQL databas
 
 ### Build backup-container docker image
 
-First, in order to build the image and buildConfig in openshift, the [BuildConfig.yaml](./chart/templates/BuildConfig.yaml) file is customized.
+First, in order to build the image and buildConfig in OpenShift, the [BuildConfig.yaml](./chart/templates/BuildConfig.yaml) file is customized to use PostgreSQL 16 (`quay.io/fedora/postgresql-16:16`, tracked in [`postgres-ver.properties`](../../postgres-ver.properties)).
 
-1. The value of `git_repo_url`, `git_ref` and `source_context_dir` are set to `https://github.com/bcgov/moh-pidp.git`, `develop`, `/infra/backup-container/docker`, respectively. Start a new build once the buildConfig is deployed in openShift, it will create a new backup container image.
+1. The value of `git_repo_url`, `git_ref` and `source_context_dir` are set to `https://github.com/bcgov/moh-pidp.git`, `develop`, `/infra/backup-container/docker`, respectively. Start a new build (`oc start-build backup-container -n f088b1-tools --follow`) once the buildConfig is deployed in OpenShift to create the updated PostgreSQL 16 backup container image.
 2. Tag the backup container image. You can change the value of `global.image.tag` depending on the namespace you will deploy the backup-container app, which is `latest` by default.
 
 ### Configure your DBs and set the cron schedule
@@ -54,7 +54,7 @@ Log in to the internal registry using your OpenShift credentials using `oc login
 4. Run the following commands while you are in the [infra\backup-container\chart](.\chart) directory to build the app using its helm chart.
 
 ```bash
-*helm upgrade --install --values ./values.yaml --namespace f088b1-* backup-container .
+helm upgrade --install --values ./values.yaml --namespace f088b1-* backup-container .
 ```
 Firstly, the backup-container BuildConfig is deployed to create an ImageStreamTag named `backup-container:latest` on the f088b1-tools namespace. Then it creates the backup-container application on the desired namespace which calls the newly created ImageStreamTag from the f088b1-tools namespace.
 

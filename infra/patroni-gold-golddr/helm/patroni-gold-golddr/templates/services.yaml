@@ -13,7 +13,7 @@ spec:
       targetPort: 5432
   selector:
     cluster-name: {{ .Values.app_name }}
-    role: master
+    role: primary
     app.kubernetes.io/name: {{ .Values.app_name }}
     app: {{ .Values.app_name }}
   sessionAffinity: None

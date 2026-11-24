@@ -19,7 +19,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               title: '🔔 Annual Task Reminder: Renew SSL Certificate and secret rotation',
-              body: 'This is your annual reminder to swap out the SSL Certificate and rotate secrets.\n\n## Tasks\n- [ ] Generate new SSL Certificate\n- [ ] Rotate TLS secrets for PLR\n- \n@Paahn',
+              body: 'This is your annual reminder to swap out the SSL Certificate and rotate secrets.\n\n## Tasks\n- [ ] Generate new SSL Certificate\n- [ ] Rotate TLS secrets for PLR',
               labels: ['reminder', 'annual-maintenance'],
-              assignees: ['Paahn']
+              assignees: ['dwatson-cgi', 'emiliobarriosr-cgi']
             })

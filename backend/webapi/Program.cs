@@ -36,9 +36,25 @@ public class Program
     public static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
             .ConfigureWebHostDefaults(webBuilder => webBuilder.UseStartup<Startup>())
-            .UseSerilog();
+            .UseSerilog((hostingContext, services, loggerConfiguration) =>
+            {
+                ConfigureLogger(loggerConfiguration, hostingContext.Configuration);
+            });
 
     private static void CreateLogger()
+    {
+        var configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json", optional: true)
+            .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true)
+            .AddEnvironmentVariables()
+            .Build();
+
+        var loggerConfig = new LoggerConfiguration();
+        ConfigureLogger(loggerConfig, configuration);
+        Log.Logger = loggerConfig.CreateLogger();
+    }
+
+    private static void ConfigureLogger(LoggerConfiguration loggerConfiguration, IConfiguration configuration)
     {
         var path = Environment.GetEnvironmentVariable("LogFilePath") ?? "logs";
 
@@ -57,11 +73,12 @@ public class Program
         var name = Assembly.GetExecutingAssembly().GetName();
         var outputTemplate = "[{Timestamp:yyyy/MM/dd HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
 
-        Log.Logger = new LoggerConfiguration()
+        loggerConfiguration
             .MinimumLevel.Information()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
             .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
             .MinimumLevel.Override("System", LogEventLevel.Warning)
+            .MinimumLevel.Override("Serilog.AspNetCore.RequestLoggingMiddleware", LogEventLevel.Warning)
             .Enrich.FromLogContext()
             .Enrich.WithMachineName()
             .Enrich.WithProperty("Assembly", $"{name.Name}")
@@ -80,6 +97,6 @@ public class Program
                 new JsonFormatter(),
                 $@"{path}/pidp.json",
                 rollingInterval: RollingInterval.Day))
-            .CreateLogger();
+            .ReadFrom.Configuration(configuration);
     }
 }

@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "workspace/**"
+      - "nginx-ver.properties"
   workflow_dispatch:
 
 env:
@@ -18,7 +19,7 @@ concurrency:
 
 jobs:      
   promote-image-to-prod-gold:
-    name: WebAPI Backend Promote to prod- Gold
+    name: Frontend Promote to prod - Gold
     runs-on: ubuntu-latest
     steps:     
       - name: Install oc

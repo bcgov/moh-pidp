@@ -24,7 +24,7 @@ git clone https://github.com/bcgov/moh-pidp
 
 #### Node
 
-[Download](https://nodejs.org/en/) and install **Node v16.10.x** or greater
+[Download](https://nodejs.org/en/) and install **Node v22.x** (used for Angular 22 and CI builds)
 
 #### VS Code
 
@@ -93,7 +93,7 @@ nx test APP_NAME
 Execute the unit tests for affected by a change by typing:
 
 ```bash
-nx affected:test
+nx affected -t test
 ```
 
 Other way of running unit tests is
@@ -113,7 +113,7 @@ nx e2e APP_NAME
 Execute the end-to-end tests for affected by a change by typing:
 
 ```bash
-nx affected:e2e
+nx affected -t e2e
 ```
 
 ### Generators
@@ -170,12 +170,12 @@ nx g @nx/angular:component my-component --project=my-app
 To see a diagram of the dependencies of your projects type:
 
 ```bash
-nx dep-graph
+nx graph
 ```
 
 ## Coding Styles
 
-Coding styles should adhere to the [Angular Style Guide](https://angular.io/docs/ts/latest/guide/style-guide.html) with assistance from EditorConfig, Prettier, and ESLint setups for the project that automatically apply code formatting.
+Coding styles should adhere to the [Angular Style Guide](https://angular.dev/style-guide) with assistance from EditorConfig, Prettier, and ESLint setups for the project that automatically apply code formatting.
 
 ## Getting Help
 

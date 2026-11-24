@@ -154,4 +154,39 @@ public class PlrStatusDigestTests
         yield return new object[] { IdentifierType.Nurse, false };
         yield return new object[] { IdentifierType.NaturopathicPhysician, true };
     }
+
+    [Fact]
+    public void HasGoodStanding_FromRecordsTwoRecordsSameIdentifierTypeInactiveFirst_True()
+    {
+        var digest = PlrStandingsDigest.FromRecords(new[] { new PlrRecordMock(false, IdentifierType.Nurse), new PlrRecordMock(true, IdentifierType.Nurse) });
+
+        Assert.True(digest.With(IdentifierType.Nurse).HasGoodStanding);
+        Assert.True(digest.Excluding(IdentifierType.PharmacyTech).HasGoodStanding);
+    }
+
+    [Fact]
+    public void HasGoodStanding_FromRecordsTwoRecordsNurseWithInactiveRNAndActiveRNP_True()
+    {
+        var digest = PlrStandingsDigest.FromRecords([
+            new PlrRecord
+            {
+                IdentifierType = IdentifierType.Nurse,
+                ProviderRoleType = "RN",
+                StatusCode = PlrStatusCode.Terminated,
+                StatusReasonCode = "RESDISC",
+            },
+            new PlrRecord
+            {
+                IdentifierType = IdentifierType.Nurse,
+                ProviderRoleType = ProviderRoleType.RegisteredNursePractitioner,
+                StatusCode = PlrStatusCode.Active,
+                StatusReasonCode = PlrStatusReasonCode.Practicing,
+            }
+        ]);
+
+        Assert.True(digest.HasGoodStanding);
+        Assert.True(digest.Excluding(IdentifierType.PharmacyTech).HasGoodStanding);
+        Assert.True(digest.With(IdentifierType.Nurse).HasGoodStanding);
+        Assert.True(digest.With(ProviderRoleType.RegisteredNursePractitioner).HasGoodStanding);
+    }
 }

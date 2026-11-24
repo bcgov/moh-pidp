@@ -6,7 +6,7 @@ ENV PATH="$PATH:/opt/.dotnet/tools"
 
 RUN apk add --no-cache krb5-libs
 
-RUN dotnet tool install --global dotnet-ef --version "10.*"
+RUN dotnet tool install --global dotnet-ef
 
 COPY *.csproj .
 RUN dotnet restore -r linux-musl-x64 /p:PublishReadyToRun=true

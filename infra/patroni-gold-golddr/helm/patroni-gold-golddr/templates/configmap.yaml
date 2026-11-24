@@ -64,14 +64,17 @@ data:
             port: $tsc_port
 {{- end }}
       initdb:
-      - auth-host: md5
+      - auth-host: scram-sha-256
       - auth-local: trust
       - encoding: UTF8
       - locale: en_US.UTF-8
       - data-checksums
       pg_hba:
+      - host all all 0.0.0.0/0 scram-sha-256
       - host all all 0.0.0.0/0 md5
+      - host replication ${PATRONI_REPLICATION_USERNAME} 10.95.0.0/16    scram-sha-256
       - host replication ${PATRONI_REPLICATION_USERNAME} 10.95.0.0/16    md5  # GoldDR Range
+      - host replication ${PATRONI_REPLICATION_USERNAME} 10.97.0.0/16    scram-sha-256
       - host replication ${PATRONI_REPLICATION_USERNAME} 10.97.0.0/16    md5  # Gold & Silver Clusters
     restapi:
       connect_address: '${POD_IP}:8008'

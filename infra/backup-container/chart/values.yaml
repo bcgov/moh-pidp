@@ -20,13 +20,13 @@ settings:
   namespace: f088b1-prod
   licens_plate: f088b1
 
-resources: 
+resources:
   limits:
-    cpu: 50m
-    memory: 50Mi
+    cpu: 500m
+    memory: 512Mi
   requests:
-    cpu: 25m
-    memory: 15Mi
+    cpu: 50m
+    memory: 128Mi
 
 backup:
   backup_dir: /backups/
