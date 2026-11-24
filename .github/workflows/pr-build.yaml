@@ -73,7 +73,7 @@ jobs:
           node-version: 22.x
      
       - name: YARN Install
-        run:  yarn install
+        run:  yarn install --frozen-lockfile
 
       - name: YARN Lint
         run:  yarn lint:all 
@@ -101,7 +101,7 @@ jobs:
           node-version: 22.x
 
       - name: YARN Install
-        run:  yarn install
+        run:  yarn install --frozen-lockfile
 
       - name: YARN Build
         run:  yarn build
