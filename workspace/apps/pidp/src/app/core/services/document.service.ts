@@ -80,7 +80,7 @@ export class DocumentService {
       {
         type: DocumentType.NPDP_EFORMS_COLLECTION_NOTICE,
         title:
-          'Exceptional Coverage: Plan NP (National Pharmacare) and mifepristone-misoprostol Collection Notice',
+          'Exceptional PharmaCare Plan Coverage: Plan NP (National Pharmacare) and mifepristone-misoprostol Collection Notice',
       },
       {
         type: DocumentType.PHARMACY_ADMIN_COLLECTION_NOTICE,

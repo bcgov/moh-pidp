@@ -77,7 +77,7 @@ export class NpdpEformsPage implements OnInit, AfterViewInit {
       title: 'Access',
       path: AccessRoutes.routePath(AccessRoutes.ACCESS_REQUESTS),
     },
-    { title: 'Exceptional PharmaCare Coverage', path: '' },
+    { title: 'Exceptional PharmaCare Plan Coverage', path: '' },
   ];
 
   public constructor() {
