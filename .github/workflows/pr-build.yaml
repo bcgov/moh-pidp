@@ -243,6 +243,7 @@ jobs:
     runs-on: 'ubuntu-latest'
     permissions:
       contents: read
+      pull-requests: read
       id-token: write
     steps:
       - uses: actions/checkout@master
