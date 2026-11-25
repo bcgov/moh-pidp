@@ -1,0 +1,108 @@
+name: Patroni Failback - GOLDDR to GOLD
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment (only test and prod have GoldDR)"
+        type: choice
+        required: true
+        default: "test"
+        options:
+          - test
+          - prod
+      dry_run:
+        description: "Dry run only (validates auth, RBAC, Patroni roles, TSC ports, backup pod, and GSLB with zero changes)"
+        type: boolean
+        required: true
+        default: true
+      confirmation:
+        description: "Required when dry_run=false: type 'failback-test' or 'failback-prod'"
+        type: string
+        required: false
+        default: ""
+      target_replicas:
+        description: "Patroni replica count ('auto' inherits current GoldDR replicas, or enter an integer e.g. 3)"
+        type: string
+        required: false
+        default: "auto"
+      allow_no_pvc_backup:
+        description: "Allow stream-only pg_dump check if no backup-container PVC pod exists (never uploads dumps to GitHub)"
+        type: boolean
+        required: false
+        default: false
+
+# Never cancel an in-flight failback
+concurrency:
+  group: patroni-failback-${{ inputs.environment }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  failback:
+    name: Failback GOLDDR -> GOLD (${{ inputs.environment }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Validate live confirmation guard
+        if: ${{ !inputs.dry_run }}
+        env:
+          INPUT_ENV: ${{ inputs.environment }}
+          INPUT_CONFIRM: ${{ inputs.confirmation }}
+        run: |
+          EXPECTED="failback-${INPUT_ENV}"
+          if [[ "${INPUT_CONFIRM}" != "${EXPECTED}" ]]; then
+            echo "::error::Live failback requires confirmation='${EXPECTED}' (got '${INPUT_CONFIRM}'). Aborting."
+            exit 1
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@61b9e3751b92087fd0b06925ba6dd6314e06f089 # v4
+
+      - name: Install OpenShift CLI (oc)
+        uses: redhat-actions/openshift-tools-installer@144527c7d98999f2652264c048c7a9bd103f8a82 # v1
+        with:
+          oc: "4"
+
+      - name: Authenticate to GOLD and GOLDDR (isolated kubeconfigs)
+        env:
+          GOLD_URL: ${{ secrets.GOLD_OPENSHIFT_CLUSTER_URL }}
+          GOLD_TOKEN: ${{ secrets.GOLD_PIPELINE_SERVICE_ACCOUNT_TOKEN }}
+          GOLDDR_URL: ${{ secrets.GOLDDR_OPENSHIFT_CLUSTER_URL }}
+          GOLDDR_TOKEN: ${{ secrets.GOLDDR_PIPELINE_SERVICE_ACCOUNT_TOKEN }}
+          TARGET_NS: f088b1-${{ inputs.environment }}
+        run: |
+          set -Eeuo pipefail
+          KUBE_DIR="$(mktemp -d)"
+          chmod 700 "$KUBE_DIR"
+          KUBE_GOLD="${KUBE_DIR}/gold.kubeconfig"
+          KUBE_GOLDDR="${KUBE_DIR}/golddr.kubeconfig"
+
+          KUBECONFIG="$KUBE_GOLD" oc login --server="$GOLD_URL" --token="$GOLD_TOKEN" --namespace="$TARGET_NS" >/dev/null
+          KUBECONFIG="$KUBE_GOLDDR" oc login --server="$GOLDDR_URL" --token="$GOLDDR_TOKEN" --namespace="$TARGET_NS" >/dev/null
+
+          {
+            echo "KUBE_DIR=${KUBE_DIR}"
+            echo "KUBE_GOLD=${KUBE_GOLD}"
+            echo "KUBE_GOLDDR=${KUBE_GOLDDR}"
+          } >> "$GITHUB_ENV"
+
+      - name: Run Patroni GOLDDR -> GOLD failback
+        env:
+          ENV: ${{ inputs.environment }}
+          DRY_RUN: ${{ inputs.dry_run }}
+          TARGET_REPLICAS: ${{ inputs.target_replicas }}
+          ALLOW_NO_PVC_BACKUP: ${{ inputs.allow_no_pvc_backup }}
+        run: |
+          chmod +x infra/patroni-gold-golddr/scripts/failback-golddr-to-gold.sh
+          bash infra/patroni-gold-golddr/scripts/failback-golddr-to-gold.sh
+
+      - name: Clean up kubeconfigs
+        if: always()
+        run: |
+          if [[ -n "${KUBE_DIR:-}" && -d "${KUBE_DIR}" ]]; then
+            rm -rf "${KUBE_DIR}"
+          fi

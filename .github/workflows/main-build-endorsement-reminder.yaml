@@ -16,6 +16,8 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions: {}
+
 jobs:
   promote-image-to-prod-gold:
     name: Promote endorsement-reminder from test to prod

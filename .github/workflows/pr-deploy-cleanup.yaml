@@ -6,6 +6,9 @@ on:
     branches-ignore:
       - 'test'
       - 'master'
+permissions:
+  contents: read
+
 jobs:
   remove-deployment:
     runs-on: ubuntu-latest

@@ -15,6 +15,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   helm-deployment-gold:
     runs-on: 'ubuntu-latest'
@@ -42,7 +45,7 @@ jobs:
   
           echo installing helm chart...
           set -a && source <(tr -d '\r' < ./nginx-ver.properties) && source <(tr -d '\r' < ./postgres-ver.properties) && set +a
-          helm upgrade --wait --values ./deploy/prod_values.yaml --namespace f088b1-prod prod charts/pidp --debug --set image.tag="$POSTGRES_VERSION" --set nginx.image.tag="$NGINX_VERSION" --set nginx.metrics.image.tag="$NGINX_EXPORTER_VERSION" --set nginx.fluentbit.imageRegistry="docker.io/fluent/fluent-bit:$NGINX_FLUENTBIT_VERSION"
+          helm upgrade --server-side=false --wait --values ./deploy/prod_values.yaml --namespace f088b1-prod prod charts/pidp --debug --set image.tag="$POSTGRES_VERSION" --set nginx.image.tag="$NGINX_VERSION" --set nginx.metrics.image.tag="$NGINX_EXPORTER_VERSION" --set nginx.fluentbit.imageRegistry="docker.io/fluent/fluent-bit:$NGINX_FLUENTBIT_VERSION"
 
   helm-deployment-golddr:
     runs-on: 'ubuntu-latest'
@@ -70,5 +73,5 @@ jobs:
   
           echo installing helm chart...
           set -a && source <(tr -d '\r' < ./nginx-ver.properties) && source <(tr -d '\r' < ./postgres-ver.properties) && set +a
-          helm upgrade --wait --values ./deploy/prod_values.yaml --namespace f088b1-prod prod charts/pidp --debug --set image.tag="$POSTGRES_VERSION" --set nginx.image.tag="$NGINX_VERSION" --set nginx.metrics.image.tag="$NGINX_EXPORTER_VERSION" --set nginx.fluentbit.imageRegistry="docker.io/fluent/fluent-bit:$NGINX_FLUENTBIT_VERSION" --set webapi.migrations.enabled=false --set plr-intake.migrations.enabled=false
+          helm upgrade --server-side=false --wait --values ./deploy/prod_values.yaml --namespace f088b1-prod prod charts/pidp --debug --set image.tag="$POSTGRES_VERSION" --set nginx.image.tag="$NGINX_VERSION" --set nginx.metrics.image.tag="$NGINX_EXPORTER_VERSION" --set nginx.fluentbit.imageRegistry="docker.io/fluent/fluent-bit:$NGINX_FLUENTBIT_VERSION" --set webapi.migrations.enabled=false --set plr-intake.migrations.enabled=false
 

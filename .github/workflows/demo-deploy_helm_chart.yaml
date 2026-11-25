@@ -13,6 +13,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
 
   helm-deployment-gold:
@@ -41,4 +44,4 @@ jobs:
   
           echo installing helm chart...
           set -a && source <(tr -d '\r' < ./nginx-ver.properties) && source <(tr -d '\r' < ./postgres-ver.properties) && set +a
-          helm upgrade --wait --values ./deploy/demo_values.yaml --namespace f088b1-test demo charts/pidp --debug --set image.tag="$POSTGRES_VERSION" --set nginx.image.tag="$NGINX_VERSION" --set nginx.metrics.image.tag="$NGINX_EXPORTER_VERSION" --set nginx.fluentbit.imageRegistry="docker.io/fluent/fluent-bit:$NGINX_FLUENTBIT_VERSION"
+          helm upgrade --server-side=false --wait --values ./deploy/demo_values.yaml --namespace f088b1-test demo charts/pidp --debug --set image.tag="$POSTGRES_VERSION" --set nginx.image.tag="$NGINX_VERSION" --set nginx.metrics.image.tag="$NGINX_EXPORTER_VERSION" --set nginx.fluentbit.imageRegistry="docker.io/fluent/fluent-bit:$NGINX_FLUENTBIT_VERSION"
