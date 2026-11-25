@@ -60,10 +60,10 @@ jobs:
           fi
 
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@61b9e3751b92087fd0b06925ba6dd6314e06f089 # v4
 
       - name: Install OpenShift CLI (oc)
-        uses: redhat-actions/openshift-tools-installer@v1
+        uses: redhat-actions/openshift-tools-installer@144527c7d98999f2652264c048c7a9bd103f8a82 # v1
         with:
           oc: "4"
 
