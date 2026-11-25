@@ -38,4 +38,4 @@ jobs:
           helm list --namespace f088b1-dev
 
           echo installing helm chart...
-          helm upgrade --wait --namespace f088b1-dev --values infra/endorsement_reminder/values.yaml endorsement-reminder infra/endorsement_reminder
+          helm upgrade --server-side=false --wait --namespace f088b1-dev --values infra/endorsement_reminder/values.yaml endorsement-reminder infra/endorsement_reminder

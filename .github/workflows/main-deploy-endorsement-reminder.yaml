@@ -38,5 +38,5 @@ jobs:
           helm list --namespace f088b1-test
 
           echo installing helm chart...
-          helm upgrade --wait --namespace f088b1-prod --values infra/endorsement_reminder/values.yaml --set env=prod --set global.image.tag=main --set aspnetcore.environment=Production  endorsement-reminder infra/endorsement_reminder
+          helm upgrade --server-side=false --wait --namespace f088b1-prod --values infra/endorsement_reminder/values.yaml --set env=prod --set global.image.tag=main --set aspnetcore.environment=Production  endorsement-reminder infra/endorsement_reminder
 
