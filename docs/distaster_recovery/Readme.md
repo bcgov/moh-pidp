@@ -6,6 +6,17 @@ Applications are typically served from the Gold cluster. Deployments in the Gold
 > - The PostgreSQL superuser is consistently `postgres` across all environments (`dev`, `test`, `prod`).
 > - TSC ports (e.g., `16307`) are dynamically assigned by Porter when `patroni-postgres-tsc` is created and may differ between Gold (`patroni-master-golddr`) and GoldDR (`patroni-master-gold`). Always look up the live port on each cluster rather than hardcoding it.
 
+# Automated Failback (GitHub Actions)
+
+The preferred way to fail back from **GOLDDR** to **GOLD** is the manual GitHub Actions workflow **Patroni Failback - GOLDDR to GOLD** ([`.github/workflows/failback-golddr-to-gold.yaml`](../../.github/workflows/failback-golddr-to-gold.yaml)), backed by [`infra/patroni-gold-golddr/scripts/failback-golddr-to-gold.sh`](../../infra/patroni-gold-golddr/scripts/failback-golddr-to-gold.sh):
+
+1. Open **Actions → Patroni Failback - GOLDDR to GOLD → Run workflow**.
+2. First run with **`dry_run: true`** on `test` or `prod` — this verifies authentication, RBAC permissions (`oc auth can-i`), live Patroni roles, TSC ports, `midas-probe`/GSLB DNS, and the in-cluster `backup-container` PVC target with zero changes.
+3. Run again with **`dry_run: false`** and **`confirmation`** set to `failback-test` or `failback-prod`.
+   - The workflow orchestrates Phases 1–4 end-to-end across both clusters using isolated kubeconfigs, streams the safety `pg_dump` directly to the in-cluster `backup-container` `/backups/failback/` PVC (never uploaded to GitHub Actions), waits for `0 MB` replication lag before auto-promoting GOLD, toggles `midas-probe` `notouch=200` until GSLB DNS flips to GOLD (`142.34.229.4`), and re-syncs GOLDDR as `Standby Leader` before unsuspending `patroni-probe`.
+
+*(If GitHub Actions is unavailable during an incident, you can either run `infra/patroni-gold-golddr/scripts/failback-golddr-to-gold.sh` locally with `KUBE_GOLD` and `KUBE_GOLDDR` set, or follow the manual runbook below.)*
+
 # Steps to do manual failback from GOLDDR to GOLD
 
 Set target environment variables first (adjust `ENV` for `dev`, `test`, or `prod`):

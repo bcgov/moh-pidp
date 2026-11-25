@@ -141,7 +141,8 @@ data:
 
     if [ "$health_status" == "unhealthy" ] || [ "$gslb_ip" == "142.34.64.4" ]; then
       echo "Gold is unhealthy..."
-      status=`oc exec $(oc describe cm patroni-leader|sed -n -e 's/^.*leader: //p') -- /bin/bash -c '/usr/bin/pg_isready -q && /usr/local/bin/patronictl list --format=json | jq -r ".[] | select(.Role == \"Standby Leader\") | .Role" '`
+      leader_pod=$(oc get cm patroni-leader -o jsonpath='{.metadata.annotations.leader}')
+      status=$(oc exec "$leader_pod" -- /bin/bash -c '/usr/bin/pg_isready -q && /usr/local/bin/patronictl -c /home/postgres/patroni.yml list --format=json | jq -r ".[] | select(.Role == \"Standby Leader\") | .Role"')
       if [[ "$status" == "Standby Leader" ]];  then
         echo "GoldDR config needs to be updated to be leader"
         sleep 200

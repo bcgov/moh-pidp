@@ -1,6 +1,7 @@
 ## Fail Back From GOLDDR to GOLD (PostgreSQL 16 / Patroni 4.x)
 
-For the full, up-to-date copy-paste failback runbook (including Patroni 4.x `Primary` vs legacy `master` terminology, suspending `patroni-probe` on GoldDR, and dynamic TSC port lookups), see [docs/distaster_recovery/Readme.md](../../../../docs/distaster_recovery/Readme.md).
+- **Automated (Preferred):** Run the **Patroni Failback - GOLDDR to GOLD** GitHub Actions workflow ([`.github/workflows/failback-golddr-to-gold.yaml`](../../../../.github/workflows/failback-golddr-to-gold.yaml)) with `dry_run: true` first, then `dry_run: false` + `confirmation: failback-<env>`. It invokes [`../../scripts/failback-golddr-to-gold.sh`](../../scripts/failback-golddr-to-gold.sh) across both clusters.
+- **Manual Runbook:** For the full, up-to-date copy-paste failback runbook (including Patroni 4.x `Primary` vs legacy `master` terminology, suspending `patroni-probe` on GoldDR, and dynamic TSC port lookups), see [docs/distaster_recovery/Readme.md](../../../../docs/distaster_recovery/Readme.md).
 
 ### High-Level Summary
 - Suspend the `patroni-probe` CronJob on GoldDR (`oc patch cronjob patroni-probe -p '{"spec":{"suspend":true}}'`).
