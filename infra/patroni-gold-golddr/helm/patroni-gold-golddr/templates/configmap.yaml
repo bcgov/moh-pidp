@@ -70,12 +70,20 @@ data:
       - locale: en_US.UTF-8
       - data-checksums
       pg_hba:
+      - local all all trust
+      - local replication all trust
+      - host all all 127.0.0.1/32 trust
+      - host all all ::1/128 trust
+      - host replication ${PATRONI_REPLICATION_USERNAME} 127.0.0.1/32  trust
+      - host replication ${PATRONI_REPLICATION_USERNAME} ::1/128       trust
       - host all all 0.0.0.0/0 scram-sha-256
       - host all all 0.0.0.0/0 md5
       - host replication ${PATRONI_REPLICATION_USERNAME} 10.95.0.0/16    scram-sha-256
       - host replication ${PATRONI_REPLICATION_USERNAME} 10.95.0.0/16    md5  # GoldDR Range
       - host replication ${PATRONI_REPLICATION_USERNAME} 10.97.0.0/16    scram-sha-256
       - host replication ${PATRONI_REPLICATION_USERNAME} 10.97.0.0/16    md5  # Gold & Silver Clusters
+      - host replication ${PATRONI_REPLICATION_USERNAME} 100.64.0.0/16   scram-sha-256  # OVN-Kubernetes NodePort/F5 SNAT
+      - host replication ${PATRONI_REPLICATION_USERNAME} 100.64.0.0/16   md5  # OVN-Kubernetes NodePort/F5 SNAT
     restapi:
       connect_address: '${POD_IP}:8008'
     postgresql:

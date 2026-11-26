@@ -94,7 +94,7 @@ export TS="$(date +%Y%m%d_%H%M%S)"
     echo "GOLDDR -> GOLD TSC port: $DR_TSC_PORT"
 
     oc annotate cm patroni-leader -n "$NS" initialize- leader- optime- --overwrite 2>/dev/null || true
-   oc annotate cm patroni-config -n "$NS" initialize- --overwrite 2>/dev/null || true
+    oc annotate cm patroni-config -n "$NS" initialize- --overwrite 2>/dev/null || true
 
     oc patch cm patroni-config -n "$NS" --type merge -p "{
       \"metadata\": {
@@ -114,3 +114,62 @@ export TS="$(date +%Y%m%d_%H%M%S)"
     ```bash
     oc patch cronjob patroni-probe -n "$NS" -p '{"spec":{"suspend":false}}'
     ```
+
+---
+
+# Cross-Cluster Replication Network Architecture & Troubleshooting
+
+## How Traffic Flows Between GOLD and GOLDDR (Example IPs & Ports)
+
+> **Note:** ClusterIPs, NodePorts (`30000–32767`), and Porter TSC ports are dynamically allocated and differ per environment (and can change if a Service or `TransportServerClaim` is recreated). The values below are real examples from `f088b1-test` / `f088b1-prod` for illustration.
+
+Cross-cluster PostgreSQL replication (`pg_basebackup` + WAL streaming) does **not** connect directly to remote pod IPs or NodePorts. Instead, BC Gov's **Porter** operator (`TransportServerClaim` → F5 CIS `TransportServer` with label `f5cr: nodeport`) publishes a VIP port on the target cluster's F5 BIG-IP and creates a matching ClusterIP Service + Endpoint on the remote cluster:
+
+```text
+Normal Operation (GOLD Primary -> GOLDDR Standby):
+
+GOLDDR patroni-0 (pod IP e.g. 10.95.15.253)
+  └─► GOLDDR Service: patroni-master-gold (ClusterIP e.g. 10.96.72.172:40829 [test] / :16307 [prod])
+        └─► GOLD F5 BIG-IP VIP (e.g. 142.34.229.61:40829 [test] / :16307 [prod])
+              └─► GOLD OpenShift Worker Nodes NodePort (e.g. :31724 [test] / :30978 [prod])
+                    └─► GOLD OVN-Kubernetes Gateway SNAT (source IP becomes 100.64.0.x)
+                          └─► GOLD Service: patroni-master (type: NodePort, selector role=primary -> :5432)
+                                └─► GOLD patroni-0 (pod IP e.g. 10.97.10.160:5432)
+```
+
+*(During failback from GOLDDR to GOLD, the exact mirror path is used in reverse: GOLD `patroni-0` → `patroni-master-golddr:<gold_tsc_port>` → GOLDDR F5 BIG-IP VIP → GOLDDR worker `NodePort` → GOLDDR OVN SNAT `100.64.0.x` → GOLDDR `patroni-0:5432`.)*
+
+### Network & IP Range Reference
+
+| Subnet / Address | Role | Examples |
+| :--- | :--- | :--- |
+| **`10.97.0.0/16`** | GOLD OpenShift pod network | `10.97.10.160` (`patroni-0`), `10.97.47.21` (`patroni-1`) |
+| **`10.98.0.0/16`** | GOLD OpenShift ClusterIP Service network | `10.98.70.233` (`test` `patroni-master`), `10.98.125.243` (`prod` `patroni-master`) |
+| **`10.95.0.0/16`** | GOLDDR OpenShift pod network | `10.95.15.253` (`patroni-0`), `10.95.13.84` (`patroni-1`) |
+| **`10.96.0.0/16`** | GOLDDR OpenShift ClusterIP Service network | `10.96.72.172:40829` (`patroni-master-gold`) |
+| **`100.64.0.0/16`** | OpenShift **OVN-Kubernetes** internal node/join SNAT subnet | `100.64.0.8` (source IP seen by PostgreSQL for incoming `NodePort`/F5 BIG-IP traffic) |
+| **`142.34.229.61`** | GOLD F5 BIG-IP TSC VIP (replication tunnel) | `:40829` (`test`), `:16307` (`prod`) |
+| **`142.34.229.4` / `142.34.64.4`** | GSLB HTTPS ingress VIPs | GOLD (`142.34.229.4:443`), GOLDDR (`142.34.64.4:443`) |
+| **`142.34.229.245` / `142.34.94.245`** | Authoritative BC Gov GSLB DNS servers (`glb.gov.bc.ca`) | Resolves `*.healthprovideridentityportal.gov.bc.ca.glb.gov.bc.ca` |
+
+## Why Each `host replication` Entry Exists in `pg_hba.conf`
+
+In [`infra/patroni-gold-golddr/helm/patroni-gold-golddr/templates/configmap.yaml`](../../infra/patroni-gold-golddr/helm/patroni-gold-golddr/templates/configmap.yaml), `pg_hba` explicitly permits replication from four scopes — **all four are required** for Patroni 4.x on OpenShift OVN-Kubernetes:
+
+- **`local replication all trust` & `127.0.0.1/32` / `::1/128` (`trust`):** Patroni 4.x opens a local replication connection to `localhost:5432` as the `replication` user to query local timeline and LSN (`get_replica_timeline`). Without these, standby/replica pods log `FATAL: no pg_hba.conf entry for replication connection from host "127.0.0.1", user "replication"`.
+- **`10.97.0.0/16` (`scram-sha-256` / `md5`):** Allows in-cluster streaming replication between GOLD Patroni pods (`patroni-0` ↔ `patroni-1` / `patroni-2`).
+- **`10.95.0.0/16` (`scram-sha-256` / `md5`):** Allows in-cluster streaming replication between GOLDDR Patroni pods.
+- **`100.64.0.0/16` (`scram-sha-256` / `md5`):** **Critical for cross-cluster replication on OVN-Kubernetes.** Because F5 CIS (`f5cr: nodeport`) delivers cross-cluster TSC traffic to `service/patroni-master` (`type: NodePort`, `externalTrafficPolicy: Cluster`), OpenShift OVN-Kubernetes SNATs the source IP through the node's internal OVN join subnet (`100.64.0.0/16`, e.g., `100.64.0.8`) before it reaches the Patroni pod. Without `100.64.0.0/16`, `pg_basebackup` and WAL streaming across GOLD ↔ GOLDDR fail with `FATAL: no pg_hba.conf entry for replication connection from host "100.64.0.x", user "replication"`.
+
+## Troubleshooting Porter `TransportServerClaim` / F5 BIG-IP `422`
+
+- **`service/patroni-master` must stay `type: NodePort`** (configured in [`services.yaml`](../../infra/patroni-gold-golddr/helm/patroni-gold-golddr/templates/services.yaml)). Reverting it to `ClusterIP` causes Kubernetes to release the NodePort and F5 CIS (`f5cr: nodeport`) to fail with HTTP `422`.
+- **Force Porter / F5 CIS to re-reconcile without deleting the TSC:** If `oc get transportserver patroni-postgres-tsc -n "$NS" -o jsonpath='{.status}{"\n"}'` reports `status: ERROR` (`Big-IP Responded with error code: 422`) or BIG-IP fails to pick up a `patroni-master` NodePort change, **do not delete the `TransportServerClaim`** (which tears down the VIP/port). Instead, toggle a harmless field such as `spec.monitor.timeout` (`10` → `11` → `10`) on the cluster hosting the `TransportServerClaim` to trigger operator reconciliation:
+  ```bash
+  oc patch transportserverclaim patroni-postgres-tsc -n "$NS" --type merge -p '{"spec":{"monitor":{"timeout":11}}}'
+  sleep 5
+  oc patch transportserverclaim patroni-postgres-tsc -n "$NS" --type merge -p '{"spec":{"monitor":{"timeout":10}}}'
+  sleep 10
+  oc get transportserver patroni-postgres-tsc -n "$NS" -o jsonpath='{.status}{"\n"}'
+  ```
+  Verify the status flips back to `{"status":"OK","vsAddress":"142.34.229.61",...}`.
