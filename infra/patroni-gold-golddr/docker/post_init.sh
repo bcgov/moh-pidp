@@ -4,9 +4,10 @@ set -e
 echo "Running post_init.sh..."
 
 if [[ -n "$APP_USER" && -n "$APP_PASSWORD" ]]; then
+    SUPERUSER="${PATRONI_SUPERUSER_USERNAME:-postgres}"
     DB="${APP_DATABASE:-$APP_USER}"
-    echo "Creating application user '$APP_USER' and database '$DB'..."
-    psql -v ON_ERROR_STOP=1 --username "postgres" <<-EOSQL
+    echo "Creating application user '$APP_USER' and database '$DB' (as superuser '$SUPERUSER')..."
+    psql -v ON_ERROR_STOP=1 --username "${SUPERUSER}" --dbname "postgres" <<-EOSQL
         DO \$\$
         BEGIN
             IF NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = '${APP_USER}') THEN
@@ -22,7 +23,7 @@ if [[ -n "$APP_USER" && -n "$APP_PASSWORD" ]]; then
 
         GRANT ALL PRIVILEGES ON DATABASE "${DB}" TO "${APP_USER}";
 EOSQL
-    psql -v ON_ERROR_STOP=1 --username "postgres" --dbname "${DB}" <<-EOSQL
+    psql -v ON_ERROR_STOP=1 --username "${SUPERUSER}" --dbname "${DB}" <<-EOSQL
         ALTER SCHEMA public OWNER TO "${APP_USER}";
         GRANT ALL ON SCHEMA public TO "${APP_USER}";
 EOSQL

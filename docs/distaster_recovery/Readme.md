@@ -42,6 +42,7 @@ export TS="$(date +%Y%m%d_%H%M%S)"
    echo "GOLD -> GOLDDR TSC port: $GOLD_TSC_PORT"
 
    oc annotate cm patroni-leader -n "$NS" initialize- leader- optime- --overwrite 2>/dev/null || true
+   oc annotate cm patroni-config -n "$NS" initialize- --overwrite 2>/dev/null || true
 
    oc patch cm patroni-config -n "$NS" --type merge -p "{
      \"metadata\": {
@@ -93,6 +94,7 @@ export TS="$(date +%Y%m%d_%H%M%S)"
     echo "GOLDDR -> GOLD TSC port: $DR_TSC_PORT"
 
     oc annotate cm patroni-leader -n "$NS" initialize- leader- optime- --overwrite 2>/dev/null || true
+   oc annotate cm patroni-config -n "$NS" initialize- --overwrite 2>/dev/null || true
 
     oc patch cm patroni-config -n "$NS" --type merge -p "{
       \"metadata\": {

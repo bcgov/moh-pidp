@@ -17,4 +17,4 @@ spec:
     app.kubernetes.io/name: {{ .Values.app_name }}
     app: {{ .Values.app_name }}
   sessionAffinity: None
-  type: ClusterIP
+  type: NodePort
